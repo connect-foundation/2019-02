@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const Users = require('./users');
 
 mongoose.connect(
   process.env.DB_URL,
@@ -14,3 +15,5 @@ mongoose.connect(
     }
   },
 );
+
+module.exports = { Users };
