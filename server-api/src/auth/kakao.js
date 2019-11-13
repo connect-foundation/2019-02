@@ -1,9 +1,7 @@
-const express = require('express');
 const passport = require('passport');
 const KakaoStrategy = require('passport-kakao').Strategy;
 const { Users } = require('../models');
 
-const router = express.Router();
 const kakaoKey = {
   clientID: process.env.KAKAO_ID,
   callbackURL: 'http://localhost:4000/auth/kakao/callback',
@@ -31,13 +29,3 @@ passport.use('kakao', new KakaoStrategy(
     }).catch((error) => done(error));
   },
 ));
-
-router.get('/', passport.authenticate('kakao'));
-
-router.get('/callback',
-  passport.authenticate('kakao'),
-  (req, res) => {
-    res.send(req.user);
-  });
-
-module.exports = router;

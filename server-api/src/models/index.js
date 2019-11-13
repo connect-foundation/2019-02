@@ -16,4 +16,7 @@ mongoose.connect(
   },
 );
 
-module.exports = { Users };
+module.exports = {
+  Users,
+  connection: mongoose.connection,
+};

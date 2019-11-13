@@ -1,12 +1,22 @@
 const { Router } = require('express');
 const passport = require('passport');
-const authKakao = require('./kakao');
+
+require('./kakao');
 
 const router = Router();
 
-passport.serializeUser((user, done) => done(null, user));
-passport.deserializeUser((user, done) => done(null, user));
+passport.serializeUser((user, done) => {
+  done(null, user);
+});
+passport.deserializeUser((user, done) => {
+  done(null, user);
+});
 
-router.use('/kakao', authKakao);
+router.get('/kakao', passport.authenticate('kakao'));
+router.get('/kakao/callback',
+  passport.authenticate('kakao'),
+  (req, res) => {
+    res.status(200).end();
+  });
 
 module.exports = router;

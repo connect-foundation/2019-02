@@ -2,7 +2,6 @@ const { ApolloServer } = require('apollo-server-express');
 const express = require('express');
 const session = require('express-session');
 const cookieParser = require('cookie-parser');
-const mongoose = require('mongoose');
 const connectMongo = require('connect-mongo');
 const passport = require('passport');
 const typeDefs = require('./typeDefs');
@@ -34,15 +33,17 @@ class App {
   setSession() {
     const MongoStore = connectMongo(session);
     const sessionMiddleWare = session({
+      key: 'sid',
       secret: process.env.SESSION_SECRET_KEY,
       resave: false,
       saveUninitialized: true,
       cookie: {
-        maxAge: parseInt(process.env.COOKIE_MAX_AGE, 10),
+        secure: false,
+        maxAge: 24 * 1000 * 60 * 60,
       },
       store: new MongoStore({
-        mongooseConnection: mongoose.connection,
-        ttl: parseInt(process.env.SESSION_MAX_AGE, 10),
+        mongooseConnection: this.db.connection,
+        ttl: 24 * 60 * 60,
       }),
     });
 
