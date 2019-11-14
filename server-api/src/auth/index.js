@@ -1,22 +1,20 @@
 const { Router } = require('express');
 const passport = require('passport');
-
-require('./kakao');
+require('./passport');
+const { generateToken, sendToken } = require('../middleware/token');
 
 const router = Router();
 
-passport.serializeUser((user, done) => {
-  done(null, user);
-});
-passport.deserializeUser((user, done) => {
-  done(null, user);
-});
-
-router.get('/kakao', passport.authenticate('kakao'));
-router.get('/kakao/callback',
-  passport.authenticate('kakao'),
-  (req, res) => {
-    res.status(200).end();
-  });
+router.route('/google')
+  .post(passport.authenticate('google-token', { session: false }), (req, res, next) => {
+    if (!req.user) {
+      return res.send(401, 'User Not Authenticated');
+    }
+    req.auth = {
+      id: req.user.id,
+      displayname: req.user.displayname,
+    };
+    next();
+  }, generateToken, sendToken);
 
 module.exports = router;

@@ -14,4 +14,23 @@ const UserSchema = new Schema({
   },
 });
 
+UserSchema.statics.upsertUser = function upsertUserHandler(username, displayname) {
+  const UserModel = this;
+  const findUser = UserModel.findOne({ username });
+
+  return findUser.then((user) => {
+    if (user) return user;
+
+    const userInfo = {
+      username,
+      displayname,
+    };
+    const newUser = new UserModel(userInfo);
+
+    return newUser.save();
+  }).catch((error) => {
+    throw error;
+  });
+};
+
 module.exports = mongoose.model('user', UserSchema);

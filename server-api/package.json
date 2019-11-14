@@ -8,14 +8,15 @@
   },
   "dependencies": {
     "apollo-server-express": "^2.9.7",
-    "connect-mongo": "^3.1.2",
     "cookie-parser": "^1.4.4",
+    "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
-    "express-session": "^1.17.0",
     "graphql": "^14.5.8",
+    "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.7.9",
     "passport": "^0.4.0",
+    "passport-google-token": "^0.1.2",
     "passport-kakao": "^1.0.0"
   },
   "devDependencies": {
