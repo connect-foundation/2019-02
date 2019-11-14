@@ -1,6 +1,7 @@
 import React from 'react';
-import KakaoLogin from 'react-kakao-login';
+import { GoogleLogin } from 'react-google-login';
 import { useMutation } from '@apollo/react-hooks';
+import styled from 'styled-components';
 import gql from 'graphql-tag';
 
 const LOGIN = gql`
@@ -9,15 +10,20 @@ const LOGIN = gql`
   }
 `;
 
-const KakaoButton = () => {
+const GoogleButton = () => {
   const [logIn] = useMutation(LOGIN);
-  const handleResponse = ({ response }) => {
+  const handleResponse = (response) => {
+    const tokenBlob = new Blob(
+      [JSON.stringify({ access_token: response.accessToken }, null, 2)],
+      { type: 'application/json' },
+    );
     const options = {
-      method: 'GET',
+      method: 'POST',
+      body: tokenBlob,
       mode: 'cors',
       cache: 'default',
     };
-    fetch(`http://localhost:4000/auth/kakao?access_token=${response.access_token}`, options).then((res) => {
+    fetch('http://localhost:4000/auth/google', options).then((res) => {
       const token = res.headers.get('x-auth-token');
       res.json().then((user) => {
         if (token) {
@@ -31,13 +37,19 @@ const KakaoButton = () => {
   };
 
   return (
-    <KakaoLogin
-      jsKey={process.env.KAKAO_ID}
-      buttonText="Kakao Login"
+    <S.LoginBtn
+      clientId={process.env.GOOGLE_ID}
+      buttonText="Google Login"
       onSuccess={handleResponse}
       onFailure={handleFailure}
     />
   );
 };
 
-export default KakaoButton;
+const S = {
+  LoginBtn: styled(GoogleLogin)`
+    width:100%;
+  `,
+};
+
+export default GoogleButton;

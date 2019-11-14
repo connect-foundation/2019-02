@@ -1,10 +1,11 @@
 import React from 'react';
 import NaverLogin from 'react-naver-login';
+import styled from 'styled-components';
 import PropTypes from 'prop-types';
 
 const NaverLoginButton = (props) => {
   const { onClick } = props;
-  return <button type="button" onClick={onClick}>Naver Login</button>;
+  return <S.LoginBtn type="button" onClick={onClick}>Naver Login</S.LoginBtn>;
 };
 
 const NaverButton = () => {
@@ -24,6 +25,16 @@ const NaverButton = () => {
       onFailure={handleFailure}
     />
   );
+};
+
+const S = {
+  LoginBtn: styled('button')`
+  width:100%;
+  background-color:#2db400;
+  height:100%;
+  border-radius:2px;
+  box-shadow:rgba(0, 0, 0, 0.24) 0px 2px 2px 0px, rgba(0, 0, 0, 0.24) 0px 0px 1px 0px;
+  `,
 };
 
 NaverLoginButton.propTypes = {
