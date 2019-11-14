@@ -1,8 +1,16 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { GoogleLogin } from 'react-google-login';
+import { useMutation } from '@apollo/react-hooks';
+import gql from 'graphql-tag';
+
+const LOGIN = gql`
+  mutation LogIn($token: String!, $displayName: String!) {
+    logIn(token: $token, displayName: $displayName) @client
+  }
+`;
 
 const LoginButton = () => {
-  const [state, setState] = useState({ isAuthenticated: false, user: null, token: '' });
+  const [logIn] = useMutation(LOGIN);
 
   const googleResponse = (response) => {
     const tokenBlob = new Blob([JSON.stringify({ access_token: response.accessToken }, null, 2)], { type: 'application/json' });
@@ -16,7 +24,7 @@ const LoginButton = () => {
       const token = res.headers.get('x-auth-token');
       res.json().then((user) => {
         if (token) {
-          setState({ isAuthenticated: true, user, token });
+          logIn({ variables: { token, displayName: user.displayname } });
         }
       });
     });
@@ -26,18 +34,12 @@ const LoginButton = () => {
     console.log(error);
   };
   return (
-    <>
-      { state.isAuthenticated
-        ? <div>{state.user.displayname}</div>
-        : (
-          <GoogleLogin
-            clientId={process.env.GOOGLE_ID}
-            buttonText="Login"
-            onSuccess={googleResponse}
-            onFailure={onFailure}
-          />
-        )}
-    </>
+    <GoogleLogin
+      clientId={process.env.GOOGLE_ID}
+      buttonText="Login"
+      onSuccess={googleResponse}
+      onFailure={onFailure}
+    />
   );
 };
 

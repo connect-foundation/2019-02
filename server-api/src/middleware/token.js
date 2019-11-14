@@ -1,4 +1,4 @@
-const createToken = require('../utils/createToken');
+const { createToken } = require('../utils/token');
 
 const generateToken = (req, res, next) => {
   req.token = createToken(req.auth);

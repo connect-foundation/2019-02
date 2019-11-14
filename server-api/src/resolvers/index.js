@@ -1,7 +1,11 @@
 // Provide resolver functions for your schema fields
 const resolvers = {
   Query: {
-    hello: () => 'Hello world!',
+    hello: (_, __, context) => {
+      console.log('Context: ', context);
+
+      return 'Hello world!';
+    },
   },
 };
 

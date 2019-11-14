@@ -12,12 +12,12 @@ module.exports = {
     alias: {
       '@': Path.resolve(__dirname, './src'),
     },
-    extensions: ['.js', '.jsx'],
+    extensions: ['.mjs', '.js', '.jsx'],
   },
   module: {
     rules: [
       {
-        test: /\.(js|jsx)$/,
+        test: /\.(mjs|js|jsx)$/,
         exclude: /node_modules/,
         loader: 'babel-loader',
         options: {

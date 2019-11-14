@@ -5,11 +5,23 @@ const cookieParser = require('cookie-parser');
 const typeDefs = require('./typeDefs');
 const resolvers = require('./resolvers');
 const auth = require('./auth');
+const { verifyToken } = require('./utils/token');
 
 class App {
   constructor(db) {
     this.app = express();
-    this.server = new ApolloServer({ typeDefs, resolvers });
+    this.server = new ApolloServer({
+      typeDefs,
+      resolvers,
+      context: ({ req }) => {
+        const user = verifyToken(req.headers['x-auth-token']);
+        const apolloContext = {
+          user,
+        };
+
+        return apolloContext;
+      },
+    });
     this.db = db;
   }
 
