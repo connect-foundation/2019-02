@@ -9,10 +9,9 @@ const LOGIN = gql`
   }
 `;
 
-const LoginButton = () => {
+const GoogleButton = () => {
   const [logIn] = useMutation(LOGIN);
-
-  const googleResponse = (response) => {
+  const handleResponse = (response) => {
     const tokenBlob = new Blob([JSON.stringify({ access_token: response.accessToken }, null, 2)], { type: 'application/json' });
     const options = {
       method: 'POST',
@@ -29,18 +28,18 @@ const LoginButton = () => {
       });
     });
   };
-
-  const onFailure = (error) => {
+  const handleFailure = (error) => {
     console.log(error);
   };
+
   return (
     <GoogleLogin
       clientId={process.env.GOOGLE_ID}
-      buttonText="Login"
-      onSuccess={googleResponse}
-      onFailure={onFailure}
+      buttonText="Google Login"
+      onSuccess={handleResponse}
+      onFailure={handleFailure}
     />
   );
 };
 
-export default LoginButton;
+export default GoogleButton;

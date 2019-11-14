@@ -17,4 +17,28 @@ router.route('/google')
     next();
   }, generateToken, sendToken);
 
+router.route('/naver')
+  .post(passport.authenticate('naver-token', { session: false }), (req, res, next) => {
+    if (!req.user) {
+      return res.send(401, 'User Not Authenticated');
+    }
+    req.auth = {
+      id: req.user.id,
+      displayname: req.user.displayname,
+    };
+    next();
+  }, generateToken, sendToken);
+
+router.route('/kakao')
+  .get(passport.authenticate('kakao-token', { session: false }), (req, res, next) => {
+    if (!req.user) {
+      return res.send(401, 'User Not Authenticated');
+    }
+    req.auth = {
+      id: req.user.id,
+      displayname: req.user.displayname,
+    };
+    next();
+  }, generateToken, sendToken);
+
 module.exports = router;

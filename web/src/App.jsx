@@ -1,7 +1,9 @@
 import React from 'react';
 import { useQuery } from '@apollo/react-hooks';
 import gql from 'graphql-tag';
-import LoginButton from './components/LoginButton/LoginButton';
+import GoogleButton from './components/LoginButton/GoogleButton';
+import KakaoButton from './components/LoginButton/KakaoButton';
+import NaverButton from './components/LoginButton/NaverButton';
 
 const GET_AUTH = gql`
 query Auth {
@@ -20,7 +22,11 @@ const App = () => {
       {authentication.isLoggedIn ? (
         <div>{authentication.displayName}</div>
       ) : (
-        <LoginButton />
+        <>
+          <GoogleButton />
+          <KakaoButton />
+          <NaverButton />
+        </>
       )}
     </div>
   );
