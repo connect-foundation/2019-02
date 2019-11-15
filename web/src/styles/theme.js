@@ -2,6 +2,7 @@ import { createMuiTheme } from '@material-ui/core/styles';
 
 export default createMuiTheme({
   palette: {
+    default: '#f8f9fa',
     common: {
       white: '#fff',
       black: '#000',
@@ -11,15 +12,11 @@ export default createMuiTheme({
       main: '#e67700',
       light: '#343a40',
     },
-    secondary: {
-      light: '#f8f9fa',
-      main: '#f1f3f5',
-    },
     background: {
       light: '#fff9db',
       main: '#fff3bf',
     },
-    'dropy-gray': {
+    dropyGray: {
       0: '#f8f9fa',
       1: '#f1f3f5',
       2: '#e9ecef',
@@ -31,7 +28,7 @@ export default createMuiTheme({
       8: '#343a40',
       9: '#212529',
     },
-    'dropy-yellow': {
+    dropyYellow: {
       0: '#fff9db',
       1: '#fff3bf',
       2: '#ffec99',
@@ -50,11 +47,17 @@ export default createMuiTheme({
       'Spoqa Han Sans', 'Spoqa Han Sans JP', 'Sans-serif',
     ].join(','),
     h1: {
-      color: '#fff',
+      color: '#e67700',
       fontSize: '1.3rem',
       fontWeight: 700,
     },
   },
   overrides: {
+    MuiAppBar: {
+      colorPrimary: {
+        'background-color': '#f8f9fa',
+        'border-bottom': '1px solid #dee2e6',
+      },
+    },
   },
 });

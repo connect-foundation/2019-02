@@ -1,5 +1,6 @@
 import React from 'react';
 import KakaoLogin from 'react-kakao-login';
+import PropTypes from 'prop-types';
 import { useMutation } from '@apollo/react-hooks';
 import styled from 'styled-components';
 import gql from 'graphql-tag';
@@ -10,7 +11,14 @@ const LOGIN = gql`
   }
 `;
 
-const KakaoButton = () => {
+const KakaoLoginButton = (props) => {
+  const { onClick } = props;
+  console.log(onClick);
+  return <S.LoginBtn type="button" onClick={onClick}>Kakao Login</S.LoginBtn>;
+};
+
+const KakaoButton = (props) => {
+  const { handleClose } = props;
   const [logIn] = useMutation(LOGIN);
   const handleResponse = ({ response }) => {
     const options = {
@@ -35,9 +43,15 @@ const KakaoButton = () => {
   };
 
   return (
-    <S.LoginBtn
+    <KakaoLogin
       jsKey={process.env.KAKAO_ID}
-      buttonText="Kakao Login"
+      render={({ onClick }) => (
+        <KakaoLoginButton onClick={() => {
+          handleClose();
+          onClick();
+        }}
+        />
+      )}
       onSuccess={handleResponse}
       onFailure={handleFailure}
     />
@@ -45,7 +59,7 @@ const KakaoButton = () => {
 };
 
 const S = {
-  LoginBtn: styled(KakaoLogin)`
+  LoginBtn: styled.button`
   width:100%;
   background-color:#fee102;
   height:100%;
@@ -54,5 +68,11 @@ const S = {
   `,
 };
 
+KakaoLoginButton.propTypes = {
+  onClick: PropTypes.func.isRequired,
+};
+KakaoButton.propTypes = {
+  handleClose: PropTypes.func.isRequired,
+};
 
 export default KakaoButton;
