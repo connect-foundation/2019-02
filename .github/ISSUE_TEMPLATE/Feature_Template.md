@@ -1,3 +1,11 @@
+---
+name: Feature Request 
+about: 기능 개발에 관련 된 이슈를 열 수 있습니다.
+title: ''
+labels: ''
+assignees: happydhKim, load0ne, always-awake, aereeeee
+---
+
 # [Epic#1] 이슈 제목
 
 - 이슈에 대한 설명1

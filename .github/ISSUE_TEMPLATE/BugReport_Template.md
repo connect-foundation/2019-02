@@ -1,3 +1,11 @@
+---
+name: Bug Report
+about: 버그에 대해 알리고 이를 수정하기 위한 이슈를 열 수 있습니다.
+title: ''
+labels: ''
+assignees: happydhKim, load0ne, always-awake, aereeeee
+---
+
 # 버그 이슈 제목
 
 - 육하원칙에 따른 자세한 설명일수록 좋다

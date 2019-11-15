@@ -1,3 +1,11 @@
+---
+name: Proposal & Discussion
+about: 제안하고 싶은 사항에 대해 토론하는 이슈를 열 수 있습니다.
+title: ''
+labels: ''
+assignees: happydhKim, load0ne, always-awake, aereeeee
+---
+
 # 이슈 제목
 
 - 이슈에 대한 설명(육하원칙에 따른 자세한 설명일수록 좋다)
