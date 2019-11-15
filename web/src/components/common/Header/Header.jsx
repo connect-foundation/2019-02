@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useQuery } from '@apollo/react-hooks';
 import gql from 'graphql-tag';
 import styled from 'styled-components';
@@ -29,10 +29,6 @@ const Header = () => {
   };
   const isOpened = Boolean(anchorEl);
   const id = isOpened ? 'simple-popover' : undefined;
-
-  useEffect(() => {
-    if (authentication.isLoggedIn) setAnchorEl(null);
-  }, [authentication]);
 
   return (
     <AppBar position="static" elevation={0}>
