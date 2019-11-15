@@ -8,7 +8,8 @@ const NaverLoginButton = (props) => {
   return <S.LoginBtn type="button" onClick={onClick}>Naver Login</S.LoginBtn>;
 };
 
-const NaverButton = () => {
+const NaverButton = (props) => {
+  const { handleClose } = props;
   const handleResponse = (response) => {
     console.log('naver res', response);
   };
@@ -20,7 +21,13 @@ const NaverButton = () => {
     <NaverLogin
       clientId={process.env.NAVER_ID}
       callbackUrl="http://localhost:4000/auth/naver/callback"
-      render={NaverLoginButton}
+      render={({ onClick }) => (
+        <NaverLoginButton onClick={() => {
+          handleClose();
+          onClick();
+        }}
+        />
+      )}
       onSuccess={handleResponse}
       onFailure={handleFailure}
     />
@@ -39,6 +46,9 @@ const S = {
 
 NaverLoginButton.propTypes = {
   onClick: PropTypes.func.isRequired,
+};
+NaverButton.propTypes = {
+  handleClose: PropTypes.func.isRequired,
 };
 
 export default NaverButton;

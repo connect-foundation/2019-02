@@ -1,26 +1,31 @@
 import React from 'react';
 import styled from 'styled-components';
+import PropTypes from 'prop-types';
 import GoogleButton from '../LoginButton/GoogleButton';
 import KakaoButton from '../LoginButton/KakaoButton';
 import NaverButton from '../LoginButton/NaverButton';
 
-const LoginPopover = () => (
-  <S.PopoverWrapper>
-    <S.BtnWrapper>
-      <GoogleButton />
-    </S.BtnWrapper>
-    <S.BtnWrapper>
-      <KakaoButton />
-    </S.BtnWrapper>
-    <S.BtnWrapper>
-      <NaverButton />
-    </S.BtnWrapper>
-  </S.PopoverWrapper>
-);
+const LoginPopover = (props) => {
+  const { handleClose } = props;
+
+  return (
+    <S.PopoverWrapper>
+      <S.BtnWrapper>
+        <GoogleButton handleClose={handleClose} />
+      </S.BtnWrapper>
+      <S.BtnWrapper>
+        <KakaoButton handleClose={handleClose} />
+      </S.BtnWrapper>
+      <S.BtnWrapper>
+        <NaverButton handleClose={handleClose} />
+      </S.BtnWrapper>
+    </S.PopoverWrapper>
+  );
+};
 
 const S = {
   PopoverWrapper: styled.div`
-    width:300px;
+    width:200px;
     padding:20px 15px;
   `,
   BtnWrapper: styled.div`
@@ -31,6 +36,10 @@ const S = {
       margin-bottom:0;
     }
   `,
+};
+
+LoginPopover.propTypes = {
+  handleClose: PropTypes.func.isRequired,
 };
 
 export default LoginPopover;
