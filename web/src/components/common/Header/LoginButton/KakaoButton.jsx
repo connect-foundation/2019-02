@@ -1,16 +1,9 @@
 import React from 'react';
-import KakaoLogin from 'react-kakao-login';
 import PropTypes from 'prop-types';
-import { useMutation } from '@apollo/react-hooks';
 import styled from 'styled-components';
-import gql from 'graphql-tag';
+import KakaoLogin from 'react-kakao-login';
 import { authByKakao } from '@/apis';
-
-const LOGIN = gql`
-  mutation LogIn($token: String!, $displayName: String!) {
-    logIn(token: $token, displayName: $displayName) @client
-  }
-`;
+import { useLogin } from '@/hooks';
 
 const KakaoLoginButton = (props) => {
   const { onClick } = props;
@@ -19,12 +12,12 @@ const KakaoLoginButton = (props) => {
 
 const KakaoButton = (props) => {
   const { handleClose } = props;
-  const [logIn] = useMutation(LOGIN);
+  const { mutate } = useLogin();
   const handleResponse = async ({ response }) => {
     const { token, user } = await authByKakao(response.access_token);
 
     if (token) {
-      logIn({ variables: { token, displayName: user.displayname } });
+      mutate({ variables: { token, displayName: user.displayname } });
     }
   };
   const handleFailure = (error) => {

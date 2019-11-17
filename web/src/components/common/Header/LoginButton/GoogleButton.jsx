@@ -1,16 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { GoogleLogin } from 'react-google-login';
-import { useMutation } from '@apollo/react-hooks';
 import styled from 'styled-components';
-import gql from 'graphql-tag';
+import { GoogleLogin } from 'react-google-login';
 import { authByGoogle } from '@/apis';
-
-const LOGIN = gql`
-  mutation LogIn($token: String!, $displayName: String!) {
-    logIn(token: $token, displayName: $displayName) @client
-  }
-`;
+import { useLogin } from '@/hooks';
 
 const GoogleLoginButton = (props) => {
   const { onClick } = props;
@@ -19,12 +12,11 @@ const GoogleLoginButton = (props) => {
 
 const GoogleButton = (props) => {
   const { handleClose } = props;
-  const [logIn] = useMutation(LOGIN);
+  const { mutate } = useLogin();
   const handleResponse = async ({ accessToken }) => {
     const { token, user } = await authByGoogle(accessToken);
-
     if (token) {
-      logIn({ variables: { token, displayName: user.displayname } });
+      mutate({ variables: { token, displayName: user.displayname } });
     }
   };
   const handleFailure = (error) => {

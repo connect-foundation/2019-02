@@ -1,23 +1,17 @@
 import React from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
-import { useMutation } from '@apollo/react-hooks';
 import { MenuItem } from '@material-ui/core';
-import gql from 'graphql-tag';
-
-const LOGOUT = gql`
-  mutation LogOut($token: String!) {
-    logOut(token: $token) @client
-  }
-`;
+import { useLogout } from '@/hooks';
 
 const LogoutPopover = (props) => {
   const { handleClose } = props;
-  const [logOut] = useMutation(LOGOUT);
+  const { mutate } = useLogout();
   const handleLogOut = () => {
     handleClose();
-    logOut();
+    mutate();
   };
+
   return (
     <S.PopoverWrapper>
       <MenuItem onClick={handleClose}>
@@ -35,8 +29,8 @@ const LogoutPopover = (props) => {
 
 const S = {
   PopoverWrapper: styled.div`
-    width:150px;
-    padding:10px 0;
+    width: 150px;
+    padding: 10px 0;
   `,
 };
 

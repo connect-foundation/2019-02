@@ -1,7 +1,7 @@
 import React from 'react';
-import NaverLogin from 'react-naver-login';
-import styled from 'styled-components';
 import PropTypes from 'prop-types';
+import styled from 'styled-components';
+import NaverLogin from 'react-naver-login';
 import { authByNaver } from '@/apis';
 import { NAVER_AUTH_CALLBACK } from '@/constants';
 
