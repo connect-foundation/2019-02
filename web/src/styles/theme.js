@@ -16,6 +16,9 @@ export default createMuiTheme({
       light: '#fff9db',
       main: '#fff3bf',
     },
+    naver: '#2db400',
+    kakao: '#fee102',
+    google: '#fff',
     dropyGray: {
       0: '#f8f9fa',
       1: '#f1f3f5',
@@ -39,6 +42,9 @@ export default createMuiTheme({
       7: '#f59f00',
       8: '#f08c00',
       9: '#e67700',
+    },
+    shadow: {
+      button: 'rgba(0, 0, 0, 0.24) 0px 2px 2px 0px, rgba(0, 0, 0, 0.24) 0px 0px 1px 0px',
     },
   },
   typography: {

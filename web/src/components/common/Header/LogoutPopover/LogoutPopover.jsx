@@ -1,8 +1,8 @@
 import React from 'react';
-import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import { MenuItem } from '@material-ui/core';
 import { useLogout } from '@/hooks';
+import S from './style';
 
 const LogoutPopover = (props) => {
   const { handleClose } = props;
@@ -25,13 +25,6 @@ const LogoutPopover = (props) => {
       </MenuItem>
     </S.PopoverWrapper>
   );
-};
-
-const S = {
-  PopoverWrapper: styled.div`
-    width: 150px;
-    padding: 10px 0;
-  `,
 };
 
 LogoutPopover.propTypes = {

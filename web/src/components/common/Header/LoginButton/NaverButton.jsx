@@ -1,14 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
 import NaverLogin from 'react-naver-login';
 import { authByNaver } from '@/apis';
 import { NAVER_AUTH_CALLBACK } from '@/constants';
-
-const NaverLoginButton = (props) => {
-  const { onClick } = props;
-  return <S.LoginBtn type="button" onClick={onClick}>Naver Login</S.LoginBtn>;
-};
+import S from './style';
 
 const NaverButton = (props) => {
   const { handleClose } = props;
@@ -24,11 +19,13 @@ const NaverButton = (props) => {
       clientId={process.env.NAVER_ID}
       callbackUrl={NAVER_AUTH_CALLBACK}
       render={({ onClick }) => (
-        <NaverLoginButton onClick={() => {
+        <S.NaverLoginButton onClick={() => {
           handleClose();
           onClick();
         }}
-        />
+        >
+          Naver Login
+        </S.NaverLoginButton>
       )}
       onSuccess={handleResponse}
       onFailure={handleFailure}
@@ -36,19 +33,6 @@ const NaverButton = (props) => {
   );
 };
 
-const S = {
-  LoginBtn: styled('button')`
-  width:100%;
-  background-color:#2db400;
-  height:100%;
-  border-radius:2px;
-  box-shadow:rgba(0, 0, 0, 0.24) 0px 2px 2px 0px, rgba(0, 0, 0, 0.24) 0px 0px 1px 0px;
-  `,
-};
-
-NaverLoginButton.propTypes = {
-  onClick: PropTypes.func.isRequired,
-};
 NaverButton.propTypes = {
   handleClose: PropTypes.func.isRequired,
 };
