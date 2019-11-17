@@ -7,10 +7,10 @@ const Users = require('../models/users');
 passport.use(new GoogleTokenStrategy({
   clientID: process.env.GOOGLE_ID,
   clientSecret: process.env.GOOGLE_SECRET,
-},
-((_, __, profile, done) => {
+}, ((_, __, profile, done) => {
   const username = `google_${profile.id}`;
   const displayname = profile.displayName;
+
   Users.upsertUser(username, displayname)
     .then((user) => done(null, user))
     .catch((error) => done(error));
@@ -19,10 +19,10 @@ passport.use(new GoogleTokenStrategy({
 passport.use(new NaverTokenStrategy({
   clientID: process.env.NAVER_ID,
   clientSecret: process.env.NAVER_SECRET,
-},
-((_, __, profile, done) => {
+}, ((_, __, profile, done) => {
   const username = `naver_${profile.id}`;
   const displayname = profile.displayName;
+
   Users.upsertUser(username, displayname)
     .then((user) => done(null, user))
     .catch((error) => done(error));
@@ -30,10 +30,10 @@ passport.use(new NaverTokenStrategy({
 
 passport.use(new KakaoTokenStrategy({
   clientID: process.env.KAKAO_ID,
-},
-((_, __, profile, done) => {
+}, ((_, __, profile, done) => {
   const username = `kakao_${profile.id}`;
   const displayname = profile.displayName;
+
   Users.upsertUser(username, displayname)
     .then((user) => done(null, user))
     .catch((error) => done(error));

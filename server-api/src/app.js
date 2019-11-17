@@ -1,7 +1,7 @@
-const { ApolloServer } = require('apollo-server-express');
 const express = require('express');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
+const { ApolloServer } = require('apollo-server-express');
 const typeDefs = require('./typeDefs');
 const resolvers = require('./resolvers');
 const auth = require('./auth');
@@ -13,14 +13,9 @@ class App {
     this.server = new ApolloServer({
       typeDefs,
       resolvers,
-      context: ({ req }) => {
-        const user = verifyToken(req.headers['x-auth-token']);
-        const apolloContext = {
-          user,
-        };
-
-        return apolloContext;
-      },
+      context: ({ req }) => ({
+        user: verifyToken(req.headers['x-auth-token']),
+      }),
     });
     this.db = db;
   }
@@ -32,6 +27,7 @@ class App {
       credentials: true,
       exposedHeaders: ['x-auth-token'],
     };
+
     this.app.use(cors(corsOption));
     this.app.use(express.json());
     this.app.use(express.urlencoded({ extended: true }));
@@ -41,8 +37,8 @@ class App {
   }
 
   start() {
-    this.app.listen({ port: 4000 }, () => {
-      console.log(`🚀 Server ready at http://localhost:4000${this.server.graphqlPath}`);
+    this.app.listen({ port: process.env.PORT }, () => {
+      console.log(`🚀 Server ready at http://localhost:${process.env.PORT}${this.server.graphqlPath}`);
     });
   }
 
