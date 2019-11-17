@@ -20,6 +20,7 @@ query Auth {
 
 const Header = () => {
   const { data: { authentication } } = useQuery(GET_AUTH);
+  // 변수명을 조금 더 명확하게 했으면 좋겠습니다!
   const [anchorEl, setAnchorEl] = useState(null);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -27,6 +28,7 @@ const Header = () => {
   const handleClose = () => {
     setAnchorEl(null);
   };
+  // isOpend 의 대상을 좀 명시했으면 좋을거 같습니다.
   const isOpened = Boolean(anchorEl);
   const id = isOpened ? 'simple-popover' : undefined;
 
@@ -95,6 +97,7 @@ const S = {
     display:flex;
     background-color: transparent;
   `,
+  // ProfileImage 가 더 정확한 의미의 컴포넌트 이름인 것 같음
   Profile: styled.div`
     width:36px;
     height:36px;

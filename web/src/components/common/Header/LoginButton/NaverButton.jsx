@@ -2,6 +2,8 @@ import React from 'react';
 import NaverLogin from 'react-naver-login';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
+import { authByNaver } from '@/apis';
+import { NAVER_AUTH_CALLBACK } from '@/constants';
 
 const NaverLoginButton = (props) => {
   const { onClick } = props;
@@ -10,8 +12,8 @@ const NaverLoginButton = (props) => {
 
 const NaverButton = (props) => {
   const { handleClose } = props;
-  const handleResponse = (response) => {
-    console.log('naver res', response);
+  const handleResponse = ({ accessToken }) => {
+    authByNaver(accessToken);
   };
   const handleFailure = (error) => {
     console.log(error);
@@ -20,7 +22,7 @@ const NaverButton = (props) => {
   return (
     <NaverLogin
       clientId={process.env.NAVER_ID}
-      callbackUrl="http://localhost:4000/auth/naver/callback"
+      callbackUrl={NAVER_AUTH_CALLBACK}
       render={({ onClick }) => (
         <NaverLoginButton onClick={() => {
           handleClose();

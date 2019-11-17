@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { useMutation } from '@apollo/react-hooks';
 import styled from 'styled-components';
 import gql from 'graphql-tag';
+import { authByKakao } from '@/apis';
 
 const LOGIN = gql`
   mutation LogIn($token: String!, $displayName: String!) {
@@ -13,30 +14,18 @@ const LOGIN = gql`
 
 const KakaoLoginButton = (props) => {
   const { onClick } = props;
-  console.log(onClick);
   return <S.LoginBtn type="button" onClick={onClick}>Kakao Login</S.LoginBtn>;
 };
 
 const KakaoButton = (props) => {
   const { handleClose } = props;
   const [logIn] = useMutation(LOGIN);
-  const handleResponse = ({ response }) => {
-    const options = {
-      method: 'GET',
-      mode: 'cors',
-      cache: 'default',
-    };
-    fetch(
-      `http://localhost:4000/auth/kakao?access_token=${response.access_token}`,
-      options,
-    ).then((res) => {
-      const token = res.headers.get('x-auth-token');
-      res.json().then((user) => {
-        if (token) {
-          logIn({ variables: { token, displayName: user.displayname } });
-        }
-      });
-    });
+  const handleResponse = async ({ response }) => {
+    const { token, user } = await authByKakao(response.access_token);
+
+    if (token) {
+      logIn({ variables: { token, displayName: user.displayname } });
+    }
   };
   const handleFailure = (error) => {
     console.log(error);
