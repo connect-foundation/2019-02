@@ -1,5 +1,9 @@
 const jwt = require('jsonwebtoken');
 
+/**
+ * @param {{ id: string, displayname: string }} auth
+ * @returns {string} jwt token
+ */
 const createToken = (auth) => jwt.sign({
   id: auth.id,
   displayname: auth.displayname,
@@ -8,6 +12,10 @@ const createToken = (auth) => jwt.sign({
   expiresIn: '10h',
 });
 
+/**
+ * @param {string} token
+ * @returns {{ id: string, displayname: string }}
+ */
 const verifyToken = (token) => {
   if (!token) return null;
 

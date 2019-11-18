@@ -1,7 +1,7 @@
 import React from 'react';
 import { CssBaseline } from '@material-ui/core';
-import GlobalStyle from './styles/global';
-import Header from './components/common/Header';
+import { GlobalStyle } from './styles';
+import { Header } from './components/common';
 
 const App = () => (
   <>

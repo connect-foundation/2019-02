@@ -14,7 +14,7 @@ const UserSchema = new Schema({
   },
 });
 
-UserSchema.statics.upsertUser = function upsertUserHandler(username, displayname) {
+UserSchema.statics.upsert = function upsertUser(username, displayname) {
   const UserModel = this;
   const findUser = UserModel.findOne({ username });
 
