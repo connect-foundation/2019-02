@@ -5,7 +5,7 @@ import authLink from './auth';
 import { GRAPHQL_API } from '@/constants';
 
 const errorLink = onError(({ graphQLErrors, networkError }) => {
-  console.log(graphQLErrors, networkError);
+  console.error(graphQLErrors, networkError);
 });
 
 const httpLink = new HttpLink({

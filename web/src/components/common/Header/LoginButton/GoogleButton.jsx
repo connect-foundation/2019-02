@@ -15,7 +15,7 @@ const GoogleButton = (props) => {
     }
   };
   const handleFailure = (error) => {
-    console.log(error);
+    console.error(error);
   };
 
   return (

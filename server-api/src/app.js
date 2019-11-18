@@ -1,50 +1,31 @@
-const express = require('express');
-const cors = require('cors');
-const cookieParser = require('cookie-parser');
-const { ApolloServer } = require('apollo-server-express');
-const typeDefs = require('./typeDefs');
-const resolvers = require('./resolvers');
-const auth = require('./auth');
-const { verifyToken } = require('./utils/token');
+const mongoose = require('mongoose');
+const expressApp = require('./express/app');
+const apolloApp = require('./apollo/app');
 
-class App {
-  constructor(db) {
-    this.app = express();
-    this.server = new ApolloServer({
-      typeDefs,
-      resolvers,
-      context: ({ req }) => ({
-        user: verifyToken(req.headers['x-auth-token']),
-      }),
-    });
-    this.db = db;
-  }
+const start = () => {
+  const authServer = expressApp;
+  const apiServer = apolloApp;
+  const connectOptions = {
+    useUnifiedTopology: true,
+    useNewUrlParser: true,
+  };
+  const doneDbConnection = (error) => {
+    if (error) console.error('mongodb connect error', error);
+    else console.log('mongodb connect success!');
+  };
+  const doneServerStart = () => {
+    console.log([
+      '🚀 Server ready at ',
+      `${process.env.SERVER_HOST}:${process.env.SERVER_PORT}`,
+      apiServer.graphqlPath,
+    ].join(''));
+  };
 
-  init() {
-    const corsOption = {
-      origin: true,
-      methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-      credentials: true,
-      exposedHeaders: ['x-auth-token'],
-    };
+  mongoose.connect(process.env.DB_URL, connectOptions, doneDbConnection);
+  apiServer.applyMiddleware({ app: authServer });
+  authServer.listen({ port: process.env.SERVER_PORT }, doneServerStart);
+};
 
-    this.app.use(cors(corsOption));
-    this.app.use(express.json());
-    this.app.use(express.urlencoded({ extended: true }));
-    this.app.use(cookieParser());
-    this.setRouting();
-    this.server.applyMiddleware({ app: this.app });
-  }
-
-  start() {
-    this.app.listen({ port: process.env.PORT }, () => {
-      console.log(`🚀 Server ready at http://localhost:${process.env.PORT}${this.server.graphqlPath}`);
-    });
-  }
-
-  setRouting() {
-    this.app.use('/auth', auth);
-  }
-}
-
-module.exports = App;
+module.exports = {
+  start,
+};

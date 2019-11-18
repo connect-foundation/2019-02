@@ -11,7 +11,7 @@ const NaverButton = (props) => {
     authByNaver(accessToken);
   };
   const handleFailure = (error) => {
-    console.log(error);
+    console.error(error);
   };
 
   return (

@@ -1,4 +1,15 @@
-const { createToken } = require('../utils/token');
+const { createToken } = require('../../utils/token');
+
+const setAuth = (req, res, next) => {
+  if (!req.user) return res.send(401, 'User Not Authenticated');
+
+  req.auth = {
+    id: req.user.id,
+    displayname: req.user.displayname,
+  };
+
+  next();
+};
 
 const generateToken = (req, _, next) => {
   req.token = createToken(req.auth);
@@ -11,6 +22,7 @@ const sendToken = (req, res) => {
 };
 
 module.exports = {
+  setAuth,
   generateToken,
   sendToken,
 };

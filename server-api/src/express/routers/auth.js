@@ -1,7 +1,10 @@
 const { Router } = require('express');
 const passport = require('passport');
-const { generateToken, sendToken } = require('./tokenizer');
-require('./passport');
+const {
+  setAuth,
+  generateToken,
+  sendToken,
+} = require('../middlewares/auth');
 
 const router = Router();
 
@@ -17,16 +20,7 @@ const router = Router();
 router.route('/google')
   .post(
     passport.authenticate('google-token', { session: false }),
-    (req, res, next) => {
-      if (!req.user) return res.send(401, 'User Not Authenticated');
-
-      req.auth = {
-        id: req.user.id,
-        displayname: req.user.displayname,
-      };
-
-      next();
-    },
+    setAuth,
     generateToken,
     sendToken,
   );
@@ -43,16 +37,7 @@ router.route('/google')
 router.route('/kakao')
   .get(
     passport.authenticate('kakao-token', { session: false }),
-    (req, res, next) => {
-      if (!req.user) return res.send(401, 'User Not Authenticated');
-
-      req.auth = {
-        id: req.user.id,
-        displayname: req.user.displayname,
-      };
-
-      next();
-    },
+    setAuth,
     generateToken,
     sendToken,
   );
@@ -70,16 +55,7 @@ router.route('/kakao')
 router.route('/naver')
   .post(
     passport.authenticate('naver-token', { session: false }),
-    (req, res, next) => {
-      if (!req.user) return res.send(401, 'User Not Authenticated');
-
-      req.auth = {
-        id: req.user.id,
-        displayname: req.user.displayname,
-      };
-
-      next();
-    },
+    setAuth,
     generateToken,
     sendToken,
   );
