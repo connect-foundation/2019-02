@@ -62,6 +62,13 @@
     "@types/express-serve-static-core" "*"
     "@types/serve-static" "*"
 
+"@types/gm@^1.18.6":
+  version "1.18.6"
+  resolved "https://registry.yarnpkg.com/@types/gm/-/gm-1.18.6.tgz#212d77c4a387a4b2d7fc8770d84f3b38a91159fd"
+  integrity sha512-ghb4ZYoSovciyS/BcbGhH/3VBmTu6Hit7rIdtIZnzVjT/a2OOAp4ZrdJGyW0PtF94XXzJC5li7WgEpg8saHfPQ==
+  dependencies:
+    "@types/node" "*"
+
 "@types/json-schema@^7.0.3":
   version "7.0.3"
   resolved "https://registry.yarnpkg.com/@types/json-schema/-/json-schema-7.0.3.tgz#bdfd69d61e464dcc81b25159c270d75a73c1a636"
