@@ -1,4 +1,4 @@
-export const getExtenstion = (path: string): string => {
+export const getExtension = (path: string): string => {
   const indexOfPoint = path.lastIndexOf('.');
 
   return path.substring(indexOfPoint + 1);

@@ -1,7 +1,7 @@
 import * as gm from 'gm';
 import { ReadStream, createReadStream } from 'fs';
 import {
-  getExtenstion,
+  getExtension,
 } from '../utils/pathParser';
 
 interface SlideConverterSpec {
@@ -40,7 +40,7 @@ class SlideConverter implements SlideConverterSpec {
   }
 
   async convertToSlides(inputPath: string, outputPath: string): Promise<SlideInfo[]> {
-    const ext = getExtenstion(inputPath);
+    const ext = getExtension(inputPath);
 
     if (ext === 'pdf') {
       const slides = await this.convertPdfToSlides(inputPath, outputPath);
