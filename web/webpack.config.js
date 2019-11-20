@@ -3,6 +3,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const Dotenv = require('dotenv-webpack');
 
 module.exports = {
+  mode: 'development',
   entry: './src/index.js',
   output: {
     path: Path.join(__dirname, './build'),
@@ -27,6 +28,10 @@ module.exports = {
       {
         test: /\.css$/,
         use: ['style-loader', 'css-loader'],
+      },
+      {
+        test: /\.(png|jpg|jpeg|svg)$/,
+        use: ['file-loader'],
       },
     ],
   },
