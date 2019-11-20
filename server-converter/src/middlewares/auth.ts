@@ -1,5 +1,5 @@
 import * as jwt from 'jsonwebtoken';
-import { RequestHandler } from 'express';
+import { RequestHandler } from '../@types';
 
 const verifyToken = (token: string): boolean => {
   if (!token) return false;

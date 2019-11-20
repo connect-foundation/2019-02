@@ -1,11 +1,11 @@
 import * as express from 'express';
 import * as cors from 'cors';
-import * as multer from 'multer';
 import {
   auth,
   convert,
   upload,
-  save,
+  saveTmp,
+  removeTmp,
 } from './middlewares';
 
 const app = express();
@@ -17,14 +17,27 @@ const corsOption = {
   exposedHeaders: ['x-auth-token'],
 };
 
+const handleError: express.ErrorRequestHandler = (err, _, res, __) => {
+  console.log(err);
+  if (typeof err === 'string') res.status(500).send(err);
+  else {
+    res.status(err.status || 500).send(err.message);
+  }
+};
+
 const start = () => {
   app.use(cors(corsOption));
   app.use(express.json());
   app.use(auth);
-  app.post('/images', save, convert, upload);
-  app.use((err: any, _: any, res: any, __: any) => {
-    res.status(err.status || 500).end();
-  });
+  app.post(
+    '/images',
+    saveTmp,
+    convert,
+    upload,
+    removeTmp,
+    (_, res) => res.status(200).end(),
+  );
+  app.use(handleError);
   app.listen('3000', () => {
     console.log('welcome dropy converter!');
   });
