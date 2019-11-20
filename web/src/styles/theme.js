@@ -45,6 +45,7 @@ export default createMuiTheme({
     },
     shadow: {
       button: 'rgba(0, 0, 0, 0.24) 0px 2px 2px 0px, rgba(0, 0, 0, 0.24) 0px 0px 1px 0px',
+      channelButton: '0px 2px 19px rgba(230, 119, 0, 0.4)',
     },
   },
   typography: {
