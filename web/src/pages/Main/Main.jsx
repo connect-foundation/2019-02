@@ -3,12 +3,12 @@ import { ChannelButton, MainLogo } from '../../components/main';
 import S from './style';
 
 const Main = () => (
-  <S.Main>
-    <S.MainWrapper>
+  <S.MainWrapper>
+    <S.Main>
       <MainLogo />
       <ChannelButton />
-    </S.MainWrapper>
-  </S.Main>
+    </S.Main>
+  </S.MainWrapper>
 );
 
 export default Main;

@@ -4,7 +4,7 @@ const Dotenv = require('dotenv-webpack');
 
 module.exports = {
   mode: 'development',
-  entry: './src/index.js',
+  entry: { index: './src/index.js' },
   output: {
     path: Path.join(__dirname, './build'),
     filename: 'index.bundle.js',
@@ -12,6 +12,7 @@ module.exports = {
   resolve: {
     alias: {
       '@': Path.resolve(__dirname, './src'),
+      '@@': Path.resolve(__dirname, './public/images'),
     },
     extensions: ['.mjs', '.js', '.jsx'],
   },

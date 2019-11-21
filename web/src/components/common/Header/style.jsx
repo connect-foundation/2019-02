@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import { Button } from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import Profile from '@@/tempProfile.png';
 import { px, colorGray } from '@/styles';
 
 export default {
@@ -24,7 +25,7 @@ export default {
     border-radius: 100%;
     background-color: ${colorGray(4)};
     background-size: contain;
-    background-image: url('/public/statics/images/tempProfile.png');
+    background-image: url(${Profile});
     margin-right: 10px;
   `,
   UserName: styled.div`

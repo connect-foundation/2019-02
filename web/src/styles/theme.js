@@ -64,6 +64,7 @@ export default createMuiTheme({
       colorPrimary: {
         'background-color': '#f8f9fa',
         'border-bottom': '1px solid #dee2e6',
+        flex: 0,
       },
     },
   },

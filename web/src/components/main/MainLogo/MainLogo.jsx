@@ -1,6 +1,6 @@
 import React from 'react';
+import Logo from '@@/dropyLogo.png';
 import S from './style';
-import Logo from '@/assets/dropyLogo.png';
 
 const MainLogo = () => (
   <S.MainLogo>
