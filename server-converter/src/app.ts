@@ -18,11 +18,11 @@ const corsOption = {
 };
 
 const handleError: express.ErrorRequestHandler = (err, _, res, __) => {
-  console.log(err);
-  if (typeof err === 'string') res.status(500).send(err);
-  else {
-    res.status(err.status || 500).send(err.message);
-  }
+  const status = 'error';
+  const message = (typeof err === 'string') ? err : err.message;
+
+  res.status(500)
+    .json({ status, message });
 };
 
 const start = () => {
