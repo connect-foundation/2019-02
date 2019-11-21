@@ -3,25 +3,11 @@ import { ReadStream, createReadStream } from 'fs';
 import {
   getExtension,
 } from '../utils/pathParser';
-
-interface SlideConverterSpec {
-  convertToSlides: (inputPath: string, outputPath: string) => Promise<SlideInfo[]>
-}
-
-interface SlideImageOptions {
-  quality: number;
-  format: string;
-  resolution: number;
-  compression: string;
-  width: number;
-  height?: number;
-  name: (page: number) => string;
-}
-
-interface SlideInfo {
-  path: string;
-  page: number;
-}
+import {
+  SlideConverterSpec,
+  SlideImageOptions,
+  SlideInfo,
+} from '../@types/converter';
 
 class SlideConverter implements SlideConverterSpec {
   private options: SlideImageOptions;
@@ -79,7 +65,10 @@ class SlideConverter implements SlideConverterSpec {
         .write(output, (err) => {
           if (err) reject(err);
           else {
-            resolve({ path: output, page });
+            resolve({
+              path: output,
+              page,
+            });
           }
         });
     });
@@ -89,15 +78,14 @@ class SlideConverter implements SlideConverterSpec {
 
   private doGraphicWork(imageStream: ReadStream, page: number) {
     const {
+      quality,
       resolution,
       compression,
-      width,
-      height,
     } = this.options;
 
     return gm(imageStream, `${imageStream.path}[${page - 1}]`)
       .density(resolution, resolution)
-      .resize(width, height)
+      .quality(quality)
       .compress(compression);
   }
 }
