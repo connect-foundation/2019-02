@@ -24,5 +24,6 @@ module.exports = {
 		"no-console": "off",
 		"react/jsx-filename-extension": "off",
 		"import/no-unresolved": "off",
+		"jsx-a11y/label-has-associated-control": "off" 
 	}
 };

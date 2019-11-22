@@ -5,7 +5,8 @@
   "license": "MIT",
   "scripts": {
     "dev": "ts-node ./src/index.ts --project tsconfig.json",
-    "lint": "eslint src/**/*.ts"
+    "lint": "eslint src/**/*.ts",
+    "test": "echo Preparing..."
   },
   "dependencies": {
     "aws-sdk": "^2.574.0",

@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { 
-  GoogleButton, 
-  KakaoButton, 
-  NaverButton, 
+import {
+  GoogleButton,
+  KakaoButton,
+  NaverButton,
 } from '../LoginButton';
 import S from './style';
 

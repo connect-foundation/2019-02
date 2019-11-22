@@ -6,7 +6,6 @@ const verifyToken = (token: string): boolean => {
 
   try {
     const payload: any = jwt.verify(token, process.env.TOKEN_SECRET);
-
     return !!(payload.id && payload.displayname);
   } catch (error) {
     return false;
@@ -21,7 +20,7 @@ const authMiddleware: RequestHandler = (req, res, next) => {
   if (isVerified) {
     next();
   } else {
-    res.status(401).end();
+    res.status(401).json({ status: 'unauthorized' });
   }
 };
 

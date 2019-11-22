@@ -8,6 +8,10 @@ const GlobalStyle = createGlobalStyle`
     word-breaK: keep-all;
   }
 
+  html, body {
+    height: 100%;
+  }
+  
   ol, ul {
     margin: 0;
     padding: 0;
