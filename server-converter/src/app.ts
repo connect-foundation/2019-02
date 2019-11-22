@@ -35,7 +35,7 @@ const start = () => {
     convert,
     upload,
     removeTmp,
-    (_, res) => res.status(200).end(),
+    (_, res) => res.status(200).json({ status: 'ok' }),
   );
   app.use(handleError);
   app.listen('3000', () => {
