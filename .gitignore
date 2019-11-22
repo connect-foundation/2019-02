@@ -1,0 +1,5 @@
+server-api
+# .auto-deploy
+.vscode
+web
+node_modules
