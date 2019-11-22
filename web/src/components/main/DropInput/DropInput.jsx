@@ -1,14 +1,23 @@
 import React from 'react';
 import { Button } from '@material-ui/core';
 import { uploadFile } from '@/apis';
+import createChannelId from '@/utils/uuid';
 
 const DropInput = () => {
   const handleUpload = async (e) => {
     const file = e.target.files[0];
+    const channelId = createChannelId();
     const data = new FormData();
 
     data.append('file', file);
-    await uploadFile(data);
+    data.append('channelId', channelId);
+
+    const status = await uploadFile(data);
+    if (status === 'ok') {
+      // Todo: 채널 생성
+    } else {
+      // Todo: error
+    }
   };
 
   return (
