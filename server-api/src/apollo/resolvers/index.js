@@ -7,6 +7,7 @@ const resolvers = merge({
 }, ...[
   require('./common'),
   require('./channels'),
+  require('./chats'),
 ]);
 
 module.exports = resolvers;

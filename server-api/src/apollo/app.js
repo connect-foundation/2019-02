@@ -1,7 +1,13 @@
-const { ApolloServer, makeExecutableSchema } = require('apollo-server-express');
+const {
+  ApolloServer,
+  makeExecutableSchema,
+  PubSub,
+} = require('apollo-server-express');
 const typeDefs = require('./typeDefs');
 const resolvers = require('./resolvers');
 const { verifyToken } = require('../utils/token');
+
+const pubsub = new PubSub();
 
 const schema = makeExecutableSchema({
   typeDefs,
@@ -10,9 +16,17 @@ const schema = makeExecutableSchema({
 
 const apolloServer = new ApolloServer({
   schema,
-  context: ({ req }) => ({
+  context: ({ req, connection }) => (connection ? connection.context : ({
     user: verifyToken(req.headers['x-auth-token']),
-  }),
+    pubsub,
+  })),
+  subscriptions: {
+    onConnect: (connectionParams) => Promise.resolve(connectionParams['x-auth-token'])
+      .then((token) => ({
+        user: token ? verifyToken(token) : null,
+        pubsub,
+      })),
+  },
 });
 
 module.exports = apolloServer;

@@ -1,8 +1,12 @@
-const { gql } = require('apollo-server-express');
-
-const typeDefs = gql`
+const typeDefs = `
 type Query {
-  Dummy: String
+  _empty: String
+}
+type Mutation {
+  _empty: String
+}
+type Subscription {
+  _empty: String
 }
 `;
 

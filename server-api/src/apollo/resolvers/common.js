@@ -1,7 +1,3 @@
-const resolvers = {
-  Query: {
-    Dummy: () => '',
-  },
-};
+const resolvers = {};
 
 module.exports = resolvers;
