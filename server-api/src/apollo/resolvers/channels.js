@@ -1,3 +1,4 @@
+const { ApolloError } = require('apollo-server-express');
 const Channels = require('../../models/channels');
 
 const createChannelInfo = (user, channelId) => ({
@@ -10,9 +11,9 @@ const createChannel = async (_, { channelId }, { user }) => {
 
   try {
     const result = await newChannel.save();
-    return { status: 'ok', channel: result }
+    return { status: 'ok', channel: result };
   } catch (err) {
-    throw err;
+    throw new ApolloError(err.message);
   }
 };
 
