@@ -8,7 +8,7 @@ const UserSchema = new Schema({
     required: [true, '아이디는 필수입니다.'],
   },
   displayname: String,
-  created_at: {
+  createdAt: {
     type: Date,
     default: Date.now(),
   },

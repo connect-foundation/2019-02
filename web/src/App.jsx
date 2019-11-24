@@ -7,8 +7,7 @@ import {
 import { CssBaseline } from '@material-ui/core';
 import { GlobalStyle } from './styles';
 import { Header, Wrapper } from './components/common';
-import { DropModal } from './components/main';
-import { Main } from './pages';
+import { Main, Channel } from './pages';
 
 const App = () => (
   <>
@@ -18,9 +17,11 @@ const App = () => (
       <Header />
       <Router>
         <Switch>
-          <Route path="/">
+          <Route path="/" exact>
             <Main />
-            <DropModal />
+          </Route>
+          <Route path="/channels/:channelId" exact>
+            <Channel />
           </Route>
         </Switch>
       </Router>

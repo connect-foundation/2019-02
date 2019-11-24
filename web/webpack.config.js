@@ -5,7 +5,7 @@ const Dotenv = require('dotenv-webpack');
 module.exports = {
   mode: 'development',
   entry: {
-    app: ['babel-polyfill', './src/index.js'],
+    app: ['./src/index.js'],
   },
   output: {
     path: Path.join(__dirname, './build'),
@@ -26,6 +26,7 @@ module.exports = {
         loader: 'babel-loader',
         options: {
           presets: ['@babel/preset-env', '@babel/preset-react'],
+          plugins: ['@babel/plugin-transform-runtime'],
         },
       },
       {
@@ -40,6 +41,7 @@ module.exports = {
   },
   devServer: {
     port: 8000,
+    historyApiFallback: true,
   },
   plugins: [
     new HtmlWebpackPlugin({

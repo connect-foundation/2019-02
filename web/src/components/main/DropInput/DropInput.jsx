@@ -1,15 +1,29 @@
 import React from 'react';
+import { Redirect } from 'react-router-dom';
 import { Button } from '@material-ui/core';
 import { uploadFile } from '@/apis';
+import createChannelId from '@/utils/uuid';
+import { useCreateChannel } from '@/hooks';
+import createFormData from '@/utils/createFormdata';
 
 const DropInput = () => {
+  const { mutate, data } = useCreateChannel();
   const handleUpload = async (e) => {
+    const channelId = createChannelId();
     const file = e.target.files[0];
-    const data = new FormData();
+    const formData = createFormData({ file, channelId });
+    const status = await uploadFile(formData);
 
-    data.append('file', file);
-    await uploadFile(data);
+    if (status === 'ok') {
+      mutate({ variables: { channelId } });
+    } else {
+      // Todo: error
+    }
   };
+
+  if (data.status === 'ok') {
+    return <Redirect to={`/channels/${data.channel.channelId}`} />;
+  }
 
   return (
     <>

@@ -6,8 +6,8 @@ export default {
     justify-content: center;
     align-items: center;
     width: 100%;
-    background-color:white;
-    flex:1;
+    background-color: white;
+    flex: 1;
   `,
   Main: styled.div`
     display: flex;
@@ -15,6 +15,6 @@ export default {
     justify-content: center;
     align-items: center;
     width: 500px;
-    margin-top:-64px;
+    margin-top: -64px;
 `,
 };
