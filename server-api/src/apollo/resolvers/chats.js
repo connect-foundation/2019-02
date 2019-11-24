@@ -5,7 +5,12 @@ const CHAT_ADDED = 'CHAT_ADDED';
 const addChat = (_, { channelId, message }, { user, pubsub }) => {
   const channel = { channelId };
   const author = user || { displayname: '', username: '' };
-  const chat = { channel, author, message };
+  const chat = {
+    channel,
+    author,
+    message,
+    createdAt: new Date(),
+  };
 
   pubsub.publish(CHAT_ADDED, { chatAdded: chat });
 

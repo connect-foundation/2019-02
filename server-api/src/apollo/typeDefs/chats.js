@@ -3,6 +3,7 @@ type Chat {
   channel: Channel
   author: User
   message: String
+  createdAt: Date
 }
 
 extend type Mutation {

@@ -1,4 +1,6 @@
 const typeDefs = `
+scalar Date
+
 type Query {
   _empty: String
 }
