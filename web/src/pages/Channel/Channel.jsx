@@ -1,5 +1,6 @@
 import React from 'react';
 import { useRouteMatch } from 'react-router-dom';
+import { ChatInput, ChatLogs } from '@/components/channel';
 import S from './style';
 
 const Channel = () => {
@@ -7,8 +8,8 @@ const Channel = () => {
 
   return (
     <S.ChannelWrapper>
-      채널아이디 :
-      {channelId}
+      <ChatInput channelId={channelId} />
+      <ChatLogs channelId={channelId} />
     </S.ChannelWrapper>
   );
 };
