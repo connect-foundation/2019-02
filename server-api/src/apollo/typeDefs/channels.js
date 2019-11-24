@@ -9,6 +9,7 @@ type Channel {
 
 type CreateChannelResponse {
   status: String!
+  channel: Channel
 }
 
 type Mutation {

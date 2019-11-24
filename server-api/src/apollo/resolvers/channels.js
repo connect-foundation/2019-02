@@ -9,9 +9,10 @@ const createChannel = async (_, { channelId }, { user }) => {
   const newChannel = new Channels(createChannelInfo(user, channelId));
 
   try {
-    await newChannel.save();
+    const result = await newChannel.save();
+    return { status: 'ok', channel: result }
   } catch (err) {
-    console.log(err);
+    throw err;
   }
 };
 
