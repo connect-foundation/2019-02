@@ -1,8 +1,10 @@
+const http = require('http');
 const mongoose = require('mongoose');
 const expressApp = require('./express/app');
 const apolloApp = require('./apollo/app');
 
 const start = () => {
+  const httpServer = http.createServer(expressApp);
   const authServer = expressApp;
   const apiServer = apolloApp;
   const connectOptions = {
@@ -23,7 +25,8 @@ const start = () => {
 
   mongoose.connect(process.env.DB_URL, connectOptions, doneDbConnection);
   apiServer.applyMiddleware({ app: authServer });
-  authServer.listen({ port: process.env.SERVER_PORT }, doneServerStart);
+  apiServer.installSubscriptionHandlers(httpServer);
+  httpServer.listen({ port: process.env.SERVER_PORT }, doneServerStart);
 };
 
 module.exports = {

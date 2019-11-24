@@ -3,7 +3,10 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const Dotenv = require('dotenv-webpack');
 
 module.exports = {
-  entry: './src/index.js',
+  mode: 'development',
+  entry: {
+    app: ['./src/index.js'],
+  },
   output: {
     path: Path.join(__dirname, './build'),
     filename: 'index.bundle.js',
@@ -11,6 +14,7 @@ module.exports = {
   resolve: {
     alias: {
       '@': Path.resolve(__dirname, './src'),
+      '@@': Path.resolve(__dirname, './public/images'),
     },
     extensions: ['.mjs', '.js', '.jsx'],
   },
@@ -22,16 +26,22 @@ module.exports = {
         loader: 'babel-loader',
         options: {
           presets: ['@babel/preset-env', '@babel/preset-react'],
+          plugins: ['@babel/plugin-transform-runtime'],
         },
       },
       {
         test: /\.css$/,
         use: ['style-loader', 'css-loader'],
       },
+      {
+        test: /\.(png|jpg|jpeg|svg)$/,
+        use: ['file-loader'],
+      },
     ],
   },
   devServer: {
     port: 8000,
+    historyApiFallback: true,
   },
   plugins: [
     new HtmlWebpackPlugin({
