@@ -2,7 +2,6 @@ import { ApolloClient } from 'apollo-client';
 import link from './link';
 import cache from './cache';
 import resolvers from './resolvers';
-// import resolvers from './resolvers/auth';
 
 const defaultCacheData = {
   authentication: {
@@ -11,6 +10,10 @@ const defaultCacheData = {
     displayName: localStorage.getItem('DROPY_USERNAME'),
     token: localStorage.getItem('DROPY_TOKEN'),
   },
+  chatLogs: {
+    __typename: 'chatLogs',
+    logs: [],
+  }
 };
 
 const client = new ApolloClient({

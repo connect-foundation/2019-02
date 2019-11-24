@@ -1,8 +1,14 @@
-const { gql } = require('apollo-server-express');
+const typeDefs = `
+scalar Date
 
-const typeDefs = gql`
 type Query {
-  Dummy: String
+  _empty: String
+}
+type Mutation {
+  _empty: String
+}
+type Subscription {
+  _empty: String
 }
 `;
 

@@ -1,6 +1,4 @@
-const { gql } = require('apollo-server-express');
-
-const typeDefs = gql`
+const typeDefs = `
 type Channel {
   channelId: String!
   channelName: String
@@ -12,7 +10,7 @@ type CreateChannelResponse {
   channel: Channel
 }
 
-type Mutation {
+extend type Mutation {
   createChannel(channelId: String!): CreateChannelResponse
 }
 `;
