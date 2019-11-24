@@ -10,6 +10,10 @@ const defaultCacheData = {
     displayName: localStorage.getItem('DROPY_USERNAME'),
     token: localStorage.getItem('DROPY_TOKEN'),
   },
+  chatLogs: {
+    __typename: 'chatLogs',
+    logs: [],
+  }
 };
 
 const client = new ApolloClient({

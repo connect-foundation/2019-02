@@ -5,16 +5,13 @@ import { useChatAdded } from '@/hooks';
 const ChatLogs = (props) => {
   const { channelId } = props;
   const { data } = useChatAdded(channelId);
+
   return (
     <>
       <ul>
-        {data && (
-        <li>
-          {data.author.displayname}
-          :
-          {data.message}
-        </li>
-        )}
+        {data && data.map(({ author, message }, i) =>(
+          <li key={`chat-${i}`}>{author.displayname}: {message}</li>
+        ))}
       </ul>
     </>
   );
