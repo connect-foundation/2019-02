@@ -1,16 +1,29 @@
 import React from 'react';
 import { useRouteMatch } from 'react-router-dom';
-import { ChatInput, ChatLogs } from '@/components/channel';
+import { ChannelContext } from '@/contexts';
+import { useCheckChannel } from '@/hooks';
+import { Chat } from '@/components/channel';
 import S from './style';
 
 const Channel = () => {
   const { params: { channelId } } = useRouteMatch();
+  const { data } = useCheckChannel(channelId);
+
+  if (!data) return null;
+  if (data.status === 'not_exist') {
+    return (
+      <div>존재하지 않는 채널입니다...</div>
+    );
+  }
 
   return (
-    <S.ChannelWrapper>
-      <ChatInput channelId={channelId} />
-      <ChatLogs channelId={channelId} />
-    </S.ChannelWrapper>
+    <ChannelContext.Provider
+      value={{ isMaster: data.isMaster }}
+    >
+      <S.ChannelWrapper>
+        <Chat channelId={channelId} />
+      </S.ChannelWrapper>
+    </ChannelContext.Provider>
   );
 };
 
