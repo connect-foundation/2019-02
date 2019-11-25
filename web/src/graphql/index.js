@@ -13,7 +13,7 @@ const defaultCacheData = {
   chatLogs: {
     __typename: 'chatLogs',
     logs: [],
-  }
+  },
 };
 
 const client = new ApolloClient({

@@ -29,7 +29,9 @@ const useChatAdded = (channelId) => {
   const [cacheChat, mutationResult] = useMutation(CACHE_CHAT_ADDED);
   const result = useSubscription(CHAT_ADDED, { variables: { channelId } });
   const data = result.data ? result.data.chatAdded : null;
-  const chatLogs = mutationResult.data ? mutationResult.data.addChat.logs.filter(log => log) : null;
+  const chatLogs = mutationResult.data
+    ? mutationResult.data.addChat.logs.filter((log) => log)
+    : null;
 
   useEffect(() => {
     cacheChat({ variables: { chat: data } });

@@ -1,5 +1,4 @@
 import getChatLogs from '@/graphql/cache/getChatLogs';
-import { toIdValue } from 'apollo-utilities';
 import cache from '../cache';
 
 const resolver = {
@@ -16,8 +15,8 @@ const resolver = {
       cache.writeData({ data });
 
       return data.chatLogs;
-    }
-  }
+    },
+  },
 };
 
 export default resolver;

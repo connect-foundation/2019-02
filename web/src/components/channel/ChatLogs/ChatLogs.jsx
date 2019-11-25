@@ -9,8 +9,12 @@ const ChatLogs = (props) => {
   return (
     <>
       <ul>
-        {data && data.map(({ author, message }, i) =>(
-          <li key={`chat-${i}`}>{author.displayname}: {message}</li>
+        {data && data.map(({ author, message }, i) => (
+          <li key={`chat-${i * 1}`}>
+            {author.displayname}
+:
+            {message}
+          </li>
         ))}
       </ul>
     </>

@@ -1,4 +1,3 @@
-/* eslint-disable global-require */
 const { merge } = require('../../utils/object');
 
 const resolvers = merge({
