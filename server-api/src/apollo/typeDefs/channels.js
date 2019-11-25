@@ -1,6 +1,7 @@
 const typeDefs = `
 type Channel {
   channelId: String!
+  master: User 
   channelName: String
   maxHeadCount: Int
 }

@@ -6,7 +6,7 @@ const verifyToken = (token: string): boolean => {
 
   try {
     const payload: any = jwt.verify(token, process.env.TOKEN_SECRET);
-    return !!(payload.id && payload.displayName);
+    return !!(payload.userId && payload.displayName);
   } catch (error) {
     return false;
   }

@@ -1,17 +1,17 @@
 const jwt = require('jsonwebtoken');
 
 /**
- * @param {{ id: string, displayName: string }} auth
+ * @param {{ userId: string, displayName: string }} auth
  * @returns {string} jwt token
  */
 const createToken = (auth) => jwt.sign({
-  id: auth.id,
+  userId: auth.userId,
   displayName: auth.displayName,
 }, process.env.TOKEN_SECRET);
 
 /**
  * @param {string} token
- * @returns {{ id: string, displayName: string }}
+ * @returns {{ userId: string, displayName: string }}
  */
 const verifyToken = (token) => {
   if (!token) return null;
