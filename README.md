@@ -40,10 +40,9 @@ http://www.dropy.org
 <br>
 
 ## 📝 Document
-> 
-- [위키](https://github.com/connect-foundation/2019-02/wiki)
-- [기술적으로 고민한 부분들]()
-- [dropy-converter 모듈 API]()
+
+- [기획 / 규칙 / 로그](https://github.com/connect-foundation/2019-02/wiki)
+- [기술공유 01. Passport와 Apollo를 활용한 oAuth 인증 시스템](https://github.com/connect-foundation/2019-02/wiki/%EA%B8%B0%EC%88%A0%EA%B3%B5%EC%9C%A0-01.-Passport%EC%99%80-Apollo%EB%A5%BC-%ED%99%9C%EC%9A%A9%ED%95%9C-oAuth-%EC%9D%B8%EC%A6%9D-%EC%8B%9C%EC%8A%A4%ED%85%9C)
 
 <br>
 

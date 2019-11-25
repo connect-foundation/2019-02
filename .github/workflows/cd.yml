@@ -10,22 +10,6 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event.pull_request.merged == true
     steps:
-      - name: Checkout Master Branch
-        uses: actions/checkout@v1
       - run: |
-          npm init -y
-          npm install shelljs @actions/core
-      - name: Deploy Api Server
-        uses: ./.github/actions/deploy
-        with:
-          server-host: ${{ secrets.SERVER_API_HOST }}
-          server-username: ${{ secrets.SERVER_USERNAME }}
-          server-password: ${{ secrets.SERVER_PASSWORD }}
-          script-path: /home/2019-02/.auto-deploy/deploy-api.sh
-      - name: Deploy Web Server
-        uses: ./.github/actions/deploy
-        with:
-          server-host: ${{ secrets.SERVER_WEB_HOST }}
-          server-username: ${{ secrets.SERVER_USERNAME }}
-          server-password: ${{ secrets.SERVER_PASSWORD }}
-          script-path: /home/2019-02/.auto-deploy/deploy-web.sh
+        echo "Preparing auto deployment"
+      

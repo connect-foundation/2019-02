@@ -9,19 +9,5 @@ jobs:
     name: Test All Application
     runs-on: ubuntu-latest
     steps:
-      - name: Setup Node Env
-        uses: actions/setup-node@v1
-        with:
-          node-version: 10.16.0
-      - name: Checkout Devlop Branch
-        uses: actions/checkout@v1
-      - name: Run Api Test Codes
-        run: |
-          cd server-api
-          yarn install
-          yarn test
-      - name: Run Web Test Codes
-        run: |
-          cd ../web
-          yarn install
-          yarn test
+      - run: |
+        echo "Preparing auto Integration"
