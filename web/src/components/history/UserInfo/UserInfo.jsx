@@ -1,10 +1,16 @@
 import React from 'react';
+import UserInfoText from '../UserInfoText';
+import UserInfoButton from '../UserInfoButton';
 import S from './style';
 
 const UserInfo = () => (
   <>
     <S.UserInfoWrapper>
-      유저정보
+      <S.Profile />
+      <UserInfoText />
+      <UserInfoText />
+      <UserInfoButton />
+      <UserInfoButton />
     </S.UserInfoWrapper>
   </>
 );
