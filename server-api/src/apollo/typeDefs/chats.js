@@ -1,6 +1,6 @@
 const typeDefs = `
 type Chat {
-  channel: Channel
+  channelId: String
   author: User
   message: String
   createdAt: Date

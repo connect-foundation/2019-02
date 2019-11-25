@@ -11,7 +11,7 @@ const Users = require('../models/users');
  */
 const setProviderToUpsert = (provider) => (_, __, profile, done) => {
   const userId = `${provider}_${profile.id}`;
-  const displayName = profile.displayName;
+  const { displayName } = profile;
 
   Users.upsert(userId, displayName)
     .then((user) => done(null, user))
