@@ -12,7 +12,7 @@ const KakaoButton = (props) => {
     const { token, user } = await authByKakao(response.access_token);
 
     if (token) {
-      mutate({ variables: { token, displayName: user.displayname } });
+      mutate({ variables: { token, displayName: user.displayName } });
     }
   };
   const handleFailure = (error) => {

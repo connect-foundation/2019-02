@@ -17,7 +17,7 @@ const CHAT_ADDED = gql`
   subscription ChatAdded($channelId: String!) {
     chatAdded(channelId: $channelId) {
       author {
-        displayname
+        displayName
       }
       message
       createdAt

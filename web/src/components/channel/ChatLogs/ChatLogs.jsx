@@ -11,7 +11,7 @@ const ChatLogs = (props) => {
       <ul>
         {data && data.map(({ author, message }, i) => (
           <li key={`chat-${i * 1}`}>
-            {author.displayname}
+            {author.displayName}
 :
             {message}
           </li>

@@ -5,11 +5,11 @@ const CHAT_ADDED = 'CHAT_ADDED';
 
 const addChat = async (_, { channelId, message }, { user, pubsub }) => {
   const channel = { channelId };
-  const author = user || { displayname: '익명', username: 'null' };
+  const author = user || { displayName: '익명', userId: 'null' };
   try {
     const newChat = await new Chat({
       channelId,
-      displayName: author.displayname,
+      displayName: author.displayName,
       message,
     }).save();
     const payload = {

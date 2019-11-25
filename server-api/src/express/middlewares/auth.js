@@ -5,7 +5,7 @@ const setAuth = (req, res, next) => {
 
   req.auth = {
     id: req.user.id,
-    displayname: req.user.displayname,
+    displayName: req.user.displayName,
   };
 
   next();

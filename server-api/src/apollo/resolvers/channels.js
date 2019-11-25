@@ -3,7 +3,7 @@ const Channels = require('../../models/channels');
 
 const createChannelInfo = (user, channelId) => ({
   channelId,
-  channelName: `${user.displayname}님의 채널입니다.😀`,
+  channelName: `${user.displayName}님의 채널입니다.😀`,
 });
 
 const createChannel = async (_, { channelId }, { user }) => {

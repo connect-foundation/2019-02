@@ -3,27 +3,27 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const UserSchema = new Schema({
-  username: {
+  userId: {
     type: String,
     required: [true, '아이디는 필수입니다.'],
   },
-  displayname: String,
+  displayName: String,
   createdAt: {
     type: Date,
     default: Date.now(),
   },
 });
 
-UserSchema.statics.upsert = function upsertUser(username, displayname) {
+UserSchema.statics.upsert = function upsertUser(userId, displayName) {
   const UserModel = this;
-  const findUser = UserModel.findOne({ username });
+  const findUser = UserModel.findOne({ userId });
 
   return findUser.then((user) => {
     if (user) return user;
 
     const userInfo = {
-      username,
-      displayname,
+      userId,
+      displayName,
     };
     const newUser = new UserModel(userInfo);
 
