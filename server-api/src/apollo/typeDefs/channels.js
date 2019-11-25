@@ -6,9 +6,18 @@ type Channel {
   maxHeadCount: Int
 }
 
+type CheckChannelResponse {
+  status: String!
+  isMaster: Boolean!
+}
+
 type CreateChannelResponse {
   status: String!
   channel: Channel
+}
+
+extend type Query {
+  checkChannel(channelId: String!): CheckChannelResponse
 }
 
 extend type Mutation {

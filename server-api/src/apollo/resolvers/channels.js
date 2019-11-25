@@ -8,6 +8,18 @@ const createChannelInfo = (user, channelId) => ({
   masterId: user.userId,
 });
 
+const checkChannel = async (_, { channelId }, { user }) => {
+  try {
+    const channel = await Channels.findOne({ channelId });
+    const status = channel ? 'ok' : 'not_exist';
+    const isMaster = !!channel && !!user && channel.masterId === user.userId;
+
+    return { status, isMaster };
+  } catch (err) {
+    throw new ApolloError(err.message);
+  }
+};
+
 const createChannel = async (_, { channelId }, { user }) => {
   const newChannel = new Channels(createChannelInfo(user, channelId));
 
@@ -27,6 +39,9 @@ const createChannel = async (_, { channelId }, { user }) => {
 };
 
 const resolvers = {
+  Query: {
+    checkChannel,
+  },
   Mutation: {
     createChannel,
   },
