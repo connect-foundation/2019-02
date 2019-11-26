@@ -30,6 +30,12 @@ const DropZone = () => {
       setIsError(true);
     }
   };
+  const handleDragOver = (event) => {
+    event.preventDefault();
+  };
+  const handleDragLeave = (event) => {
+    event.preventDefault();
+  };
 
   if (data.status === 'ok') {
     return <Redirect to={`/channels/${data.channel.channelId}`} />;
@@ -44,6 +50,8 @@ const DropZone = () => {
           {isLoading ? (<LoadingModal message="채널에 입장중" />) : (
             <S.DropZone
               onDrop={(event) => handleDrop(event)}
+              onDragOver={(event) => handleDragOver(event)}
+              onDragLeave={(event) => handleDragLeave(event)}
             >
               <S.DropZoneContent>
                 <DropEmoji />
