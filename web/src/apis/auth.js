@@ -52,8 +52,9 @@ const authByNaver = async () => {
 const authByAnonymous = async () => {
   const response = await get({ url: ANONYMOUS_AUTH_API });
   const token = response.headers.get('x-anonymous-token');
+  const user = await response.json();
 
-  return { token };
+  return { token, user };
 };
 
 export {

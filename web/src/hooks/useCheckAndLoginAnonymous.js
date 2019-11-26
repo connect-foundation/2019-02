@@ -12,8 +12,8 @@ const GET_AUTH = gql`
 `;
 
 const LOGIN_ANONYMOUS = gql`
-  mutation LogInAnonymous($token: String!) {
-    logInAnonymous(token: $token) @client
+  mutation LogInAnonymous($token: String!, $userId: String!) {
+    logInAnonymous(token: $token, userId: $userId) @client
   }
 `;
 
@@ -25,8 +25,8 @@ const useCheckAndLoginAnonymous = () => {
   useEffect(() => {
     if (isTokenExisted) return;
 
-    authByAnonymous().then(({ token }) => {
-      logInAnonymous({ variables: { token } });
+    authByAnonymous().then(({ token, user }) => {
+      logInAnonymous({ variables: { token, userId: user.userId } });
     });
   }, [isTokenExisted]);
 };

@@ -1,11 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { useChatChanged } from '@/hooks';
+import { useChatChanged, useGetUserStatus } from '@/hooks';
 import ChatCard from './ChatCard';
 import S from './style';
 
 const ChatLogs = (props) => {
   const { channelId } = props;
+  const { userId } = useGetUserStatus();
   const { data } = useChatChanged(channelId);
 
   return (
@@ -16,16 +17,15 @@ const ChatLogs = (props) => {
             id,
             author,
             message,
-            isLiked,
-            likesCount,
+            likes,
           }) => (
             <S.ChatLog key={`chat-log-${id}`}>
               <ChatCard
                 id={id}
                 author={author}
                 message={message}
-                isLiked={isLiked}
-                likesCount={likesCount}
+                isLiked={likes.includes(userId)}
+                likesCount={likes.length}
               />
             </S.ChatLog>
           ))}

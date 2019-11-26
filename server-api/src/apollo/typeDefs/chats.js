@@ -4,8 +4,7 @@ type Chat {
   channelId: String
   author: User
   message: String
-  isLiked: Boolean
-  likesCount: Int
+  likes: [String]
   createdAt: Date
 }
 

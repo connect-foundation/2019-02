@@ -17,11 +17,11 @@ const CHAT_CHANGED = gql`
     chatChanged(channelId: $channelId) {
       id
       author {
+        userId
         displayName
       }
       message
-      isLiked
-      likesCount
+      likes
     }
   }
 `;

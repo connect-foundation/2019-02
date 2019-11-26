@@ -5,6 +5,7 @@ import resolvers from './resolvers';
 
 const token = localStorage.getItem('DROPY_TOKEN');
 const tokenAnonymous = localStorage.getItem('DROPY_ANONYMOUS_TOKEN');
+const userId = localStorage.getItem('DROPY_USER_ID');
 const displayName = localStorage.getItem('DROPY_USERNAME');
 
 const defaultCacheData = {
@@ -12,6 +13,7 @@ const defaultCacheData = {
     __typename: 'authentication',
     isLoggedIn: !!token,
     isAnonymous: !token && !!tokenAnonymous,
+    userId,
     displayName,
     token: token || tokenAnonymous,
   },
