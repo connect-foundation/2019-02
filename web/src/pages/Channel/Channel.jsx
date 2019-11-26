@@ -2,7 +2,7 @@ import React from 'react';
 import { useRouteMatch } from 'react-router-dom';
 import { ChannelContext } from '@/contexts';
 import { useCheckChannel } from '@/hooks';
-import { Chat } from '@/components/channel';
+import { Chat, Slide, ToolBar } from '@/components/channel';
 import S from './style';
 
 const Channel = () => {
@@ -21,6 +21,8 @@ const Channel = () => {
       value={{ isMaster: data.isMaster }}
     >
       <S.ChannelWrapper>
+        <ToolBar />
+        <Slide />
         <Chat channelId={channelId} />
       </S.ChannelWrapper>
     </ChannelContext.Provider>

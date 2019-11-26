@@ -14,7 +14,7 @@ export default createMuiTheme({
     },
     background: {
       light: '#fff9db',
-      main: '#fff3bf',
+      main: '#F1F3F5',
     },
     naver: '#2db400',
     kakao: '#fee102',
