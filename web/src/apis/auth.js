@@ -1,6 +1,7 @@
 import {
   KAKAO_AUTH_API,
   GOOGLE_AUTH_API,
+  ANONYMOUS_AUTH_API,
 } from '@/constants';
 import { get, post } from './http';
 
@@ -48,8 +49,16 @@ const authByNaver = async () => {
   // TODO
 };
 
+const authByAnonymous = async () => {
+  const response = await get({ url: ANONYMOUS_AUTH_API });
+  const token = response.headers.get('x-anonymous-token');
+
+  return { token };
+};
+
 export {
   authByGoogle,
   authByKakao,
   authByNaver,
+  authByAnonymous,
 };

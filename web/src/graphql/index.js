@@ -3,12 +3,17 @@ import link from './link';
 import cache from './cache';
 import resolvers from './resolvers';
 
+const token = localStorage.getItem('DROPY_TOKEN');
+const tokenAnonymous = localStorage.getItem('DROPY_ANONYMOUS_TOKEN');
+const displayName = localStorage.getItem('DROPY_USERNAME');
+
 const defaultCacheData = {
   authentication: {
     __typename: 'authentication',
-    isLoggedIn: !!localStorage.getItem('DROPY_TOKEN'),
-    displayName: localStorage.getItem('DROPY_USERNAME'),
-    token: localStorage.getItem('DROPY_TOKEN'),
+    isLoggedIn: !!token,
+    isAnonymous: !token && !!tokenAnonymous,
+    displayName,
+    token: token || tokenAnonymous,
   },
   chatLogs: {
     __typename: 'chatLogs',
