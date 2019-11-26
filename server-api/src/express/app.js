@@ -9,7 +9,7 @@ const corsOption = {
   origin: true,
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   credentials: true,
-  exposedHeaders: ['x-auth-token'],
+  exposedHeaders: ['x-auth-token', 'x-anonymous-token'],
 };
 
 app.use(cors(corsOption));
