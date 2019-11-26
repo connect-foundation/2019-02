@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { px } from '@/styles';
 
 export default {
-  DropText: styled.div`
+  DropText: styled.div.attrs({ type: 'div' })`
     color: white;
     white-space: nowrap;
     text-align: center;

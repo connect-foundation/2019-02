@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { colorGray } from '@/styles';
 
 export default {
-  DropZone: styled.div`
+  DropZone: styled.div.attrs({ type: 'div' })`
     display: flex;
     position: fixed;
     z-index: 999;
@@ -12,7 +12,7 @@ export default {
     height: 100%;
     background-color: ${colorGray(7)}E6;
   `,
-  DropZoneContent: styled.div`
+  DropZoneContent: styled.div.attrs({ type: 'div' })`
     display: flex;
     flex-direction: column;
     justify-content: space-around;

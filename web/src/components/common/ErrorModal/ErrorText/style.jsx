@@ -2,11 +2,11 @@ import styled from 'styled-components';
 import { px, colorGray } from '@/styles';
 
 export default {
-  ErrorTitle: styled.div`
+  ErrorTitle: styled.div.attrs({ type: 'div' })`
     color: ${colorGray(9)};
     font-size: ${px(35)};
   `,
-  ErrorText: styled.div`
+  ErrorText: styled.div.attrs({ type: 'div' })`
     color: ${({ theme }) => theme.palette.primary.main};
     white-space: nowrap;
     text-align: center;
