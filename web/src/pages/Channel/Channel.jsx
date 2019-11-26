@@ -18,7 +18,7 @@ const Channel = () => {
 
   return (
     <ChannelContext.Provider
-      value={{ isMaster: data.isMaster }}
+      value={{ isMaster: data.isMaster, slideUrls: data.slideUrls }}
     >
       <S.ChannelWrapper>
         <ToolBar />
