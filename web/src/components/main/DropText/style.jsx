@@ -8,5 +8,6 @@ export default {
     text-align: center;
     font-weight: 300;
     font-size: ${px(76)};
+    margin-bottom: ${px(120)};
   `,
 };
