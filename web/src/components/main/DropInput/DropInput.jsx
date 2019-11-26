@@ -11,7 +11,7 @@ const DropInput = () => {
   const handleUpload = async (e) => {
     const channelId = createChannelId();
     const file = e.target.files[0];
-    const formData = createFormData({ file, channelId });
+    const formData = createFormData({ channelId, file });
     const status = await uploadFile(formData);
 
     if (status === 'ok') {
