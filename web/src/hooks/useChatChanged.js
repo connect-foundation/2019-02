@@ -20,19 +20,34 @@ const CHAT_CHANGED = gql`
         displayName
       }
       message
+      isLiked
+      likesCount
     }
   }
 `;
 
-const useChatAdded = (channelId) => {
+const addOrUpdateChat = (chatLogs, chat) => {
+  const indexOfChat = chatLogs.findIndex(({ id }) => id === chat.id);
+  const newChatLogs = [...chatLogs];
+
+  if (indexOfChat === -1) {
+    newChatLogs.push(chat);
+  } else {
+    newChatLogs.splice(indexOfChat, 1, chat);
+  }
+
+  return newChatLogs;
+};
+
+const useChatChanged = (channelId) => {
   const client = useApolloClient();
   const published = useSubscription(CHAT_CHANGED, { variables: { channelId } });
-  const chatAdded = published.data && published.data.chatChanged;
+  const chatChanged = published.data && published.data.chatChanged;
   const { chatLogs: { logs } } = client.readQuery({ query: GET_CHAT_CACHED });
 
-  if (!chatAdded) return { data: logs };
+  if (!chatChanged) return { data: logs };
 
-  const newLogs = [...logs, chatAdded];
+  const newLogs = addOrUpdateChat(logs, chatChanged);
   const data = {
     chatLogs: {
       __typename: 'chatLogs',
@@ -45,4 +60,4 @@ const useChatAdded = (channelId) => {
   return { data: newLogs };
 };
 
-export default useChatAdded;
+export default useChatChanged;
