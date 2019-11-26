@@ -35,7 +35,14 @@ const start = () => {
     convert,
     upload,
     removeTmp,
-    (_, res) => res.status(200).json({ status: 'ok' }),
+    (req, res) => {
+      const { slideUrls, fileUrl } = req;
+      res.status(200).json({
+        status: 'ok',
+        slideUrls,
+        fileUrl,
+      });
+    },
   );
   app.use(handleError);
   app.listen('3000', () => {

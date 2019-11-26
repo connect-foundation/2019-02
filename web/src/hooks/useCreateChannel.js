@@ -2,8 +2,16 @@ import gql from 'graphql-tag';
 import { useMutation } from '@apollo/react-hooks';
 
 const CREATE_CHANNEL = gql`
-  mutation createChannel($channelId: String!) {
-    createChannel(channelId: $channelId) { 
+  mutation createChannel(
+    $channelId: String!, 
+    $slideUrls: [String], 
+    $fileUrl: String,
+  ) {
+    createChannel(
+      channelId: $channelId,
+      slideUrls: $slideUrls,
+      fileUrl: $fileUrl
+    ) { 
       status 
       channel { 
         channelId

@@ -4,11 +4,15 @@ type Channel {
   master: User 
   channelName: String
   maxHeadCount: Int
+  slideUrls: [String]
+  fileUrl: String
 }
 
 type CheckChannelResponse {
   status: String!
   isMaster: Boolean!
+  slideUrls: [String]
+  fileUrl: String
 }
 
 type CreateChannelResponse {
@@ -21,7 +25,11 @@ extend type Query {
 }
 
 extend type Mutation {
-  createChannel(channelId: String!): CreateChannelResponse
+  createChannel(
+    channelId: String!, 
+    slideUrls: [String], 
+    fileUrl: String,
+  ): CreateChannelResponse
 }
 `;
 

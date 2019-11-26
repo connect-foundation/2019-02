@@ -6,9 +6,17 @@ const uploadFile = async (data) => {
     url: CONVERT_API,
     body: data,
   });
-  const { status } = await response.json();
+  const {
+    status,
+    slideUrls,
+    fileUrl,
+  } = await response.json();
 
-  return status;
+  return {
+    status,
+    slideUrls,
+    fileUrl,
+  };
 };
 
 export default uploadFile;

@@ -5,6 +5,8 @@ declare global {
   namespace Express {
       interface Request {
           slides: SlideInfo[]
+          fileUrl: string
+          slideUrls: string[]
       }
   }
 }
