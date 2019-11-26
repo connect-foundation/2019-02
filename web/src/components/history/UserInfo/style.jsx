@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import Profile from '@@/tempProfile.png';
+import Modal from '@material-ui/core/Modal';
 import { px, colorGray } from '@/styles';
 
 export default {
@@ -27,5 +28,13 @@ export default {
     top: ${px(80)};
     left: ${px(360)};
     cursor: pointer;
+  `,
+  SettingModal: styled(Modal)`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  `,
+  SettingModalPage: styled.div`
+    background: ${(({ theme }) => theme.palette.background.paper)};
   `,
 };
