@@ -1,7 +1,7 @@
 const { withFilter, ApolloError } = require('apollo-server-express');
 const Chat = require('../../models/chats');
 
-const CHAT_ADDED = 'CHAT_ADDED';
+const CHAT_CHANGED = 'CHAT_CHANGED';
 
 const addChat = async (_, { channelId, message }, { user, pubsub }) => {
   const author = user || { displayName: '익명', userId: 'null' };
@@ -16,10 +16,11 @@ const addChat = async (_, { channelId, message }, { user, pubsub }) => {
       channelId,
       author,
       message,
+      likes: [],
       createdAt: newChat.createdAt,
     };
 
-    pubsub.publish(CHAT_ADDED, { chatAdded: payload });
+    pubsub.publish(CHAT_CHANGED, { chatChanged: payload });
 
     return payload;
   } catch (err) {
@@ -27,10 +28,10 @@ const addChat = async (_, { channelId, message }, { user, pubsub }) => {
   }
 };
 
-const chatAdded = {
+const chatChanged = {
   subscribe: withFilter(
-    (_, __, { pubsub }) => pubsub.asyncIterator(CHAT_ADDED),
-    (payload, variables) => payload.chatAdded.channelId === variables.channelId,
+    (_, __, { pubsub }) => pubsub.asyncIterator(CHAT_CHANGED),
+    (payload, variables) => payload.chatChanged.channelId === variables.channelId,
   ),
 };
 
@@ -39,7 +40,7 @@ const resolvers = {
     addChat,
   },
   Subscription: {
-    chatAdded,
+    chatChanged,
   },
 };
 

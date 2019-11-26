@@ -15,6 +15,10 @@ const ChatSchema = new Schema({
     type: String,
     required: true,
   },
+  likes: {
+    type: Array,
+    default: [],
+  },
   createdAt: {
     type: Date,
     default: Date.now(),

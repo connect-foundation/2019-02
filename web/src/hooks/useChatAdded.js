@@ -12,9 +12,9 @@ const GET_CHAT_CACHED = gql`
   }
 `;
 
-const CHAT_ADDED = gql`
-  subscription ChatAdded($channelId: String!) {
-    chatAdded(channelId: $channelId) {
+const CHAT_CHANGED = gql`
+  subscription ChatChanged($channelId: String!) {
+    chatChanged(channelId: $channelId) {
       id
       author {
         displayName
@@ -26,8 +26,8 @@ const CHAT_ADDED = gql`
 
 const useChatAdded = (channelId) => {
   const client = useApolloClient();
-  const published = useSubscription(CHAT_ADDED, { variables: { channelId } });
-  const chatAdded = published.data && published.data.chatAdded;
+  const published = useSubscription(CHAT_CHANGED, { variables: { channelId } });
+  const chatAdded = published.data && published.data.chatChanged;
   const { chatLogs: { logs } } = client.readQuery({ query: GET_CHAT_CACHED });
 
   if (!chatAdded) return { data: logs };
