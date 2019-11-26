@@ -22,4 +22,10 @@ export default {
     background-image: url(${Profile});
     margin-right: 10px;
   `,
+  Setting: styled.div`
+    position: absolute;
+    top: ${px(80)};
+    left: ${px(360)};
+    cursor: pointer;
+  `,
 };
