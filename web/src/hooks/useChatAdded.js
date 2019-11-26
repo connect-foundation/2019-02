@@ -1,13 +1,12 @@
-import { useEffect } from 'react';
 import gql from 'graphql-tag';
 import {
   useSubscription,
-  useMutation,
+  useApolloClient,
 } from '@apollo/react-hooks';
 
-const CACHE_CHAT_ADDED = gql`
-  mutation addChat($chat: Chat) {
-    addChat(chat: $chat) @client {
+const GET_CHAT_CACHED = gql`
+  query GetChatCached {
+    chatLogs @client {
       logs
     }
   }
@@ -16,6 +15,7 @@ const CACHE_CHAT_ADDED = gql`
 const CHAT_ADDED = gql`
   subscription ChatAdded($channelId: String!) {
     chatAdded(channelId: $channelId) {
+      id
       author {
         displayName
       }
@@ -25,18 +25,24 @@ const CHAT_ADDED = gql`
 `;
 
 const useChatAdded = (channelId) => {
-  const [cacheChat, mutationResult] = useMutation(CACHE_CHAT_ADDED);
-  const result = useSubscription(CHAT_ADDED, { variables: { channelId } });
-  const data = result.data ? result.data.chatAdded : null;
-  const chatLogs = mutationResult.data
-    ? mutationResult.data.addChat.logs.filter((log) => log)
-    : null;
+  const client = useApolloClient();
+  const published = useSubscription(CHAT_ADDED, { variables: { channelId } });
+  const chatAdded = published.data && published.data.chatAdded;
+  const { chatLogs: { logs } } = client.readQuery({ query: GET_CHAT_CACHED });
 
-  useEffect(() => {
-    cacheChat({ variables: { chat: data } });
-  }, [data]);
+  if (!chatAdded) return { data: logs };
 
-  return { data: chatLogs };
+  const newLogs = [...logs, chatAdded];
+  const data = {
+    chatLogs: {
+      __typename: 'chatLogs',
+      logs: newLogs,
+    },
+  };
+
+  client.writeQuery({ query: GET_CHAT_CACHED, data });
+
+  return { data: newLogs };
 };
 
 export default useChatAdded;

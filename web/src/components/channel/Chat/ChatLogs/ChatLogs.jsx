@@ -13,11 +13,13 @@ const ChatLogs = (props) => {
       <S.ScrollWrap>
         <S.Scroller>
           {data && data.map(({
+            id,
             author,
             message,
-          }, i) => (
-            <S.ChatLog key={`chat-log-${i * i}`}>
+          }) => (
+            <S.ChatLog key={`chat-log-${id}`}>
               <ChatCard
+                id={id}
                 author={author}
                 message={message}
               />

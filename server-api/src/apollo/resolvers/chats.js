@@ -12,6 +12,7 @@ const addChat = async (_, { channelId, message }, { user, pubsub }) => {
       message,
     }).save();
     const payload = {
+      id: newChat.id,
       channelId,
       author,
       message,
