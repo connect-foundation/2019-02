@@ -20,7 +20,6 @@ const CHAT_ADDED = gql`
         displayName
       }
       message
-      createdAt
     }
   }
 `;
