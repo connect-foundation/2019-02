@@ -4,12 +4,14 @@ type Chat {
   channelId: String
   author: User
   message: String
-  likes: [String]
+  isLiked: Boolean
+  likesCount: Int
   createdAt: Date
 }
 
 extend type Mutation {
   addChat(channelId: String!, message: String!): Chat
+  likeChat(chatId: String!): Chat
 }
 
 extend type Subscription {
