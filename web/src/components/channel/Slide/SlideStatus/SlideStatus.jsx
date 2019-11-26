@@ -1,7 +1,8 @@
 import React from 'react';
+import S from './style';
 
 const SlideStatus = () => (
-  <div>status</div>
+  <S.Wrapper>status</S.Wrapper>
 );
 
 export default SlideStatus;
