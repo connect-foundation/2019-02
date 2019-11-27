@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { MenuItem } from '@material-ui/core';
+import { Redirect } from 'react-router-dom';
 import { useLogout } from '@/hooks';
 import S from './style';
 
@@ -11,10 +12,15 @@ const LogoutPopover = (props) => {
     handleClose();
     mutate();
   };
+  const setMyPage = () => {
+    console.log('프로필 페이지로 가라');
+    // return <Redirect to="/mypage/" />;
+    return <Redirect to="/channels/" />;
+  };
 
   return (
     <S.PopoverWrapper>
-      <MenuItem onClick={handleClose}>
+      <MenuItem onClick={setMyPage}>
         프로필
       </MenuItem>
       <MenuItem onClick={handleLogOut}>

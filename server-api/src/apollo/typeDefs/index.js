@@ -3,4 +3,5 @@ module.exports = [
   require('./channels'),
   require('./chats'),
   require('./users'),
+  require('./histories'),
 ];

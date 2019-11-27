@@ -8,6 +8,7 @@ const resolvers = merge({
   require('./common'),
   require('./channels'),
   require('./chats'),
+  require('./histories'),
 ]);
 
 module.exports = resolvers;

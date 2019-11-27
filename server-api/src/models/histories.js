@@ -21,7 +21,7 @@ const HistorySchema = new Schema({
   },
 });
 
-HistorySchema.statics.upsert = function upsertUser(userId, channelId) {
+HistorySchema.statics.upsert = function upsertHistory(userId, channelId) {
   const HistoryModel = this;
   const findHistory = HistoryModel.find({ userId });
 
