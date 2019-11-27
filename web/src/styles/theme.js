@@ -10,7 +10,7 @@ export default createMuiTheme({
     primary: {
       contrastText: '#fff',
       main: '#e67700',
-      light: '#343a40',
+      light: '#FAB005',
     },
     background: {
       light: '#fff9db',

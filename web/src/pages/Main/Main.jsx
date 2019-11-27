@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import {
   ChannelButton,
   MainLogo,
-  DropModal,
+  DropZone,
 } from '@/components/main';
 import S from './style';
 
@@ -17,7 +17,7 @@ const Main = () => {
           <ChannelButton onClick={() => setShowDropModal(true)} />
         </S.Main>
       </S.MainWrapper>
-      {showDropModal && <DropModal />}
+      {showDropModal && <DropZone />}
     </>
   );
 };

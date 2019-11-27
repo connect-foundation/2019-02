@@ -1,24 +1,29 @@
 import styled from 'styled-components';
-import { colorGray } from '@/styles';
+import { px, colorGray } from '@/styles';
 
 export default {
-  ModalWrapper: styled.div`
+  DropZone: styled.div`
+    width: 100%;
+    height: 100%;
+    z-index: 990;
+    position: fixed;
+  `,
+  DropModal: styled.div`
     display: flex;
     position: fixed;
-    z-index: 999;
     justify-content: center;
     align-items: center;
     width: 100%;
     height: 100%;
     background-color: ${colorGray(7)}E6;
   `,
-  Modal: styled.div`
+  DropModalContent: styled.div`
     display: flex;
     flex-direction: column;
     justify-content: space-around;
     align-items: center;
-    width: 500px;
+    width: ${px(500)};
     height: 100%;
-    margin-top:-64px;
+    margin-top: ${px(-64)};
   `,
 };
