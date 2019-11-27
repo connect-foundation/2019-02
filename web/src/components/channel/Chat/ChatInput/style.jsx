@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { px, colorGray, colorYellow } from '@/styles';
 
 const S = {
-  ChatInputWrapper: styled.div`
+  ChatInput: styled.div`
     flex: 0 0 auto;
     box-sizing: border-box;
     width: 100%;

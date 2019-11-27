@@ -2,12 +2,14 @@ import gql from 'graphql-tag';
 import {
   useSubscription,
   useApolloClient,
+  useQuery,
 } from '@apollo/react-hooks';
 
 const GET_CHAT_CACHED = gql`
   query GetChatCached {
     chatLogs @client {
       logs
+      cached
     }
   }
 `;
@@ -43,7 +45,8 @@ const useChatChanged = (channelId) => {
   const client = useApolloClient();
   const published = useSubscription(CHAT_CHANGED, { variables: { channelId } });
   const chatChanged = published.data && published.data.chatChanged;
-  const { chatLogs: { logs } } = client.readQuery({ query: GET_CHAT_CACHED });
+  const queryResult = useQuery(GET_CHAT_CACHED);
+  const logs = queryResult.data ? queryResult.data.chatLogs.logs : [];
 
   if (!chatChanged) return { data: logs };
 
@@ -52,6 +55,7 @@ const useChatChanged = (channelId) => {
     chatLogs: {
       __typename: 'chatLogs',
       logs: newLogs,
+      cached: queryResult.data.chatLogs.cached,
     },
   };
 
@@ -60,4 +64,5 @@ const useChatChanged = (channelId) => {
   return { data: newLogs };
 };
 
+export { GET_CHAT_CACHED };
 export default useChatChanged;

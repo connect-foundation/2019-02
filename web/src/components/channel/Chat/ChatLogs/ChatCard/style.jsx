@@ -22,6 +22,7 @@ const S = {
     line-height: ${px(21)};
     word-break: break-all;
     word-wrap: break-word;
+    white-space: pre-wrap;
     color: ${colorGray(8)};
   `,
   AreaButtons: styled.div`

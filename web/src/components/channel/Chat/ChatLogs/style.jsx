@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { px } from '@/styles';
 
 const S = {
-  ChatLogsWrapper: styled.div`
+  ChatLogs: styled.div`
     flex: 1 1 auto;
     position:relative;
   `,
@@ -15,6 +15,11 @@ const S = {
     overflow-x: hidden;
     overflow-y: auto;
     padding: 0 ${px(20)};
+    scrollbar-width: none; /* For Firefox */
+    -ms-overflow-style: none;
+    &::-webkit-scrollbar {
+      width: 0px; /* For Chrome, Safari, and Opera */
+    }
   `,
   Scroller: styled.ul`
     margin: ${px(14)} 0;
