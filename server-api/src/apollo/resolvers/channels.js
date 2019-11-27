@@ -40,7 +40,7 @@ const createChannel = async (_, {
   }
 };
 
-const getChannel = async (_, { channelId }, { user, pubsub }) => {
+const getChannel = async (_, { channelId }, { user }) => {
   try {
     const channel = await Channels.findOne({ channelId });
     const status = channel ? 'ok' : 'not_exist';
@@ -49,9 +49,6 @@ const getChannel = async (_, { channelId }, { user, pubsub }) => {
     if (!channel) return { status, isMaster };
 
     const payload = channel.toPayload({ master: user });
-
-    const publishPayload = { currentSlide: 0 };
-    pubsub.publish(SLIDE_CHANGED, { channelId, slideChanged: publishPayload });
 
     return {
       status,
