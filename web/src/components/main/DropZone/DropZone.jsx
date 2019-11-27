@@ -23,7 +23,6 @@ const DropZone = () => {
   const [dropZoneTextColor, setDropZoneTextColor] = useState('default');
   const [dropZoneMessage, setDropZoneMessage] = useState('Drag & Drop');
   const [dropZoneEmoji, setDropZoneEmoji] = useState('👇');
-
   const handleDrop = async (event) => {
     event.preventDefault();
     setIsLoading(true);
@@ -32,10 +31,20 @@ const DropZone = () => {
     const { dataTransfer: { files } } = event;
     const file = files[0];
     const formData = createFormData({ channelId, file });
-    const status = await uploadFile(formData);
+    const {
+      status,
+      slideUrls,
+      fileUrl,
+    } = await uploadFile(formData);
 
     if (status === 'ok') {
-      mutate({ variables: { channelId } });
+      mutate({
+        variables: {
+          channelId,
+          slideUrls,
+          fileUrl,
+        },
+      });
     } else {
       setIsError(true);
     }
