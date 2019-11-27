@@ -15,6 +15,11 @@ const S = {
     overflow-x: hidden;
     overflow-y: auto;
     padding: 0 ${px(20)};
+    scrollbar-width: none; /* For Firefox */
+    -ms-overflow-style: none;
+    &::-webkit-scrollbar {
+      width: 0px; /* For Chrome, Safari, and Opera */
+    }
   `,
   Scroller: styled.ul`
     margin: ${px(14)} 0;

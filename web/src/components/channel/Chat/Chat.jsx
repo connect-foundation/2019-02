@@ -3,16 +3,16 @@ import PropTypes from 'prop-types';
 import ChatInput from './ChatInput';
 import ChatLogs from './ChatLogs';
 import S from './style';
-import { useInitChatLogs } from '@/hooks';
+import { useInitChatLogs, useGetUserStatus } from '@/hooks';
 
 const Chat = ({ channelId }) => {
+  const { userId } = useGetUserStatus();
+
   useInitChatLogs(channelId);
 
   return (
     <S.ChatWrapper>
-      <ChatLogs
-        channelId={channelId}
-      />
+      <ChatLogs channelId={channelId} userId={userId} />
       <ChatInput channelId={channelId} />
     </S.ChatWrapper>
   );
