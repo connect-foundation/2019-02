@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { px } from '@/styles';
 
 export default {
-  ChatWrapper: styled.div`
+  Chat: styled.div`
     display: flex;
     flex: 0 0 auto;
     flex-direction: column;

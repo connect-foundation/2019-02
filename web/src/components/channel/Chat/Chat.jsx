@@ -11,10 +11,10 @@ const Chat = ({ channelId }) => {
   useInitChatLogs(channelId);
 
   return (
-    <S.ChatWrapper>
+    <S.Chat>
       <ChatLogs channelId={channelId} userId={userId} />
       <ChatInput channelId={channelId} />
-    </S.ChatWrapper>
+    </S.Chat>
   );
 };
 

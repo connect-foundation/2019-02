@@ -16,7 +16,6 @@ const ChatInput = (props) => {
     setMessage('');
   };
   const handleChangeInput = (event) => {
-    if (event);
     setMessage(event.target.value);
   };
   const handleKeyDownInput = (event) => {
@@ -27,7 +26,7 @@ const ChatInput = (props) => {
   };
 
   return (
-    <S.ChatInputWrapper>
+    <S.ChatInput>
       <S.MessageInput
         placeholder="의견을 남겨주세요."
         onChange={handleChangeInput}
@@ -40,7 +39,7 @@ const ChatInput = (props) => {
       >
         전송
       </S.SendButton>
-    </S.ChatInputWrapper>
+    </S.ChatInput>
   );
 };
 

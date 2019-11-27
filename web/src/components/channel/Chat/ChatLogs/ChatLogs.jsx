@@ -19,7 +19,7 @@ const ChatLogs = (props) => {
   }, [chatLogs]);
 
   return (
-    <S.ChatLogsWrapper>
+    <S.ChatLogs>
       <S.ScrollWrap ref={scrollWrapRef}>
         <S.Scroller>
           {chatLogs.map(({
@@ -40,7 +40,7 @@ const ChatLogs = (props) => {
           ))}
         </S.Scroller>
       </S.ScrollWrap>
-    </S.ChatLogsWrapper>
+    </S.ChatLogs>
   );
 };
 

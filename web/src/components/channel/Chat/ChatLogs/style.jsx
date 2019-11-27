@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { px } from '@/styles';
 
 const S = {
-  ChatLogsWrapper: styled.div`
+  ChatLogs: styled.div`
     flex: 1 1 auto;
     position:relative;
   `,
