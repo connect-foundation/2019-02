@@ -12,6 +12,11 @@ export default createMuiTheme({
       main: '#e67700',
       light: '#FAB005',
     },
+    secondary: {
+      contrastText: '#fff',
+      main: '#dee2e6',
+      light: '#343a40',
+    },
     background: {
       light: '#fff9db',
       main: '#F1F3F5',
