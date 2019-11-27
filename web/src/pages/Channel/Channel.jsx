@@ -1,7 +1,11 @@
 import React from 'react';
 import { useRouteMatch } from 'react-router-dom';
 import { ChannelContext } from '@/contexts';
-import { useCheckChannel, useCheckAndLoginAnonymous } from '@/hooks';
+import {
+  useCheckChannel,
+  useCheckAndLoginAnonymous,
+  useInitChatCached,
+} from '@/hooks';
 import { Chat, Slide, ToolBar } from '@/components/channel';
 import S from './style';
 
@@ -9,6 +13,7 @@ const Channel = () => {
   const { params: { channelId } } = useRouteMatch();
   const { data } = useCheckChannel(channelId);
 
+  useInitChatCached();
   useCheckAndLoginAnonymous();
 
   if (!data) return null;
