@@ -9,6 +9,7 @@ const resolvers = merge({
   require('./channels'),
   require('./chats'),
   require('./histories'),
+  require('./slides'),
 ]);
 
 module.exports = resolvers;
