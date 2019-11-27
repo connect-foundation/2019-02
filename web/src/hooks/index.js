@@ -10,3 +10,4 @@ export { default as useCheckAndLoginAnonymous } from './useCheckAndLoginAnonymou
 export { default as useInitChatLogs } from './useInitChatLogs';
 export { default as useChannelSelector } from './useChannelSelector';
 export { default as useGetChatsCached } from './useGetChatsCached';
+export { default as useInitChatCached } from './useInitChatCached';
