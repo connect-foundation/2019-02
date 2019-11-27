@@ -4,7 +4,7 @@ import Indicator from './Indicator';
 import MainSlide from './MainSlide';
 import { useChannelSelector } from '@/hooks';
 
-const SlideView = () => {
+const SlideViewer = () => {
   const [page, setPage] = useState(0);
   const slideUrls = useChannelSelector((state) => state.slideUrls);
   const handleSetPage = (direction) => () => {
@@ -32,4 +32,4 @@ const SlideView = () => {
   );
 };
 
-export default SlideView;
+export default SlideViewer;

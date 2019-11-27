@@ -1,13 +1,13 @@
 import React from 'react';
 import S from './style';
 import SlideStatus from './SlideStatus';
-import SlideView from './SlideView';
+import SlideViewer from './SlideViewer';
 import SlideInfo from './SlideInfo';
 
 const Slide = () => (
   <S.SlideWrapper>
     <SlideStatus />
-    <SlideView />
+    <SlideViewer />
     <SlideInfo />
   </S.SlideWrapper>
 );
