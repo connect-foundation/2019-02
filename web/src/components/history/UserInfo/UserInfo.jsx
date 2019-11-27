@@ -1,11 +1,25 @@
 import React, { useState } from 'react';
+import { useQuery } from '@apollo/react-hooks';
+import gql from 'graphql-tag';
 import { Fade, Backdrop } from '@material-ui/core';
-import UserInfoText from '../UserInfoText';
+import UserInfoDisplayName from '../UserInfoDisplayName';
+import UserInfoUserId from '../UserInfoUserId';
 import UserInfoButton from '../UserInfoButton';
 import UserSettingModal from '../UserSettingModal';
 import S from './style';
 
+const GET_AUTH = gql`
+query Auth {
+  authentication @client {
+    isLoggedIn
+    userId
+    displayName
+  }
+}
+`;
+
 const UserInfo = () => {
+  const { data: { authentication } } = useQuery(GET_AUTH);
   const [open, setOpen] = useState(false);
   const handleOpen = () => {
     setOpen(true);
@@ -23,8 +37,8 @@ const UserInfo = () => {
           </span>
         </S.Setting>
         <S.Profile />
-        <UserInfoText />
-        <UserInfoText />
+        <UserInfoDisplayName displayName={authentication.displayName} />
+        {authentication.userId && <UserInfoUserId userId={authentication.userId} /> }
         <UserInfoButton />
         <UserInfoButton />
       </S.UserInfo>
