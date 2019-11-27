@@ -2,7 +2,7 @@ import React from 'react';
 import { useRouteMatch } from 'react-router-dom';
 import { ChannelContext } from '@/contexts';
 import { useCheckChannel, useCheckAndLoginAnonymous } from '@/hooks';
-import { Chat } from '@/components/channel';
+import { Chat, Slide, ToolBar } from '@/components/channel';
 import S from './style';
 
 const Channel = () => {
@@ -20,11 +20,13 @@ const Channel = () => {
 
   return (
     <ChannelContext.Provider
-      value={{ isMaster: data.isMaster }}
+      value={{ isMaster: data.isMaster, slideUrls: data.slideUrls }}
     >
-      <S.ChannelWrapper>
+      <S.Channel>
+        <ToolBar />
+        <Slide />
         <Chat channelId={channelId} />
-      </S.ChannelWrapper>
+      </S.Channel>
     </ChannelContext.Provider>
   );
 };

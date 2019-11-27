@@ -12,10 +12,20 @@ const DropInput = () => {
     const channelId = createChannelId();
     const file = e.target.files[0];
     const formData = createFormData({ file, channelId });
-    const status = await uploadFile(formData);
+    const {
+      status,
+      slideUrls,
+      fileUrl,
+    } = await uploadFile(formData);
 
     if (status === 'ok') {
-      mutate({ variables: { channelId } });
+      mutate({
+        variables: {
+          channelId,
+          slideUrls,
+          fileUrl,
+        },
+      });
     } else {
       // Todo: error
     }
@@ -33,7 +43,6 @@ const DropInput = () => {
         type="file"
         style={{ display: 'none' }}
         onChange={handleUpload}
-
       />
       <label htmlFor="upload-file">
         <Button variant="contained" component="span">

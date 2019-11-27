@@ -25,6 +25,12 @@ const ChannelSchema = new Schema({
     required: true,
     default: Date.now() + 30 * 24 * 60 * 60 * 1000,
   },
+  slideUrls: {
+    type: Array,
+  },
+  fileUrl: {
+    type: String,
+  },
   createdAt: {
     type: Date,
     default: Date.now(),
