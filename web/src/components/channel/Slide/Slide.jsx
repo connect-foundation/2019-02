@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import S from './style';
 import SlideStatus from './SlideStatus';
@@ -7,11 +7,18 @@ import SlideInfo from './SlideInfo';
 
 const Slide = (props) => {
   const { channelId } = props;
+  const [isSync, setSync] = useState(true);
 
   return (
     <S.Slide>
-      <SlideStatus channelId={channelId} />
-      <SlideViewer channelId={channelId} />
+      <SlideStatus
+        isSync={isSync}
+        setSync={setSync}
+      />
+      <SlideViewer
+        isSync={isSync}
+        channelId={channelId}
+      />
       <SlideInfo />
     </S.Slide>
   );
