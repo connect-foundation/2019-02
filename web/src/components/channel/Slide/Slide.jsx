@@ -5,11 +5,11 @@ import SlideViewer from './SlideViewer';
 import SlideInfo from './SlideInfo';
 
 const Slide = () => (
-  <S.SlideWrapper>
+  <S.Slide>
     <SlideStatus />
     <SlideViewer />
     <SlideInfo />
-  </S.SlideWrapper>
+  </S.Slide>
 );
 
 export default Slide;

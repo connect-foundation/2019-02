@@ -3,7 +3,7 @@ import { ArrowBackIosRounded, ArrowForwardIosRounded } from '@material-ui/icons'
 import { px, colorGray } from '@/styles/themeUtil';
 
 export default {
-  Wrapper: styled.div`
+  Indicator: styled.div`
     height: 100%;
     min-width: ${px(80)};
     width: 20%;

@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { px } from '@/styles/themeUtil';
 
 export default {
-  Wrapper: styled.div`
+  MainSlide: styled.div`
     display: flex;
     justify-content: center;
     align-items: center;

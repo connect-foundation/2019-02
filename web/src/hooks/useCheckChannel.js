@@ -12,9 +12,9 @@ const CHECK_CHANNEL = gql`
   } 
 `;
 const useCheckChannel = (channelId) => {
-  console.log('checkchannel');
   const result = useQuery(CHECK_CHANNEL, { variables: { channelId } });
   const data = result.data ? result.data.checkChannel : null;
+
   return { data };
 };
 

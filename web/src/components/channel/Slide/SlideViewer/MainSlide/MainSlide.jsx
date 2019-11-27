@@ -6,9 +6,9 @@ const MainSlide = (props) => {
   const { page, slideUrls } = props;
 
   return (
-    <S.Wrapper>
+    <S.MainSlide>
       <S.SlideImg alt="slide" src={slideUrls[page]} />
-    </S.Wrapper>
+    </S.MainSlide>
   );
 };
 

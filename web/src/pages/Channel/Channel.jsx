@@ -20,11 +20,11 @@ const Channel = () => {
     <ChannelContext.Provider
       value={{ isMaster: data.isMaster, slideUrls: data.slideUrls }}
     >
-      <S.ChannelWrapper>
+      <S.Channel>
         <ToolBar />
         <Slide />
         <Chat channelId={channelId} />
-      </S.ChannelWrapper>
+      </S.Channel>
     </ChannelContext.Provider>
   );
 };

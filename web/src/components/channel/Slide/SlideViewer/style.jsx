@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 export default {
-  Wrapper: styled.div`
+  SlideViewer: styled.div`
     flex: 1;
     width: 94%;
     height: 100%;

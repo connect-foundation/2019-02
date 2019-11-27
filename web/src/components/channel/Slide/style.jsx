@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 export default {
-  SlideWrapper: styled.div`
+  Slide: styled.div`
     flex: 1;
     display: flex;
     flex-direction: column;

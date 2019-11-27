@@ -1,10 +1,10 @@
 import styled from 'styled-components';
 
 export default {
-  ChannelWrapper: styled.div`
+  Channel: styled.div`
     background-color:  ${({ theme }) => theme.palette.background.main};
     flex: 1 1 auto;
-    display:flex;
+    display: flex;
     height: 100%;
   `,
 };

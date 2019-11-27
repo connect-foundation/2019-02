@@ -5,7 +5,7 @@ import S from './style';
 const Indicator = (props) => {
   const { direction, handleSetPage } = props;
   return (
-    <S.Wrapper
+    <S.Indicator
       onClick={handleSetPage(direction)}
       direction={direction}
     >
@@ -14,7 +14,7 @@ const Indicator = (props) => {
           ? <S.ArrowBack />
           : <S.ArrowFoward />}
       </S.ArrowWrapper>
-    </S.Wrapper>
+    </S.Indicator>
   );
 };
 

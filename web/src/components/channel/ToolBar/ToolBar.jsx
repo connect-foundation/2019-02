@@ -2,7 +2,7 @@ import React from 'react';
 import S from './style';
 
 const style = () => (
-  <S.ToolBarWrapper>toolbar</S.ToolBarWrapper>
+  <S.ToolBar>toolbar</S.ToolBar>
 );
 
 export default style;
