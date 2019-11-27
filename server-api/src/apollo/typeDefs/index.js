@@ -4,5 +4,4 @@ module.exports = [
   require('./chats'),
   require('./users'),
   require('./histories'),
-  require('./slides'),
 ];
