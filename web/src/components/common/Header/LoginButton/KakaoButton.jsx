@@ -9,10 +9,10 @@ const KakaoButton = (props) => {
   const { handleClose } = props;
   const { mutate } = useLogin();
   const handleResponse = async ({ response }) => {
-    const { token, user } = await authByKakao(response.access_token);
+    const { token, user: { displayName, userId } } = await authByKakao(response.access_token);
 
     if (token) {
-      mutate({ variables: { token, displayName: user.displayName } });
+      mutate({ variables: { token, displayName, userId } });
     }
   };
   const handleFailure = (error) => {
