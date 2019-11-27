@@ -25,14 +25,19 @@ HistorySchema.statics.upsert = function upsertHistory(userId, channelId) {
   const HistoryModel = this;
   const findHistory = HistoryModel.find({ userId });
 
-  return findHistory.then((user) => {
-    if (user) return user;
+  return findHistory.then((history) => {
+    if (history) {
+      const historyExisted = history;
 
-    const updateDate = Date.now();
+      historyExisted.updatedAt = Date.now();
+
+      return historyExisted.save();
+    }
+
     const historyInfo = {
       userId,
       channelId,
-      updateDate,
+      updatedAt: Date.now(),
     };
     const newHistory = new HistoryModel(historyInfo);
 
