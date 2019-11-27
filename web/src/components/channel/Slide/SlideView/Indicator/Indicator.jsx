@@ -3,10 +3,12 @@ import PropTypes from 'prop-types';
 import S from './style';
 
 const Indicator = (props) => {
-  const { direction } = props;
-
+  const { direction, handleSetPage } = props;
   return (
-    <S.Wrapper direction={direction}>
+    <S.Wrapper
+      onClick={handleSetPage(direction)}
+      direction={direction}
+    >
       <S.ArrowWrapper direction={direction}>
         {direction === 'back'
           ? <S.ArrowBack />
@@ -18,6 +20,7 @@ const Indicator = (props) => {
 
 Indicator.propTypes = {
   direction: PropTypes.string.isRequired,
+  handleSetPage: PropTypes.func.isRequired,
 };
 
 export default Indicator;
