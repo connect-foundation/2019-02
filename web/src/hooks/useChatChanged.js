@@ -11,6 +11,7 @@ const GET_CHAT_CACHED = gql`
       logs
       cached
       changeType
+      sortType
     }
   }
 `;
@@ -25,19 +26,18 @@ const CHAT_CHANGED = gql`
       }
       message
       likes
+      createdAt
     }
   }
 `;
 
 const addOrUpdateChat = (cacheData, chat) => {
-  const { chatLogs: { logs, cached, changeType } } = cacheData;
-  const indexOfChat = logs.findIndex(({ id }) => id === chat.id);
+  const { chatLogs } = cacheData;
+  const indexOfChat = chatLogs.logs.findIndex(({ id }) => id === chat.id);
   const newData = {
     chatLogs: {
-      __typename: 'chatLogs',
-      logs: [...logs],
-      cached,
-      changeType,
+      ...chatLogs,
+      logs: [...chatLogs.logs],
     },
   };
 

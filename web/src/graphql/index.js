@@ -2,6 +2,7 @@ import { ApolloClient } from 'apollo-client';
 import link from './link';
 import cache from './cache';
 import resolvers from './resolvers';
+import { CHAT_SORT_BY_RECENT } from '@/constants';
 
 const token = localStorage.getItem('DROPY_TOKEN');
 const tokenAnonymous = localStorage.getItem('DROPY_ANONYMOUS_TOKEN');
@@ -22,6 +23,7 @@ const defaultCacheData = {
     logs: [],
     cached: false,
     changeType: null,
+    sortType: CHAT_SORT_BY_RECENT,
   },
 };
 
