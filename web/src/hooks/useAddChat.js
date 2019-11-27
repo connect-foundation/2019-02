@@ -4,8 +4,7 @@ import { useMutation } from '@apollo/react-hooks';
 const ADD_CHAT = gql`
   mutation AddChat($channelId: String!, $message: String!) {
     addChat(channelId: $channelId, message: $message) {
-      message
-      createdAt
+      id
     }
   }
 `;

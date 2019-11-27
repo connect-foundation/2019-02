@@ -1,32 +1,45 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import S from './style';
 import { useAddChat } from '@/hooks';
 
+const KEYCODE_ENTER = 13;
+
 const ChatInput = (props) => {
-  const [state, setState] = useState('');
+  const [message, setMessage] = useState('');
   const { mutate } = useAddChat();
   const { channelId } = props;
-  const handleClick = () => {
-    mutate({ variables: { channelId, message: state } });
+  const sendMessage = () => {
+    if (message === '') return;
+
+    mutate({ variables: { channelId, message } });
+    setMessage('');
   };
-  const handleChange = (event) => {
-    setState(event.target.value);
+  const handleChangeInput = (event) => {
+    setMessage(event.target.value);
+  };
+  const handleKeyDownInput = (event) => {
+    if (event.keyCode === KEYCODE_ENTER && !event.shiftKey) {
+      event.preventDefault();
+      sendMessage();
+    }
   };
 
   return (
-    <>
-      <input
-        type="text"
-        onChange={handleChange}
-        value={state}
+    <S.ChatInput>
+      <S.MessageInput
+        placeholder="의견을 남겨주세요."
+        onChange={handleChangeInput}
+        onKeyDown={handleKeyDownInput}
+        value={message}
       />
-      <button
+      <S.SendButton
         type="button"
-        onClick={handleClick}
+        onClick={sendMessage}
       >
-      보내기
-      </button>
-    </>
+        전송
+      </S.SendButton>
+    </S.ChatInput>
   );
 };
 

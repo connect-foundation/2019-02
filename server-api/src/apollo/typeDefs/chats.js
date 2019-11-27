@@ -1,17 +1,24 @@
 const typeDefs = `
 type Chat {
+  id: String
   channelId: String
   author: User
   message: String
+  likes: [String]
   createdAt: Date
+}
+
+extend type Query {
+  getChatLogs(channelId: String!): [Chat]
 }
 
 extend type Mutation {
   addChat(channelId: String!, message: String!): Chat
+  likeChat(chatId: String!): Chat
 }
 
 extend type Subscription {
-  chatAdded(channelId: String!): Chat
+  chatChanged(channelId: String!): Chat
 }
 `;
 

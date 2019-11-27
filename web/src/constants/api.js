@@ -9,3 +9,4 @@ export const KAKAO_AUTH_API = `${API_HOST}/auth/kakao`;
 export const GOOGLE_AUTH_API = `${API_HOST}/auth/google`;
 export const NAVER_AUTH_API = `${API_HOST}/auth/naver`;
 export const NAVER_AUTH_CALLBACK = `${API_HOST}/auth/naver/callback`;
+export const ANONYMOUS_AUTH_API = `${API_HOST}/auth/anonymous`;

@@ -20,11 +20,21 @@ const DropInput = () => {
     setIsLoading(true);
     const channelId = createChannelId();
     const file = e.target.files[0];
-    const formData = createFormData({ channelId, file });
-    const status = await uploadFile(formData);
+    const formData = createFormData({ file, channelId });
+    const {
+      status,
+      slideUrls,
+      fileUrl,
+    } = await uploadFile(formData);
 
     if (status === 'ok') {
-      mutate({ variables: { channelId } });
+      mutate({
+        variables: {
+          channelId,
+          slideUrls,
+          fileUrl,
+        },
+      });
     } else {
       setIsError(true);
     }

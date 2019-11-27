@@ -4,6 +4,8 @@ const {
   setAuth,
   generateToken,
   sendToken,
+  setAnonymousAuth,
+  sendAnonymousToken,
 } = require('../middlewares/auth');
 
 const router = Router();
@@ -58,6 +60,19 @@ router.route('/naver')
     setAuth,
     generateToken,
     sendToken,
+  );
+
+/**
+ * @api {get} /auth/anonymous
+ *
+ * @apiSuccessExample Success-Response
+ * HTTP/1.1 200 OK
+ */
+router.route('/anonymous')
+  .get(
+    setAnonymousAuth,
+    generateToken,
+    sendAnonymousToken,
   );
 
 module.exports = router;

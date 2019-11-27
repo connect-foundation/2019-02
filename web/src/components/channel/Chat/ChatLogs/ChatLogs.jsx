@@ -1,28 +1,52 @@
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { useChatAdded } from '@/hooks';
+import { useChatChanged } from '@/hooks';
+import ChatCard from './ChatCard';
+import S from './style';
+import { computeScrollEndTop } from '@/utils/dom';
 
 const ChatLogs = (props) => {
-  const { channelId } = props;
-  const { data } = useChatAdded(channelId);
+  const scrollWrapRef = useRef(null);
+  const { channelId, userId } = props;
+  const { data } = useChatChanged(channelId);
+  const chatLogs = data;
+
+  useEffect(() => {
+    const scrollWrapEl = scrollWrapRef.current;
+    const endTop = computeScrollEndTop(scrollWrapEl);
+
+    scrollWrapRef.current.scrollTop = endTop;
+  }, [chatLogs]);
 
   return (
-    <>
-      <ul>
-        {data && data.map(({ author, message }, i) => (
-          <li key={`chat-${i * 1}`}>
-            {author.displayName}
-:
-            {message}
-          </li>
-        ))}
-      </ul>
-    </>
+    <S.ChatLogs>
+      <S.ScrollWrap ref={scrollWrapRef}>
+        <S.Scroller>
+          {chatLogs.map(({
+            id,
+            author,
+            message,
+            likes,
+          }) => (
+            <S.ChatLog key={`chat-log-${id}`}>
+              <ChatCard
+                id={id}
+                author={author}
+                message={message}
+                isLiked={likes.includes(userId)}
+                likesCount={likes.length}
+              />
+            </S.ChatLog>
+          ))}
+        </S.Scroller>
+      </S.ScrollWrap>
+    </S.ChatLogs>
   );
 };
 
 ChatLogs.propTypes = {
   channelId: PropTypes.string.isRequired,
+  userId: PropTypes.string.isRequired,
 };
 
 export default ChatLogs;
