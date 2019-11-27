@@ -8,12 +8,13 @@ const ChatLogs = (props) => {
   const { channelId } = props;
   const { userId } = useGetUserStatus();
   const { data } = useChatChanged(channelId);
+  const chatLogs = data;
 
   return (
     <S.ChatLogsWrapper>
       <S.ScrollWrap>
         <S.Scroller>
-          {data && data.map(({
+          {chatLogs.map(({
             id,
             author,
             message,
