@@ -3,6 +3,7 @@ import {
   ChannelButton,
   MainLogo,
   DropZone,
+  CodeInput,
 } from '@/components/main';
 import S from './style';
 
@@ -14,6 +15,7 @@ const Main = () => {
       <S.MainWrapper>
         <S.Main>
           <MainLogo />
+          <CodeInput />
           <ChannelButton onClick={() => setShowDropModal(true)} />
         </S.Main>
       </S.MainWrapper>
