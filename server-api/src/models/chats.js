@@ -7,6 +7,10 @@ const ChatSchema = new Schema({
     type: String,
     required: true,
   },
+  userId: {
+    type: String,
+    required: true,
+  },
   displayName: {
     type: String,
     required: true,
@@ -14,6 +18,10 @@ const ChatSchema = new Schema({
   message: {
     type: String,
     required: true,
+  },
+  likes: {
+    type: Array,
+    default: [],
   },
   createdAt: {
     type: Date,

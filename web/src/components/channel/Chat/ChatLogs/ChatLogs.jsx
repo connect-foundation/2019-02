@@ -1,23 +1,37 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { useChatAdded } from '@/hooks';
+import { useChatChanged, useGetUserStatus } from '@/hooks';
+import ChatCard from './ChatCard';
+import S from './style';
 
 const ChatLogs = (props) => {
   const { channelId } = props;
-  const { data } = useChatAdded(channelId);
+  const { userId } = useGetUserStatus();
+  const { data } = useChatChanged(channelId);
 
   return (
-    <>
-      <ul>
-        {data && data.map(({ author, message }, i) => (
-          <li key={`chat-${i * 1}`}>
-            {author.displayName}
-:
-            {message}
-          </li>
-        ))}
-      </ul>
-    </>
+    <S.ChatLogsWrapper>
+      <S.ScrollWrap>
+        <S.Scroller>
+          {data && data.map(({
+            id,
+            author,
+            message,
+            likes,
+          }) => (
+            <S.ChatLog key={`chat-log-${id}`}>
+              <ChatCard
+                id={id}
+                author={author}
+                message={message}
+                isLiked={likes.includes(userId)}
+                likesCount={likes.length}
+              />
+            </S.ChatLog>
+          ))}
+        </S.Scroller>
+      </S.ScrollWrap>
+    </S.ChatLogsWrapper>
   );
 };
 

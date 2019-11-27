@@ -1,13 +1,15 @@
 import React from 'react';
 import { useRouteMatch } from 'react-router-dom';
 import { ChannelContext } from '@/contexts';
-import { useCheckChannel } from '@/hooks';
+import { useCheckChannel, useCheckAndLoginAnonymous } from '@/hooks';
 import { Chat } from '@/components/channel';
 import S from './style';
 
 const Channel = () => {
   const { params: { channelId } } = useRouteMatch();
   const { data } = useCheckChannel(channelId);
+
+  useCheckAndLoginAnonymous();
 
   if (!data) return null;
   if (data.status === 'not_exist') {

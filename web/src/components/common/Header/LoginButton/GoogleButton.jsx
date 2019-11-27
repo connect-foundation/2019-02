@@ -9,9 +9,9 @@ const GoogleButton = (props) => {
   const { handleClose } = props;
   const { mutate } = useLogin();
   const handleResponse = async ({ accessToken }) => {
-    const { token, user } = await authByGoogle(accessToken);
+    const { token, user: { displayName, userId } } = await authByGoogle(accessToken);
     if (token) {
-      mutate({ variables: { token, displayName: user.displayName } });
+      mutate({ variables: { token, displayName, userId } });
     }
   };
   const handleFailure = (error) => {

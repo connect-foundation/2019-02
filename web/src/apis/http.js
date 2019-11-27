@@ -10,8 +10,8 @@ export const get = ({
   query = {},
 }) => {
   const token = getToken();
-  const queryString = Object.keys(query).reduce((str, key) => `${str}&${key}=${query[key]}`);
-  const requestUrl = query ? `${url}?${queryString}` : url;
+  const queryString = Object.keys(query).reduce((str, key) => `${str}&${key}=${query[key]}`, '');
+  const requestUrl = queryString ? `${url}?${queryString}` : url;
 
   return fetch(requestUrl, {
     ...defaultOptions,

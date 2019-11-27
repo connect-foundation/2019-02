@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import S from './style';
 import { useAddChat } from '@/hooks';
 
 const ChatInput = (props) => {
@@ -14,19 +15,19 @@ const ChatInput = (props) => {
   };
 
   return (
-    <>
-      <input
-        type="text"
+    <S.ChatInputWrapper>
+      <S.MessageInput
+        placeholder="질문 또는 의견을 남겨주세요."
         onChange={handleChange}
         value={state}
       />
-      <button
+      <S.SendButton
         type="button"
         onClick={handleClick}
       >
-      보내기
-      </button>
-    </>
+        전송
+      </S.SendButton>
+    </S.ChatInputWrapper>
   );
 };
 
