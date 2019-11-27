@@ -11,8 +11,8 @@ const ChatCards = (props) => {
   const { userId } = props;
   const { logs, changeType, sortType } = useGetChatsCached();
   const sortCallback = sortType === CHAT_SORT_BY_LIKE
-    ? (a, b) => b.likes.length - a.likes.length
-    : (a, b) => a.createdAt - b.createdAt;
+    ? (prev, next) => next.likes.length - prev.likes.length
+    : (prev, next) => prev.createdAt - next.createdAt;
   const chatLogs = logs.sort(sortCallback);
   const changeScrollTop = () => {
     const scrollWrapEl = scrollWrapRef.current;
