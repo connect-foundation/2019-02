@@ -3,11 +3,12 @@ import PropTypes from 'prop-types';
 import S from './style';
 
 const SmallButton = (props) => {
-  const { children, color } = props;
+  const { children, color, onClick } = props;
   return (
     <S.SmallButton
       color={color}
       variant="contained"
+      onClick={onClick}
     >
       {children}
     </S.SmallButton>
@@ -16,6 +17,13 @@ const SmallButton = (props) => {
 
 SmallButton.propTypes = {
   children: PropTypes.node.isRequired,
-  color: PropTypes.string.isRequired,
+  color: PropTypes.string,
+  onClick: PropTypes.func,
 };
+
+SmallButton.defaultProps = {
+  color: 'inherit',
+  onClick: () => {},
+};
+
 export default SmallButton;

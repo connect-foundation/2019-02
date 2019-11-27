@@ -8,12 +8,13 @@ import SlideInfo from './SlideInfo';
 const Slide = (props) => {
   const { channelId } = props;
   const [isSync, setSync] = useState(true);
+  const handleSync = () => setSync(!isSync);
 
   return (
     <S.Slide>
       <SlideStatus
         isSync={isSync}
-        setSync={setSync}
+        handleSync={handleSync}
       />
       <SlideViewer
         isSync={isSync}

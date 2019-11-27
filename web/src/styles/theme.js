@@ -87,11 +87,15 @@ export default createMuiTheme({
       containedPrimary: {
         'background-color': '#e67700',
         'box-shadow': '0px 2px 9px rgba(0, 0, 0, 0.03)',
-        'border-radius': '3px',
-        padding: '4px 10px',
         '&:hover': {
           'background-color': '#e67700',
           'box-shadow': '0px 2px 9px rgba(0, 0, 0, 0.03)',
+        },
+      },
+      containedSecondary: {
+        'background-color': '#ADB5BD',
+        '&:hover': {
+          'background-color': '#868E96',
         },
       },
     },

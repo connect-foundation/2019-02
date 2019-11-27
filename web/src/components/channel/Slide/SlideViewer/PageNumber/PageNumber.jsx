@@ -1,15 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { useSlideChanged } from '@/hooks';
 import S from './style';
 
 const PageNumber = (props) => {
-  const { channelId, slideLength } = props;
-  const { data } = useSlideChanged(channelId);
+  const { slideLength, currentSlide } = props;
 
   return (
     <S.PageNumber>
-      {data + 1}
+      {currentSlide}
 /
       {slideLength}
     </S.PageNumber>
@@ -17,8 +15,9 @@ const PageNumber = (props) => {
 };
 
 PageNumber.propTypes = {
-  channelId: PropTypes.string.isRequired,
   slideLength: PropTypes.number.isRequired,
+  currentSlide: PropTypes.number.isRequired,
+
 };
 
 export default PageNumber;
