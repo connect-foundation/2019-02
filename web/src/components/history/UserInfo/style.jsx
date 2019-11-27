@@ -12,16 +12,16 @@ export default {
     flex-direction: column;
     width: ${px(400)};
     height: 100%;
-    padding: 100px 0;
+    padding: ${px(100)} 0;
   `,
   Profile: styled.div`
-    width: 150px;
-    height: 150px;
+    width: ${px(150)};
+    height: ${px(150)};
     border-radius: 100%;
     background-color: ${colorGray(4)};
     background-size: contain;
     background-image: url(${Profile});
-    margin-right: 10px;
+    margin-right: ${px(10)};
   `,
   Setting: styled.div`
     position: absolute;

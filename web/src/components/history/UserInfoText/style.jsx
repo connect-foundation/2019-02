@@ -8,6 +8,6 @@ export default {
     text-align: center;
     font-weight: 300;
     font-size: ${px(16)};
-    margin-top: 10px;
+    margin-top: ${px(10)};
   `,
 };

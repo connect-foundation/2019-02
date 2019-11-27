@@ -1,39 +1,39 @@
 import styled from 'styled-components';
 import { Card } from '@material-ui/core';
 import Profile from '@@/tempProfile.png';
-import { colorGray } from '@/styles';
+import { px, colorGray } from '@/styles';
 
 export default {
   HistoryCard: styled(Card)`
-    margin: 50px 100px;
-    min-width: 600px;
+    margin: ${px(50)} ${px(100)};
+    min-width: ${px(600)};
     &:first-of-type {
-      margin-top: 100px;
+      margin-top: ${px(100)};
     }
   `,
   HistoryCardLeftDetail: styled.div`
-    margin: 50px 0 50px 50px;
+    margin: ${px(50)} 0 ${px(50)} ${px(50)};
     float: left;
   `,
   HistoryCardMiddleDetail: styled.div`
-    margin: 50px 0;
+    margin: ${px(50)} 0;
     float: right;
   `,
   HistoryCardRightDetail: styled.div`
-    margin: 50px 50px 50px 0;
+    margin: ${px(50)} ${px(50)} ${px(50)} 0;
     float: right;
   `,
   OnAir: styled.div`
-    width: 200px
+    width: ${px(200)};
   `,
   Profile: styled.div`
-    width: 80px;
-    height: 80px;
+    width: ${px(80)};
+    height: ${px(80)};
     border-radius: 100%;
-    border: 1px solid ${(({ theme }) => theme.palette.dropyGray[3])}; 
+    border: ${px(1)} solid ${colorGray(4)}; 
     background-color: ${colorGray(4)};
     background-size: contain;
     background-image: url(${Profile});
-    margin-right: 10px;
+    margin-right: ${px(10)};
   `,
 };

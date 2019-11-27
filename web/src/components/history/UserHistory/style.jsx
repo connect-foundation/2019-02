@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { px, colorGray } from '@/styles';
 
 export default {
   UserHistory: styled.div`
@@ -8,7 +9,7 @@ export default {
     flex: 1;
     height: 100%;
     overflow: auto;
-    border-left: 1px solid ${(({ theme }) => theme.palette.dropyGray[3])};
+    border-left: ${px(1)} solid${colorGray(3)};
   `,
   UserHistoryContents: styled.div`
     position: absolute;

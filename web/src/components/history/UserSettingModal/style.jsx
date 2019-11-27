@@ -17,24 +17,24 @@ export default {
     padding: ${px(10)} 0;
   `,
   Profile: styled.div`
-    width: 150px;
-    height: 150px;
+    width: ${px(150)};
+    height: ${px(150)};
     border-radius: 100%;
-    border: 1px solid ${(({ theme }) => theme.palette.dropyGray[3])}; 
+    border: ${px(1)} solid ${colorGray(3)}; 
     background-color: ${colorGray(4)};
     background-size: contain;
     background-image: url(${Profile});
-    margin-right: 10px;
+    margin-right: ${px(10)};
   `,
   SettingInput: styled(TextField)`
     width: 90%;
-    height: 56px;
+    height: ${px(56)};
     font-size: ${px(21)};
     font-weight: bold;
   `,
   SettingButton: styled(Button)`
     width: 30%;
-    height: 40px;
+    height: ${px(40)};
     font-size: ${px(21)};
     font-weight: bold;
   `,
