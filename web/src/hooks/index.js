@@ -9,3 +9,5 @@ export { default as useCheckChannel } from './useCheckChannel';
 export { default as useCheckAndLoginAnonymous } from './useCheckAndLoginAnonymous';
 export { default as useInitChatLogs } from './useInitChatLogs';
 export { default as useChannelSelector } from './useChannelSelector';
+export { default as useSetCurrentSlide } from './useSetCurrentSlide';
+export { default as useSlideChanged } from './useSetCurrentSlide';

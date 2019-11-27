@@ -24,7 +24,7 @@ const Channel = () => {
     >
       <S.Channel>
         <ToolBar />
-        <Slide />
+        <Slide channelId={channelId} />
         <Chat channelId={channelId} />
       </S.Channel>
     </ChannelContext.Provider>
