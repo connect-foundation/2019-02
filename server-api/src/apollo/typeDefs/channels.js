@@ -6,6 +6,7 @@ type Channel {
   maxHeadCount: Int
   slideUrls: [String]
   fileUrl: String
+  channelCode: String!
 }
 
 type CheckChannelResponse {
@@ -27,6 +28,7 @@ extend type Query {
 extend type Mutation {
   createChannel(
     channelId: String!, 
+    channelCode: String!,
     slideUrls: [String], 
     fileUrl: String,
   ): CreateChannelResponse

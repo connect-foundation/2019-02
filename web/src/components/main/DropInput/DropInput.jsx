@@ -2,7 +2,10 @@ import React, { useState } from 'react';
 import { Redirect } from 'react-router-dom';
 import { Button } from '@material-ui/core';
 import { uploadFile } from '@/apis';
-import createChannelId from '@/utils/uuid';
+import {
+  createShortUuid as createChannelId,
+  sliceShortUuid as createChannelCode,
+} from '@/utils/uuid';
 import { useCreateChannel } from '@/hooks';
 import { LoadingModal, ErrorModal } from '@/components/common';
 import createFormData from '@/utils/createFormdata';
@@ -12,6 +15,8 @@ import {
   CREATING_CHANNEL_MESSAGE,
 } from '@/constants';
 
+const ChannelCodeLength = 5;
+
 const DropInput = () => {
   const { mutate, data } = useCreateChannel();
   const [isLoading, setIsLoading] = useState(false);
@@ -19,6 +24,7 @@ const DropInput = () => {
   const handleUpload = async (e) => {
     setIsLoading(true);
     const channelId = createChannelId();
+    const channelCode = createChannelCode(ChannelCodeLength);
     const file = e.target.files[0];
     const formData = createFormData({ file, channelId });
     const {
@@ -31,6 +37,7 @@ const DropInput = () => {
       mutate({
         variables: {
           channelId,
+          channelCode,
           slideUrls,
           fileUrl,
         },

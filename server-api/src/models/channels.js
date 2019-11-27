@@ -7,6 +7,10 @@ const ChannelSchema = new Schema({
     type: String,
     required: true,
   },
+  channelCode: {
+    type: String,
+    required: true,
+  },
   masterId: {
     type: String,
     required: true,

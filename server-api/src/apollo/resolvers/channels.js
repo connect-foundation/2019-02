@@ -5,10 +5,12 @@ const { assignFilter } = require('../../utils/object');
 const createChannelInfo = (
   user,
   channelId,
+  channelCode,
   slideUrls,
   fileUrl,
 ) => ({
   channelId,
+  channelCode,
   channelName: `${user.displayName}님의 채널입니다.😀`,
   masterId: user.userId,
   slideUrls,
@@ -38,6 +40,7 @@ const checkChannel = async (_, { channelId }, { user }) => {
 
 const createChannel = async (_, {
   channelId,
+  channelCode,
   slideUrls,
   fileUrl,
 }, { user }) => {
@@ -45,6 +48,7 @@ const createChannel = async (_, {
     createChannelInfo(
       user,
       channelId,
+      channelCode,
       slideUrls,
       fileUrl,
     ),
@@ -54,6 +58,7 @@ const createChannel = async (_, {
     const result = await newChannel.save();
     const channel = assignFilter([
       'channelId',
+      'channelCode',
       'master',
       'channelName',
       'maxHeadCount',
