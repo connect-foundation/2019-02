@@ -1,6 +1,5 @@
 const { withFilter, ApolloError } = require('apollo-server-express');
 const Chat = require('../../models/chats');
-const { assignFilter } = require('../../utils/object');
 
 const CHAT_CHANGED = 'CHAT_CHANGED';
 
@@ -12,14 +11,7 @@ const addChat = async (_, { channelId, message }, { user, pubsub }) => {
       displayName: user.displayName,
       message,
     }).save();
-    const payload = {
-      id: newChat.id,
-      channelId,
-      author: user,
-      message,
-      likes: [],
-      createdAt: newChat.createdAt,
-    };
+    const payload = newChat.toPayload({ author: user });
 
     pubsub.publish(CHAT_CHANGED, { chatChanged: payload });
 
@@ -44,25 +36,23 @@ const likeChat = async (_, { chatId }, { user, pubsub }) => {
     chat.likes = newLikes;
     await chat.save();
 
-    const payload = assignFilter(
-      [
-        'id',
-        'channelId',
-        'author',
-        'message',
-        'likes',
-        'createdAt',
-      ],
-      chat,
-      {
-        author: { userId: chat.userId, displayName: chat.displayName },
-        likes: newLikes,
-      },
-    );
+    const author = { userId: chat.userId, displayName: chat.displayName };
+    const payload = chat.toPayload({ author });
 
     pubsub.publish(CHAT_CHANGED, { chatChanged: payload });
 
     return payload;
+  } catch (err) {
+    throw new ApolloError(err.message);
+  }
+};
+
+const getChatLogs = async (_, { channelId }) => {
+  try {
+    const chats = await Chat.find({ channelId }).sort({ createdAt: 'asc' });
+    const chatLogs = chats ? chats.map((chat) => chat.toPayload()) : [];
+
+    return chatLogs;
   } catch (err) {
     throw new ApolloError(err.message);
   }
@@ -76,6 +66,9 @@ const chatChanged = {
 };
 
 const resolvers = {
+  Query: {
+    getChatLogs,
+  },
   Mutation: {
     addChat,
     likeChat,

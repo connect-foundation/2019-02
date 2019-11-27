@@ -8,6 +8,10 @@ type Chat {
   createdAt: Date
 }
 
+extend type Query {
+  getChatLogs(channelId: String!): [Chat]
+}
+
 extend type Mutation {
   addChat(channelId: String!, message: String!): Chat
   likeChat(chatId: String!): Chat
