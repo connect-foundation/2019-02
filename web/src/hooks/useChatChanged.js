@@ -48,7 +48,7 @@ const useChatChanged = (channelId) => {
   const queryResult = useQuery(GET_CHAT_CACHED);
   const logs = queryResult.data ? queryResult.data.chatLogs.logs : [];
 
-  if (!chatChanged) return { data: logs };
+  if (!chatChanged) return;
 
   const newLogs = addOrUpdateChat(logs, chatChanged);
   const data = {
@@ -60,8 +60,6 @@ const useChatChanged = (channelId) => {
   };
 
   client.writeQuery({ query: GET_CHAT_CACHED, data });
-
-  return { data: newLogs };
 };
 
 export { GET_CHAT_CACHED };
