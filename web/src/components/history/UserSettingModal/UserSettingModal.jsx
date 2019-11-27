@@ -1,4 +1,5 @@
 import React from 'react';
+import CloseIcon from '@material-ui/icons/Close';
 import S from './style';
 
 const UserSettingModal = () => (
@@ -22,7 +23,7 @@ const UserSettingModal = () => (
         수정하기
       </S.SettingButton>
       <S.ModalClosedButton>
-        <span role="img" aria-label="modal-close">✖️</span>
+        <CloseIcon />
       </S.ModalClosedButton>
     </S.Modal>
   </>
