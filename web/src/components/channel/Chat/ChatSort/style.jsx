@@ -29,7 +29,11 @@ const S = {
   SwitchButton: styled(Switch).attrs({
     size: 'small',
     color: 'primary',
-  })``,
+  })`
+  .MuiButtonBase-root {
+    transition: none;
+  }
+  `,
 };
 
 export default S;

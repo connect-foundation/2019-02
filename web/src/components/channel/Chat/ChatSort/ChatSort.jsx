@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import { useChangeChatSort } from '@/hooks';
 import { CHAT_SORT_BY_RECENT, CHAT_SORT_BY_LIKE } from '@/constants';
 import S from './style';
 
-const ChatSort = () => {
-  const [isClosed, setIsClosed] = useState(false);
+const ChatSort = (props) => {
+  const { isClosed, toggleChatBox } = props;
   const [sortType, setSortType] = useState(CHAT_SORT_BY_RECENT);
   const changeSort = useChangeChatSort();
   const handleClick = (targetSortType) => {
@@ -16,24 +17,33 @@ const ChatSort = () => {
 
   return (
     <S.ChatSort>
-      <S.SortButton
-        aria-selected={sortType === CHAT_SORT_BY_RECENT}
-        onClick={() => handleClick(CHAT_SORT_BY_RECENT)}
-      >
-        최신순
-      </S.SortButton>
-      <S.SortButton
-        aria-selected={sortType === CHAT_SORT_BY_LIKE}
-        onClick={() => handleClick(CHAT_SORT_BY_LIKE)}
-      >
-        공감순
-      </S.SortButton>
+      {!isClosed && (
+        <>
+          <S.SortButton
+            aria-selected={sortType === CHAT_SORT_BY_RECENT}
+            onClick={() => handleClick(CHAT_SORT_BY_RECENT)}
+          >
+            최신순
+          </S.SortButton>
+          <S.SortButton
+            aria-selected={sortType === CHAT_SORT_BY_LIKE}
+            onClick={() => handleClick(CHAT_SORT_BY_LIKE)}
+          >
+            공감순
+          </S.SortButton>
+        </>
+      )}
       <S.SwitchButton
-        onChange={() => setIsClosed(!isClosed)}
-        checked={isClosed}
+        onChange={toggleChatBox}
+        checked={!isClosed}
       />
     </S.ChatSort>
   );
+};
+
+ChatSort.propTypes = {
+  isClosed: PropTypes.bool.isRequired,
+  toggleChatBox: PropTypes.func.isRequired,
 };
 
 export default ChatSort;
