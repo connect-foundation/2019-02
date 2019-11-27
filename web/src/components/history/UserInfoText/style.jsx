@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { px } from '@/styles';
 
 export default {
-  UserInfoDisplayName: styled.div`
+  UserInfoText: styled.div`
     color: black;
     white-space: nowrap;
     text-align: center;
