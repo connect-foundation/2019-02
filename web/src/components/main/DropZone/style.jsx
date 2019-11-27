@@ -2,10 +2,15 @@ import styled from 'styled-components';
 import { colorGray } from '@/styles';
 
 export default {
+  DropZoneWrapper: styled.div.attrs({ type: 'div' })`
+    width: 100%;
+    height: 100%;
+    z-index: 990;
+    position: fixed;
+  `,
   DropZone: styled.div.attrs({ type: 'div' })`
     display: flex;
     position: fixed;
-    z-index: 999;
     justify-content: center;
     align-items: center;
     width: 100%;
