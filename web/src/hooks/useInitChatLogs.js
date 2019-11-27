@@ -23,7 +23,7 @@ const useInitChatLogs = (channelId) => {
   const chatLogs = result.data ? result.data.getChatLogs : [];
 
   useEffect(() => {
-    const { chatLogs: { logs, cached } } = client.readQuery({ query: GET_CHAT_CACHED });
+    const { chatLogs: { logs, cached, changeType } } = client.readQuery({ query: GET_CHAT_CACHED });
 
     if (result.loading || cached) return;
 
@@ -32,6 +32,7 @@ const useInitChatLogs = (channelId) => {
         __typename: 'chatLogs',
         logs: [...chatLogs, ...logs],
         cached: true,
+        changeType,
       },
     };
 

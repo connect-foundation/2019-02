@@ -21,6 +21,7 @@ const defaultCacheData = {
     __typename: 'chatLogs',
     logs: [],
     cached: false,
+    changeType: null,
   },
 };
 
