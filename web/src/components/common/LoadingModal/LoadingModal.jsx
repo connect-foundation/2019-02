@@ -8,12 +8,12 @@ const LoadingModal = (props) => {
   const { message } = props;
 
   return (
-    <S.LoadingModalWrapper>
-      <S.LoadingModal>
+    <S.LoadingModal>
+      <S.LoadingModalContent>
         <Spinner />
         <LoadingText message={message} />
-      </S.LoadingModal>
-    </S.LoadingModalWrapper>
+      </S.LoadingModalContent>
+    </S.LoadingModal>
   );
 };
 

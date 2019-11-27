@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 export default {
-  DropInputWrapper: styled.div.attrs({ type: 'div' })`
+  DropInputWrapper: styled.div`
     width: 100%;
     height: 15%;
     z-index: 999;

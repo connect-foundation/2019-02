@@ -7,6 +7,10 @@ import { useCreateChannel } from '@/hooks';
 import { LoadingModal, ErrorModal } from '@/components/common';
 import createFormData from '@/utils/createFormdata';
 import S from './style';
+import {
+  TEMP_ERROR_MESSAGE,
+  CREATING_CHANNEL_MESSAGE,
+} from '@/constants';
 
 const DropInput = () => {
   const { mutate, data } = useCreateChannel();
@@ -49,8 +53,8 @@ const DropInput = () => {
           </Button>
         </label>
       </S.DropInputWrapper>
-      {isError && <ErrorModal message="일시적인 오류입니다. 다시 시도해주세요." />}
-      {isLoading && <LoadingModal message="채널에 생성중" />}
+      {isError && <ErrorModal message={TEMP_ERROR_MESSAGE} />}
+      {isLoading && <LoadingModal message={CREATING_CHANNEL_MESSAGE} />}
     </>
   );
 };

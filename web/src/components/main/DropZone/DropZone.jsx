@@ -10,6 +10,11 @@ import DropText from '../DropText';
 import DropInput from '../DropInput';
 import getRandomItemOfList from '@/utils/random';
 import createChannelId from '@/utils/uuid';
+import {
+  EMOJI_LIST,
+  TEMP_ERROR_MESSAGE,
+  CREATING_CHANNEL_MESSAGE,
+} from '@/constants';
 
 const DropZone = () => {
   const { mutate, data } = useCreateChannel();
@@ -38,11 +43,9 @@ const DropZone = () => {
   const handleDragEnter = (event) => {
     event.preventDefault();
 
-    const emojiList = ['😀', '😃', '🤣', '😍', '😘', '🥳', '😻', '😽', '😇', '🦄', '🤓', '😎', '🤩'];
-
     setDropZoneTextColor('drag');
     setDropZoneMessage('Start Speech!');
-    setDropZoneEmoji(getRandomItemOfList(emojiList));
+    setDropZoneEmoji(getRandomItemOfList(EMOJI_LIST));
   };
   const handleDragOver = (event) => {
     event.preventDefault();
@@ -61,24 +64,24 @@ const DropZone = () => {
 
   return (
     <>
-      <S.DropZone>
-        <S.DropZoneContent>
+      <S.DropModal>
+        <S.DropModalContent>
           <DropEmoji emoji={dropZoneEmoji} />
           <DropText
             fontColor={dropZoneTextColor}
             message={dropZoneMessage}
           />
-        </S.DropZoneContent>
-      </S.DropZone>
-      <S.DropZoneWrapper
+        </S.DropModalContent>
+      </S.DropModal>
+      <S.DropZone
         onDrop={(event) => handleDrop(event)}
         onDragEnter={(event) => handleDragEnter(event)}
         onDragOver={(event) => handleDragOver(event)}
         onDragLeave={(event) => handleDragLeave(event)}
       />
       <DropInput />
-      {isError && <ErrorModal message="일시적인 오류입니다. 다시 시도해주세요." />}
-      {isLoading && <LoadingModal message="채널에 생성중" />}
+      {isError && <ErrorModal message={TEMP_ERROR_MESSAGE} />}
+      {isLoading && <LoadingModal message={CREATING_CHANNEL_MESSAGE} />}
     </>
   );
 };

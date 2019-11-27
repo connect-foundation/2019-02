@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { px } from '@/styles/themeUtil';
 
 export default {
-  LoadingModalWrapper: styled.div.attrs({ type: 'div' })`
+  LoadingModal: styled.div`
     display: flex;
     position: fixed;
     z-index: 999;
@@ -10,15 +10,15 @@ export default {
     align-items: center;
     width: 100%;
     height: 100%;
-    background-color: white
+    background-color: ${({ theme }) => theme.palette.common.white}
   `,
-  LoadingModal: styled.div.attrs({ type: 'div' })`
+  LoadingModalContent: styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 500px;
+    width: ${px(500)};
     height: 100%;
-    margin-top:-64px;
+    margin-top: ${px(-64)};
     padding-top: ${px(350)};
   `,
 };

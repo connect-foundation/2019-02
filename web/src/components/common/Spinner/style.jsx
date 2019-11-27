@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 export default {
-  SpinnerWrapper: styled.div.attrs({ type: 'div' })`
+  Spinner: styled.div`
     z-index: 999;
   `,
 };

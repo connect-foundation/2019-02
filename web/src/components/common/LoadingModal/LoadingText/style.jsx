@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { px } from '@/styles/themeUtil';
 
 export default {
-  LoadingText: styled.div.attrs({ type: 'div' })`
+  LoadingText: styled.div`
     color: ${({ theme }) => theme.palette.primary.main};
     white-space: nowrap;
     text-align: center;

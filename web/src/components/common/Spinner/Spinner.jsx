@@ -3,9 +3,9 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import S from './style';
 
 const Spinner = () => (
-  <S.SpinnerWrapper>
+  <S.Spinner>
     <CircularProgress />
-  </S.SpinnerWrapper>
+  </S.Spinner>
 );
 
 export default Spinner;

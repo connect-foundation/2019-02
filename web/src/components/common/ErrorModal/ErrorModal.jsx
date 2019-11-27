@@ -8,12 +8,12 @@ const ErrorModal = (props) => {
   const { message } = props;
 
   return (
-    <S.ErrorModalWrapper>
-      <S.ErrorModal>
+    <S.ErrorModal>
+      <S.ErrorModalContent>
         <ErrorEmoji />
         <ErrorText message={message} />
-      </S.ErrorModal>
-    </S.ErrorModalWrapper>
+      </S.ErrorModalContent>
+    </S.ErrorModal>
   );
 };
 

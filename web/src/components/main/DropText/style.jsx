@@ -1,11 +1,8 @@
 import styled from 'styled-components';
-import { px, colorGray, colorLightMain } from '@/styles';
+import { px, colorGray, colorYellow } from '@/styles';
 
 export default {
-  DropText: styled.div.attrs({ type: 'div' })`    color: ${(props) => (
-    props.fontColor === 'default'
-      ? colorGray(0)
-      : colorLightMain())};
+  DropText: styled.div`
     white-space: nowrap;
     text-align: center;
     font-weight: 300;
@@ -14,6 +11,6 @@ export default {
     color: ${(props) => (
     props.fontColor === 'default'
       ? colorGray(0)
-      : colorLightMain())};
+      : colorYellow(5))};
   `,
 };
