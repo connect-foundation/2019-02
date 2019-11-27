@@ -4,6 +4,7 @@ import { CHAT_SORT_BY_RECENT, CHAT_SORT_BY_LIKE } from '@/constants';
 import S from './style';
 
 const ChatSort = () => {
+  const [isClosed, setIsClosed] = useState(false);
   const [sortType, setSortType] = useState(CHAT_SORT_BY_RECENT);
   const changeSort = useChangeChatSort();
   const handleClick = (targetSortType) => {
@@ -27,6 +28,10 @@ const ChatSort = () => {
       >
         공감순
       </S.SortButton>
+      <S.SwitchButton
+        onChange={() => setIsClosed(!isClosed)}
+        checked={isClosed}
+      />
     </S.ChatSort>
   );
 };
