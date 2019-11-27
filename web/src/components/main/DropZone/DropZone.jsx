@@ -79,10 +79,10 @@ const DropZone = () => {
         </S.DropModalContent>
       </S.DropModal>
       <S.DropZone
-        onDrop={(event) => handleDrop(event)}
-        onDragEnter={(event) => handleDragEnter(event)}
-        onDragOver={(event) => handleDragOver(event)}
-        onDragLeave={(event) => handleDragLeave(event)}
+        onDrop={handleDrop}
+        onDragEnter={handleDragEnter}
+        onDragOver={handleDragOver}
+        onDragLeave={handleDragLeave}
       />
       <DropInput />
       {isError && <ErrorModal message={TEMP_ERROR_MESSAGE} />}
