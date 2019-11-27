@@ -1,13 +1,13 @@
 import React from 'react';
 import { useRouteMatch } from 'react-router-dom';
 import { ChannelContext } from '@/contexts';
-import { useCheckChannel, useCheckAndLoginAnonymous } from '@/hooks';
+import { useGetChannel, useCheckAndLoginAnonymous } from '@/hooks';
 import { Chat, Slide, ToolBar } from '@/components/channel';
 import S from './style';
 
 const Channel = () => {
   const { params: { channelId } } = useRouteMatch();
-  const { data } = useCheckChannel(channelId);
+  const { data } = useGetChannel(channelId);
 
   useCheckAndLoginAnonymous();
 
@@ -20,7 +20,7 @@ const Channel = () => {
 
   return (
     <ChannelContext.Provider
-      value={{ isMaster: data.isMaster, slideUrls: data.slideUrls }}
+      value={{ isMaster: data.isMaster, slideUrls: data.channel.slideUrls }}
     >
       <S.Channel>
         <ToolBar />

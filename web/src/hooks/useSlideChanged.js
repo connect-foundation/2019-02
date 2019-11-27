@@ -2,7 +2,7 @@ import gql from 'graphql-tag';
 import { useSubscription } from '@apollo/react-hooks';
 
 const SLIDE_CHANGED = gql`
-  subscription slideChanged($channelId: String!) {
+  subscription SlideChanged($channelId: String!) {
     slideChanged(channelId: $channelId) {
       currentSlide
     }
@@ -10,13 +10,10 @@ const SLIDE_CHANGED = gql`
 `;
 
 const useSlideChanged = (channelId) => {
-  const {
-    data: { slideChanged },
-    loading,
-    error,
-  } = useSubscription(SLIDE_CHANGED, { variables: { channelId } });
-  if (error) { console.log(error); }
-  return { data: slideChanged, loading };
+  const { data } = useSubscription(SLIDE_CHANGED, { variables: { channelId } });
+  const currentSlide = !data ? 0 : data.slideChanged.currentSlide;
+
+  return { data: currentSlide };
 };
 
 

@@ -2,8 +2,8 @@ import gql from 'graphql-tag';
 import { useMutation } from '@apollo/react-hooks';
 
 const SET_CURRENT_SLIDE = gql`
-  mutation SetCurrentSlide($slide: number!) {
-    setCurrentSlide(slide: $slide) { 
+  mutation SetCurrentSlide($channelId: String!, $currentSlide: Int!) {
+    setCurrentSlide(channelId: $channelId, currentSlide: $currentSlide) { 
      currentSlide
     }
   }

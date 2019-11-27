@@ -10,7 +10,7 @@ const Slide = (props) => {
 
   return (
     <S.Slide>
-      <SlideStatus />
+      <SlideStatus channelId={channelId} />
       <SlideViewer channelId={channelId} />
       <SlideInfo />
     </S.Slide>
