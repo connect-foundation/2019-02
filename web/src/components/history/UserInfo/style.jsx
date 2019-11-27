@@ -4,7 +4,7 @@ import Modal from '@material-ui/core/Modal';
 import { px, colorGray } from '@/styles';
 
 export default {
-  UserInfoWrapper: styled.div`
+  UserInfo: styled.div`
     display: flex;
     flex-shrink: 0;
     flex-grow: 0;

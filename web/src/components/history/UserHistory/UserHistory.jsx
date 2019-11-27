@@ -4,7 +4,7 @@ import S from './style';
 
 const UserHistory = () => (
   <>
-    <S.UserHistoryWrapper>
+    <S.UserHistory>
       김도현님이 리스너로 방문하셨던 채널이에요!
       <S.UserHistoryContents>
         <UserHistoryCard />
@@ -15,7 +15,7 @@ const UserHistory = () => (
         <UserHistoryCard />
         <UserHistoryCard />
       </S.UserHistoryContents>
-    </S.UserHistoryWrapper>
+    </S.UserHistory>
   </>
 );
 

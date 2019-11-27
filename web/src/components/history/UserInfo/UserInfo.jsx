@@ -16,7 +16,7 @@ const UserInfo = () => {
 
   return (
     <>
-      <S.UserInfoWrapper>
+      <S.UserInfo>
         <S.Setting onClick={handleOpen}>
           <span role="img" aria-label="setting-img">
           ✏️
@@ -27,7 +27,7 @@ const UserInfo = () => {
         <UserInfoText />
         <UserInfoButton />
         <UserInfoButton />
-      </S.UserInfoWrapper>
+      </S.UserInfo>
       <S.SettingModal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"

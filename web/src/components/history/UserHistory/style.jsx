@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 export default {
-  UserHistoryWrapper: styled.div`
+  UserHistory: styled.div`
     display: flex;
     position: relative;
     flex-direction: column;

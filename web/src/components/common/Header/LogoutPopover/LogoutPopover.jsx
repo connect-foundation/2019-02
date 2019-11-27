@@ -12,11 +12,7 @@ const LogoutPopover = (props) => {
     handleClose();
     mutate();
   };
-  const setMyPage = () => {
-    console.log('프로필 페이지로 가라');
-    // return <Redirect to="/mypage/" />;
-    return <Redirect to="/channels/" />;
-  };
+  const setMyPage = () => <Redirect to="/channels/" />;
 
   return (
     <S.PopoverWrapper>
