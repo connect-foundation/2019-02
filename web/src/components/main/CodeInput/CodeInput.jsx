@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { Redirect } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import S from './style';
 import { useGetChannelsByCode } from '@/hooks';
 
-const CodeInput = () => {
+const CodeInput = (props) => {
+  const { SetShowChannelListModal, setChannels } = props;
   const [channelCode, setChannelCode] = useState('');
   const { query, data } = useGetChannelsByCode();
   const handleOnClick = () => {
@@ -21,7 +23,8 @@ const CodeInput = () => {
     } if (!channelCount) {
       // TODO: 해당 코드를 갖고 있는 채널이 없을 경우 에러 모달 렌더링
     } else {
-      // TODO: 갖은 채널 코드를 갖고 이쓴 코드가 2개 이상일 경우
+      SetShowChannelListModal(true);
+      setChannels(data.channels);
     }
   }
 
@@ -39,6 +42,11 @@ const CodeInput = () => {
       </S.EnterButton>
     </S.CodeInput>
   );
+};
+
+CodeInput.propTypes = {
+  SetShowChannelListModal: PropTypes.func.isRequired,
+  setChannels: PropTypes.func.isRequired,
 };
 
 export default CodeInput;

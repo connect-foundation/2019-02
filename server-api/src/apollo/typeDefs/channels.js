@@ -21,8 +21,14 @@ type CreateChannelResponse {
   channel: Channel
 }
 
+type getChannelsByCodeResponse {
+  status: String!
+  channels: [Channel]
+}
+
 extend type Query {
   checkChannel(channelId: String!): CheckChannelResponse
+  getChannelsByCode(channelCode: String!): getChannelsByCodeResponse
 }
 
 extend type Mutation {

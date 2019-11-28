@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Redirect } from 'react-router-dom';
 import { Button } from '@material-ui/core';
 import { uploadFile } from '@/apis';
-import { createShortUuid as createChannelId } from '@/utils/uuid';
+import createChannelId from '@/utils/uuid';
 import { useCreateChannel } from '@/hooks';
 import { LoadingModal, ErrorModal } from '@/components/common';
 import createFormData from '@/utils/createFormdata';

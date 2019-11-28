@@ -9,7 +9,7 @@ import DropEmoji from '../DropEmoji';
 import DropText from '../DropText';
 import DropInput from '../DropInput';
 import getRandomItemOfList from '@/utils/random';
-import { createShortUuid as createChannelId } from '@/utils/uuid';
+import createChannelId from '@/utils/uuid';
 import {
   EMOJI_LIST,
   TEMP_ERROR_MESSAGE,

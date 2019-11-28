@@ -72,9 +72,24 @@ const createChannel = async (_, {
   }
 };
 
+const getChannelsByCode = async (_, { channelCode }) => {
+  try {
+    const channels = await Channels.find({ channelCode });
+    const status = channels ? 'ok' : 'not_exist';
+
+    return {
+      status,
+      channels,
+    };
+  } catch (err) {
+    throw new ApolloError(err.message);
+  }
+};
+
 const resolvers = {
   Query: {
     checkChannel,
+    getChannelsByCode,
   },
   Mutation: {
     createChannel,
