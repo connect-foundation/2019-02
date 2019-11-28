@@ -8,7 +8,7 @@ export default {
     align-items: center;
     width: 100%;
     height: 100%;
-    padding: ${px(50)} 0;
+    padding: ${px(40)} 0;
   `,
   SlideImg: styled.img`
     user-select: none;
