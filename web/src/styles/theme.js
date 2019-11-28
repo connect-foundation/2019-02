@@ -98,6 +98,20 @@ export default createMuiTheme({
           'background-color': '#868E96',
         },
       },
+    }, 
+    MuiSwitch: {
+      colorPrimary: {
+        color: '#f8f9fa !important',
+      },
+      switchBase: {
+        '&$checked': {
+          transform: 'translateX(60%)',
+        },
+      },
+      track: {
+        'background-color': '#868e96',
+        opacity: '1 !important',
+      },
     },
   },
 });

@@ -12,3 +12,6 @@ export { default as useChannelSelector } from './useChannelSelector';
 export { default as useSetCurrentSlide } from './useSetCurrentSlide';
 export { default as useSlideChanged } from './useSlideChanged';
 export { default as useSyncSlide } from './useSyncSlide';
+export { default as useGetChatsCached } from './useGetChatsCached';
+export { default as useInitChatCached } from './useInitChatCached';
+export { default as useChangeChatSort } from './useChangeChatSort';
