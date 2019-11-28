@@ -7,6 +7,10 @@ const HistorySchema = new Schema({
     type: String,
     required: [true, '아이디는 필수입니다.'],
   },
+  masterId: {
+    type: String,
+    required: true,
+  },
   channelId: {
     type: String,
     required: true,

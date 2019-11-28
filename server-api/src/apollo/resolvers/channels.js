@@ -52,8 +52,10 @@ const createChannel = async (_, {
   );
   const updatedAt = Date.now();
   const { userId } = user;
+  const masterId = userId;
   const newHistory = new Histories({
     userId,
+    masterId,
     channelId,
     updatedAt,
   });
