@@ -1,7 +1,33 @@
+import React from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import iconThumbGray from '@@/icon_thumb_gray.svg';
-import iconThumbYellow from '@@/icon_thumb_yellow.svg';
 import { px, colorGray } from '@/styles';
+import { CHAT_LIKE_ICON_PATH } from '@/constants';
+
+const LikeIcon = styled(({ isActive, className }) => (
+  <span className={className}>
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path
+        d={CHAT_LIKE_ICON_PATH}
+        style={{
+          transition: 'fill .2s',
+          fill: isActive ? '#F08C00' : '#CED4DA',
+        }}
+      />
+    </svg>
+  </span>
+))`
+display: inline-block;
+width: ${px(14)};
+height: ${px(14)};
+margin: ${px(4)} ${px(5)} 0 0;
+vertical-align: top;
+`;
+
+LikeIcon.propTypes = {
+  isActive: PropTypes.bool.isRequired,
+  className: PropTypes.string,
+};
 
 const S = {
   ChatCard: styled.div`
@@ -37,16 +63,12 @@ const S = {
   LikeButton: styled.button.attrs({ type: 'button' })`
     float: right;
     height: ${px(20)};
-    padding-left: ${px(18)};
-    background: url(${iconThumbGray}) no-repeat 0 70%/${px(14)};
     font-size: ${px(12)};
     line-height: ${px(24)};
     color: ${colorGray(6)};
     cursor: pointer;
-    ${(props) => (props.isActive ? `
-    background-image: url(${iconThumbYellow});
-    ` : '')}
   `,
+  LikeIcon,
 };
 
 export default S;

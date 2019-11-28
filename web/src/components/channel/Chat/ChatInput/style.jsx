@@ -8,6 +8,7 @@ const S = {
     width: 100%;
     height: ${px(124)};
     padding: ${px(9)} ${px(12)} ${px(9)} ${px(16)};
+    border-top: ${px(1)} solid ${colorGray(1)};
     border-radius: ${px(3)};
     box-shadow: 0 ${px(2)} ${px(20)} rgba(0, 0, 0, 0.03);
     background-color: #fff;
@@ -16,7 +17,7 @@ const S = {
     type: 'text',
   })`
     box-sizing: border-box;
-    width: ${px(168)};
+    width: ${px(238)};
     height: ${px(84)};
     margin: ${px(11)} ${px(14)} 0 0;
     border: 0;

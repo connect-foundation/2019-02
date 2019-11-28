@@ -4,6 +4,7 @@ import S from './style';
 
 const Indicator = (props) => {
   const { direction, handleSetPage } = props;
+
   return (
     <S.Indicator
       onClick={handleSetPage(direction)}
@@ -21,6 +22,7 @@ const Indicator = (props) => {
 Indicator.propTypes = {
   direction: PropTypes.string.isRequired,
   handleSetPage: PropTypes.func.isRequired,
+
 };
 
 export default Indicator;

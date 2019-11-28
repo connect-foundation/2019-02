@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import S from './style';
 import { useAddChat } from '@/hooks';
+import { CHAT_INPUT_PLACEHOLDER } from '@/constants';
+import S from './style';
 
 const KEYCODE_ENTER = 13;
 
@@ -28,7 +29,7 @@ const ChatInput = (props) => {
   return (
     <S.ChatInput>
       <S.MessageInput
-        placeholder="의견을 남겨주세요."
+        placeholder={CHAT_INPUT_PLACEHOLDER}
         onChange={handleChangeInput}
         onKeyDown={handleKeyDownInput}
         value={message}

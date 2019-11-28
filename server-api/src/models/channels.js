@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const { assignFilter } = require('../utils/object');
 
 const { Schema } = mongoose;
 
@@ -35,10 +36,35 @@ const ChannelSchema = new Schema({
   fileUrl: {
     type: String,
   },
+  channelStatus: {
+    type: String,
+    required: true,
+    default: 'on',
+  },
+  currentSlide: {
+    type: Number,
+    required: true,
+    default: 0,
+  },
   createdAt: {
     type: Date,
     default: Date.now(),
   },
 });
+
+ChannelSchema.methods.toPayload = function toChatPayload(...objs) {
+  const channel = this;
+
+  return assignFilter([
+    'channelId',
+    'master',
+    'channelName',
+    'maxHeadCount',
+    'slideUrls',
+    'fileUrl',
+    'channelStatus',
+    'currentSlide',
+  ], channel, ...objs);
+};
 
 module.exports = mongoose.model('channels', ChannelSchema);
