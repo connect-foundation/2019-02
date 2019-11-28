@@ -5,7 +5,8 @@
   "license": "MIT",
   "scripts": {
     "dev": "ts-node ./src/index.ts --project tsconfig.json",
-    "lint": "eslint src/**/*.ts",
+    "start": "pm2 start ./build/app.js",
+    "build": "tsc",
     "test": "echo Preparing..."
   },
   "dependencies": {
