@@ -9,5 +9,9 @@ export default {
     width: ${px(280)};
     height: 100%;
     background-color: #f8f9fa;
+    transition: transform 0.5s;
+    ${({ isClosed, theme }) => (isClosed ? `
+    width: ${theme.typography.pxToRem(60)};
+    ` : '')}
   `,
 };
