@@ -14,7 +14,11 @@ const setProviderToUpsert = (provider) => (_, __, profile, done) => {
   const { displayName } = profile;
 
   Users.upsert(userId, displayName)
-    .then((user) => done(null, user))
+    .then((user) => done(null, {
+      userId: user.userId,
+      displayName: user.displayName,
+      isAnonymous: false,
+    }))
     .catch((error) => done(error));
 };
 
