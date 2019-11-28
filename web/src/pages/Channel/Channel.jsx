@@ -29,6 +29,8 @@ const Channel = () => {
         isMaster: data.isMaster,
         slideUrls: data.channel.slideUrls,
         initialSlide: data.channel.currentSlide,
+        channelName: data.channel.channelName,
+        masterName: data.channel.master.displayName,
       }}
     >
       <S.Channel>

@@ -2,7 +2,6 @@ const { withFilter, ApolloError } = require('apollo-server-express');
 const Channels = require('../../models/channels');
 const Users = require('../../models/users');
 
-
 const SLIDE_CHANGED = 'SLIDE_CHANGED';
 
 const createChannelInfo = (
@@ -14,7 +13,7 @@ const createChannelInfo = (
 ) => ({
   channelId,
   channelCode,
-  channelName: `${user.displayName}님의 채널입니다.😀`,
+  channelName: `${user.displayName}님의 채널입니다😀`,
   masterId: user.userId,
   slideUrls,
   fileUrl,

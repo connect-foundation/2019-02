@@ -8,14 +8,14 @@ export default {
     align-items: center;
     width: 100%;
     height: 100%;
-    padding: ${px(50)} 0;
+    padding: ${px(40)} 0;
   `,
   SlideImg: styled.img`
     user-select: none;
     height:auto;
     width:auto;
     max-width: 100%;
-    border-radius:3px;
+    border-radius: ${px(3)};
     max-height: 100%;
     object-fit: contain;
     background-color: ${({ theme }) => theme.palette.common.white};
