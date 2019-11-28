@@ -3,7 +3,11 @@ import PropTypes from 'prop-types';
 import ChatCard from './ChatCard';
 import { useGetChatsCached } from '@/hooks';
 import { computeScrollEndTop } from '@/utils/dom';
-import { CHAT_ADDED, CHAT_SORT_BY_LIKE } from '@/constants';
+import {
+  CHAT_ADDED,
+  CHAT_SORT_BY_LIKE,
+  CHAT_SORT_BY_RECENT,
+} from '@/constants';
 import S from './style';
 
 const ChatCards = (props) => {
@@ -14,15 +18,24 @@ const ChatCards = (props) => {
     ? (prev, next) => next.likes.length - prev.likes.length
     : (prev, next) => prev.createdAt - next.createdAt;
   const chatLogs = logs.sort(sortCallback);
-  const changeScrollTop = () => {
+  const changeScrollTop = (always) => () => {
     const scrollWrapEl = scrollWrapRef.current;
-    const endTop = sortType === CHAT_SORT_BY_LIKE ? 0 : computeScrollEndTop(scrollWrapEl);
+    const targetTop = sortType === CHAT_SORT_BY_RECENT ? computeScrollEndTop(scrollWrapEl) : 0;
 
-    scrollWrapRef.current.scrollTop = endTop;
+    if (always) {
+      scrollWrapEl.scrollTop = targetTop;
+      return;
+    }
+
+    const isAllowedRange = targetTop - scrollWrapEl.scrollTop < 400;
+
+    if (changeType === CHAT_ADDED && isAllowedRange) {
+      scrollWrapEl.scrollTop = targetTop;
+    }
   };
 
-  useEffect(() => { if (changeType === CHAT_ADDED) changeScrollTop(); }, [logs]);
-  useEffect(() => changeScrollTop(), [sortType]);
+  useEffect(changeScrollTop(), [logs]);
+  useEffect(changeScrollTop(true), [sortType]);
 
   return (
     <S.ScrollWrap ref={scrollWrapRef}>
