@@ -1,10 +1,10 @@
 import styled from 'styled-components';
-import { colorGray } from '@/styles/themeUtil';
+import { colorGray, px } from '@/styles/themeUtil';
 
 export default {
   SlideStatus: styled.div`
-    height: 76px;
-    width:94%;
+    height: ${px(76)};
+    width: 94%;
     border-bottom: 1px solid ${colorGray(3)};
     display: flex;
     align-items: center;

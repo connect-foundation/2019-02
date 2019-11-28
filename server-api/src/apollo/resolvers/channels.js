@@ -1,5 +1,7 @@
 const { withFilter, ApolloError } = require('apollo-server-express');
 const Channels = require('../../models/channels');
+const Users = require('../../models/users');
+
 
 const SLIDE_CHANGED = 'SLIDE_CHANGED';
 
@@ -43,12 +45,13 @@ const createChannel = async (_, {
 const getChannel = async (_, { channelId }, { user }) => {
   try {
     const channel = await Channels.findOne({ channelId });
+    const master = await Users.findOne({ userId: channel.masterId });
     const status = channel ? 'ok' : 'not_exist';
     const isMaster = !!channel && !!user && channel.masterId === user.userId;
 
     if (!channel) return { status, isMaster };
 
-    const payload = channel.toPayload({ master: user });
+    const payload = channel.toPayload({ master });
 
     return {
       status,
