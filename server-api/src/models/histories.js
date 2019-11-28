@@ -16,15 +16,6 @@ const HistorySchema = new Schema({
     type: String,
     required: true,
   },
-  channelName: {
-    type: String,
-    required: true,
-  },
-  channelStatus: {
-    type: String,
-    required: true,
-    default: 'on',
-  },
   createdAt: {
     type: Date,
     default: Date.now,

@@ -20,7 +20,11 @@ const Channel = () => {
   useInitChatCached();
   useEffect(() => {
     if (userStatus.token) return;
-    authByAnonymous().then(({ token, user }) => logIn({ token, user, isAnonymous: true }));
+    authByAnonymous().then(({ token, user }) => logIn({
+      token,
+      userId: user.userId,
+      isAnonymous: true,
+    }));
   }, [userStatus]);
 
   if (!data) return null;

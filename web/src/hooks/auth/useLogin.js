@@ -20,7 +20,9 @@ const useLogin = () => {
       },
     };
 
-    window.localStorage.setItem('DROPY_TOKEN', token);
+    const TOKEN_KEY = isAnonymous ? 'DROPY_ANONYMOUS_TOKEN' : 'DROPY_TOKEN';
+
+    window.localStorage.setItem(TOKEN_KEY, token);
     window.localStorage.setItem('DROPY_USER_ID', userId);
     window.localStorage.setItem('DROPY_USERNAME', displayName);
     client.writeQuery({ query: GET_USER_STATUS, data });

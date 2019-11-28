@@ -22,7 +22,7 @@ const UserInfoButton = (props) => {
   );
 };
 
-UserInfoButton.propsTypes = {
+UserInfoButton.propTypes = {
   setHistoryState: PropTypes.func.isRequired,
 };
 
