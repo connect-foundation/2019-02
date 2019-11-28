@@ -16,26 +16,38 @@ import {
   CREATING_CHANNEL_MESSAGE,
 } from '@/constants';
 
+const ChannelCodeLength = 5;
+
 const DropZone = () => {
   const { mutate, data } = useCreateChannel();
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
-  const [dropZoneTextColor, setDropZoneTextColor] = useState('default');
-  const [dropZoneMessage, setDropZoneMessage] = useState('Drag & Drop');
+  const [dragOver, setDragOver] = useState(false);
   const [dropZoneEmoji, setDropZoneEmoji] = useState('👇');
-
   const handleDrop = async (event) => {
     event.preventDefault();
     setIsLoading(true);
 
     const channelId = createChannelId();
+    const channelCode = channelId.substring(0, ChannelCodeLength);
     const { dataTransfer: { files } } = event;
     const file = files[0];
     const formData = createFormData({ channelId, file });
-    const status = await uploadFile(formData);
+    const {
+      status,
+      slideUrls,
+      fileUrl,
+    } = await uploadFile(formData);
 
     if (status === 'ok') {
-      mutate({ variables: { channelId } });
+      mutate({
+        variables: {
+          channelId,
+          slideUrls,
+          fileUrl,
+          channelCode,
+        },
+      });
     } else {
       setIsError(true);
     }
@@ -43,8 +55,7 @@ const DropZone = () => {
   const handleDragEnter = (event) => {
     event.preventDefault();
 
-    setDropZoneTextColor('drag');
-    setDropZoneMessage('Start Speech!');
+    setDragOver(true);
     setDropZoneEmoji(getRandomItemOfList(EMOJI_LIST));
   };
   const handleDragOver = (event) => {
@@ -53,8 +64,7 @@ const DropZone = () => {
   const handleDragLeave = (event) => {
     event.preventDefault();
 
-    setDropZoneTextColor('default');
-    setDropZoneMessage('Drag & Drop');
+    setDragOver(false);
     setDropZoneEmoji('👇');
   };
 
@@ -68,16 +78,15 @@ const DropZone = () => {
         <S.DropModalContent>
           <DropEmoji emoji={dropZoneEmoji} />
           <DropText
-            fontColor={dropZoneTextColor}
-            message={dropZoneMessage}
+            dragOver={dragOver}
           />
         </S.DropModalContent>
       </S.DropModal>
       <S.DropZone
-        onDrop={(event) => handleDrop(event)}
-        onDragEnter={(event) => handleDragEnter(event)}
-        onDragOver={(event) => handleDragOver(event)}
-        onDragLeave={(event) => handleDragLeave(event)}
+        onDrop={handleDrop}
+        onDragEnter={handleDragEnter}
+        onDragOver={handleDragOver}
+        onDragLeave={handleDragLeave}
       />
       <DropInput />
       {isError && <ErrorModal message={TEMP_ERROR_MESSAGE} />}

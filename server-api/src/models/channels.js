@@ -8,6 +8,10 @@ const ChannelSchema = new Schema({
     type: String,
     required: true,
   },
+  channelCode: {
+    type: String,
+    required: true,
+  },
   masterId: {
     type: String,
     required: true,
@@ -60,6 +64,7 @@ ChannelSchema.methods.toPayload = function toChatPayload(...objs) {
     'fileUrl',
     'channelStatus',
     'currentSlide',
+    'channelCode',
   ], channel, ...objs);
 };
 

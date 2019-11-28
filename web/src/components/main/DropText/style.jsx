@@ -9,8 +9,7 @@ export default {
     font-size: ${px(76)};
     margin-bottom: ${px(160)};
     color: ${(props) => (
-    props.fontColor === 'default'
-      ? colorGray(0)
-      : colorYellow(5))};
+    props.dragOver ? colorYellow(5) : colorGray(0)
+  )};
   `,
 };
