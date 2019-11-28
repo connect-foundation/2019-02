@@ -12,6 +12,7 @@ const CHECK_CHANNEL = gql`
         master{
           displayName
         }
+        currentSlide
       }
     }
   } 

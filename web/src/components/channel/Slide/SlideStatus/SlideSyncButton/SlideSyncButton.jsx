@@ -9,7 +9,7 @@ const SlideSyncButton = (props) => {
   return (
     <SmallButton
       color={color}
-      onClick={handleSync}
+      onClick={handleSync(!isSync)}
     >
       <span aria-label="sync" role="img">⚡️</span>
       스피커 동기화

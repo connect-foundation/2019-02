@@ -1,23 +1,42 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import S from './style';
-import { useChannelSelector, useSetCurrentSlide, useSlideChanged } from '@/hooks';
-import movePagePossible from '@/utils/movePagePossible';
+import {
+  useChannelSelector,
+  useSetCurrentSlide,
+  useSlideChanged,
+  useSyncSlide,
+} from '@/hooks';
+import { moveSlide, moveSlidePossible } from '@/utils/slide';
 import Indicator from './Indicator';
 import MainSlide from './MainSlide';
 import PageNumber from './PageNumber';
 
 const SlideViewer = (props) => {
-  const { channelId, isSync } = props;
+  const {
+    channelId,
+    isSync,
+    setSync,
+    page,
+    setPage,
+  } = props;
   const { mutate } = useSetCurrentSlide();
   const { currentSlide } = useSlideChanged(channelId);
-  const slideUrls = useChannelSelector((state) => state.slideUrls);
-  const isMaster = useChannelSelector((state) => state.isMaster);
-  const [page, setPage] = useState(0);
+  const { slideUrls, isMaster } = useChannelSelector((state) => state);
+  const syncSlide = useSyncSlide(
+    isMaster,
+    isSync,
+    page,
+    currentSlide,
+  );
   const handleSetPage = (direction) => () => {
-    if (!movePagePossible(direction, page, slideUrls.length)) return;
-    if (direction === 'back') setPage(page - 1);
-    else setPage(page + 1);
+    const sync = isSync ? currentSlide : page;
+    if (!moveSlidePossible(direction, sync, slideUrls.length)) return;
+    if (!isMaster && isSync) {
+      setSync(false);
+      moveSlide(direction, setPage, currentSlide);
+      return;
+    } moveSlide(direction, setPage, page);
   };
 
   useEffect(() => {
@@ -28,19 +47,18 @@ const SlideViewer = (props) => {
   return (
     <S.SlideViewer>
       <MainSlide
-        page={isSync ? currentSlide : page}
+        page={syncSlide}
         slideUrls={slideUrls}
       />
-      <Indicator
-        handleSetPage={handleSetPage}
-        direction="back"
-      />
-      <Indicator
-        handleSetPage={handleSetPage}
-        direction="foward"
-      />
+      {['back', 'foward'].map((direction) => (
+        <Indicator
+          key={direction}
+          direction={direction}
+          handleSetPage={handleSetPage}
+        />
+      ))}
       <PageNumber
-        currentSlide={isSync ? currentSlide + 1 : page + 1}
+        currentSlide={syncSlide + 1}
         slideLength={slideUrls.length}
       />
     </S.SlideViewer>
@@ -50,6 +68,9 @@ const SlideViewer = (props) => {
 SlideViewer.propTypes = {
   channelId: PropTypes.string.isRequired,
   isSync: PropTypes.bool.isRequired,
+  setSync: PropTypes.func.isRequired,
+  page: PropTypes.number.isRequired,
+  setPage: PropTypes.func.isRequired,
 };
 
 export default SlideViewer;
