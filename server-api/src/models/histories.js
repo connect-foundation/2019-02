@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const Channels = require('./channels');
 
 const { Schema } = mongoose;
 
@@ -7,17 +8,30 @@ const HistorySchema = new Schema({
     type: String,
     required: [true, '아이디는 필수입니다.'],
   },
+  masterId: {
+    type: String,
+    required: true,
+  },
   channelId: {
     type: String,
     required: true,
   },
+  channelName: {
+    type: String,
+    required: true,
+  },
+  channelStatus: {
+    type: String,
+    required: true,
+    default: 'on',
+  },
   createdAt: {
     type: Date,
-    default: Date.now(),
+    default: Date.now,
   },
   updatedAt: {
     type: Date,
-    default: Date.now(),
+    default: Date.now,
   },
 });
 
@@ -45,6 +59,19 @@ HistorySchema.statics.upsert = function upsertHistory(userId, channelId) {
   }).catch((error) => {
     throw error;
   });
+};
+
+HistorySchema.methods.toPayload = async function toHistoryPayload() {
+  const history = this;
+  const { channelId, updatedAt } = history;
+  const channel = await Channels.findOne({ channelId });
+  console.log(channel);
+  const channelPayload = channel ? channel.toPayload() : {
+    master: {},
+    slideUrls: [],
+  };
+
+  return { channel: channelPayload, updatedAt };
 };
 
 module.exports = mongoose.model('history', HistorySchema);

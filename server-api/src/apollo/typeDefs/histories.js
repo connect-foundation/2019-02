@@ -1,16 +1,11 @@
 const typeDefs = `
 type History {
-  userId: String!
-  histories: [Histories]
-}
-
-type Histories {
-  channelId: String!
-  updatedAt: String!
+  channel: Channel
+  updatedAt: Date
 }
 
 extend type Query {
-  histories: [Histories]
+  getHistories: [History]
 }
 `;
 
