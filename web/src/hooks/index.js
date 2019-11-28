@@ -1,12 +1,10 @@
-export { default as useLogin } from './useLogin';
-export { default as useLogout } from './useLogout';
+export * from './auth';
 export { default as useCreateChannel } from './useCreateChannel';
-export { default as useGetUserStatus } from './useGetUserStatus';
+export { default as useGetUserStatus } from './auth/useGetUserStatus';
 export { default as useAddChat } from './useAddChat';
 export { default as useLikeChat } from './useLikeChat';
 export { default as useChatChanged } from './useChatChanged';
 export { default as useGetChannel } from './useGetChannel';
-export { default as useCheckAndLoginAnonymous } from './useCheckAndLoginAnonymous';
 export { default as useInitChatLogs } from './useInitChatLogs';
 export { default as useChannelSelector } from './useChannelSelector';
 export { default as useAddUserHistory } from './useAddUserHistory';

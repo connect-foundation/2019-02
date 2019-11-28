@@ -7,10 +7,10 @@ import S from './style';
 
 const LogoutPopover = (props) => {
   const { handleClose } = props;
-  const { mutate } = useLogout();
+  const logOut = useLogout();
   const handleLogOut = () => {
     handleClose();
-    mutate();
+    logOut();
   };
   const setMyPage = () => <Redirect to="/mypage" />;
 

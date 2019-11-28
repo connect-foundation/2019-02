@@ -67,10 +67,22 @@ export default createMuiTheme({
   },
   overrides: {
     MuiAppBar: {
+      root: {
+        position: 'relative',
+        height: '50px',
+      },
       colorPrimary: {
         'background-color': '#f8f9fa',
         'border-bottom': '1px solid #dee2e6',
         flex: 0,
+      },
+    },
+    MuiToolbar: {
+      root: {
+        height: '50px',
+      },
+      regular: {
+        'min-height': '50px !important',
       },
     },
     MuiButton: {
@@ -98,7 +110,7 @@ export default createMuiTheme({
           'background-color': '#868E96',
         },
       },
-    }, 
+    },
     MuiSwitch: {
       colorPrimary: {
         color: '#f8f9fa !important',

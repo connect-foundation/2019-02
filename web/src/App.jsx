@@ -14,8 +14,8 @@ const App = () => (
     <GlobalStyle />
     <CssBaseline />
     <Wrapper>
-      <Header />
       <Router>
+        <Header />
         <Switch>
           <Route path="/" exact>
             <Main />

@@ -7,11 +7,11 @@ import S from './style';
 
 const GoogleButton = (props) => {
   const { handleClose } = props;
-  const { mutate } = useLogin();
+  const logIn = useLogin();
   const handleResponse = async ({ accessToken }) => {
     const { token, user: { displayName, userId } } = await authByGoogle(accessToken);
     if (token) {
-      mutate({ variables: { token, displayName, userId } });
+      logIn({ token, userId, displayName });
     }
   };
   const handleFailure = (error) => {

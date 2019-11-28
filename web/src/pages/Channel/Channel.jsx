@@ -1,20 +1,27 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useRouteMatch } from 'react-router-dom';
 import { ChannelContext } from '@/contexts';
 import {
+  useLogin,
+  useGetUserStatus,
   useGetChannel,
-  useCheckAndLoginAnonymous,
   useInitChatCached,
 } from '@/hooks';
 import { Chat, Slide, ToolBar } from '@/components/channel';
+import { authByAnonymous } from '@/apis';
 import S from './style';
 
 const Channel = () => {
   const { params: { channelId } } = useRouteMatch();
   const { data } = useGetChannel(channelId);
+  const logIn = useLogin();
+  const userStatus = useGetUserStatus();
 
   useInitChatCached();
-  useCheckAndLoginAnonymous();
+  useEffect(() => {
+    if (userStatus.token) return;
+    authByAnonymous().then(({ token, user }) => logIn({ token, user, isAnonymous: true }));
+  }, [userStatus]);
 
   if (!data) return null;
   if (data.status === 'not_exist') {

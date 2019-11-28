@@ -1,40 +1,27 @@
 import React, { useState } from 'react';
-import { useQuery } from '@apollo/react-hooks';
-import gql from 'graphql-tag';
+import { Link } from 'react-router-dom';
 import {
   AppBar, Toolbar, Typography, Popover,
 } from '@material-ui/core';
 import LoginPopover from './LoginPopover';
 import LogoutPopover from './LogoutPopover';
+import { useGetUserStatus } from '@/hooks';
 import S from './style';
 
-const GET_AUTH = gql`
-query Auth {
-  authentication @client {
-    isLoggedIn
-    displayName
-  }
-}
-`;
-
 const Header = () => {
-  const { data: { authentication } } = useQuery(GET_AUTH);
+  const authentication = useGetUserStatus();
   const [anchorEl, setAnchorEl] = useState(null);
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
+  const handleClick = (event) => setAnchorEl(event.currentTarget);
+  const handleClose = () => setAnchorEl(null);
   const isOpened = Boolean(anchorEl);
   const id = isOpened ? 'simple-popover' : undefined;
 
   return (
     <AppBar position="static" elevation={0}>
       <Toolbar>
-        <Typography variant="h1">
-          dropy
-        </Typography>
+        <Link to="/">
+          <Typography variant="h1">dropy</Typography>
+        </Link>
         <S.User>
           {authentication.isLoggedIn ? (
             <S.UserInfo
