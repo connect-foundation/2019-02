@@ -6,6 +6,8 @@ const GET_USER_HISTORIES = gql`
     getHistories {
       channel {
         channelId
+        channelName
+        channelStatus
         master {
           userId
           displayName
@@ -20,6 +22,6 @@ const useGetUserHistories = () => {
   const result = useQuery(GET_USER_HISTORIES);
   const data = result.data ? result.data.getHistories : null;
 
-  return { data };
+  return { data, loading: result.loading };
 };
 export default useGetUserHistories;

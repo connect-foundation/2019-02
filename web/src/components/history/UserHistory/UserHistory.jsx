@@ -1,15 +1,30 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import UserHistoryCard from '../UserHistoryCard';
-import { useGetUserHistories } from '@/hooks';
+import { useGetUserHistories, useGetUserStatus } from '@/hooks';
 import S from './style';
 
 const UserHistory = (props) => {
   const { historyState } = props;
-  const history = useGetUserHistories();
-  console.log(history);
-  return (
+  const { userId } = useGetUserStatus();
+  const { data, loading } = useGetUserHistories();
 
+  if (loading) return <p>데이터 가져오는 중...</p>;
+
+  const filterToDomain = ({ channel: { master } }) => (historyState === 'speaker'
+    ? master.userId === userId
+    : master.userId !== userId);
+  const mapToCardComponent = (historyInfo) => (
+    <UserHistoryCard
+      key={historyInfo.channel.channelId}
+      historyInfo={historyInfo}
+    />
+  );
+  const historyCardList = data && data.length > 0
+    ? data.filter(filterToDomain).map(mapToCardComponent)
+    : <p>아직 채널을 한번도 생성 안해보셨네요??</p>;
+
+  return (
     <>
       <S.UserHistory>
         {historyState === 'speaker'
@@ -17,13 +32,7 @@ const UserHistory = (props) => {
           : <>김도현님이 리스너로 방문하셨던 채널이에요!</>}
 
         <S.UserHistoryContents>
-          <UserHistoryCard />
-          <UserHistoryCard />
-          <UserHistoryCard />
-          <UserHistoryCard />
-          <UserHistoryCard />
-          <UserHistoryCard />
-          <UserHistoryCard />
+          {historyCardList}
         </S.UserHistoryContents>
       </S.UserHistory>
     </>
