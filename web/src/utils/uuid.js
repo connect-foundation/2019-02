@@ -1,5 +1,5 @@
 import shortUuid from 'short-uuid';
 
-const createshortUuid = () => shortUuid.generate();
+const createShortUuid = () => shortUuid.generate();
 
-export default createshortUuid;
+export default createShortUuid;
