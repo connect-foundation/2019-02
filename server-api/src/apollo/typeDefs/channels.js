@@ -21,10 +21,6 @@ type CreateChannelResponse {
   channel: Channel
 }
 
-type SlideResponse {
-  currentSlide: Int!
-}
-
 extend type Query {
   getChannel(channelId: String!): getChannelResponse
 }
@@ -35,11 +31,11 @@ extend type Mutation {
     slideUrls: [String], 
     fileUrl: String,
   ): CreateChannelResponse,
-  setCurrentSlide(channelId: String!, currentSlide: Int!): SlideResponse
+  setCurrentSlide(channelId: String!, currentSlide: Int!): Channel
 }
 
 extend type Subscription {
-  slideChanged(channelId: String!): SlideResponse
+  slideChanged(channelId: String!): Channel
 }
 `;
 

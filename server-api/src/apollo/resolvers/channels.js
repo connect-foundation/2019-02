@@ -60,14 +60,14 @@ const getChannel = async (_, { channelId }, { user }) => {
   }
 };
 
-const setCurrentSlide = async (_, { channelId, currentSlide }, { pubsub }) => {
+const setCurrentSlide = async (_, { channelId, currentSlide }, { user, pubsub }) => {
   try {
     const channel = await Channels.findOneAndUpdate(
       { channelId },
       { currentSlide },
       { new: true },
     );
-    const payload = { channelId, currentSlide: channel.currentSlide };
+    const payload = channel.toPayload({ master: user });
 
     pubsub.publish(SLIDE_CHANGED, { slideChanged: payload });
 
