@@ -43,7 +43,9 @@ const createChannel = async (_, {
 
   try {
     const channel = await newChannel.save();
-    const payload = channel.toPayload({ master: user });
+    const payload = await channel.toPayload({ master: user });
+
+    await newHistory.save();
 
     return { status: 'ok', channel: payload };
   } catch (err) {
@@ -60,7 +62,7 @@ const getChannel = async (_, { channelId }, { user }) => {
 
     if (!channel) return { status, isMaster };
 
-    const payload = channel.toPayload({ master });
+    const payload = await channel.toPayload({ master });
 
     return {
       status,
@@ -79,7 +81,7 @@ const setCurrentSlide = async (_, { channelId, currentSlide }, { user, pubsub })
       { currentSlide },
       { new: true },
     );
-    const payload = channel.toPayload({ master: user });
+    const payload = await channel.toPayload({ master: user });
 
     pubsub.publish(SLIDE_CHANGED, { slideChanged: payload });
 

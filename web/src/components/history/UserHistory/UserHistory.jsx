@@ -1,11 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import UserHistoryCard from '../UserHistoryCard';
+import { useGetUserHistories } from '@/hooks';
 import S from './style';
 
 const UserHistory = (props) => {
   const { historyState } = props;
-
+  const history = useGetUserHistories();
+  console.log(history);
   return (
 
     <>

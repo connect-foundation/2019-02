@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const Channels = require('./channels');
 
 const { Schema } = mongoose;
 
@@ -17,11 +18,11 @@ const HistorySchema = new Schema({
   },
   createdAt: {
     type: Date,
-    default: Date.now(),
+    default: Date.now,
   },
   updatedAt: {
     type: Date,
-    default: Date.now(),
+    default: Date.now,
   },
 });
 
@@ -49,6 +50,19 @@ HistorySchema.statics.upsert = function upsertHistory(userId, channelId) {
   }).catch((error) => {
     throw error;
   });
+};
+
+HistorySchema.methods.toPayload = async function toHistoryPayload() {
+  const history = this;
+  const { channelId, updatedAt } = history;
+  const channel = await Channels.findOne({ channelId });
+  console.log(channel);
+  const channelPayload = channel ? channel.toPayload() : {
+    master: {},
+    slideUrls: [],
+  };
+
+  return { channel: channelPayload, updatedAt };
 };
 
 module.exports = mongoose.model('history', HistorySchema);

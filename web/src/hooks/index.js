@@ -16,3 +16,4 @@ export { default as useSyncSlide } from './useSyncSlide';
 export { default as useGetChatsCached } from './useGetChatsCached';
 export { default as useInitChatCached } from './useInitChatCached';
 export { default as useChangeChatSort } from './useChangeChatSort';
+export { default as useGetUserHistories } from './useGetUserHistories';
