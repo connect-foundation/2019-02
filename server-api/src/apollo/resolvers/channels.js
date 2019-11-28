@@ -8,11 +8,13 @@ const SLIDE_CHANGED = 'SLIDE_CHANGED';
 const createChannelInfo = (
   user,
   channelId,
+  channelCode,
   slideUrls,
   fileUrl,
 ) => ({
   channelId,
-  channelName: `${user.displayName}님의 채널입니다.😀`,
+  channelCode,
+  channelName: `${user.displayName}님의 채널입니다😀`,
   masterId: user.userId,
   slideUrls,
   fileUrl,
@@ -20,6 +22,7 @@ const createChannelInfo = (
 
 const createChannel = async (_, {
   channelId,
+  channelCode,
   slideUrls,
   fileUrl,
 }, { user }) => {
@@ -27,6 +30,7 @@ const createChannel = async (_, {
     createChannelInfo(
       user,
       channelId,
+      channelCode,
       slideUrls,
       fileUrl,
     ),
@@ -74,6 +78,20 @@ const getChannel = async (_, { channelId }, { user }) => {
   }
 };
 
+const getChannelsByCode = async (_, { channelCode }) => {
+  try {
+    const channels = await Channels.find({ channelCode });
+    const status = channels ? 'ok' : 'not_exist';
+
+    return {
+      status,
+      channels,
+    };
+  } catch (err) {
+    throw new ApolloError(err.message);
+  }
+};
+
 const setCurrentSlide = async (_, { channelId, currentSlide }, { user, pubsub }) => {
   try {
     const channel = await Channels.findOneAndUpdate(
@@ -101,6 +119,7 @@ const slideChanged = {
 const resolvers = {
   Query: {
     getChannel,
+    getChannelsByCode,
   },
   Mutation: {
     createChannel,

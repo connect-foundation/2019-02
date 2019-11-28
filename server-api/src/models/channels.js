@@ -9,6 +9,10 @@ const ChannelSchema = new Schema({
     type: String,
     required: true,
   },
+  channelCode: {
+    type: String,
+    required: true,
+  },
   masterId: {
     type: String,
     required: true,
@@ -62,6 +66,7 @@ ChannelSchema.methods.toPayload = async function toChannelPayload(...objs) {
     'fileUrl',
     'channelStatus',
     'currentSlide',
+    'channelCode',
   ], channel, { master }, ...objs);
 };
 

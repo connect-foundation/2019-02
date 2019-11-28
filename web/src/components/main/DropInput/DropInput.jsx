@@ -12,6 +12,8 @@ import {
   CREATING_CHANNEL_MESSAGE,
 } from '@/constants';
 
+const ChannelCodeLength = 5;
+
 const DropInput = () => {
   const { mutate, data } = useCreateChannel();
   const [isLoading, setIsLoading] = useState(false);
@@ -19,6 +21,7 @@ const DropInput = () => {
   const handleUpload = async (e) => {
     setIsLoading(true);
     const channelId = createChannelId();
+    const channelCode = channelId.substring(0, ChannelCodeLength);
     const file = e.target.files[0];
     const formData = createFormData({ file, channelId });
     const {
@@ -31,6 +34,7 @@ const DropInput = () => {
       mutate({
         variables: {
           channelId,
+          channelCode,
           slideUrls,
           fileUrl,
         },

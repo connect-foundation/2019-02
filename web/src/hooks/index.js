@@ -17,3 +17,4 @@ export { default as useGetChatsCached } from './useGetChatsCached';
 export { default as useInitChatCached } from './useInitChatCached';
 export { default as useChangeChatSort } from './useChangeChatSort';
 export { default as useGetUserHistories } from './useGetUserHistories';
+export { default as useGetChannelsByCode } from './useGetChannelsByCode';
