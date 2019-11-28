@@ -17,7 +17,7 @@ const S = {
     type: 'text',
   })`
     box-sizing: border-box;
-    width: ${px(168)};
+    width: ${px(238)};
     height: ${px(84)};
     margin: ${px(11)} ${px(14)} 0 0;
     border: 0;
