@@ -64,6 +64,7 @@ ChannelSchema.methods.toPayload = function toChatPayload(...objs) {
     'fileUrl',
     'channelStatus',
     'currentSlide',
+    'channelCode',
   ], channel, ...objs);
 };
 
