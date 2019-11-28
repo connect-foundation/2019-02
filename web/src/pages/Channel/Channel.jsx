@@ -2,7 +2,7 @@ import React from 'react';
 import { useRouteMatch } from 'react-router-dom';
 import { ChannelContext } from '@/contexts';
 import {
-  useCheckChannel,
+  useGetChannel,
   useCheckAndLoginAnonymous,
   useInitChatCached,
 } from '@/hooks';
