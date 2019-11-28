@@ -3,7 +3,7 @@ name: Feature Request
 about: 기능 개발에 관련 된 이슈를 열 수 있습니다.
 title: ''
 labels: ''
-assignees: happydhKim, load0ne, always-awake, aereeeee
+assignees: ''
 ---
 
 # [Epic#1] 이슈 제목
@@ -11,13 +11,11 @@ assignees: happydhKim, load0ne, always-awake, aereeeee
 - 이슈에 대한 설명1
 - 이슈에 대한 설명2
 
-  <br>
 
 ## 완료 조건 ✅
 
 - [ ] 조건1
 
-  <br>
 
 ## 관련 이슈 📎
 
@@ -25,7 +23,6 @@ assignees: happydhKim, load0ne, always-awake, aereeeee
 
 - 이슈명 (#이슈번호)
 
-  <br>
 
 ## 레퍼런스 📚
 
@@ -33,7 +30,6 @@ assignees: happydhKim, load0ne, always-awake, aereeeee
 
 - [레퍼런스 제목](url)
 
-  <br>
 
 ---
 

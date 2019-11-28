@@ -7,12 +7,12 @@ import S from './style';
 
 const KakaoButton = (props) => {
   const { handleClose } = props;
-  const { mutate } = useLogin();
+  const logIn = useLogin();
   const handleResponse = async ({ response }) => {
-    const { token, user } = await authByKakao(response.access_token);
+    const { token, user: { displayName, userId } } = await authByKakao(response.access_token);
 
     if (token) {
-      mutate({ variables: { token, displayName: user.displayname } });
+      logIn({ token, userId, displayName });
     }
   };
   const handleFailure = (error) => {

@@ -3,15 +3,15 @@ import { px } from '@/styles/themeUtil';
 
 export default {
   Emoji: styled.div`
-    margin-top: 64px;
-    font-size: ${px(180)};
+    margin-top: ${px(100)};
+    font-size: ${px(160)};
     text-align: center;  
     animation:fingerAni 2s infinite;
     @keyframes fingerAni
     {
-      0%{transform:translateY(10px);}
-      50%{transform:translateY(-20px);}
-      100%{transform:translateY(10px);}
+      0%{transform:translateY(${px(10)});}
+      50%{transform:translateY(${px(-20)});}
+      100%{transform:translateY(${px(10)});}
     }
   `,
 };

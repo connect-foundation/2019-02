@@ -18,4 +18,12 @@ const merge = (target, ...sources) => sources.reduceRight(
   target,
 );
 
-module.exports = { merge };
+const assignFilter = (keyArr, ...targets) => targets.reduce((obj, target) => {
+  keyArr.forEach((key) => {
+    if (target[key] !== undefined) obj[key] = target[key];
+  });
+
+  return obj;
+}, {});
+
+module.exports = { merge, assignFilter };

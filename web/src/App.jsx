@@ -7,21 +7,24 @@ import {
 import { CssBaseline } from '@material-ui/core';
 import { GlobalStyle } from './styles';
 import { Header, Wrapper } from './components/common';
-import { Main, Channel } from './pages';
+import { Main, Channel, MyPage } from './pages';
 
 const App = () => (
   <>
     <GlobalStyle />
     <CssBaseline />
     <Wrapper>
-      <Header />
       <Router>
+        <Header />
         <Switch>
           <Route path="/" exact>
             <Main />
           </Route>
           <Route path="/channels/:channelId" exact>
             <Channel />
+          </Route>
+          <Route path="/mypage" exact>
+            <MyPage />
           </Route>
         </Switch>
       </Router>
