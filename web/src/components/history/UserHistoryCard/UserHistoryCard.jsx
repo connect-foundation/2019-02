@@ -6,19 +6,24 @@ import FaceIcon from '@material-ui/icons/Face';
 import S from './style';
 
 const UserHistoryCard = (props) => {
-  const { historyInfo } = props;
-  const label = historyInfo.channelStatus === 'on' ? '현재 생방송중!' : '종료된 채널';
-  const color = historyInfo.channelStatus === 'on' ? 'primary' : 'default';
+  const {
+    channelStatus,
+    updatedAt,
+    channelName,
+    displayName,
+  } = props;
+  const label = channelStatus === 'on' ? '현재 생방송중!' : '종료된 채널';
+  const color = channelStatus === 'on' ? 'primary' : 'default';
 
   return (
     <>
       <S.HistoryCard>
         <S.HistoryCardLeftDetail>
           <Typography variant="subtitle1" color="textSecondary">
-            {historyInfo.updatedAt}
+            {updatedAt}
           </Typography>
           <Typography component="h5" variant="h5">
-            {historyInfo.channelName}
+            {channelName}
           </Typography>
         </S.HistoryCardLeftDetail>
         <S.HistoryCardRightDetail>
@@ -31,7 +36,7 @@ const UserHistoryCard = (props) => {
             />
           </Typography>
           <Typography component="h6" variant="h6">
-            {historyInfo.displayName}
+            {displayName}
           </Typography>
         </S.HistoryCardRightDetail>
         <S.HistoryCardMiddleDetail>
@@ -42,13 +47,11 @@ const UserHistoryCard = (props) => {
   );
 };
 
-UserHistoryCard.propsTypes = {
-  historyInfo: PropTypes.shape({
-    channelStatus: PropTypes.string.isRequired,
-    updatedAt: PropTypes.date,
-    channelName: PropTypes.string.isRequired,
-    displayName: PropTypes.string.isRequired,
-  }).isRequired,
+UserHistoryCard.propTypes = {
+  channelStatus: PropTypes.string.isRequired,
+  updatedAt: PropTypes.number.isRequired,
+  channelName: PropTypes.string.isRequired,
+  displayName: PropTypes.string.isRequired,
 };
 
 export default UserHistoryCard;

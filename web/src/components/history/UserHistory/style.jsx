@@ -18,13 +18,11 @@ export default {
     width: 100%;
   `,
   UserHistoryTitle: styled(Card)`
-    width: 80%;
-    margin: 0 auto;
+    margin: ${px(20)} ${px(100)};
+    min-width: ${px(700)};
     text-align: center;
     font-weight: bold;
     height: ${px(50)};
     padding: ${px(14)};
-    margin-top: ${px(26)};
-    min-width: ${px(700)};
   `,
 };
