@@ -1,6 +1,6 @@
-const API_HOST = 'http://localhost:4000';
-const WS_HOST = 'ws://localhost:4000';
-const CONVERTER_HOST = 'http://localhost:3000';
+const { API_HOST } = process.env;
+const { WS_HOST } = process.env;
+const { CONVERTER_HOST } = process.env;
 
 export const CONVERT_API = `${CONVERTER_HOST}/images`;
 export const GRAPHQL_API = `${API_HOST}/graphql`;
