@@ -12,7 +12,7 @@ const LogoutPopover = (props) => {
     handleClose();
     logOut();
   };
-  const setMyPage = () => <Redirect to="/channels/" />;
+  const setMyPage = () => <Redirect to="/mypage" />;
 
   return (
     <S.PopoverWrapper>

@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import { Fade, Backdrop } from '@material-ui/core';
 import UserInfoText from '../UserInfoText';
 import UserInfoButton from '../UserInfoButton';
 import UserSettingModal from '../UserSettingModal';
 import S from './style';
 
-const UserInfo = () => {
+const UserInfo = (props) => {
+  const { setHistoryState } = props;
   const [open, setOpen] = useState(false);
   const handleOpen = () => {
     setOpen(true);
@@ -24,13 +26,9 @@ const UserInfo = () => {
         </S.Setting>
         <S.Profile />
         <UserInfoText />
-        <UserInfoText />
-        <UserInfoButton />
-        <UserInfoButton />
+        <UserInfoButton setHistoryState={setHistoryState} />
       </S.UserInfo>
       <S.SettingModal
-        aria-labelledby="transition-modal-title"
-        aria-describedby="transition-modal-description"
         className="modal"
         open={open}
         onClose={handleClose}
@@ -42,12 +40,16 @@ const UserInfo = () => {
       >
         <Fade in={open}>
           <S.SettingModalPage>
-            <UserSettingModal />
+            <UserSettingModal handleClose={handleClose} />
           </S.SettingModalPage>
         </Fade>
       </S.SettingModal>
     </>
   );
+};
+
+UserInfo.propTypes = {
+  setHistoryState: PropTypes.func.isRequired,
 };
 
 export default UserInfo;

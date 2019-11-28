@@ -4,11 +4,13 @@ import { useMutation } from '@apollo/react-hooks';
 const CREATE_CHANNEL = gql`
   mutation createChannel(
     $channelId: String!, 
+    $channelCode: String!,
     $slideUrls: [String], 
     $fileUrl: String,
   ) {
     createChannel(
       channelId: $channelId,
+      channelCode: $channelCode,
       slideUrls: $slideUrls,
       fileUrl: $fileUrl
     ) { 

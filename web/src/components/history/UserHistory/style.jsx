@@ -1,5 +1,7 @@
 import styled from 'styled-components';
+import { Card } from '@material-ui/core';
 import { px, colorGray } from '@/styles';
+
 
 export default {
   UserHistory: styled.div`
@@ -14,5 +16,13 @@ export default {
   UserHistoryContents: styled.div`
     position: absolute;
     width: 100%;
+  `,
+  UserHistoryTitle: styled(Card)`
+    margin: ${px(20)} ${px(100)};
+    min-width: ${px(700)};
+    text-align: center;
+    font-weight: bold;
+    height: ${px(50)};
+    padding: ${px(14)};
   `,
 };

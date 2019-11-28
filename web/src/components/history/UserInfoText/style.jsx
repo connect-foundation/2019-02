@@ -7,7 +7,7 @@ export default {
     white-space: nowrap;
     text-align: center;
     font-weight: 300;
-    font-size: ${px(16)};
+    font-size: ${px(20)};
     margin-top: ${px(10)};
   `,
 };

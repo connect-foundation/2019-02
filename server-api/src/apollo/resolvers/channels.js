@@ -1,18 +1,20 @@
 const { withFilter, ApolloError } = require('apollo-server-express');
 const Channels = require('../../models/channels');
+const Histories = require('../../models/histories');
 const Users = require('../../models/users');
-
 
 const SLIDE_CHANGED = 'SLIDE_CHANGED';
 
 const createChannelInfo = (
   user,
   channelId,
+  channelCode,
   slideUrls,
   fileUrl,
 ) => ({
   channelId,
-  channelName: `${user.displayName}님의 채널입니다.😀`,
+  channelCode,
+  channelName: `${user.displayName}님의 채널입니다😀`,
   masterId: user.userId,
   slideUrls,
   fileUrl,
@@ -20,6 +22,7 @@ const createChannelInfo = (
 
 const createChannel = async (_, {
   channelId,
+  channelCode,
   slideUrls,
   fileUrl,
 }, { user }) => {
@@ -27,14 +30,26 @@ const createChannel = async (_, {
     createChannelInfo(
       user,
       channelId,
+      channelCode,
       slideUrls,
       fileUrl,
     ),
   );
+  const updatedAt = Date.now();
+  const { userId } = user;
+  const masterId = userId;
+  const newHistory = new Histories({
+    userId,
+    masterId,
+    channelId,
+    updatedAt,
+  });
 
   try {
     const channel = await newChannel.save();
-    const payload = channel.toPayload({ master: user });
+    const payload = await channel.toPayload({ master: user });
+
+    await newHistory.save();
 
     return { status: 'ok', channel: payload };
   } catch (err) {
@@ -51,12 +66,26 @@ const getChannel = async (_, { channelId }, { user }) => {
 
     if (!channel) return { status, isMaster };
 
-    const payload = channel.toPayload({ master });
+    const payload = await channel.toPayload({ master });
 
     return {
       status,
       isMaster,
       channel: payload,
+    };
+  } catch (err) {
+    throw new ApolloError(err.message);
+  }
+};
+
+const getChannelsByCode = async (_, { channelCode }) => {
+  try {
+    const channels = await Channels.find({ channelCode });
+    const status = channels ? 'ok' : 'not_exist';
+
+    return {
+      status,
+      channels,
     };
   } catch (err) {
     throw new ApolloError(err.message);
@@ -70,7 +99,7 @@ const setCurrentSlide = async (_, { channelId, currentSlide }, { user, pubsub })
       { currentSlide },
       { new: true },
     );
-    const payload = channel.toPayload({ master: user });
+    const payload = await channel.toPayload({ master: user });
 
     pubsub.publish(SLIDE_CHANGED, { slideChanged: payload });
 
@@ -90,6 +119,7 @@ const slideChanged = {
 const resolvers = {
   Query: {
     getChannel,
+    getChannelsByCode,
   },
   Mutation: {
     createChannel,

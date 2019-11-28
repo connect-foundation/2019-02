@@ -1,12 +1,12 @@
 const { ApolloError } = require('apollo-server-express');
 const Histories = require('../../models/histories');
 
-const histories = async (_, { userId }) => {
+const getHistories = async (_, __, { user }) => {
   try {
-    const history = await Histories.find({ userId });
-    const status = history ? 'ok' : 'not_exist';
+    const histories = (await Histories.find({ userId: user.userId })) || [];
+    const payloads = await Promise.all(histories.map((history) => history.toPayload()));
 
-    return { status };
+    return payloads;
   } catch (err) {
     throw new ApolloError(err.message);
   }
@@ -14,7 +14,7 @@ const histories = async (_, { userId }) => {
 
 const resolvers = {
   Query: {
-    histories: () => histories,
+    getHistories,
   },
 };
 

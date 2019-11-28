@@ -1,10 +1,17 @@
 import React from 'react';
+import { useGetUserStatus } from '@/hooks';
 import S from './style';
 
-const UserInfoText = () => (
-  <S.UserInfoText>
-    유저네임과 닉네임
-  </S.UserInfoText>
-);
+const UserInfoText = () => {
+  const { displayName } = useGetUserStatus();
+
+  return (
+    <>
+      <S.UserInfoText>
+        {displayName}
+      </S.UserInfoText>
+    </>
+  );
+};
 
 export default UserInfoText;

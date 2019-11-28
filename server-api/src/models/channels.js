@@ -1,10 +1,15 @@
 const mongoose = require('mongoose');
+const Users = require('./users');
 const { assignFilter } = require('../utils/object');
 
 const { Schema } = mongoose;
 
 const ChannelSchema = new Schema({
   channelId: {
+    type: String,
+    required: true,
+  },
+  channelCode: {
     type: String,
     required: true,
   },
@@ -48,8 +53,9 @@ const ChannelSchema = new Schema({
   },
 });
 
-ChannelSchema.methods.toPayload = function toChatPayload(...objs) {
+ChannelSchema.methods.toPayload = async function toChannelPayload(...objs) {
   const channel = this;
+  const master = await Users.findOne({ userId: channel.masterId });
 
   return assignFilter([
     'channelId',
@@ -60,7 +66,8 @@ ChannelSchema.methods.toPayload = function toChatPayload(...objs) {
     'fileUrl',
     'channelStatus',
     'currentSlide',
-  ], channel, ...objs);
+    'channelCode',
+  ], channel, { master }, ...objs);
 };
 
 module.exports = mongoose.model('channels', ChannelSchema);
