@@ -6,7 +6,7 @@ import { px, colorGray } from '@/styles';
 export default {
   HistoryCard: styled(Card)`
     margin: ${px(50)} ${px(100)};
-    min-width: ${px(600)};
+    min-width: ${px(700)};
     &:first-of-type {
       margin-top: ${px(100)};
     }

@@ -5,13 +5,11 @@ import { useGetUserStatus } from '@/hooks';
 import S from './style';
 
 const UserSettingModal = (props) => {
-  const { userId, displayName } = useGetUserStatus();
+  const { displayName } = useGetUserStatus();
   const { handleClose } = props;
 
   const noActionHandleClose = () => handleClose();
   const saveActionHandleClose = () => handleClose();
-
-  const showUserId = userId || '';
 
   return (
     <>
@@ -22,12 +20,6 @@ const UserSettingModal = (props) => {
           label="닉네임"
           variant="outlined"
           value={displayName}
-        />
-        <S.SettingInput
-          id="outlined-basic"
-          label="유저네임"
-          variant="outlined"
-          value={showUserId}
         />
         <S.SettingButton
           variant="contained"

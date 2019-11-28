@@ -6,9 +6,10 @@ import FaceIcon from '@material-ui/icons/Face';
 import S from './style';
 
 const UserHistoryCard = (props) => {
-  // console.log(props);
   const { historyInfo } = props;
-  console.log(historyInfo);
+  const label = historyInfo.channelStatus === 'on' ? '현재 생방송중!' : '종료된 채널';
+  const color = historyInfo.channelStatus === 'on' ? 'primary' : 'default';
+
   return (
     <>
       <S.HistoryCard>
@@ -17,20 +18,20 @@ const UserHistoryCard = (props) => {
             {historyInfo.updatedAt}
           </Typography>
           <Typography component="h5" variant="h5">
-            {historyInfo.channel.channelName}
+            {historyInfo.channelName}
           </Typography>
         </S.HistoryCardLeftDetail>
         <S.HistoryCardRightDetail>
           <Typography variant="subtitle1">
             <Chip
               icon={<FaceIcon />}
-              label="현재 생방송중!"
-              color="primary"
+              label={label}
+              color={color}
               variant="outlined"
             />
           </Typography>
           <Typography component="h6" variant="h6">
-            {historyInfo.channel.master.displayName}
+            {historyInfo.displayName}
           </Typography>
         </S.HistoryCardRightDetail>
         <S.HistoryCardMiddleDetail>
@@ -42,7 +43,12 @@ const UserHistoryCard = (props) => {
 };
 
 UserHistoryCard.propsTypes = {
-  historyInfo: PropTypes.object.isRequired,
+  historyInfo: PropTypes.shape({
+    channelStatus: PropTypes.string.isRequired,
+    updatedAt: PropTypes.date,
+    channelName: PropTypes.string.isRequired,
+    displayName: PropTypes.string.isRequired,
+  }).isRequired,
 };
 
 export default UserHistoryCard;

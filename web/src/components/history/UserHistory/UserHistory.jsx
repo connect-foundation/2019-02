@@ -6,7 +6,7 @@ import S from './style';
 
 const UserHistory = (props) => {
   const { historyState } = props;
-  const { userId } = useGetUserStatus();
+  const { userId, displayName } = useGetUserStatus();
   const { data, loading } = useGetUserHistories();
 
   if (loading) return <p>데이터 가져오는 중...</p>;
@@ -17,7 +17,12 @@ const UserHistory = (props) => {
   const mapToCardComponent = (historyInfo) => (
     <UserHistoryCard
       key={historyInfo.channel.channelId}
-      historyInfo={historyInfo}
+      historyInfo={{
+        channelStatus: historyInfo.channel.channelStatus,
+        updatedAt: historyInfo.updatedAt,
+        channelName: historyInfo.channel.channelName,
+        displayName: historyInfo.channel.master.displayName,
+      }}
     />
   );
   const historyCardList = data && data.length > 0
@@ -28,8 +33,18 @@ const UserHistory = (props) => {
     <>
       <S.UserHistory>
         {historyState === 'speaker'
-          ? <>김도현님이 스피커로 방문하셨던 채널이에요!</>
-          : <>김도현님이 리스너로 방문하셨던 채널이에요!</>}
+          ? (
+            <S.UserHistoryTitle>
+              {displayName}
+              님이 스피커로 방문하셨던 채널이에요!
+            </S.UserHistoryTitle>
+          )
+          : (
+            <S.UserHistoryTitle>
+              {displayName}
+              님이 리스너로 방문하셨던 채널이에요!
+            </S.UserHistoryTitle>
+          )}
 
         <S.UserHistoryContents>
           {historyCardList}
