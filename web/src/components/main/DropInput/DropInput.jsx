@@ -2,10 +2,7 @@ import React, { useState } from 'react';
 import { Redirect } from 'react-router-dom';
 import { Button } from '@material-ui/core';
 import { uploadFile } from '@/apis';
-import {
-  createShortUuid as createChannelId,
-  sliceShortUuid as createChannelCode,
-} from '@/utils/uuid';
+import { createShortUuid as createChannelId } from '@/utils/uuid';
 import { useCreateChannel } from '@/hooks';
 import { LoadingModal, ErrorModal } from '@/components/common';
 import createFormData from '@/utils/createFormdata';
@@ -24,7 +21,7 @@ const DropInput = () => {
   const handleUpload = async (e) => {
     setIsLoading(true);
     const channelId = createChannelId();
-    const channelCode = createChannelCode(ChannelCodeLength);
+    const channelCode = channelId.substring(0, ChannelCodeLength);
     const file = e.target.files[0];
     const formData = createFormData({ file, channelId });
     const {

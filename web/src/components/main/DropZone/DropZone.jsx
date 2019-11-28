@@ -9,10 +9,7 @@ import DropEmoji from '../DropEmoji';
 import DropText from '../DropText';
 import DropInput from '../DropInput';
 import getRandomItemOfList from '@/utils/random';
-import {
-  createShortUuid as createChannelId,
-  sliceShortUuid as createChannelCode,
-} from '@/utils/uuid';
+import { createShortUuid as createChannelId } from '@/utils/uuid';
 import {
   EMOJI_LIST,
   TEMP_ERROR_MESSAGE,
@@ -32,7 +29,7 @@ const DropZone = () => {
     setIsLoading(true);
 
     const channelId = createChannelId();
-    const channelCode = createChannelCode(ChannelCodeLength);
+    const channelCode = channelId.substring(0, ChannelCodeLength);
     const { dataTransfer: { files } } = event;
     const file = files[0];
     const formData = createFormData({ channelId, file });
