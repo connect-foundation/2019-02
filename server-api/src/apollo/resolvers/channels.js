@@ -1,5 +1,6 @@
 const { ApolloError } = require('apollo-server-express');
 const Channels = require('../../models/channels');
+const Histories = require('../../models/histories');
 const { assignFilter } = require('../../utils/object');
 
 const createChannelInfo = (
@@ -49,9 +50,17 @@ const createChannel = async (_, {
       fileUrl,
     ),
   );
+  const updatedAt = Date.now();
+  const { userId } = user;
+  const newHistory = new Histories({
+    userId,
+    channelId,
+    updatedAt,
+  });
 
   try {
     const result = await newChannel.save();
+    await newHistory.save();
     const channel = assignFilter([
       'channelId',
       'master',

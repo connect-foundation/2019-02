@@ -7,6 +7,7 @@ const UserInfoButton = (props) => {
   const setHistoryStateType = (type) => () => {
     setHistoryState(type);
   };
+
   return (
     <>
       <S.UserInfoButton onClick={setHistoryStateType('speaker')}>
