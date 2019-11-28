@@ -1,14 +1,19 @@
 import React from 'react';
 import { useRouteMatch } from 'react-router-dom';
 import { ChannelContext } from '@/contexts';
-import { useCheckChannel, useCheckAndLoginAnonymous } from '@/hooks';
+import {
+  useGetChannel,
+  useCheckAndLoginAnonymous,
+  useInitChatCached,
+} from '@/hooks';
 import { Chat, Slide, ToolBar } from '@/components/channel';
 import S from './style';
 
 const Channel = () => {
   const { params: { channelId } } = useRouteMatch();
-  const { data } = useCheckChannel(channelId);
+  const { data } = useGetChannel(channelId);
 
+  useInitChatCached();
   useCheckAndLoginAnonymous();
 
   if (!data) return null;
@@ -20,11 +25,15 @@ const Channel = () => {
 
   return (
     <ChannelContext.Provider
-      value={{ isMaster: data.isMaster, slideUrls: data.slideUrls }}
+      value={{
+        isMaster: data.isMaster,
+        slideUrls: data.channel.slideUrls,
+        initialSlide: data.channel.currentSlide,
+      }}
     >
       <S.Channel>
         <ToolBar />
-        <Slide />
+        <Slide channelId={channelId} />
         <Chat channelId={channelId} />
       </S.Channel>
     </ChannelContext.Provider>

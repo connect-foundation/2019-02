@@ -13,6 +13,7 @@ const INIT_CHAT_LOGS = gql`
       }
       message
       likes
+      createdAt
     }
   }
 `;
@@ -20,17 +21,17 @@ const INIT_CHAT_LOGS = gql`
 const useInitChatLogs = (channelId) => {
   const client = useApolloClient();
   const result = useQuery(INIT_CHAT_LOGS, { variables: { channelId } });
-  const chatLogs = result.data ? result.data.getChatLogs : [];
+  const chatLogsCached = result.data ? result.data.getChatLogs : [];
 
   useEffect(() => {
-    const { chatLogs: { logs, cached } } = client.readQuery({ query: GET_CHAT_CACHED });
+    const { chatLogs } = client.readQuery({ query: GET_CHAT_CACHED });
 
-    if (result.loading || cached) return;
+    if (result.loading || chatLogs.cached) return;
 
     const data = {
       chatLogs: {
-        __typename: 'chatLogs',
-        logs: [...chatLogs, ...logs],
+        ...chatLogs,
+        logs: [...chatLogsCached, ...chatLogs.logs],
         cached: true,
       },
     };
@@ -38,7 +39,7 @@ const useInitChatLogs = (channelId) => {
     client.writeQuery({ query: GET_CHAT_CACHED, data });
   }, [result.loading]);
 
-  return chatLogs;
+  return chatLogsCached;
 };
 
 export default useInitChatLogs;

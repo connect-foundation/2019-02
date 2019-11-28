@@ -32,7 +32,7 @@ export default {
     justify-content: center;
     align-items: center;
     opacity: 0;
-    transition: opacity 0.5s;
+    transition: opacity 0.2s;
   `,
   ArrowBack: styled(ArrowBackIosRounded)`
     color: ${colorGray(5)};
