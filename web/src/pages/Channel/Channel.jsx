@@ -11,7 +11,7 @@ import S from './style';
 
 const Channel = () => {
   const { params: { channelId } } = useRouteMatch();
-  const { data } = useCheckChannel(channelId);
+  const { data } = useGetChannel(channelId);
 
   useInitChatCached();
   useCheckAndLoginAnonymous();
@@ -25,11 +25,15 @@ const Channel = () => {
 
   return (
     <ChannelContext.Provider
-      value={{ isMaster: data.isMaster, slideUrls: data.slideUrls }}
+      value={{
+        isMaster: data.isMaster,
+        slideUrls: data.channel.slideUrls,
+        initialSlide: data.channel.currentSlide,
+      }}
     >
       <S.Channel>
         <ToolBar />
-        <Slide />
+        <Slide channelId={channelId} />
         <Chat channelId={channelId} />
       </S.Channel>
     </ChannelContext.Provider>

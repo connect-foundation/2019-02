@@ -24,6 +24,7 @@ const start = () => {
   };
 
   mongoose.connect(process.env.DB_URL, connectOptions, doneDbConnection);
+  mongoose.set('useFindAndModify', false);
   apiServer.applyMiddleware({ app: authServer });
   apiServer.installSubscriptionHandlers(httpServer);
   httpServer.listen({ port: process.env.SERVER_PORT }, doneServerStart);

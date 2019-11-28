@@ -6,13 +6,14 @@ type Channel {
   maxHeadCount: Int
   slideUrls: [String]
   fileUrl: String
+  channelStatus: String
+  currentSlide: Int!
 }
 
-type CheckChannelResponse {
+type getChannelResponse {
   status: String!
   isMaster: Boolean!
-  slideUrls: [String]
-  fileUrl: String
+  channel: Channel
 }
 
 type CreateChannelResponse {
@@ -21,7 +22,7 @@ type CreateChannelResponse {
 }
 
 extend type Query {
-  checkChannel(channelId: String!): CheckChannelResponse
+  getChannel(channelId: String!): getChannelResponse
 }
 
 extend type Mutation {
@@ -29,7 +30,12 @@ extend type Mutation {
     channelId: String!, 
     slideUrls: [String], 
     fileUrl: String,
-  ): CreateChannelResponse
+  ): CreateChannelResponse,
+  setCurrentSlide(channelId: String!, currentSlide: Int!): Channel
+}
+
+extend type Subscription {
+  slideChanged(channelId: String!): Channel
 }
 `;
 

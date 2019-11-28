@@ -73,6 +73,32 @@ export default createMuiTheme({
         flex: 0,
       },
     },
+    MuiButton: {
+      contained: {
+        'background-color': '#FFFFFF',
+        'box-shadow': '0px 2px 9px rgba(0, 0, 0, 0.03)',
+        'border-radius': '3px',
+        padding: '4px 10px',
+        '&:hover': {
+          'background-color': '#f8f9fa',
+          'box-shadow': '0px 2px 6px rgba(0, 0, 0, 0.2)',
+        },
+      },
+      containedPrimary: {
+        'background-color': '#e67700',
+        'box-shadow': '0px 2px 9px rgba(0, 0, 0, 0.03)',
+        '&:hover': {
+          'background-color': '#e67700',
+          'box-shadow': '0px 2px 9px rgba(0, 0, 0, 0.03)',
+        },
+      },
+      containedSecondary: {
+        'background-color': '#ADB5BD',
+        '&:hover': {
+          'background-color': '#868E96',
+        },
+      },
+    }, 
     MuiSwitch: {
       colorPrimary: {
         color: '#f8f9fa !important',
