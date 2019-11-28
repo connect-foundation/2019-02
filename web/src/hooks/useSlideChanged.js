@@ -1,5 +1,6 @@
 import gql from 'graphql-tag';
 import { useSubscription } from '@apollo/react-hooks';
+import { useChannelSelector } from '@/hooks';
 
 const SLIDE_CHANGED = gql`
   subscription SlideChanged($channelId: String!) {
@@ -10,8 +11,9 @@ const SLIDE_CHANGED = gql`
 `;
 
 const useSlideChanged = (channelId) => {
+  const initialSlide = useChannelSelector((state) => state.initialSlide);
   const { data } = useSubscription(SLIDE_CHANGED, { variables: { channelId } });
-  const currentSlide = !data ? 0 : data.slideChanged.currentSlide;
+  const currentSlide = !data ? initialSlide : data.slideChanged.currentSlide;
 
   return { currentSlide };
 };
