@@ -11,6 +11,8 @@ const ChannelListModal = (props) => {
       channelId={channel.channelId}
       channelName={channel.channelName}
       channelCode={channel.channelCode}
+      channelStatus={channel.channelStatus}
+      masterName={channel.master.displayName}
     />
   ));
 

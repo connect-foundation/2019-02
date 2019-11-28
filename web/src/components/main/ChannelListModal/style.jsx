@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { colorCommon } from '@/styles';
+import { px, colorCommon } from '@/styles';
 
 export default {
   ChannelListModal: styled.div`
@@ -9,12 +9,12 @@ export default {
     align-items: center;
     width: 100%;
     height: 100%;
-background-color: ${colorCommon('white')}BF;
-    padding-top: 64px;
+    background-color: ${colorCommon('white')}BF;
+    padding-top: ${px(64)};
   `,
   ChannelListModalContent: styled.div`
-    width: 65%;
+    width:60%;
     height: 100%;
-    padding-top: 60px;
+    padding-top: ${px(60)};
   `,
 };
