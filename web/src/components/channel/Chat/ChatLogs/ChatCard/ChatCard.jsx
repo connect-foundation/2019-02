@@ -19,10 +19,8 @@ const ChatCard = (props) => {
       <S.Author>{author.displayName}</S.Author>
       <S.Message>{message}</S.Message>
       <S.AreaButtons>
-        <S.LikeButton
-          isActive={isLiked}
-          onClick={handleClickLikeButton}
-        >
+        <S.LikeButton onClick={handleClickLikeButton}>
+          <S.LikeIcon isActive={isLiked} />
           {likesCount}
         </S.LikeButton>
       </S.AreaButtons>
