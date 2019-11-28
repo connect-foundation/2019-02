@@ -71,10 +71,14 @@ const getChannelsByCode = async (_, { channelCode }) => {
   try {
     const channels = await Channels.find({ channelCode });
     const status = channels ? 'ok' : 'not_exist';
+    const refindeChannels = channels.map(async (channel) => {
+      const master = await Users.findOne({ userId: channel.masterId });
+      return channel.toPayload({ master });
+    });
 
     return {
       status,
-      channels,
+      channels: refindeChannels,
     };
   } catch (err) {
     throw new ApolloError(err.message);
