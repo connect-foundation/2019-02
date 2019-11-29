@@ -15,9 +15,11 @@ export default {
     border-radius: ${px(5)};
     margin-bottom: ${px(40)};
   `,
-  CodeInputContent: styled.textarea.attrs({ type: 'text' })`
+  CodeInputContent: styled.input.attrs({ type: 'text' })`
+    box-sizing: border-box;
     width: 100%;
     height: 100%;
+    padding-left: ${px(20)};
     border: 0;
     font-size: ${px(21)};
     line-height: ${px(21)};
@@ -25,7 +27,6 @@ export default {
     resize: none;
     background: transparent;
     color: ${colorGray(9)};
-    margin: ${px(16)} 0 0 ${px(31)};
     ::placeholder,
     ::-webkit-input-placeholder {
     color: ${colorGray(6)};
@@ -36,6 +37,6 @@ export default {
     height: 100%;
     font-size: ${px(40)};
     text-align: center;
-    cursor: 'pointer';
+    cursor: pointer;
   `,
 };

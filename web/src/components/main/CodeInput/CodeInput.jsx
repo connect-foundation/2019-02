@@ -12,7 +12,10 @@ const CodeInput = (props) => {
     query({ variables: { channelCode } });
   };
   const handleOnChange = (event) => {
-    setChannelCode(event.target.value);
+    const { value } = event.target;
+    const code = value.length > 5 ? value.substring(0, 5) : value;
+
+    setChannelCode(code);
   };
 
   if (data.status === 'ok') {
@@ -33,6 +36,7 @@ const CodeInput = (props) => {
       <S.CodeInputContent
         placeholder="# 채널 코드"
         onChange={handleOnChange}
+        value={channelCode}
       />
       <S.EnterButton
         type="button"

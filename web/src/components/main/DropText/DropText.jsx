@@ -7,7 +7,7 @@ const DropText = (props) => {
 
   return (
     <S.DropText dragOver={dragOver}>
-      {dragOver ? ('Start Speech!') : ('Drag & Drop!')}
+      {dragOver ? ('Start Speech!') : ('Drag & Drop PDF!')}
     </S.DropText>
   );
 };

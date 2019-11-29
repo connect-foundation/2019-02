@@ -27,7 +27,7 @@ const ChatCards = (props) => {
       return;
     }
 
-    const isAllowedRange = targetTop - scrollWrapEl.scrollTop < 400;
+    const isAllowedRange = targetTop - scrollWrapEl.scrollTop < 600;
 
     if (changeType === CHAT_ADDED && isAllowedRange) {
       scrollWrapEl.scrollTop = targetTop;
