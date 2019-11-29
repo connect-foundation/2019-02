@@ -6,7 +6,7 @@ import { NAVER_AUTH_CALLBACK } from '@/constants';
 import S from './style';
 
 const NaverButton = (props) => {
-  const { handleClose } = props;
+  const { showError } = props;
   const handleResponse = ({ accessToken }) => {
     authByNaver(accessToken);
   };
@@ -18,13 +18,9 @@ const NaverButton = (props) => {
     <NaverLogin
       clientId={process.env.NAVER_ID}
       callbackUrl={NAVER_AUTH_CALLBACK}
-      render={({ onClick }) => (
-        <S.NaverLoginButton onClick={() => {
-          handleClose();
-          onClick();
-        }}
-        >
-          Naver Login
+      render={() => (
+        <S.NaverLoginButton onClick={() => showError()}>
+          네이버 로그인
         </S.NaverLoginButton>
       )}
       onSuccess={handleResponse}
@@ -34,7 +30,7 @@ const NaverButton = (props) => {
 };
 
 NaverButton.propTypes = {
-  handleClose: PropTypes.func.isRequired,
+  showError: PropTypes.func.isRequired,
 };
 
 export default NaverButton;

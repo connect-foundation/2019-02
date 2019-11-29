@@ -28,4 +28,11 @@ export default {
     text-align: center;
     color: #fff;
   `,
+  TempError: styled.p`
+    margin-top: 15px;
+    font-size: 14px;
+    line-height: 18px;
+    text-align: center;
+    color: #D7394A;
+  `,
 };

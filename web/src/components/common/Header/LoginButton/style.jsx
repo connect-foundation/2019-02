@@ -7,6 +7,10 @@ export default {
     height: 100%;
     border-radius: 2px;
     box-shadow: ${({ theme }) => theme.palette.shadow.button};
+    font-weight: 700;
+    font-size: 16px;
+    color: #333;
+    cursor: pointer;
   `,
   KakaoLoginButton: styled.button.attrs({ type: 'button' })`
     width: 100%;
@@ -14,6 +18,10 @@ export default {
     height:100%;
     border-radius: 2px;
     box-shadow: ${({ theme }) => theme.palette.shadow.button};
+    font-weight: 700;
+    font-size: 16px;
+    color: #333;
+    cursor: pointer;
   `,
   NaverLoginButton: styled('button')`
     width: 100%;
@@ -21,5 +29,9 @@ export default {
     height: 100%;
     border-radius: 2px;
     box-shadow: ${({ theme }) => theme.palette.shadow.button};
+    font-weight: 700;
+    font-size: 16px;
+    color: #fff;
+    cursor: pointer;
   `,
 };

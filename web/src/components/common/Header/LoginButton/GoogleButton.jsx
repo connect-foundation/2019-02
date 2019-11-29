@@ -6,13 +6,11 @@ import { useLogin } from '@/hooks';
 import S from './style';
 
 const GoogleButton = (props) => {
-  const { handleClose } = props;
+  const { showError } = props;
   const logIn = useLogin();
   const handleResponse = async ({ accessToken }) => {
     const { token, user: { displayName, userId } } = await authByGoogle(accessToken);
-    if (token) {
-      logIn({ token, userId, displayName });
-    }
+    if (token) logIn({ token, userId, displayName });
   };
   const handleFailure = (error) => {
     console.error(error);
@@ -21,14 +19,9 @@ const GoogleButton = (props) => {
   return (
     <GoogleLogin
       clientId={process.env.GOOGLE_ID}
-      render={({ onClick }) => (
-        <S.GoogleLoginButton
-          onClick={() => {
-            handleClose();
-            onClick();
-          }}
-        >
-          Google Login
+      render={() => (
+        <S.GoogleLoginButton onClick={() => showError()}>
+          구글 로그인
         </S.GoogleLoginButton>
       )}
       onSuccess={handleResponse}
@@ -38,7 +31,7 @@ const GoogleButton = (props) => {
 };
 
 GoogleButton.propTypes = {
-  handleClose: PropTypes.func.isRequired,
+  showError: PropTypes.func.isRequired,
 };
 
 export default GoogleButton;

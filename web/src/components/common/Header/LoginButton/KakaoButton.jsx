@@ -28,7 +28,7 @@ const KakaoButton = (props) => {
           onClick();
         }}
         >
-          Kakao Login
+          카카오 로그인
         </S.KakaoLoginButton>
       )}
       onSuccess={handleResponse}
