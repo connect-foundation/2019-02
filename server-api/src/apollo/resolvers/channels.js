@@ -4,6 +4,7 @@ const Histories = require('../../models/histories');
 const Users = require('../../models/users');
 
 const SLIDE_CHANGED = 'SLIDE_CHANGED';
+const updatedAt = Date.now();
 
 const createChannelInfo = (
   user,
@@ -35,7 +36,7 @@ const createChannel = async (_, {
       fileUrl,
     ),
   );
-  const updatedAt = Date.now();
+
   const { userId } = user;
   const masterId = userId;
   const newHistory = new Histories({
@@ -60,10 +61,20 @@ const createChannel = async (_, {
 const getChannel = async (_, { channelId }, { user }) => {
   try {
     const channel = await Channels.findOne({ channelId });
+    const { userId } = user;
+    const { masterId } = channel;
     const master = await Users.findOne({ userId: channel.masterId });
     const status = channel ? 'ok' : 'not_exist';
     const isMaster = !!channel && !!user && channel.masterId === user.userId;
-
+    if (!isMaster) {
+      const newHistory = new Histories({
+        userId,
+        masterId,
+        channelId,
+        updatedAt,
+      });
+      await newHistory.save();
+    }
     if (!channel) return { status, isMaster };
 
     const payload = await channel.toPayload({ master });
