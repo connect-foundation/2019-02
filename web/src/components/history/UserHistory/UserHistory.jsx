@@ -17,6 +17,7 @@ const UserHistory = (props) => {
   const mapToCardComponent = (historyInfo) => (
     <UserHistoryCard
       key={historyInfo.channel.channelId}
+      channelId={historyInfo.channel.channelId}
       channelStatus={historyInfo.channel.channelStatus}
       updatedAt={historyInfo.updatedAt}
       channelName={historyInfo.channel.channelName}
