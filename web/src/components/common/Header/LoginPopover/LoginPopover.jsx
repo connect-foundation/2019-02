@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import {
   GoogleButton,
   KakaoButton,
-  NaverButton,
 } from '../LoginButton';
 import S from './style';
 
@@ -19,7 +18,7 @@ const LoginPopover = (props) => {
         <KakaoButton handleClose={handleClose} />
       </S.BtnWrapper>
       <S.BtnWrapper>
-        <NaverButton handleClose={handleClose} />
+        <S.Link to="/privacy-policy" onClick={handleClose}>개인정보 처리방침 보기</S.Link>
       </S.BtnWrapper>
     </S.PopoverWrapper>
   );

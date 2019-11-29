@@ -7,7 +7,12 @@ import {
 import { CssBaseline } from '@material-ui/core';
 import { GlobalStyle } from './styles';
 import { Header, Wrapper } from './components/common';
-import { Main, Channel, MyPage } from './pages';
+import {
+  Main,
+  Channel,
+  MyPage,
+  PrivacyPolicy,
+} from './pages';
 
 const App = () => (
   <>
@@ -25,6 +30,9 @@ const App = () => (
           </Route>
           <Route path="/mypage" exact>
             <MyPage />
+          </Route>
+          <Route path="/privacy-policy" exact>
+            <PrivacyPolicy />
           </Route>
         </Switch>
       </Router>

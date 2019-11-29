@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
 import {
   AppBar, Toolbar, Typography, Popover,
 } from '@material-ui/core';
@@ -19,9 +18,9 @@ const Header = () => {
   return (
     <AppBar position="static" elevation={0}>
       <Toolbar>
-        <Link to="/">
+        <a href="/">
           <Typography variant="h1">dropy</Typography>
-        </Link>
+        </a>
         <S.User>
           {authentication.isLoggedIn ? (
             <S.UserInfo
