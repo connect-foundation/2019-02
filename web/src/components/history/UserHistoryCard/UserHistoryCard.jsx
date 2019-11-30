@@ -1,8 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import { Typography, Chip } from '@material-ui/core';
-import FaceIcon from '@material-ui/icons/Face';
+import { Typography } from '@material-ui/core';
+import { SmallButton } from '@/components/common';
 import S from './style';
 
 const UserHistoryCard = (props) => {
@@ -13,8 +13,9 @@ const UserHistoryCard = (props) => {
     channelName,
     displayName,
   } = props;
-  const label = channelStatus === 'on' ? '현재 생방송중!' : '종료된 채널';
-  const color = channelStatus === 'on' ? 'primary' : 'default';
+  const presentationStatus = channelStatus === 'on'
+    ? { label: 'presentation-on', color: 'primary' }
+    : { label: 'presentation-off', color: 'default' };
 
   return (
     <>
@@ -30,12 +31,10 @@ const UserHistoryCard = (props) => {
           </S.HistoryCardLeftDetail>
           <S.HistoryCardRightDetail>
             <Typography variant="subtitle1">
-              <Chip
-                icon={<FaceIcon />}
-                label={label}
-                color={color}
-                variant="outlined"
-              />
+              <SmallButton color={presentationStatus.color}>
+                <span aria-label="sync" role="img">🐥</span>
+                {presentationStatus.label}
+              </SmallButton>
             </Typography>
             <Typography component="h6" variant="h6">
               {displayName}

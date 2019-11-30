@@ -8,9 +8,6 @@ export default {
     cursor: pointer;
     margin: ${px(50)} ${px(100)};
     min-width: ${px(700)};
-    &:first-of-type {
-      margin-top: ${px(100)};
-    }
   `,
   HistoryCardLeftDetail: styled.div`
     margin: ${px(50)} 0 ${px(50)} ${px(50)};
@@ -23,9 +20,6 @@ export default {
   HistoryCardRightDetail: styled.div`
     margin: ${px(50)} ${px(50)} ${px(50)} 0;
     float: right;
-  `,
-  OnAir: styled.div`
-    width: ${px(200)};
   `,
   Profile: styled.div`
     width: ${px(80)};

@@ -66,7 +66,9 @@ const getChannel = async (_, { channelId }, { user }) => {
     const master = await Users.findOne({ userId: channel.masterId });
     const status = channel ? 'ok' : 'not_exist';
     const isMaster = !!channel && !!user && channel.masterId === user.userId;
-    if (!isMaster) {
+    const findHistory = await Histories.find({ userId, channelId });
+    const firstVisitedChannel = () => !isMaster && findHistory.length === 0;
+    if (firstVisitedChannel()) {
       const newHistory = new Histories({
         userId,
         masterId,

@@ -16,6 +16,7 @@ export default {
   UserHistoryContents: styled.div`
     position: absolute;
     width: 100%;
+    padding-top: ${px(50)};
   `,
   UserHistoryTitle: styled(Card)`
     margin: ${px(20)} ${px(100)};

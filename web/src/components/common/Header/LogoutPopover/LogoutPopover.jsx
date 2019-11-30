@@ -16,7 +16,7 @@ const LogoutPopover = (props) => {
   return (
     <S.PopoverWrapper>
       <Link to="/mypage">
-        <MenuItem>프로필</MenuItem>
+        <MenuItem onClick={handleClose}>프로필</MenuItem>
       </Link>
       <MenuItem onClick={handleLogOut}>
         로그아웃
