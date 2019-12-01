@@ -14,16 +14,20 @@ const UserHistory = (props) => {
   const filterToDomain = ({ channel: { master } }) => (historyState === 'speaker'
     ? master.userId === userId
     : master.userId !== userId);
-  const mapToCardComponent = (historyInfo) => (
-    <UserHistoryCard
-      key={historyInfo.channel.channelId}
-      channelId={historyInfo.channel.channelId}
-      channelStatus={historyInfo.channel.channelStatus}
-      updatedAt={historyInfo.updatedAt}
-      channelName={historyInfo.channel.channelName}
-      displayName={historyInfo.channel.master.displayName}
-    />
-  );
+  const mapToCardComponent = (historyInfo) => {
+    const { channel, updatedAt } = historyInfo;
+
+    return (
+      <UserHistoryCard
+        key={channel.channelId}
+        channelId={channel.channelId}
+        channelStatus={channel.channelStatus}
+        updatedAt={updatedAt}
+        channelName={channel.channelName}
+        displayName={channel.master.displayName}
+      />
+    );
+  };
   const historyCardList = data && data.length > 0
     ? data.filter(filterToDomain).map(mapToCardComponent)
     : <p>아직 채널을 한번도 생성 안해보셨네요??</p>;
