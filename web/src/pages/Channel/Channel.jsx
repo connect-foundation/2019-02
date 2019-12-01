@@ -6,6 +6,7 @@ import {
   useGetUserStatus,
   useGetChannel,
   useInitChatCached,
+  useAddUserHistory,
 } from '@/hooks';
 import { Chat, Slide, ToolBar } from '@/components/channel';
 import { authByAnonymous } from '@/apis';
@@ -16,6 +17,7 @@ const Channel = () => {
   const { data } = useGetChannel(channelId);
   const logIn = useLogin();
   const userStatus = useGetUserStatus();
+  const { mutate } = useAddUserHistory();
 
   useInitChatCached();
   useEffect(() => {
@@ -26,6 +28,16 @@ const Channel = () => {
       isAnonymous: true,
     }));
   }, [userStatus]);
+
+  useEffect(() => {
+    if (data && data.status === 'ok') {
+      mutate({
+        variables: {
+          channelId,
+        },
+      });
+    }
+  }, [data]);
 
   if (!data) return null;
   if (data.status === 'not_exist') {

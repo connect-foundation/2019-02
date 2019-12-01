@@ -35,9 +35,10 @@ const createChannel = async (_, {
       fileUrl,
     ),
   );
-  const updatedAt = Date.now();
+
   const { userId } = user;
   const masterId = userId;
+  const updatedAt = Date.now();
   const newHistory = new Histories({
     userId,
     masterId,
@@ -63,7 +64,6 @@ const getChannel = async (_, { channelId }, { user }) => {
     const master = await Users.findOne({ userId: channel.masterId });
     const status = channel ? 'ok' : 'not_exist';
     const isMaster = !!channel && !!user && channel.masterId === user.userId;
-
     if (!channel) return { status, isMaster };
 
     const payload = await channel.toPayload({ master });

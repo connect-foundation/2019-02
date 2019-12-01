@@ -56,7 +56,6 @@ HistorySchema.methods.toPayload = async function toHistoryPayload() {
   const history = this;
   const { channelId, updatedAt } = history;
   const channel = await Channels.findOne({ channelId });
-  console.log(channel);
   const channelPayload = channel ? channel.toPayload() : {
     master: {},
     slideUrls: [],
