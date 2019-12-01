@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import UserHistoryCard from '../UserHistoryCard';
 import { useGetUserHistories, useGetUserStatus } from '@/hooks';
+import dateParser from '@/utils/date';
 import S from './style';
 
 const UserHistory = (props) => {
@@ -16,13 +17,14 @@ const UserHistory = (props) => {
     : master.userId !== userId);
   const mapToCardComponent = (historyInfo) => {
     const { channel, updatedAt } = historyInfo;
+    const updatedDate = dateParser(updatedAt);
 
     return (
       <UserHistoryCard
         key={channel.channelId}
         channelId={channel.channelId}
         channelStatus={channel.channelStatus}
-        updatedAt={updatedAt}
+        updatedAt={updatedDate}
         channelName={channel.channelName}
         displayName={channel.master.displayName}
       />
