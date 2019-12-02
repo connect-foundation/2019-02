@@ -3,9 +3,11 @@ const isObjectType = (val) => typeof val === 'object';
 
 const mergeOne = (target, source) => {
   Object.keys(source).forEach((key) => {
-    if ([target[key], source[key]].every(isObjectType)) {
+    const allObject = [target[key], source[key]].every(isObjectType);
+    if (allObject) {
       target[key] = mergeOne(target[key], source[key]);
     } else {
+      if (!source[key]) return;
       target[key] = source[key];
     }
   });

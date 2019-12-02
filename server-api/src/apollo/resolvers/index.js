@@ -4,6 +4,7 @@ const { merge } = require('../../utils/object');
 const resolvers = merge({
   Query: {},
   Mutation: {},
+  Subscription: {},
 }, ...[
   require('./common'),
   require('./channels'),
