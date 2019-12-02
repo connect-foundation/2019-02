@@ -47,6 +47,7 @@ const SlideViewer = (props) => {
     mutate({ variables: { channelId, currentSlide: page } });
   }, [page]);
 
+  const screenChange = (e) => setFullScreen(e);
   const IndicatorRender = ['back', 'foward'].map((direction) => (
     <Indicator
       key={direction}
@@ -60,7 +61,7 @@ const SlideViewer = (props) => {
       <S.SlideViewer>
         <FullScreen
           enabled={isFullScreen}
-          onChange={(e) => setFullScreen(e)}
+          onChange={screenChange}
         >
           <MainSlide
             page={syncSlide}
