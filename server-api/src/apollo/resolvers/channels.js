@@ -52,7 +52,7 @@ const createChannel = async (_, {
 
     await newHistory.save();
 
-    return { status: 'ok', channel: payload };
+    return payload;
   } catch (err) {
     throw new ApolloError(err.message);
   }

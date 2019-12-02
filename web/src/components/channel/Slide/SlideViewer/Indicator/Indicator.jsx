@@ -22,7 +22,6 @@ const Indicator = (props) => {
 Indicator.propTypes = {
   direction: PropTypes.string.isRequired,
   handleSetPage: PropTypes.func.isRequired,
-
 };
 
 export default Indicator;

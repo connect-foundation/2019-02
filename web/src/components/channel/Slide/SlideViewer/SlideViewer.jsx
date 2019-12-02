@@ -12,6 +12,8 @@ import Indicator from './Indicator';
 import MainSlide from './MainSlide';
 import PageNumber from './PageNumber';
 
+const moveTo = ['back', 'foward'];
+
 const SlideViewer = (props) => {
   const {
     channelId,
@@ -34,9 +36,10 @@ const SlideViewer = (props) => {
     if (!moveSlidePossible(direction, sync, slideUrls.length)) return;
     if (!isMaster && isSync) {
       setSync(false);
-      moveSlide(direction, setPage, currentSlide);
-      return;
-    } moveSlide(direction, setPage, page);
+      moveSlide(currentSlide, direction, setPage);
+    } else {
+      moveSlide(page, direction, setPage);
+    }
   };
 
   useEffect(() => {
@@ -50,7 +53,7 @@ const SlideViewer = (props) => {
         page={syncSlide}
         slideUrls={slideUrls}
       />
-      {['back', 'foward'].map((direction) => (
+      {moveTo.map((direction) => (
         <Indicator
           key={direction}
           direction={direction}

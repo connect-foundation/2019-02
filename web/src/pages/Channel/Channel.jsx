@@ -11,10 +11,11 @@ import {
 import { Chat, Slide, ToolBar } from '@/components/channel';
 import { authByAnonymous } from '@/apis';
 import S from './style';
+import { NO_EXIST_CHANNEL } from '@/constants';
 
 const Channel = () => {
   const { params: { channelId } } = useRouteMatch();
-  const { data } = useGetChannel(channelId);
+  const { data, loading } = useGetChannel(channelId);
   const logIn = useLogin();
   const userStatus = useGetUserStatus();
   const { mutate } = useAddUserHistory();
@@ -39,10 +40,10 @@ const Channel = () => {
     }
   }, [data]);
 
-  if (!data) return null;
+  if (!data || loading) return null;
   if (data.status === 'not_exist') {
     return (
-      <div>존재하지 않는 채널입니다...</div>
+      <div>{NO_EXIST_CHANNEL}</div>
     );
   }
 
