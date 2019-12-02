@@ -60,7 +60,7 @@ const SlideViewer = (props) => {
       <S.SlideViewer>
         <FullScreen
           enabled={isFullScreen}
-          onKeyDown={setFullScreen(false)}
+          onChange={(e) => setFullScreen(e)}
         >
           <MainSlide
             page={syncSlide}
