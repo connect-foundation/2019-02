@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import FullScreen from 'react-full-screen';
 import PropTypes from 'prop-types';
 import S from './style';
 import {
@@ -19,6 +20,8 @@ const SlideViewer = (props) => {
     setSync,
     page,
     setPage,
+    isFullScreen,
+    setFullScreen,
   } = props;
   const { mutate } = useSetCurrentSlide();
   const { currentSlide } = useSlideChanged(channelId);
@@ -44,24 +47,33 @@ const SlideViewer = (props) => {
     mutate({ variables: { channelId, currentSlide: page } });
   }, [page]);
 
+  const IndicatorRender = ['back', 'foward'].map((direction) => (
+    <Indicator
+      key={direction}
+      direction={direction}
+      handleSetPage={handleSetPage}
+    />
+  ));
+
   return (
-    <S.SlideViewer>
-      <MainSlide
-        page={syncSlide}
-        slideUrls={slideUrls}
-      />
-      {['back', 'foward'].map((direction) => (
-        <Indicator
-          key={direction}
-          direction={direction}
-          handleSetPage={handleSetPage}
+    <>
+      <S.SlideViewer>
+        <FullScreen
+          enabled={isFullScreen}
+          onKeyDown={setFullScreen(false)}
+        >
+          <MainSlide
+            page={syncSlide}
+            slideUrls={slideUrls}
+          />
+          {IndicatorRender}
+        </FullScreen>
+        <PageNumber
+          currentSlide={syncSlide + 1}
+          slideLength={slideUrls.length}
         />
-      ))}
-      <PageNumber
-        currentSlide={syncSlide + 1}
-        slideLength={slideUrls.length}
-      />
-    </S.SlideViewer>
+      </S.SlideViewer>
+    </>
   );
 };
 
@@ -71,6 +83,8 @@ SlideViewer.propTypes = {
   setSync: PropTypes.func.isRequired,
   page: PropTypes.number.isRequired,
   setPage: PropTypes.func.isRequired,
+  isFullScreen: PropTypes.bool.isRequired,
+  setFullScreen: PropTypes.func.isRequired,
 };
 
 export default SlideViewer;
