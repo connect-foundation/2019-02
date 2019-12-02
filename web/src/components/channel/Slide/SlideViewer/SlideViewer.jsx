@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import FullScreen from 'react-full-screen';
 import PropTypes from 'prop-types';
 import S from './style';
 import {
@@ -9,6 +8,7 @@ import {
   useSyncSlide,
 } from '@/hooks';
 import { moveSlide, moveSlidePossible } from '@/utils/slide';
+import FullScreen from '../../../common/FullScreen';
 import Indicator from './Indicator';
 import MainSlide from './MainSlide';
 import PageNumber from './PageNumber';
@@ -23,6 +23,7 @@ const SlideViewer = (props) => {
     isFullScreen,
     setFullScreen,
   } = props;
+  console.log(isFullScreen);
   const { mutate } = useSetCurrentSlide();
   const { currentSlide } = useSlideChanged(channelId);
   const { slideUrls, isMaster } = useChannelSelector((state) => state);
