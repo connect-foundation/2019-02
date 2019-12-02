@@ -6,7 +6,7 @@ export default {
     display: flex;
     flex-direction: row;
     height: ${px(142)};
-    width: 100%;
+    width: 94%;
     border-top: 1px solid ${colorGray(3)};
     padding: ${px(15)} 0 0 ${px(20)};
   `,
@@ -38,7 +38,6 @@ export default {
     display: flex;
     flex-direction: row-reverse;
     width: 50%;
-    margin-right: ${px(20)};
     button {
       margin-left: 10px;
    }
