@@ -21,14 +21,6 @@ const S = {
       width: 0px; /* For Chrome, Safari, and Opera */
     }
   `,
-  Scroller: styled.ul`
-    margin: ${px(14)} 0;
-  `,
-  ChatLog: styled.li`
-    & + & {
-      margin-top: ${px(9)};
-    }
-  `,
 };
 
 export default S;

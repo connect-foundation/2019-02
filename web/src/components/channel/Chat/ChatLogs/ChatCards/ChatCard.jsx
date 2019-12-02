@@ -1,25 +1,22 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import S from './style';
-import { useLikeChat } from '@/hooks';
 
 const ChatCard = (props) => {
   const {
-    id,
     author,
     message,
     isLiked,
     likesCount,
+    handleClickLike,
   } = props;
-  const { mutate } = useLikeChat();
-  const handleClickLikeButton = () => mutate({ variables: { chatId: id } });
 
   return (
-    <S.ChatCard data-id={id}>
+    <S.ChatCard>
       <S.Author>{author.displayName}</S.Author>
       <S.Message>{message}</S.Message>
       <S.AreaButtons>
-        <S.LikeButton onClick={handleClickLikeButton}>
+        <S.LikeButton onClick={handleClickLike}>
           <S.LikeIcon isActive={isLiked} />
           {likesCount}
         </S.LikeButton>
@@ -29,7 +26,6 @@ const ChatCard = (props) => {
 };
 
 ChatCard.propTypes = {
-  id: PropTypes.string.isRequired,
   author: PropTypes.shape({
     userId: PropTypes.string,
     displayName: PropTypes.string,
@@ -37,6 +33,7 @@ ChatCard.propTypes = {
   message: PropTypes.string.isRequired,
   isLiked: PropTypes.bool.isRequired,
   likesCount: PropTypes.number.isRequired,
+  handleClickLike: PropTypes.func.isRequired,
 };
 
 export default ChatCard;
