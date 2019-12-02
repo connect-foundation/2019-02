@@ -7,7 +7,9 @@ const MainSlide = (props) => {
 
   return (
     <S.MainSlide>
-      <S.SlideImg alt="slide" src={slideUrls[page]} />
+      <S.SlideWrapper>
+        <S.SlideImg alt="slide" src={slideUrls[page]} />
+      </S.SlideWrapper>
     </S.MainSlide>
   );
 };
