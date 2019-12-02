@@ -1,6 +1,7 @@
 import React from 'react';
 import S from './style';
 import { useChannelSelector } from '@/hooks';
+import CodeShareButton from './CodeShareButton';
 
 const SlideInfo = () => {
   const channelName = useChannelSelector((state) => state.channelName);
@@ -15,6 +16,9 @@ const SlideInfo = () => {
           {masterName}
         </S.MasterName>
       </S.TitleWrapper>
+      <S.SlideButtonsWrapper>
+        <CodeShareButton />
+      </S.SlideButtonsWrapper>
     </S.SlideInfo>
   );
 };
