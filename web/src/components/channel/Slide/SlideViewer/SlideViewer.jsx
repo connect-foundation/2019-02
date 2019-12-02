@@ -13,8 +13,6 @@ import Indicator from './Indicator';
 import MainSlide from './MainSlide';
 import PageNumber from './PageNumber';
 
-const moveTo = ['back', 'foward'];
-
 const SlideViewer = (props) => {
   const {
     channelId,
