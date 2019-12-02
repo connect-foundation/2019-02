@@ -1,16 +1,12 @@
 import React from 'react';
 import { SmallButton } from '@/components/common';
 import { useChannelSelector } from '@/hooks';
+import { copyToClipboard } from '@/utils/dom';
 
 const CodeShareButton = () => {
   const channelCode = useChannelSelector((state) => state.channelCode);
   const handleCodeShareButtonOnClick = () => {
-    const element = document.createElement('textarea');
-    element.value = channelCode;
-    document.body.appendChild(element);
-    element.select();
-    document.execCommand('copy');
-    document.body.removeChild(element);
+    copyToClipboard(channelCode);
   };
 
   return (
