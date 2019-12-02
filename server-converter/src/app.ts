@@ -1,12 +1,6 @@
 import * as express from 'express';
 import * as cors from 'cors';
-import {
-  auth,
-  convert,
-  upload,
-  saveTmp,
-  removeTmp,
-} from './middlewares';
+import router from './router';
 
 const app = express();
 
@@ -28,22 +22,7 @@ const handleError: express.ErrorRequestHandler = (err, _, res, __) => {
 const start = () => {
   app.use(cors(corsOption));
   app.use(express.json());
-  app.use(auth);
-  app.post(
-    '/images',
-    saveTmp,
-    convert,
-    upload,
-    removeTmp,
-    (req, res) => {
-      const { slideUrls, fileUrl } = req;
-      res.status(200).json({
-        status: 'ok',
-        slideUrls,
-        fileUrl,
-      });
-    },
-  );
+  app.use(router);
   app.use(handleError);
   app.listen('3000', () => {
     console.log('welcome dropy converter!');
