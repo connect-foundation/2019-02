@@ -44,8 +44,8 @@ const DropInput = () => {
     }
   };
 
-  if (data.status === 'ok') {
-    return <Redirect to={`/channels/${data.channel.channelId}`} />;
+  if (data) {
+    return <Redirect to={`/channels/${data.channelId}`} />;
   }
 
   return (

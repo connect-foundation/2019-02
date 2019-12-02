@@ -30,6 +30,14 @@ LikeIcon.propTypes = {
 };
 
 const S = {
+  ChatLogs: styled.ul`
+    margin: ${px(14)} 0;
+  `,
+  ChatLog: styled.li`
+    & + & {
+      margin-top: ${px(9)};
+    }
+  `,
   ChatCard: styled.div`
     padding: ${px(6)} ${px(19)};
     border-radius: ${px(3)};

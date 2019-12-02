@@ -17,11 +17,6 @@ type getChannelResponse {
   channel: Channel
 }
 
-type CreateChannelResponse {
-  status: String!
-  channel: Channel
-}
-
 type getChannelsByCodeResponse {
   status: String!
   channels: [Channel]
@@ -38,7 +33,7 @@ extend type Mutation {
     channelCode: String!,
     slideUrls: [String], 
     fileUrl: String,
-  ): CreateChannelResponse,
+  ): Channel,
   setCurrentSlide(channelId: String!, currentSlide: Int!): Channel
 }
 

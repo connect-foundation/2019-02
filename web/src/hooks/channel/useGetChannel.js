@@ -14,16 +14,17 @@ const CHECK_CHANNEL = gql`
         }
         channelName
         currentSlide
+        channelCode
       }
     }
   } 
 `;
 
 const useGetChannel = (channelId) => {
-  const result = useQuery(CHECK_CHANNEL, { variables: { channelId } });
-  const data = result.data ? result.data.getChannel : null;
+  const { loading, data } = useQuery(CHECK_CHANNEL, { variables: { channelId } });
+  const channelData = data ? data.getChannel : null;
 
-  return { data };
+  return { data: channelData, loading };
 };
 
 export default useGetChannel;
