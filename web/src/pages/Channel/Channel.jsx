@@ -11,7 +11,9 @@ import {
 import { Chat, Slide, ToolBar } from '@/components/channel';
 import { authByAnonymous } from '@/apis';
 import S from './style';
-import { NO_EXIST_CHANNEL } from '@/constants';
+import { NO_EXIST_CHANNEL_MESSAGE, ENTERING_CHANNEL_MESSAGGGE } from '@/constants';
+import { LoadingModal, ErrorModal } from '@/components/common';
+
 
 const Channel = () => {
   const { params: { channelId } } = useRouteMatch();
@@ -40,11 +42,11 @@ const Channel = () => {
     }
   }, [data]);
 
-  if (!data || loading) return null;
+  if (!data || loading) {
+    return (<LoadingModal message={ENTERING_CHANNEL_MESSAGGGE} />);
+  }
   if (data.status === 'not_exist') {
-    return (
-      <div>{NO_EXIST_CHANNEL}</div>
-    );
+    return (<ErrorModal message={NO_EXIST_CHANNEL_MESSAGE} />);
   }
 
   return (
