@@ -33,7 +33,7 @@ const SlideViewer = (props) => {
     currentSlide,
   );
   const handleSetPage = (direction) => () => {
-    const sync = isSync ? currentSlide : page;
+    const sync = !isMaster && isSync ? currentSlide : page;
     if (!moveSlidePossible(direction, sync, slideUrls.length)) return;
     if (!isMaster && isSync) {
       setSync(false);
