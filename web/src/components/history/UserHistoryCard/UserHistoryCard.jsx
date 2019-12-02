@@ -52,7 +52,7 @@ const UserHistoryCard = (props) => {
 UserHistoryCard.propTypes = {
   channelId: PropTypes.string.isRequired,
   channelStatus: PropTypes.string.isRequired,
-  updatedAt: PropTypes.number.isRequired,
+  updatedAt: PropTypes.string.isRequired,
   channelName: PropTypes.string.isRequired,
   displayName: PropTypes.string.isRequired,
 };
