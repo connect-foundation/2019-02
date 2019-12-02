@@ -43,8 +43,9 @@
 
 - [기획 / 규칙 / 로그](https://github.com/connect-foundation/2019-02/wiki)
 - [기술공유 01. Passport와 Apollo를 활용한 oAuth 인증 시스템](https://github.com/connect-foundation/2019-02/wiki/%EA%B8%B0%EC%88%A0%EA%B3%B5%EC%9C%A0-01.-Passport%EC%99%80-Apollo%EB%A5%BC-%ED%99%9C%EC%9A%A9%ED%95%9C-oAuth-%EC%9D%B8%EC%A6%9D-%EC%8B%9C%EC%8A%A4%ED%85%9C)
-
 - [기술공유 02. GraphicsMagick으로 PDF 파일을 웹에 렌더링 시키기](https://github.com/connect-foundation/2019-02/wiki/%EA%B8%B0%EC%88%A0%EA%B3%B5%EC%9C%A0-02.-GraphicsMagick%EC%9C%BC%EB%A1%9C-PDF-%ED%8C%8C%EC%9D%BC%EC%9D%84-%EC%9B%B9%EC%97%90-%EB%A0%8C%EB%8D%94%EB%A7%81-%EC%8B%9C%ED%82%A4%EA%B8%B0)
+- [기술공유 03. graphQL과 Apollo 이용하여 리액트에서 상태관리하기](https://github.com/connect-foundation/2019-02/wiki/%EA%B8%B0%EC%88%A0%EA%B3%B5%EC%9C%A003.--graphQL%EA%B3%BC-Apollo-%EC%9D%B4%EC%9A%A9%ED%95%98%EC%97%AC-%EB%A6%AC%EC%95%A1%ED%8A%B8%EC%97%90%EC%84%9C-%EC%83%81%ED%83%9C%EA%B4%80%EB%A6%AC%ED%95%98%EA%B8%B0)
+- [기술공유 04. Apollo와 함께 채팅 성능 최적화하기](https://github.com/connect-foundation/2019-02/wiki/%EA%B8%B0%EC%88%A0%EA%B3%B5%EC%9C%A004.-Apollo%EC%99%80-%ED%95%A8%EA%BB%98-%EC%B1%84%ED%8C%85-%EC%84%B1%EB%8A%A5-%EC%B5%9C%EC%A0%81%ED%99%94%ED%95%98%EA%B8%B0)
 
 <br>
 
