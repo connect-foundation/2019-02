@@ -20,7 +20,6 @@ const defaultCacheData = {
   chatLogs: {
     __typename: 'chatLogs',
     logs: [],
-    cached: false,
     changeType: null,
     sortType: CHAT_SORT_BY_RECENT,
   },

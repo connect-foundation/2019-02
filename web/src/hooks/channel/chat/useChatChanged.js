@@ -9,7 +9,6 @@ const GET_CHAT_CACHED = gql`
   query GetChatCached {
     chatLogs @client {
       logs
-      cached
       changeType
       sortType
     }

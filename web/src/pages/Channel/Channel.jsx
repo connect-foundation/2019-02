@@ -5,7 +5,7 @@ import {
   useLogin,
   useGetUserStatus,
   useGetChannel,
-  useInitChatCached,
+  useInitChat,
   useAddUserHistory,
 } from '@/hooks';
 import { Chat, Slide, ToolBar } from '@/components/channel';
@@ -19,7 +19,7 @@ const Channel = () => {
   const userStatus = useGetUserStatus();
   const { mutate } = useAddUserHistory();
 
-  useInitChatCached();
+  useInitChat(channelId);
   useEffect(() => {
     if (userStatus.token) return;
     authByAnonymous().then(({ token, user }) => logIn({
