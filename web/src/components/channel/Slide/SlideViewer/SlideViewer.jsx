@@ -8,7 +8,7 @@ import {
   useSyncSlide,
 } from '@/hooks';
 import { moveSlide, moveSlidePossible } from '@/utils/slide';
-import FullScreen from '../../../common/FullScreen';
+import { FullScreen } from '@/components/common';
 import Indicator from './Indicator';
 import MainSlide from './MainSlide';
 import PageNumber from './PageNumber';
