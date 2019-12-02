@@ -4,7 +4,7 @@ import { px, colorCommon, colorGray } from '@/styles';
 export default {
   ChannelCard: styled.div`
   width: 100%;
-  height: 20%;
+  height: 25%;
   background: ${colorCommon('white')};
   box-shadow: ${px(0)} ${px(2)} ${px(19)} rgba(134, 142, 150, 0.4);
   border-radius: ${px(3)};
@@ -32,7 +32,7 @@ export default {
   ChannelCode: styled.div`
     font-size: ${px(15)};
     color: ${colorGray(7)};
-    margin-top: ${px(40)};
+    margin-top: ${px(45)};
     margin-left: ${px(75)}
   `,
 };
