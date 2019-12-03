@@ -23,7 +23,6 @@ const SlideViewer = (props) => {
     isFullScreen,
     setFullScreen,
   } = props;
-  console.log(isFullScreen);
   const { mutate } = useSetCurrentSlide();
   const { currentSlide } = useSlideChanged(channelId);
   const { slideUrls, isMaster } = useChannelSelector((state) => state);
