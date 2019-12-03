@@ -14,12 +14,16 @@ import {
 const devRouter = Router();
 
 devRouter.post(
-  '/images',
+  '/images/:channelId',
+  timeStart('save'),
   saveTmp,
+  timeEnd('save'),
   timeStart('convert'),
   convert,
   timeEnd('convert'),
+  timeStart('upload'),
   upload,
+  timeEnd('upload'),
   removeTmp,
   (req, res) => {
     const { slideUrls, fileUrl } = req;
@@ -27,47 +31,6 @@ devRouter.post(
       status: 'ok',
       slideUrls,
       fileUrl,
-    });
-  },
-);
-
-devRouter.post(
-  '/save',
-  saveTmp,
-  (req, _, next) => {
-    req.slides = [];
-    next();
-  },
-  removeTmp,
-  (_, res) => {
-    res.status(200).json({ status: 'ok' });
-  },
-);
-
-devRouter.post(
-  '/convert',
-  (req, res) => {
-    const { count } = req.body;
-    const filenames = [];
-
-    for (let i = 0; i < count; i += 1) filenames.push(`__dummy_${i}`);
-
-    const convertTasks = filenames.map((file) => {
-      const inputPath = Path.resolve(__dirname, '../../tmpFiles/__dummy.pdf');
-      const outputPath = Path.resolve(__dirname, '../../tmpFiles');
-      const converter = new Converter({
-        quality: 100,
-        format: 'png',
-        resolution: 144,
-        compression: 'JPEG2000',
-        name: (page: number) => `${file}_${page}`,
-      });
-
-      return converter.convertToSlides(inputPath, outputPath);
-    });
-
-    Promise.all(convertTasks).then(() => {
-      res.status(200).json({ status: 'ok' });
     });
   },
 );

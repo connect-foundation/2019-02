@@ -31,7 +31,7 @@ const uploadToObjectStorage = (
 });
 
 const uploadMiddleware: RequestHandler = (req, _, next) => {
-  const { channelId } = req.body;
+  const { channelId } = req.params;
   const uploadFile: Promise<string> = uploadToObjectStorage(
     req.file.path,
     channelId,

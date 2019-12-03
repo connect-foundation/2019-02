@@ -3,7 +3,7 @@ import Converter from '../core';
 import { RequestHandler } from '../@types';
 
 const convertMiddleware: RequestHandler = (req, _, next) => {
-  const { channelId } = req.body;
+  const { channelId } = req.params;
   const converterOptions = {
     quality: 100,
     format: 'png',
