@@ -1,15 +1,18 @@
 import React from 'react';
 import { SmallButton } from '@/components/common';
-import { useGetChannel } from '@/hooks';
+import { useChannelSelector } from '@/hooks';
 
 
 const SlideDownloadButton = () => {
-  const channelInfo = useGetChannel();
+  const channelFileUrl = useChannelSelector((state) => state.fileUrl);
+
   return (
     <>
       <SmallButton>
-        <span aria-label="slide-code-share-button" role="img">💾</span>
-        <span>다운로드</span>
+        <a href={channelFileUrl}>
+          <span aria-label="slide-code-share-button" role="img">💾</span>
+          <span>다운로드</span>
+        </a>
       </SmallButton>
     </>
   );

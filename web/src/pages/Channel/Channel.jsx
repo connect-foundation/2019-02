@@ -53,6 +53,7 @@ const Channel = () => {
     <ChannelContext.Provider
       value={{
         isMaster: data.isMaster,
+        fileUrl: data.channel.fileUrl,
         slideUrls: data.channel.slideUrls,
         initialSlide: data.channel.currentSlide,
         channelName: data.channel.channelName,
