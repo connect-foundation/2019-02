@@ -1,4 +1,5 @@
 import React from 'react';
+import People from '@@/people.svg';
 import S from './style';
 import { useChannelSelector } from '@/hooks';
 import CodeShareButton from './CodeShareButton';
@@ -10,13 +11,22 @@ const SlideInfo = () => {
 
   return (
     <S.SlideInfo>
-      <S.TitleWrapper>
-        <S.ChannelTitle>{channelName}</S.ChannelTitle>
-        <S.MasterName>
-          <span>| &nbsp;&nbsp;</span>
-          {masterName}
-        </S.MasterName>
-      </S.TitleWrapper>
+      <S.ChannelSummaryWrapper>
+        <S.TitleWrapper>
+          <S.ChannelTitle>{channelName}</S.ChannelTitle>
+          <S.MasterName>
+            <span>| &nbsp;&nbsp;</span>
+            {masterName}
+          </S.MasterName>
+        </S.TitleWrapper>
+        <S.PeopleWrapper>
+          <S.PeopleLogo
+            src={People}
+            alt="people-logo"
+          />
+          120명 참여중
+        </S.PeopleWrapper>
+      </S.ChannelSummaryWrapper>
       <S.SlideButtonsWrapper>
         <SlideDownloadButton />
         <CodeShareButton />
