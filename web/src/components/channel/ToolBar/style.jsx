@@ -1,10 +1,10 @@
 import styled from 'styled-components';
-import { colorGray } from '@/styles/themeUtil';
+import { colorGray, px } from '@/styles/themeUtil';
 
 export default {
   ToolBar: styled.div`
-    width:60px;
-    height:100%;
+    width: ${px(60)};
+    height: 100%;
     background: ${colorGray(0)};
     border-right: 1px solid ${colorGray(2)};
   `,
