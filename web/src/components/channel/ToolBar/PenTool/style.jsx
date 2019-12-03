@@ -17,8 +17,8 @@ const PenToolIcon = styled(({ isPenToolActive }) => (
     </svg>
   </span>
 ))`
-width: ${px(28)};
-height: ${px(28)};
+  width: ${px(28)};
+  height: ${px(28)};
 `;
 
 PenToolIcon.propTypes = {
