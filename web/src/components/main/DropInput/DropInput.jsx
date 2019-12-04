@@ -16,15 +16,18 @@ const ChannelCodeLength = 5;
 
 const DropInput = () => {
   const { mutate, data } = useCreateChannel();
-  const [isLoading, setIsLoading] = useState(false);
+  const [loadingMessage, setLoadingMessage] = useState(null);
   const [isError, setIsError] = useState(false);
   const handleUpload = async (e) => {
-    setIsLoading(true);
+    setLoadingMessage(CREATING_CHANNEL_MESSAGE);
+
     const channelId = createChannelId();
     const channelCode = channelId.substring(0, ChannelCodeLength);
     const file = e.target.files[0];
     const formData = createFormData({ file });
-    const unsubscribeProgress = subscribeProgress(channelId, console.log);
+    const unsubscribeProgress = subscribeProgress(channelId, ({ message }) => {
+      setLoadingMessage(message);
+    });
     const {
       status,
       slideUrls,
@@ -70,7 +73,7 @@ const DropInput = () => {
         </label>
       </S.DropInputWrapper>
       {isError && <ErrorModal message={TEMP_ERROR_MESSAGE} />}
-      {isLoading && <LoadingModal message={CREATING_CHANNEL_MESSAGE} />}
+      {loadingMessage && <LoadingModal message={loadingMessage} />}
     </>
   );
 };

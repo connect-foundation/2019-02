@@ -56,7 +56,6 @@ export const polling = ({ url, callback }) => {
   request();
 
   return () => {
-    console.log('unsubscribed!');
     done = true;
   };
 };

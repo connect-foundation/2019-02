@@ -20,20 +20,22 @@ const ChannelCodeLength = 5;
 
 const DropZone = () => {
   const { mutate, data } = useCreateChannel();
-  const [isLoading, setIsLoading] = useState(false);
+  const [loadingMessage, setLoadingMessage] = useState(null);
   const [isError, setIsError] = useState(false);
   const [dragOver, setDragOver] = useState(false);
   const [dropZoneEmoji, setDropZoneEmoji] = useState('👇');
   const handleDrop = async (event) => {
     event.preventDefault();
-    setIsLoading(true);
+    setLoadingMessage(CREATING_CHANNEL_MESSAGE);
 
     const channelId = createChannelId();
     const channelCode = channelId.substring(0, ChannelCodeLength);
     const { dataTransfer: { files } } = event;
     const file = files[0];
     const formData = createFormData({ file });
-    const unsubscribeProgress = subscribeProgress(channelId, console.log);
+    const unsubscribeProgress = subscribeProgress(channelId, ({ message }) => {
+      setLoadingMessage(message);
+    });
     const {
       status,
       slideUrls,
@@ -92,7 +94,7 @@ const DropZone = () => {
       />
       <DropInput />
       {isError && <ErrorModal message={TEMP_ERROR_MESSAGE} />}
-      {isLoading && <LoadingModal message={CREATING_CHANNEL_MESSAGE} />}
+      {loadingMessage && <LoadingModal message={loadingMessage} />}
     </>
   );
 };
