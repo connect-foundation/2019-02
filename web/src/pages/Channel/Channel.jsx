@@ -7,7 +7,9 @@ import {
   useGetChannel,
   useInitChat,
   useAddUserHistory,
-  useSetUserCount,
+  useEnteredListener,
+  useLeaveListener,
+  useListenerListChanged,
 } from '@/hooks';
 import {
   Chat,
@@ -17,12 +19,7 @@ import {
 import { useBeforeunload } from '@/components/common/BeforeUnload';
 import { authByAnonymous } from '@/apis';
 import S from './style';
-import {
-  NO_EXIST_CHANNEL_MESSAGE,
-  ENTERING_CHANNEL_MESSAGGGE,
-  ENTERED_USER,
-  LEAVE_USER,
-} from '@/constants';
+import { NO_EXIST_CHANNEL_MESSAGE, ENTERING_CHANNEL_MESSAGGGE } from '@/constants';
 import { LoadingModal, ErrorModal } from '@/components/common';
 
 const Channel = () => {
@@ -31,41 +28,9 @@ const Channel = () => {
   const logIn = useLogin();
   const userStatus = useGetUserStatus();
   const { mutate } = useAddUserHistory();
-  const addUserCount = useSetUserCount();
-  const mutateUserCount = (userCount) => {
-    addUserCount.mutate({
-      variables: {
-        channelId,
-        userCount,
-      },
-    });
-  };
-  const calculateUserCount = (operation) => {
-    const { userId } = userStatus;
-    const channelUserList = data.channel.userCount;
-    const isJoinedChannel = channelUserList.includes(userId);
-    const operationType = {
-      enteredUser: () => {
-        if (!isJoinedChannel) {
-          channelUserList.push(userId);
-          mutateUserCount(channelUserList);
-        }
-      },
-      leaveUser: () => {
-        if (isJoinedChannel) {
-          channelUserList.pop(userId);
-          mutateUserCount(channelUserList);
-        }
-      },
-    };
-    operationType[operation]();
-  };
-  if (data) {
-    calculateUserCount(ENTERED_USER);
-  }
-  useBeforeunload(() => {
-    calculateUserCount(LEAVE_USER);
-  });
+  const { listenerList } = useListenerListChanged(channelId);
+  const enteredListener = useEnteredListener(channelId);
+  const leaveListener = useLeaveListener(channelId);
   useInitChat(channelId);
 
   useEffect(() => {
@@ -79,6 +44,12 @@ const Channel = () => {
 
   useEffect(() => {
     if (data && data.status === 'ok') {
+      enteredListener.mutate({
+        variables: {
+          channelId,
+          listenerList,
+        },
+      });
       mutate({
         variables: {
           channelId,
@@ -86,6 +57,14 @@ const Channel = () => {
       });
     }
   }, [data]);
+  useBeforeunload(() => {
+    leaveListener.mutate({
+      variables: {
+        channelId,
+        listenerList,
+      },
+    });
+  });
 
   if (!data || loading) {
     return (<LoadingModal message={ENTERING_CHANNEL_MESSAGGGE} />);
@@ -104,12 +83,15 @@ const Channel = () => {
         channelName: data.channel.channelName,
         masterName: data.channel.master.displayName,
         channelCode: data.channel.channelCode,
-        userCount: data.channel.userCount,
+        listenerList: data.channel.listenerList,
       }}
     >
       <S.Channel>
         <ToolBar />
-        <Slide channelId={channelId} />
+        <Slide
+          channelId={channelId}
+          listenerList={listenerList.length}
+        />
         <Chat channelId={channelId} />
       </S.Channel>
     </ChannelContext.Provider>

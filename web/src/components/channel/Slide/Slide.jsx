@@ -7,7 +7,7 @@ import SlideViewer from './SlideViewer';
 import SlideInfo from './SlideInfo';
 
 const Slide = (props) => {
-  const { channelId } = props;
+  const { channelId, listenerList } = props;
   const { currentSlide } = useSlideChanged(channelId);
   const [isSync, setSync] = useState(true);
   const [isFullScreen, setFullScreen] = useState(false);
@@ -33,13 +33,14 @@ const Slide = (props) => {
         setPage={setPage}
         channelId={channelId}
       />
-      <SlideInfo />
+      <SlideInfo listenerList={listenerList} />
     </S.Slide>
   );
 };
 
 Slide.propTypes = {
   channelId: PropTypes.string.isRequired,
+  listenerList: PropTypes.number.isRequired,
 };
 
 export default Slide;
