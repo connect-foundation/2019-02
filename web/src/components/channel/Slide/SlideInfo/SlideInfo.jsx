@@ -3,6 +3,7 @@ import S from './style';
 import { useChannelSelector } from '@/hooks';
 import CodeShareButton from './CodeShareButton';
 import SlideDownloadButton from './SlideDownloadButton';
+import FlyingEmojiButton from './FlyingEmojiButton';
 
 const SlideInfo = () => {
   const channelName = useChannelSelector((state) => state.channelName);
@@ -20,6 +21,7 @@ const SlideInfo = () => {
       <S.SlideButtonsWrapper>
         <SlideDownloadButton />
         <CodeShareButton />
+        <FlyingEmojiButton />
       </S.SlideButtonsWrapper>
     </S.SlideInfo>
   );
