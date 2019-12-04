@@ -1,3 +1,4 @@
+/* eslint-disable class-methods-use-this */
 /* eslint-disable no-plusplus */
 /* eslint-disable no-param-reassign */
 import { EventEmitter } from 'events';
@@ -5,11 +6,10 @@ import { RequestHandler } from 'src/@types';
 import Job from './requestJob';
 
 class Queue extends EventEmitter {
-  private config: { queueLimit: number, activeLimit: number };
+  config: { queueLimit: number, activeLimit: number };
   private activeCount: number;
   private queue: any[];
   private active: any[];
-  private totalCount: number;
 
   constructor(config) {
     super();
@@ -17,22 +17,14 @@ class Queue extends EventEmitter {
     this.activeCount = 0;
     this.queue = [];
     this.active = [];
-    this.totalCount = 0;
   }
 
   getLength() {
     return this.queue.length;
   }
 
-  generateId() {
-    this.totalCount++;
-    if (this.totalCount > Number.MAX_SAFE_INTEGER) { this.totalCount = 0; }
-    return this.totalCount;
-  }
-
-  processJob(data) {
-    console.log('create');
-    const job = new Job(this.generateId(), this, data);
+  createJob(data) {
+    const job = new Job(this, data);
 
     process.nextTick(() => {
       if (!this.canQueue()) return this.rejectJob(job);
@@ -45,69 +37,66 @@ class Queue extends EventEmitter {
   }
 
   startJob(job) {
-    console.log('start');
     this.activeCount++;
     this.active.push(job);
-    this.emit('process', job, (...args) => {
-      this.completeJob(job, ...args);
+    job.setState(true, 'process', () => {
+      this.completeJob(job);
     });
+
     return job;
   }
 
-  dequeueJob(job = false) {
+  dequeueJob(job = null) {
     if (job) {
-      const i = this.queue.indexOf(job);
-      if (i < 0) {
-        console.log('not found');
+      const index = this.queue.indexOf(job);
+
+      if (index < 0) {
+        throw new Error('request not found in queue');
       } else {
-        this.queue.splice(i, 1);
+        this.queue.splice(index, 1);
       }
     } else {
       job = this.queue.shift();
     }
-
-    this.emit('dequeue');
+    job.setState(false, 'dequeue');
 
     return job;
   }
-  completeJob(job, ...args) {
-    console.log('complete');
-    const i = this.active.indexOf(job);
-    if (i < 0) {
-      console.log('not found');
+
+  completeJob(job) {
+    const index = this.active.indexOf(job);
+
+    if (index < 0) {
+      throw new Error('request complete but not found');
     } else {
-      this.active.splice(i, 1);
+      this.active.splice(index, 1);
       this.activeCount--;
     }
-    this.emit('complete');
+
+    job.setState(false, 'complete');
     process.nextTick(this.checkQueue.bind(this));
   }
 
   queueJob = (job) => {
-    console.log('queue');
     this.queue.push(job);
-    job.state = 'queue';
-    this.emit('queue');
+    job.setState(false, 'queue');
 
     return job;
   };
 
   rejectJob(job) {
-    job.state = 'reject';
-    this.emit('reject', job);
+    job.setState(true, 'reject');
     return job;
   }
 
   cancelJob(job) {
-    console.log('cancel');
     this.dequeueJob(job);
-    job.state = 'cancel';
-    this.emit('cancel');
+    job.setState(false, 'cancel');
+
     return job;
   }
 
   checkQueue() {
-    console.log('check');
     if (this.canStart() && this.queue.length > 0) {
       const job = this.dequeueJob();
       this.startJob(job);
