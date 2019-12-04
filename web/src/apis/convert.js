@@ -10,12 +10,14 @@ const uploadFile = async (data) => {
     status,
     slideUrls,
     fileUrl,
+    slideRatioList,
   } = await response.json();
 
   return {
     status,
     slideUrls,
     fileUrl,
+    slideRatioList,
   };
 };
 

@@ -3,7 +3,7 @@ import { px } from '@/styles/themeUtil';
 
 export default {
   MainSlide: styled.div`
-    display: inline-block;
+    box-sizing: border-box;
     width: 100%;
     height: 100%;
     padding: ${px(35)} 0;
@@ -15,17 +15,26 @@ export default {
   `,
   SlideImg: styled.img`
     position: absolute;
+    z-index: 100;
+    top: 50%;
+    left: 50%;
+    ${({ fitHeight }) => (fitHeight ? `
+    width: auto;
+    height:100%;
+    ` : `
+    width: 100%;
+    height: auto;
+    `)};
+    user-select: none;
+    border-radius: 3px;
+    box-shadow: 10px 2px 20px rgba(0, 0, 0, 0.1);
+    transform: translate(-50%, -50%);
+  `,
+  Canvas: styled.canvas`
+    position: absolute;
+    z-index: 200;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    user-select: none;
-    height:auto;
-    width:auto;
-    max-width: 100%;
-    max-height: 100%;
-    object-fit: contain;
-    border-radius: ${px(3)};
-    background-color: ${({ theme }) => theme.palette.common.white};
-    box-shadow: ${({ theme }) => theme.palette.shadow.slide};
   `,
 };

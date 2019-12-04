@@ -55,6 +55,7 @@ const Channel = () => {
         isMaster: data.isMaster,
         fileUrl: data.channel.fileUrl,
         slideUrls: data.channel.slideUrls,
+        slideRatioList: data.channel.slideRatioList,
         initialSlide: data.channel.currentSlide,
         channelName: data.channel.channelName,
         masterName: data.channel.master.displayName,

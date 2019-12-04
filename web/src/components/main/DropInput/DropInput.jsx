@@ -28,6 +28,7 @@ const DropInput = () => {
       status,
       slideUrls,
       fileUrl,
+      slideRatioList,
     } = await uploadFile(formData);
 
     if (status === 'ok') {
@@ -37,6 +38,7 @@ const DropInput = () => {
           channelCode,
           slideUrls,
           fileUrl,
+          slideRatioList,
         },
       });
     } else {

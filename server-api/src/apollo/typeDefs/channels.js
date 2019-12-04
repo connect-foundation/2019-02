@@ -5,6 +5,7 @@ type Channel {
   channelName: String
   maxHeadCount: Int
   slideUrls: [String]
+  slideRatioList: [Float]
   fileUrl: String
   channelCode: String!
   channelStatus: String
@@ -33,6 +34,7 @@ extend type Mutation {
     channelCode: String!,
     slideUrls: [String], 
     fileUrl: String,
+    slideRatioList: [Float],
   ): Channel,
   setCurrentSlide(channelId: String!, currentSlide: Int!): Channel
 }

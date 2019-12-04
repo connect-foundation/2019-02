@@ -61,13 +61,20 @@ class SlideConverter implements SlideConverterSpec {
     const { name, format } = this.options;
     const output = `${outputPath}/${name(page)}.${format}`;
     const slideInfoPromise: Promise<SlideInfo> = new Promise((resolve, reject) => {
+      let slideRatio = 0;
+
       this.doGraphicWork(imageStream, page)
+        .size((err, size) => {
+          if (err) reject(err);
+          slideRatio = size.width / size.height;
+        })
         .write(output, (err) => {
           if (err) reject(err);
           else {
             resolve({
               path: output,
               page,
+              ratio: slideRatio,
             });
           }
         });

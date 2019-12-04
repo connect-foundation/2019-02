@@ -8,6 +8,7 @@ export default {
     min-width: ${px(80)};
     width: 40%;
     position: absolute;
+    z-index: 200;
     top: 0;
     display: flex;
     flex-direction: column;

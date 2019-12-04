@@ -15,4 +15,5 @@ export interface SlideImageOptions {
 export interface SlideInfo {
   path: string;
   page: number;
+  ratio: number;
 }
