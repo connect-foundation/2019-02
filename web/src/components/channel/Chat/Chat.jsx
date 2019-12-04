@@ -17,7 +17,10 @@ const Chat = (props) => {
     <S.Chat isClosed={isClosed}>
       <ChatSort
         isClosed={isClosed}
-        toggleChatBox={() => setIsClosed(!isClosed)}
+        toggleChatBox={() => {
+          window.dispatchEvent(new Event('resize'));
+          setIsClosed(!isClosed);
+        }}
       />
       {!isClosed && (
         <>
