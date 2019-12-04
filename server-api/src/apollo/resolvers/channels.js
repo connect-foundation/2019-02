@@ -113,6 +113,21 @@ const setCurrentSlide = async (_, { channelId, currentSlide }, { user, pubsub })
   }
 };
 
+const setUserCount = async (_, { channelId, userCount }, { user }) => {
+  try {
+    const channel = await Channels.findOneAndUpdate(
+      { channelId },
+      { userCount },
+      { new: true },
+    );
+    const payload = await channel.toPayload({ master: user });
+
+    return payload;
+  } catch (err) {
+    throw new ApolloError(err.message);
+  }
+};
+
 const slideChanged = {
   subscribe: withFilter(
     (_, __, { pubsub }) => pubsub.asyncIterator(SLIDE_CHANGED),
@@ -128,6 +143,7 @@ const resolvers = {
   Mutation: {
     createChannel,
     setCurrentSlide,
+    setUserCount,
   },
   Subscription: {
     slideChanged,

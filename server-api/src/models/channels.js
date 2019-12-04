@@ -48,6 +48,11 @@ const ChannelSchema = new Schema({
     required: true,
     default: 0,
   },
+  userCount: {
+    type: Number,
+    required: true,
+    default: 0,
+  },
   createdAt: {
     type: Date,
     default: Date.now(),
