@@ -9,7 +9,7 @@ type Channel {
   channelCode: String!
   channelStatus: String
   currentSlide: Int!
-  userCount: [String]
+  listenerList: [String]
 }
 
 type getChannelResponse {
@@ -36,11 +36,13 @@ extend type Mutation {
     fileUrl: String,
   ): Channel,
   setCurrentSlide(channelId: String!, currentSlide: Int!): Channel
-  setUserCount(channelId: String!, userCount: [String]): Channel
+  enteredListener(channelId: String!, listenerList: [String]): Channel
+  leaveListener(channelId: String!, listenerList: [String]): Channel
 }
 
 extend type Subscription {
   slideChanged(channelId: String!): Channel
+  listenerListChanged(channelId: String, listenerList: [String]): Channel
 }
 `;
 

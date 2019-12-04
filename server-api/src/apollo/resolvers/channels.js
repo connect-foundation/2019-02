@@ -4,6 +4,7 @@ const Histories = require('../../models/histories');
 const Users = require('../../models/users');
 
 const SLIDE_CHANGED = 'SLIDE_CHANGED';
+const LISTENER_LIST_CHANGED = 'LISTENER_LIST_CHANGED';
 
 const createChannelInfo = (
   user,
@@ -113,19 +114,49 @@ const setCurrentSlide = async (_, { channelId, currentSlide }, { user, pubsub })
   }
 };
 
-const setUserCount = async (_, { channelId, userCount }, { user }) => {
+const enteredListener = async (_, { channelId, listenerList }, { user, pubsub }) => {
+  if (listenerList.includes(user.userId)) return;
   try {
+    listenerList.push(user.userId);
     const channel = await Channels.findOneAndUpdate(
       { channelId },
-      { userCount },
+      { listenerList },
       { new: true },
     );
-    const payload = await channel.toPayload({ master: user });
+    const payload = await channel.toPayload({});
+
+    pubsub.publish(LISTENER_LIST_CHANGED, { listenerListChanged: payload });
 
     return payload;
   } catch (err) {
     throw new ApolloError(err.message);
   }
+};
+
+const leaveListener = async (_, { channelId, listenerList }, { user, pubsub }) => {
+  if (!listenerList.includes(user.userId)) return;
+  try {
+    const newListenerList = listenerList.filter((listener) => user.userId !== listener);
+    const channel = await Channels.findOneAndUpdate(
+      { channelId },
+      { newListenerList },
+      { new: true },
+    );
+    const payload = await channel.toPayload({});
+
+    pubsub.publish(LISTENER_LIST_CHANGED, { listenerListChanged: payload });
+
+    return payload;
+  } catch (err) {
+    throw new ApolloError(err.message);
+  }
+};
+
+const listenerListChanged = {
+  subscribe: withFilter(
+    (_, __, { pubsub }) => pubsub.asyncIterator(LISTENER_LIST_CHANGED),
+    (payload, variables) => payload.listenerListChanged.channelId === variables.channelId,
+  ),
 };
 
 const slideChanged = {
@@ -143,10 +174,12 @@ const resolvers = {
   Mutation: {
     createChannel,
     setCurrentSlide,
-    setUserCount,
+    enteredListener,
+    leaveListener,
   },
   Subscription: {
     slideChanged,
+    listenerListChanged,
   },
 };
 

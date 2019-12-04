@@ -15,7 +15,7 @@ const CHECK_CHANNEL = gql`
         channelName
         currentSlide
         channelCode
-        userCount
+        listenerList
       }
     }
   } 

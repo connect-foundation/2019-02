@@ -48,7 +48,7 @@ const ChannelSchema = new Schema({
     required: true,
     default: 0,
   },
-  userCount: {
+  listenerList: {
     type: Array,
     required: true,
     default: [],
@@ -73,7 +73,7 @@ ChannelSchema.methods.toPayload = async function toChannelPayload(...objs) {
     'channelStatus',
     'currentSlide',
     'channelCode',
-    'userCount',
+    'listenerList',
   ], channel, { master }, ...objs);
 };
 
