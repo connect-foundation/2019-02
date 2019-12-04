@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Redirect } from 'react-router-dom';
 import { Button } from '@material-ui/core';
-import { uploadFile } from '@/apis';
+import { uploadFile, subscribeProgress } from '@/apis';
 import createChannelId from '@/utils/uuid';
 import { useCreateChannel } from '@/hooks';
 import { LoadingModal, ErrorModal } from '@/components/common';
@@ -23,12 +23,14 @@ const DropInput = () => {
     const channelId = createChannelId();
     const channelCode = channelId.substring(0, ChannelCodeLength);
     const file = e.target.files[0];
-    const formData = createFormData({ file, channelId });
+    const formData = createFormData({ file });
+    const unsubscribeProgress = subscribeProgress(channelId, console.log);
     const {
       status,
       slideUrls,
       fileUrl,
-    } = await uploadFile(formData);
+    } = await uploadFile(channelId, formData);
+    unsubscribeProgress();
 
     if (status === 'ok') {
       mutate({

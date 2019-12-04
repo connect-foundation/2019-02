@@ -23,6 +23,7 @@ module.exports = {
 		"import/first": "off",
 		"no-console": "off",
 		"import/no-unresolved": "off",
-		"no-unused-vars": "off"
+		"no-unused-vars": "off",
+		"lines-between-class-members": "off"
 	}
 }

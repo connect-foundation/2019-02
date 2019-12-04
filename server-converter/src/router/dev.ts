@@ -1,7 +1,4 @@
 import { Router } from 'express';
-import * as multer from 'multer';
-import * as Path from 'path';
-import Converter from '../core';
 import {
   convert,
   upload,

@@ -4,3 +4,4 @@ export { default as upload } from './upload';
 export { default as saveTmp } from './save';
 export { default as removeTmp } from './remove';
 export * from './timer';
+export * from './progress';

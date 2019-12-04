@@ -38,3 +38,25 @@ export const post = ({
     body,
   });
 };
+
+export const polling = ({ url, callback }) => {
+  let done = false;
+  const request = () => get({ url })
+    .then((response) => response.json())
+    .then((payload) => {
+      callback(payload);
+
+      if (!done) {
+        return request();
+      }
+
+      return null;
+    });
+
+  request();
+
+  return () => {
+    console.log('unsubscribed!');
+    done = true;
+  };
+};

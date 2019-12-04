@@ -1,6 +1,8 @@
 import * as AwsSdk from 'aws-sdk';
-import { createReadStream, read } from 'fs';
+import { createReadStream } from 'fs';
 import { RequestHandler } from '../@types';
+import { noitfyProgress } from './progress';
+import { PROGRESS_UPLOADING } from '../constants';
 
 const s3 = new AwsSdk.S3({
   endpoint: process.env.NCS_ENDPOINT,
@@ -45,6 +47,7 @@ const uploadMiddleware: RequestHandler = (req, _, next) => {
     false,
   ));
 
+  noitfyProgress(channelId, { message: PROGRESS_UPLOADING });
   Promise.all([uploadFile, ...uploadSlides])
     .then((locations) => {
       req.fileUrl = locations.shift();

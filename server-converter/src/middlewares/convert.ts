@@ -1,6 +1,8 @@
 import * as path from 'path';
-import Converter from '../core';
+import { Converter } from '../core';
 import { RequestHandler } from '../@types';
+import { noitfyProgress } from './progress';
+import { PROGRESS_CONVERTING } from '../constants';
 
 const convertMiddleware: RequestHandler = (req, _, next) => {
   const { channelId } = req.params;
@@ -15,8 +17,12 @@ const convertMiddleware: RequestHandler = (req, _, next) => {
   const inputPath = req.file.path;
   const outputPath = path.resolve(__dirname, '../../tmpFiles');
 
+  converter.subscribeProgress((page, totalPage) => noitfyProgress(channelId, {
+    message: `${PROGRESS_CONVERTING}: ${page}/${totalPage} 완료`,
+  }));
   converter.convertToSlides(inputPath, outputPath).then((slides) => {
     req.slides = slides;
+    converter.unsubscribeProgress();
     next();
   });
 };

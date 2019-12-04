@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Redirect } from 'react-router-dom';
 import S from './style';
-import { uploadFile } from '@/apis';
+import { uploadFile, subscribeProgress } from '@/apis';
 import { useCreateChannel } from '@/hooks';
 import createFormData from '@/utils/createFormdata';
 import { LoadingModal, ErrorModal } from '@/components/common';
@@ -32,12 +32,14 @@ const DropZone = () => {
     const channelCode = channelId.substring(0, ChannelCodeLength);
     const { dataTransfer: { files } } = event;
     const file = files[0];
-    const formData = createFormData({ channelId, file });
+    const formData = createFormData({ file });
+    const unsubscribeProgress = subscribeProgress(channelId, console.log);
     const {
       status,
       slideUrls,
       fileUrl,
-    } = await uploadFile(formData);
+    } = await uploadFile(channelId, formData);
+    unsubscribeProgress();
 
     if (status === 'ok') {
       mutate({

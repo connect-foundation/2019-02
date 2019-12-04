@@ -1,9 +1,13 @@
-import { post } from './http';
-import { CONVERT_API } from '@/constants';
+import { get, post, polling } from './http';
+import {
+  CONVERT_API,
+  CONVERT_PROGRESS_API,
+  PROGRESS_LAST_MESSAGE,
+} from '@/constants';
 
-const uploadFile = async (data) => {
+const uploadFile = async (channelId, data) => {
   const response = await post({
-    url: CONVERT_API,
+    url: `${CONVERT_API}/${channelId}`,
     body: data,
   });
   const {
@@ -19,4 +23,13 @@ const uploadFile = async (data) => {
   };
 };
 
-export default uploadFile;
+const subscribeProgress = (channelId, callback) => {
+  const url = `${CONVERT_PROGRESS_API}/${channelId}`;
+
+  return polling({ url, callback });
+};
+
+export {
+  uploadFile,
+  subscribeProgress,
+};
