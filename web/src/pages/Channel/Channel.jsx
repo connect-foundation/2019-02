@@ -20,8 +20,8 @@ import S from './style';
 import {
   NO_EXIST_CHANNEL_MESSAGE,
   ENTERING_CHANNEL_MESSAGGGE,
-  PLUS,
-  MINUS,
+  ENTERED_USER,
+  LEAVE_USER,
 } from '@/constants';
 import { LoadingModal, ErrorModal } from '@/components/common';
 
@@ -32,9 +32,7 @@ const Channel = () => {
   const userStatus = useGetUserStatus();
   const { mutate } = useAddUserHistory();
   const addUserCount = useSetUserCount();
-  const calculateUserCount = (Operator) => {
-    const operator = Operator === '+' ? 1 : -1;
-    const userCount = data.channel.userCount + operator;
+  const mutateUserCount = (userCount) => {
     addUserCount.mutate({
       variables: {
         channelId,
@@ -42,8 +40,31 @@ const Channel = () => {
       },
     });
   };
+  const calculateUserCount = (operation) => {
+    const { userId } = userStatus;
+    const channelUserList = data.channel.userCount;
+    const isJoinedChannel = channelUserList.includes(userId);
+    const operationType = {
+      enteredUser: () => {
+        if (!isJoinedChannel) {
+          channelUserList.push(userId);
+          mutateUserCount(channelUserList);
+        }
+      },
+      leaveUser: () => {
+        if (isJoinedChannel) {
+          channelUserList.pop(userId);
+          mutateUserCount(channelUserList);
+        }
+      },
+    };
+    operationType[operation]();
+  };
+  if (data) {
+    calculateUserCount(ENTERED_USER);
+  }
   useBeforeunload(() => {
-    calculateUserCount(MINUS);
+    calculateUserCount(LEAVE_USER);
   });
   useInitChat(channelId);
 
@@ -58,7 +79,6 @@ const Channel = () => {
 
   useEffect(() => {
     if (data && data.status === 'ok') {
-      calculateUserCount(PLUS);
       mutate({
         variables: {
           channelId,
@@ -84,6 +104,7 @@ const Channel = () => {
         channelName: data.channel.channelName,
         masterName: data.channel.master.displayName,
         channelCode: data.channel.channelCode,
+        userCount: data.channel.userCount,
       }}
     >
       <S.Channel>

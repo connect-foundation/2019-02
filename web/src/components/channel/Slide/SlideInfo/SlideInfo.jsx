@@ -8,6 +8,7 @@ import SlideDownloadButton from './SlideDownloadButton';
 const SlideInfo = () => {
   const channelName = useChannelSelector((state) => state.channelName);
   const masterName = useChannelSelector((state) => state.masterName);
+  const userCount = useChannelSelector((state) => state.userCount.length);
 
   return (
     <S.SlideInfo>
@@ -24,7 +25,8 @@ const SlideInfo = () => {
             src={People}
             alt="people-logo"
           />
-          120명 참여중
+          {userCount}
+          명 참여중
         </S.PeopleWrapper>
       </S.ChannelSummaryWrapper>
       <S.SlideButtonsWrapper>
