@@ -36,17 +36,19 @@ const start = () => {
     upload,
     removeTmp,
     (req, res) => {
-      const { slideUrls, fileUrl } = req;
+      const { slideUrls, fileUrl, slideRatioList } = req;
+
       res.status(200).json({
         status: 'ok',
         slideUrls,
         fileUrl,
+        slideRatioList,
       });
     },
   );
   app.use(handleError);
   app.listen('3000', () => {
-    console.log('welcome dropy converter!');
+    console.log('🔗 welcome dropy converter!');
   });
 };
 

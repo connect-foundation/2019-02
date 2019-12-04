@@ -17,6 +17,7 @@ const convertMiddleware: RequestHandler = (req, _, next) => {
 
   converter.convertToSlides(inputPath, outputPath).then((slides) => {
     req.slides = slides;
+    req.slideRatioList = slides.map((slide) => slide.ratio);
     next();
   });
 };
