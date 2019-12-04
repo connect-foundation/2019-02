@@ -7,12 +7,14 @@ const CREATE_CHANNEL = gql`
     $channelCode: String!,
     $slideUrls: [String], 
     $fileUrl: String,
+    $slideRatioList: [Float]
   ) {
     createChannel(
       channelId: $channelId,
       channelCode: $channelCode,
       slideUrls: $slideUrls,
-      fileUrl: $fileUrl
+      fileUrl: $fileUrl,
+      slideRatioList: $slideRatioList
     ) { 
       channelId
     }

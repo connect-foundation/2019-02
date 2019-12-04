@@ -37,6 +37,7 @@ const DropZone = () => {
       status,
       slideUrls,
       fileUrl,
+      slideRatioList,
     } = await uploadFile(formData);
 
     if (status === 'ok') {
@@ -46,6 +47,7 @@ const DropZone = () => {
           slideUrls,
           fileUrl,
           channelCode,
+          slideRatioList,
         },
       });
     } else {
