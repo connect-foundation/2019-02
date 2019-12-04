@@ -9,7 +9,7 @@ type Channel {
   channelCode: String!
   channelStatus: String
   currentSlide: Int!
-  countUser: Int!
+  userCount: Int!
 }
 
 type getChannelResponse {

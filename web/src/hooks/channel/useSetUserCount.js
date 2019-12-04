@@ -2,9 +2,9 @@ import gql from 'graphql-tag';
 import { useMutation } from '@apollo/react-hooks';
 
 const SET_USER_COUNT = gql`
-  mutation useSetUserCount($channelId: String! ,$userCount: Number!) {
-    addUser(channelId: $channelId, userCount: $userCount) { 
-      countUser
+  mutation UseSetUserCount($channelId: String! ,$userCount: Int!) {
+    setUserCount(channelId: $channelId, userCount: $userCount) { 
+      userCount
     }
   }
 `;
@@ -12,9 +12,10 @@ const SET_USER_COUNT = gql`
 const useSetUserCount = () => {
   const [setUserCount, result] = useMutation(SET_USER_COUNT);
   const data = result.data
-    ? result.data.addUser
+    ? result.data.userCount
     : null;
-
+  // const [setCurrentSlide] = useMutation(SET_CURRENT_SLIDE);
+  // return { mutate: setUserCount };
   return { mutate: setUserCount, data };
 };
 

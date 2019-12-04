@@ -7,13 +7,23 @@ import {
   useGetChannel,
   useInitChat,
   useAddUserHistory,
+  useSetUserCount,
 } from '@/hooks';
-import { Chat, Slide, ToolBar } from '@/components/channel';
+import {
+  Chat,
+  Slide,
+  ToolBar,
+} from '@/components/channel';
+import { useBeforeunload } from '@/components/common/BeforeUnload';
 import { authByAnonymous } from '@/apis';
 import S from './style';
-import { NO_EXIST_CHANNEL_MESSAGE, ENTERING_CHANNEL_MESSAGGGE } from '@/constants';
+import {
+  NO_EXIST_CHANNEL_MESSAGE,
+  ENTERING_CHANNEL_MESSAGGGE,
+  PLUS,
+  MINUS,
+} from '@/constants';
 import { LoadingModal, ErrorModal } from '@/components/common';
-
 
 const Channel = () => {
   const { params: { channelId } } = useRouteMatch();
@@ -21,8 +31,22 @@ const Channel = () => {
   const logIn = useLogin();
   const userStatus = useGetUserStatus();
   const { mutate } = useAddUserHistory();
-
+  const addUserCount = useSetUserCount();
+  const calculateUserCount = (Operator) => {
+    const operator = Operator === '+' ? 1 : -1;
+    const userCount = data.channel.userCount + operator;
+    addUserCount.mutate({
+      variables: {
+        channelId,
+        userCount,
+      },
+    });
+  };
+  useBeforeunload(() => {
+    calculateUserCount(MINUS);
+  });
   useInitChat(channelId);
+
   useEffect(() => {
     if (userStatus.token) return;
     authByAnonymous().then(({ token, user }) => logIn({
@@ -34,6 +58,7 @@ const Channel = () => {
 
   useEffect(() => {
     if (data && data.status === 'ok') {
+      calculateUserCount(PLUS);
       mutate({
         variables: {
           channelId,

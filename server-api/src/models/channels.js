@@ -73,6 +73,7 @@ ChannelSchema.methods.toPayload = async function toChannelPayload(...objs) {
     'channelStatus',
     'currentSlide',
     'channelCode',
+    'userCount',
   ], channel, { master }, ...objs);
 };
 
