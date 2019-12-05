@@ -5,7 +5,6 @@ import { useGetChatsCached } from '@/hooks';
 import { computeScrollEndTop } from '@/utils/dom';
 import {
   CHAT_ADDED,
-  CHAT_SORT_BY_LIKE,
   CHAT_SORT_BY_RECENT,
 } from '@/constants';
 import S from './style';
