@@ -1,4 +1,4 @@
-import Queue from '../core/Queue';
+import Queue from '../core/queue';
 import endMiddleware from './end';
 
 const requestQueue = (config) => {
@@ -12,7 +12,7 @@ const requestQueue = (config) => {
   });
 
   queue.on('reject', (job) => {
-    job.data.res.send('sorry, reject');
+    job.data.res.json({ status: 'reject', message: 'sorry, queue is full...' });
   });
 
   const queueMiddleware = (req, res, next) => {
@@ -20,8 +20,9 @@ const requestQueue = (config) => {
     const job = queue.createJob(data);
 
     res.once('close', () => {
+      // TODO: BUGFIX
       if (job.state === 'queue') {
-        job.data.res.status(204).send('close!!');
+        job.data.res.status(204).end();
         queue.cancelJob(job);
       }
     });

@@ -1,5 +1,5 @@
 Arguments: 
-  /usr/local/bin/node /usr/local/Cellar/yarn/1.19.1/libexec/bin/yarn.js add @types/express-queue
+  /usr/local/bin/node /usr/local/Cellar/yarn/1.19.1/libexec/bin/yarn.js add @types/express-end
 
 PATH: 
   /usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Applications/Visual Studio Code.app/Contents/Resources/app/bin/:/Applications/Visual Studio Code.app/Contents/Resources/app/bin/
@@ -14,7 +14,7 @@ Platform:
   darwin x64
 
 Trace: 
-  Error: https://registry.yarnpkg.com/@types%2fexpress-queue: Not found
+  Error: https://registry.yarnpkg.com/@types%2fexpress-end: Not found
       at Request.params.callback [as _callback] (/usr/local/Cellar/yarn/1.19.1/libexec/lib/cli.js:66926:18)
       at Request.self.callback (/usr/local/Cellar/yarn/1.19.1/libexec/lib/cli.js:140564:22)
       at Request.emit (events.js:198:13)
@@ -43,6 +43,7 @@ npm manifest:
       "cors": "^2.8.5",
       "dotenv": "^8.2.0",
       "express": "^4.17.1",
+      "express-end": "^0.0.8",
       "express-queue": "^0.0.12",
       "gm": "^1.23.1",
       "jsonwebtoken": "^8.5.1",
@@ -840,7 +841,7 @@ Lockfile:
     resolved "https://registry.yarnpkg.com/events/-/events-1.1.1.tgz#9ebdb7635ad099c70dcc4c2a1f5004288e8bd924"
     integrity sha1-nr23Y1rQmccNzEwqH1AEKI6L2SQ=
   
-  express-end@0.0.8:
+  express-end@0.0.8, express-end@^0.0.8:
     version "0.0.8"
     resolved "https://registry.yarnpkg.com/express-end/-/express-end-0.0.8.tgz#0c8fd95428932158f2b4cf91f4045346bf2c5323"
     integrity sha1-DI/ZVCiTIVjytM+R9ARTRr8sUyM=

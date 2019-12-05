@@ -12,15 +12,9 @@ const devRouter = Router();
 
 devRouter.post(
   '/images/:channelId',
-  timeStart('save'),
   saveTmp,
-  timeEnd('save'),
-  timeStart('convert'),
   convert,
-  timeEnd('convert'),
-  timeStart('upload'),
   upload,
-  timeEnd('upload'),
   removeTmp,
   (req, res) => {
     const { slideUrls, fileUrl } = req;

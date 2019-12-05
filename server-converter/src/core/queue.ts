@@ -2,15 +2,15 @@ import { EventEmitter } from 'events';
 import * as osu from 'node-os-utils';
 import Job from './requestJob';
 
-const { cpu } = osu;
+const { cpu, mem } = osu;
 
 class Queue extends EventEmitter {
   config: { queueLimit: number, activeLimit: number, cpuUsage: number };
   private activeLimit: number;
   private queueLimit: number;
   private activeCount: number;
-  private queue: any[];
-  private active: any[];
+  queue: Job[];
+  active: Job[];
 
   constructor(config) {
     super();
@@ -30,13 +30,20 @@ class Queue extends EventEmitter {
     const cpuUsage = await cpu.usage();
     if (this.activeLimit > 0) {
       if (cpuUsage < this.config.cpuUsage) this.activeLimit += 1;
-      else this.activeLimit -= 1;
+    }
+  }
+
+  async setQueueLimit() {
+    const { totalMemMb, freeMemMb } = await mem.free();
+    if (freeMemMb < 0) {
+      this.queueLimit = 0;
     }
   }
 
   createJob(data) {
+    this.setQueueLimit();
     this.setActiveLimit();
-    console.log(this.activeLimit);
+    console.log(this.activeLimit, this.queueLimit);
     const job = new Job(this, data);
 
     process.nextTick(() => {
@@ -92,7 +99,7 @@ class Queue extends EventEmitter {
 
   queueJob = (job) => {
     this.queue.push(job);
-    job.setState(false, 'queue');
+    job.setState(true, 'queue');
 
     return job;
   };
