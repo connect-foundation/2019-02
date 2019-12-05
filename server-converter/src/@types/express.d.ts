@@ -4,9 +4,10 @@ import { SlideInfo } from './converter';
 declare global {
   namespace Express {
       interface Request {
-          slides: SlideInfo[]
-          fileUrl: string
-          slideUrls: string[]
+          topic: string;
+          slides: SlideInfo[];
+          fileUrl: string;
+          slideUrls: string[];
           slideRatioList: number[]
       }
   }
