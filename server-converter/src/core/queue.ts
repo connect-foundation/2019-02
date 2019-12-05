@@ -1,19 +1,22 @@
-/* eslint-disable class-methods-use-this */
-/* eslint-disable no-plusplus */
-/* eslint-disable no-param-reassign */
 import { EventEmitter } from 'events';
-import { RequestHandler } from 'src/@types';
+import * as osu from 'node-os-utils';
 import Job from './requestJob';
 
+const { cpu } = osu;
+
 class Queue extends EventEmitter {
-  config: { queueLimit: number, activeLimit: number };
+  config: { queueLimit: number, activeLimit: number, cpuUsage: number };
+  private activeLimit: number;
+  private queueLimit: number;
   private activeCount: number;
   private queue: any[];
   private active: any[];
 
   constructor(config) {
     super();
-    this.config = config || {};
+    this.config = config;
+    this.activeLimit = config.activeLimit;
+    this.queueLimit = config.queueLimit;
     this.activeCount = 0;
     this.queue = [];
     this.active = [];
@@ -23,11 +26,21 @@ class Queue extends EventEmitter {
     return this.queue.length;
   }
 
+  async setActiveLimit() {
+    const cpuUsage = await cpu.usage();
+    if (this.activeLimit > 0) {
+      if (cpuUsage < this.config.cpuUsage) this.activeLimit += 1;
+      else this.activeLimit -= 1;
+    }
+  }
+
   createJob(data) {
+    this.setActiveLimit();
+    console.log(this.activeLimit);
     const job = new Job(this, data);
 
     process.nextTick(() => {
-      if (!this.canQueue()) return this.rejectJob(job);
+      if (!this.canQueue()) return job.setState(true, 'reject');
       if (this.canStart() && this.queue.length === 0) return this.startJob(job);
       return this.queueJob(job);
     });
@@ -37,7 +50,7 @@ class Queue extends EventEmitter {
   }
 
   startJob(job) {
-    this.activeCount++;
+    this.activeCount += 1;
     this.active.push(job);
     job.setState(true, 'process', () => {
       this.completeJob(job);
@@ -70,7 +83,7 @@ class Queue extends EventEmitter {
       throw new Error('request complete but not found');
     } else {
       this.active.splice(index, 1);
-      this.activeCount--;
+      this.activeCount -= 1;
     }
 
     job.setState(false, 'complete');
@@ -83,11 +96,6 @@ class Queue extends EventEmitter {
 
     return job;
   };
-
-  rejectJob(job) {
-    job.setState(true, 'reject');
-    return job;
-  }
 
   cancelJob(job) {
     this.dequeueJob(job);
@@ -104,11 +112,11 @@ class Queue extends EventEmitter {
   }
 
   canQueue() {
-    return this.getLength() < this.config.queueLimit;
+    return this.getLength() < this.queueLimit;
   }
 
   canStart() {
-    return this.activeCount < this.config.activeLimit;
+    return this.activeCount < this.activeLimit;
   }
 }
 

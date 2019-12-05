@@ -24,6 +24,7 @@ module.exports = {
 		"no-console": "off",
 		"import/no-unresolved": "off",
 		"no-unused-vars": "off",
-		"lines-between-class-members": "off"
+		"lines-between-class-members": "off",
+		"no-param-reassign": "off"
 	}
 }

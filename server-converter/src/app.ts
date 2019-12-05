@@ -20,7 +20,7 @@ const handleError: express.ErrorRequestHandler = (err, _, res, __) => {
     .json({ status, message });
 };
 
-const queueMw = requestQueue({ activeLimit: 1, queuedLimit: 1 });
+const queueMw = requestQueue({ queueLimit: 1, activeLimit: 1, cpuUsage: 10 });
 
 const start = () => {
   app.use(cors(corsOption));

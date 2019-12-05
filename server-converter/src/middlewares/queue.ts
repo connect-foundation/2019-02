@@ -1,9 +1,9 @@
-import * as endMiddleware from 'express-end';
-import { RequestHandler } from '../@types';
 import Queue from '../core/Queue';
+import endMiddleware from './end';
 
 const requestQueue = (config) => {
   const queue = new Queue(config);
+
   queue.on('process', (job, done) => {
     job.data.res.once('end', () => {
       done();
@@ -26,6 +26,7 @@ const requestQueue = (config) => {
       }
     });
   };
+
   const result = (req, res, next) => {
     endMiddleware(req, res, () => {
       queueMiddleware(req, res, next);
