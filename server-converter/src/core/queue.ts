@@ -5,12 +5,16 @@ import Job from './requestJob';
 const { cpu, mem } = osu;
 
 class Queue extends EventEmitter {
-  config: { queueLimit: number, activeLimit: number, cpuUsage: number };
+  config: {
+    queueLimit: number,
+    activeLimit: number,
+    cpuUsage: number
+  };
   private activeLimit: number;
   private queueLimit: number;
   private activeCount: number;
-  queue: Job[];
-  active: Job[];
+  private queue: Job[];
+  private active: Job[];
 
   constructor(config) {
     super();
@@ -26,15 +30,23 @@ class Queue extends EventEmitter {
     return this.queue.length;
   }
 
+  async checkCPU() {
+    const cpuUsage = await cpu.usage();
+
+    return (cpuUsage < this.config.cpuUsage);
+  }
+
   async setActiveLimit() {
     const cpuUsage = await cpu.usage();
+
     if (this.activeLimit > 0) {
       if (cpuUsage < this.config.cpuUsage) this.activeLimit += 1;
     }
   }
 
   async setQueueLimit() {
-    const { totalMemMb, freeMemMb } = await mem.free();
+    const { freeMemMb } = await mem.free();
+
     if (freeMemMb < 0) {
       this.queueLimit = 0;
     }
@@ -42,8 +54,6 @@ class Queue extends EventEmitter {
 
   createJob(data) {
     this.setQueueLimit();
-    this.setActiveLimit();
-    console.log(this.activeLimit, this.queueLimit);
     const job = new Job(this, data);
 
     process.nextTick(() => {
@@ -114,6 +124,7 @@ class Queue extends EventEmitter {
   checkQueue() {
     if (this.canStart() && this.queue.length > 0) {
       const job = this.dequeueJob();
+
       this.startJob(job);
     }
   }

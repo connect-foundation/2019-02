@@ -20,7 +20,11 @@ const handleError: express.ErrorRequestHandler = (err, _, res, __) => {
     .json({ status, message });
 };
 
-const queueMiddleware = requestQueue({ queueLimit: 5, activeLimit: 1, cpuUsage: 40 });
+const queueMiddleware = requestQueue({
+  queueLimit: 50,
+  activeLimit: 2,
+  cpuUsage: 90,
+});
 
 const start = () => {
   app.use(cors(corsOption));
@@ -32,8 +36,5 @@ const start = () => {
     console.log('welcome dropy converter!');
   });
 };
-setInterval(() => {
-  console.log(`queuelist: ${queueMiddleware.queue.queue.reduce((str, item) => `${str}  ${item.state}`, '')}`);
-  console.log(`activelist ${queueMiddleware.queue.active.reduce((str, item) => `${str}  ${item.state}`, '')}`);
-}, 2000);
+
 export default { start };
