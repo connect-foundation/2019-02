@@ -1,6 +1,6 @@
 import gql from 'graphql-tag';
 import { useEffect } from 'react';
-import { useApolloClient, useQuery } from '@apollo/react-hooks';
+import { useApolloClient, useLazyQuery } from '@apollo/react-hooks';
 import { CHAT_SORT_BY_RECENT } from '@/constants';
 import { GET_CHAT_CACHED } from './useChatChanged';
 
@@ -21,18 +21,14 @@ const GET_CHAT_LOGS = gql`
 
 const useInitChat = (channelId) => {
   const client = useApolloClient();
-  const query = useQuery(GET_CHAT_LOGS, { variables: { channelId } });
-  const logs = query.loading ? [] : query.data.getChatLogs;
+  const [loadChats, query] = useLazyQuery(GET_CHAT_LOGS, { variables: { channelId } });
   const cleanChatCache = () => {
-    const { chatLogs } = client.readQuery({ query: GET_CHAT_CACHED });
-    const chatsCleaned = chatLogs.logs.filter(({ cached }) => !cached);
-
     client.writeQuery({
       query: GET_CHAT_CACHED,
       data: {
         chatLogs: {
           __typename: 'chatLogs',
-          logs: chatsCleaned,
+          logs: [],
           changeType: null,
           sortType: CHAT_SORT_BY_RECENT,
         },
@@ -40,17 +36,17 @@ const useInitChat = (channelId) => {
     });
   };
   const writeChatCache = () => {
-    if (query.loading) return;
+    if (!query.called || query.loading) return;
 
     const { chatLogs } = client.readQuery({ query: GET_CHAT_CACHED });
-    const logsCached = logs.map((chat) => ({ ...chat, cached: true }));
+    const logs = query.data.getChatLogs;
 
     client.writeQuery({
       query: GET_CHAT_CACHED,
       data: {
         chatLogs: {
           __typename: 'chatLogs',
-          logs: [...logsCached, ...chatLogs.logs],
+          logs: [...logs, ...chatLogs.logs],
           changeType: null,
           sortType: CHAT_SORT_BY_RECENT,
         },
@@ -58,8 +54,13 @@ const useInitChat = (channelId) => {
     });
   };
 
-  useEffect(() => cleanChatCache, []);
-  useEffect(() => { writeChatCache(); }, [query]);
+  useEffect(() => {
+    loadChats();
+    return cleanChatCache;
+  }, []);
+  useEffect(() => {
+    writeChatCache();
+  }, [query.loading]);
 };
 
 export default useInitChat;
