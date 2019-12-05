@@ -32,6 +32,7 @@ const DropInput = () => {
       status,
       slideUrls,
       fileUrl,
+      slideRatioList,
     } = await uploadFile(channelId, formData);
     unsubscribeProgress();
 
@@ -42,6 +43,7 @@ const DropInput = () => {
           channelCode,
           slideUrls,
           fileUrl,
+          slideRatioList,
         },
       });
     } else {

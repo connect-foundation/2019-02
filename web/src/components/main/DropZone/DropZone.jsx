@@ -40,6 +40,7 @@ const DropZone = () => {
       status,
       slideUrls,
       fileUrl,
+      slideRatioList,
     } = await uploadFile(channelId, formData);
     unsubscribeProgress();
 
@@ -50,6 +51,7 @@ const DropZone = () => {
           slideUrls,
           fileUrl,
           channelCode,
+          slideRatioList,
         },
       });
     } else {

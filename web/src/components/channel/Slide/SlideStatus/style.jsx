@@ -11,8 +11,8 @@ export default {
     justify-content: space-between;
   `,
   Wrapper: styled.div`
-   button{
-      margin-left:10px;
+   button {
+      margin-left: 10px;
    }
   `,
 };

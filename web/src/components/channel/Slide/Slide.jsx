@@ -10,6 +10,7 @@ const Slide = (props) => {
   const { channelId } = props;
   const { currentSlide } = useSlideChanged(channelId);
   const [isSync, setSync] = useState(true);
+  const [isFullScreen, setFullScreen] = useState(false);
   const [page, setPage] = useState(0);
   const handleSync = (state) => () => {
     setPage(currentSlide);
@@ -21,10 +22,13 @@ const Slide = (props) => {
       <SlideStatus
         isSync={isSync}
         handleSync={handleSync}
+        setFullScreen={setFullScreen}
       />
       <SlideViewer
         isSync={isSync}
         setSync={setSync}
+        isFullScreen={isFullScreen}
+        setFullScreen={setFullScreen}
         page={page}
         setPage={setPage}
         channelId={channelId}

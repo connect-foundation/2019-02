@@ -8,11 +8,10 @@ import {
   useSyncSlide,
 } from '@/hooks';
 import { moveSlide, moveSlidePossible } from '@/utils/slide';
+import { FullScreen } from '@/components/common';
 import Indicator from './Indicator';
 import MainSlide from './MainSlide';
 import PageNumber from './PageNumber';
-
-const moveTo = ['back', 'foward'];
 
 const SlideViewer = (props) => {
   const {
@@ -21,6 +20,8 @@ const SlideViewer = (props) => {
     setSync,
     page,
     setPage,
+    isFullScreen,
+    setFullScreen,
   } = props;
   const { mutate } = useSetCurrentSlide();
   const { currentSlide } = useSlideChanged(channelId);
@@ -32,7 +33,7 @@ const SlideViewer = (props) => {
     currentSlide,
   );
   const handleSetPage = (direction) => () => {
-    const sync = isSync ? currentSlide : page;
+    const sync = !isMaster && isSync ? currentSlide : page;
     if (!moveSlidePossible(direction, sync, slideUrls.length)) return;
     if (!isMaster && isSync) {
       setSync(false);
@@ -47,24 +48,34 @@ const SlideViewer = (props) => {
     mutate({ variables: { channelId, currentSlide: page } });
   }, [page]);
 
+  const screenChange = (e) => setFullScreen(e);
+  const IndicatorRender = ['back', 'foward'].map((direction) => (
+    <Indicator
+      key={direction}
+      direction={direction}
+      handleSetPage={handleSetPage}
+    />
+  ));
+
   return (
-    <S.SlideViewer>
-      <MainSlide
-        page={syncSlide}
-        slideUrls={slideUrls}
-      />
-      {moveTo.map((direction) => (
-        <Indicator
-          key={direction}
-          direction={direction}
-          handleSetPage={handleSetPage}
+    <>
+      <S.SlideViewer>
+        <FullScreen
+          enabled={isFullScreen}
+          onChange={screenChange}
+        >
+          <MainSlide
+            page={syncSlide}
+            slideUrls={slideUrls}
+          />
+          {IndicatorRender}
+        </FullScreen>
+        <PageNumber
+          currentSlide={syncSlide + 1}
+          slideLength={slideUrls.length}
         />
-      ))}
-      <PageNumber
-        currentSlide={syncSlide + 1}
-        slideLength={slideUrls.length}
-      />
-    </S.SlideViewer>
+      </S.SlideViewer>
+    </>
   );
 };
 
@@ -74,6 +85,8 @@ SlideViewer.propTypes = {
   setSync: PropTypes.func.isRequired,
   page: PropTypes.number.isRequired,
   setPage: PropTypes.func.isRequired,
+  isFullScreen: PropTypes.bool.isRequired,
+  setFullScreen: PropTypes.func.isRequired,
 };
 
 export default SlideViewer;

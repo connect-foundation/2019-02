@@ -33,7 +33,7 @@ const start = () => {
   app.use(router);
   app.use(handleError);
   app.listen('3000', () => {
-    console.log('welcome dropy converter!');
+    console.log('🔗 welcome dropy converter!');
   });
 };
 

@@ -3,22 +3,32 @@ import { px } from '@/styles/themeUtil';
 
 export default {
   MainSlide: styled.div`
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    box-sizing: border-box;
     width: 100%;
     height: 100%;
-    padding: ${px(40)} 0;
+    padding: ${px(35)} 0;
+  `,
+  SlideWrapper: styled.div`
+    width:100%;
+    height:100%;
+    position:relative;
   `,
   SlideImg: styled.img`
+    position: absolute;
+    z-index: 100;
+    top: 50%;
+    left: 50%;
     user-select: none;
-    height:auto;
-    width:auto;
-    max-width: 100%;
-    border-radius: ${px(3)};
-    max-height: 100%;
-    object-fit: contain;
-    background-color: ${({ theme }) => theme.palette.common.white};
-    box-shadow: ${({ theme }) => theme.palette.shadow.slide};
+    border-radius: 3px;
+    box-shadow: 10px 2px 20px rgba(0, 0, 0, 0.1);
+    transform: translate(-50%, -50%);
+    visibility: hidden;
+  `,
+  Canvas: styled.canvas`
+    position: absolute;
+    z-index: 200;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
   `,
 };

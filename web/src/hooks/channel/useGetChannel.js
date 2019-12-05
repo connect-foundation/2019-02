@@ -8,12 +8,14 @@ const CHECK_CHANNEL = gql`
       isMaster
       channel{
         slideUrls
+        slideRatioList
         fileUrl
         master{
           displayName
         }
         channelName
         currentSlide
+        channelCode
       }
     }
   } 

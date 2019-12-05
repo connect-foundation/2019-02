@@ -54,7 +54,7 @@ const S = {
     margin-top: ${px(5)};
     font-size: ${px(16)};
     line-height: ${px(21)};
-    word-break: break-all;
+    word-break: break-word;
     word-wrap: break-word;
     white-space: pre-wrap;
     color: ${colorGray(8)};

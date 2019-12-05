@@ -5,13 +5,14 @@ import {
   useLogin,
   useGetUserStatus,
   useGetChannel,
-  useInitChat,
   useAddUserHistory,
 } from '@/hooks';
 import { Chat, Slide, ToolBar } from '@/components/channel';
 import { authByAnonymous } from '@/apis';
 import S from './style';
-import { NO_EXIST_CHANNEL } from '@/constants';
+import { NO_EXIST_CHANNEL_MESSAGE, ENTERING_CHANNEL_MESSAGGGE } from '@/constants';
+import { LoadingModal, ErrorModal } from '@/components/common';
+
 
 const Channel = () => {
   const { params: { channelId } } = useRouteMatch();
@@ -20,7 +21,6 @@ const Channel = () => {
   const userStatus = useGetUserStatus();
   const { mutate } = useAddUserHistory();
 
-  useInitChat(channelId);
   useEffect(() => {
     if (userStatus.token) return;
     authByAnonymous().then(({ token, user }) => logIn({
@@ -40,27 +40,30 @@ const Channel = () => {
     }
   }, [data]);
 
-  if (!data || loading) return null;
+  if (!data || loading) {
+    return (<LoadingModal message={ENTERING_CHANNEL_MESSAGGGE} />);
+  }
   if (data.status === 'not_exist') {
-    return (
-      <div>{NO_EXIST_CHANNEL}</div>
-    );
+    return (<ErrorModal message={NO_EXIST_CHANNEL_MESSAGE} />);
   }
 
   return (
     <ChannelContext.Provider
       value={{
         isMaster: data.isMaster,
+        fileUrl: data.channel.fileUrl,
         slideUrls: data.channel.slideUrls,
+        slideRatioList: data.channel.slideRatioList,
         initialSlide: data.channel.currentSlide,
         channelName: data.channel.channelName,
         masterName: data.channel.master.displayName,
+        channelCode: data.channel.channelCode,
       }}
     >
       <S.Channel>
         <ToolBar />
         <Slide channelId={channelId} />
-        <Chat channelId={channelId} />
+        <Chat channelId={channelId} userId={userStatus.userId} />
       </S.Channel>
     </ChannelContext.Provider>
   );

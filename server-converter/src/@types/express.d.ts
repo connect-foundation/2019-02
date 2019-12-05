@@ -8,6 +8,7 @@ declare global {
           slides: SlideInfo[];
           fileUrl: string;
           slideUrls: string[];
+          slideRatioList: number[]
       }
   }
 }

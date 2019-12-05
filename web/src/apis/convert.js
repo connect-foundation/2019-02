@@ -14,12 +14,14 @@ const uploadFile = async (channelId, data) => {
     status,
     slideUrls,
     fileUrl,
+    slideRatioList,
   } = await response.json();
 
   return {
     status,
     slideUrls,
     fileUrl,
+    slideRatioList,
   };
 };
 
