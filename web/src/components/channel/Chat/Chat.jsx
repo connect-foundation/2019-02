@@ -1,9 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import {
-  useChatChanged,
-  useInitChat,
-} from '@/hooks';
+import { useChatChanged, useInitChat } from '@/hooks';
 import ChatInput from './ChatInput';
 import ChatLogs from './ChatLogs';
 import ChatSort from './ChatSort';

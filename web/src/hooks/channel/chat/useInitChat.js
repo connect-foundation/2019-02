@@ -36,7 +36,9 @@ const useInitChat = (channelId) => {
     });
   };
   const writeChatCache = () => {
-    if (!query.called || query.loading) return;
+    const isNotComponentMountEvent = !query.called || query.loading;
+
+    if (isNotComponentMountEvent) return;
 
     const { chatLogs } = client.readQuery({ query: GET_CHAT_CACHED });
     const logs = query.data.getChatLogs;
