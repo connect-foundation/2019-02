@@ -11,6 +11,7 @@ const createChannelInfo = (
   channelCode,
   slideUrls,
   fileUrl,
+  slideRatioList,
 ) => ({
   channelId,
   channelCode,
@@ -18,6 +19,7 @@ const createChannelInfo = (
   masterId: user.userId,
   slideUrls,
   fileUrl,
+  slideRatioList,
 });
 
 const createChannel = async (_, {
@@ -25,6 +27,7 @@ const createChannel = async (_, {
   channelCode,
   slideUrls,
   fileUrl,
+  slideRatioList,
 }, { user }) => {
   const newChannel = new Channels(
     createChannelInfo(
@@ -33,11 +36,13 @@ const createChannel = async (_, {
       channelCode,
       slideUrls,
       fileUrl,
+      slideRatioList,
     ),
   );
-  const updatedAt = Date.now();
+
   const { userId } = user;
   const masterId = userId;
+  const updatedAt = Date.now();
   const newHistory = new Histories({
     userId,
     masterId,
@@ -51,7 +56,7 @@ const createChannel = async (_, {
 
     await newHistory.save();
 
-    return { status: 'ok', channel: payload };
+    return payload;
   } catch (err) {
     throw new ApolloError(err.message);
   }
@@ -63,7 +68,6 @@ const getChannel = async (_, { channelId }, { user }) => {
     const master = await Users.findOne({ userId: channel.masterId });
     const status = channel ? 'ok' : 'not_exist';
     const isMaster = !!channel && !!user && channel.masterId === user.userId;
-
     if (!channel) return { status, isMaster };
 
     const payload = await channel.toPayload({ master });

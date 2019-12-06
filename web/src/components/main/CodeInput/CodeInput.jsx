@@ -3,6 +3,8 @@ import { Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import S from './style';
 import { useGetChannelsByCode } from '@/hooks';
+import { ErrorModal } from '@/components/common';
+import { NO_EXIST_CHANNEL_MESSAGE, CODEINPUT_PLACEHOLDER } from '@/constants';
 
 const CodeInput = (props) => {
   const { SetShowChannelListModal, setChannels } = props;
@@ -24,17 +26,16 @@ const CodeInput = (props) => {
       const { channelId } = data.channels[0];
       return <Redirect to={`/channels/${channelId}`} />;
     } if (!channelCount) {
-      // TODO: 해당 코드를 갖고 있는 채널이 없을 경우 에러 모달 렌더링
-    } else {
-      SetShowChannelListModal(true);
-      setChannels(data.channels);
+      return <ErrorModal message={NO_EXIST_CHANNEL_MESSAGE} />;
     }
+    SetShowChannelListModal(true);
+    setChannels(data.channels);
   }
 
   return (
     <S.CodeInput>
       <S.CodeInputContent
-        placeholder="# 채널 코드"
+        placeholder={CODEINPUT_PLACEHOLDER}
         onChange={handleOnChange}
         value={channelCode}
       />

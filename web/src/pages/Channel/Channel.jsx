@@ -5,19 +5,22 @@ import {
   useLogin,
   useGetUserStatus,
   useGetChannel,
-  useInitChatCached,
+  useAddUserHistory,
 } from '@/hooks';
 import { Chat, Slide, ToolBar } from '@/components/channel';
 import { authByAnonymous } from '@/apis';
 import S from './style';
+import { NO_EXIST_CHANNEL_MESSAGE, ENTERING_CHANNEL_MESSAGGGE } from '@/constants';
+import { LoadingModal, ErrorModal } from '@/components/common';
+
 
 const Channel = () => {
   const { params: { channelId } } = useRouteMatch();
-  const { data } = useGetChannel(channelId);
+  const { data, loading } = useGetChannel(channelId);
   const logIn = useLogin();
   const userStatus = useGetUserStatus();
+  const { mutate } = useAddUserHistory();
 
-  useInitChatCached();
   useEffect(() => {
     if (userStatus.token) return;
     authByAnonymous().then(({ token, user }) => logIn({
@@ -27,27 +30,40 @@ const Channel = () => {
     }));
   }, [userStatus]);
 
-  if (!data) return null;
+  useEffect(() => {
+    if (data && data.status === 'ok') {
+      mutate({
+        variables: {
+          channelId,
+        },
+      });
+    }
+  }, [data]);
+
+  if (!data || loading) {
+    return (<LoadingModal message={ENTERING_CHANNEL_MESSAGGGE} />);
+  }
   if (data.status === 'not_exist') {
-    return (
-      <div>존재하지 않는 채널입니다...</div>
-    );
+    return (<ErrorModal message={NO_EXIST_CHANNEL_MESSAGE} />);
   }
 
   return (
     <ChannelContext.Provider
       value={{
         isMaster: data.isMaster,
+        fileUrl: data.channel.fileUrl,
         slideUrls: data.channel.slideUrls,
+        slideRatioList: data.channel.slideRatioList,
         initialSlide: data.channel.currentSlide,
         channelName: data.channel.channelName,
         masterName: data.channel.master.displayName,
+        channelCode: data.channel.channelCode,
       }}
     >
       <S.Channel>
         <ToolBar />
         <Slide channelId={channelId} />
-        <Chat channelId={channelId} />
+        <Chat channelId={channelId} userId={userStatus.userId} />
       </S.Channel>
     </ChannelContext.Provider>
   );

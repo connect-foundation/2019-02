@@ -1,5 +1,9 @@
+export type SubscribeProgressCallback = (page: number, totalPage: number) => void;
+
 export interface SlideConverterSpec {
-  convertToSlides: (inputPath: string, outputPath: string) => Promise<SlideInfo[]>
+  convertToSlides: (inputPath: string, outputPath: string) => Promise<SlideInfo[]>;
+  subscribeProgress: (callback: SubscribeProgressCallback) => void;
+  unsubscribeProgress: () => void;
 }
 
 export interface SlideImageOptions {
@@ -15,4 +19,5 @@ export interface SlideImageOptions {
 export interface SlideInfo {
   path: string;
   page: number;
+  ratio: number;
 }

@@ -12,7 +12,21 @@ const computeScrollEndTop = (el) => {
   return wrapHeight > scrollerSize ? 0 : scrollerSize - wrapHeight;
 };
 
+/**
+ * @description param으로 들어온 값을 클립보드에 복사해주는 유틸함수
+ * @param {String} textToCopy
+ */
+const copyToClipboard = (textToCopy) => {
+  const element = document.createElement('textarea');
+  element.value = textToCopy;
+  document.body.appendChild(element);
+  element.select();
+  document.execCommand('copy');
+  document.body.removeChild(element);
+};
+
 export {
   pxToNum,
   computeScrollEndTop,
+  copyToClipboard,
 };

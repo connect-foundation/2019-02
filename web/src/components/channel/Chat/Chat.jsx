@@ -1,20 +1,40 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { useInitChatLogs, useGetUserStatus } from '@/hooks';
-import ChatBox from './ChatBox';
+import { useChatChanged, useInitChat } from '@/hooks';
+import ChatInput from './ChatInput';
+import ChatLogs from './ChatLogs';
+import ChatSort from './ChatSort';
+import S from './style';
 
-const Chat = ({ channelId }) => {
-  const { userId } = useGetUserStatus();
+const Chat = (props) => {
+  const { channelId, userId } = props;
+  const [isClosed, setIsClosed] = useState(false);
 
-  useInitChatLogs(channelId);
+  useInitChat(channelId);
+  useChatChanged(channelId);
 
   return (
-    <ChatBox channelId={channelId} userId={userId} />
+    <S.Chat isClosed={isClosed}>
+      <ChatSort
+        isClosed={isClosed}
+        toggleChatBox={() => {
+          window.dispatchEvent(new Event('resize'));
+          setIsClosed(!isClosed);
+        }}
+      />
+      {!isClosed && (
+        <>
+          <ChatLogs channelId={channelId} userId={userId} />
+          <ChatInput channelId={channelId} />
+        </>
+      )}
+    </S.Chat>
   );
 };
 
 Chat.propTypes = {
   channelId: PropTypes.string.isRequired,
+  userId: PropTypes.string.isRequired,
 };
 
 export default Chat;

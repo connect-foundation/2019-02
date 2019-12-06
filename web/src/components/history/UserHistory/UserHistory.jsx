@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import UserHistoryCard from '../UserHistoryCard';
 import { useGetUserHistories, useGetUserStatus } from '@/hooks';
+import dateParser from '@/utils/date';
 import S from './style';
 
 const UserHistory = (props) => {
@@ -14,15 +15,21 @@ const UserHistory = (props) => {
   const filterToDomain = ({ channel: { master } }) => (historyState === 'speaker'
     ? master.userId === userId
     : master.userId !== userId);
-  const mapToCardComponent = (historyInfo) => (
-    <UserHistoryCard
-      key={historyInfo.channel.channelId}
-      channelStatus={historyInfo.channel.channelStatus}
-      updatedAt={historyInfo.updatedAt}
-      channelName={historyInfo.channel.channelName}
-      displayName={historyInfo.channel.master.displayName}
-    />
-  );
+  const mapToCardComponent = (historyInfo) => {
+    const { channel, updatedAt } = historyInfo;
+    const updatedDate = dateParser(updatedAt);
+
+    return (
+      <UserHistoryCard
+        key={channel.channelId}
+        channelId={channel.channelId}
+        channelStatus={channel.channelStatus}
+        updatedAt={updatedDate}
+        channelName={channel.channelName}
+        displayName={channel.master.displayName}
+      />
+    );
+  };
   const historyCardList = data && data.length > 0
     ? data.filter(filterToDomain).map(mapToCardComponent)
     : <p>아직 채널을 한번도 생성 안해보셨네요??</p>;

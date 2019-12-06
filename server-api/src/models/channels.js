@@ -3,6 +3,7 @@ const Users = require('./users');
 const { assignFilter } = require('../utils/object');
 
 const { Schema } = mongoose;
+const expired = 30 * 24 * 60 * 60 * 1000;
 
 const ChannelSchema = new Schema({
   channelId: {
@@ -29,9 +30,12 @@ const ChannelSchema = new Schema({
   expiredAt: {
     type: Date,
     required: true,
-    default: Date.now() + 30 * 24 * 60 * 60 * 1000,
+    default: Date.now() + expired,
   },
   slideUrls: {
+    type: Array,
+  },
+  slideRatioList: {
     type: Array,
   },
   fileUrl: {
@@ -63,6 +67,7 @@ ChannelSchema.methods.toPayload = async function toChannelPayload(...objs) {
     'channelName',
     'maxHeadCount',
     'slideUrls',
+    'slideRatioList',
     'fileUrl',
     'channelStatus',
     'currentSlide',

@@ -7,10 +7,14 @@ import {
   SlideConverterSpec,
   SlideImageOptions,
   SlideInfo,
+  SubscribeProgressCallback,
 } from '../@types/converter';
 
 class SlideConverter implements SlideConverterSpec {
   private options: SlideImageOptions;
+  private progressDoneCallback: SubscribeProgressCallback;
+  private totalSlideCount: number;
+  private slideCountCompleted: number;
 
   private static getSlidesCount(inputPath: string): Promise<number> {
     return new Promise((resolve, reject) => {
@@ -23,6 +27,9 @@ class SlideConverter implements SlideConverterSpec {
 
   constructor(options: SlideImageOptions) {
     this.options = options;
+    this.progressDoneCallback = null;
+    this.totalSlideCount = 0;
+    this.slideCountCompleted = 0;
   }
 
   async convertToSlides(inputPath: string, outputPath: string): Promise<SlideInfo[]> {
@@ -37,9 +44,19 @@ class SlideConverter implements SlideConverterSpec {
     return [];
   }
 
+  subscribeProgress(callback) {
+    this.progressDoneCallback = callback;
+  }
+
+  unsubscribeProgress() {
+    this.progressDoneCallback = null;
+  }
+
   private async convertPdfToSlides(inputPath: string, outputPath: string): Promise<SlideInfo[]> {
     const count = await SlideConverter.getSlidesCount(inputPath);
     const promises = [];
+
+    this.totalSlideCount = count;
 
     for (let page = 1; page <= count; page += 1) {
       const readStream = createReadStream(inputPath);
@@ -61,13 +78,22 @@ class SlideConverter implements SlideConverterSpec {
     const { name, format } = this.options;
     const output = `${outputPath}/${name(page)}.${format}`;
     const slideInfoPromise: Promise<SlideInfo> = new Promise((resolve, reject) => {
+      let slideRatio = 0;
+
       this.doGraphicWork(imageStream, page)
+        .size((err, size) => {
+          if (err) reject(err);
+          slideRatio = size.width / size.height;
+        })
         .write(output, (err) => {
           if (err) reject(err);
           else {
+            this.progressDone();
+
             resolve({
               path: output,
               page,
+              ratio: slideRatio,
             });
           }
         });
@@ -87,6 +113,11 @@ class SlideConverter implements SlideConverterSpec {
       .density(resolution, resolution)
       .quality(quality)
       .compress(compression);
+  }
+
+  private progressDone() {
+    this.slideCountCompleted += 1;
+    this.progressDoneCallback(this.slideCountCompleted, this.totalSlideCount);
   }
 }
 

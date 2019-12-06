@@ -5,6 +5,7 @@ type Channel {
   channelName: String
   maxHeadCount: Int
   slideUrls: [String]
+  slideRatioList: [Float]
   fileUrl: String
   channelCode: String!
   channelStatus: String
@@ -14,11 +15,6 @@ type Channel {
 type getChannelResponse {
   status: String!
   isMaster: Boolean!
-  channel: Channel
-}
-
-type CreateChannelResponse {
-  status: String!
   channel: Channel
 }
 
@@ -38,7 +34,8 @@ extend type Mutation {
     channelCode: String!,
     slideUrls: [String], 
     fileUrl: String,
-  ): CreateChannelResponse,
+    slideRatioList: [Float],
+  ): Channel,
   setCurrentSlide(channelId: String!, currentSlide: Int!): Channel
 }
 

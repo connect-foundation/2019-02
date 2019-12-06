@@ -8,22 +8,24 @@ const CHECK_CHANNEL = gql`
       isMaster
       channel{
         slideUrls
+        slideRatioList
         fileUrl
         master{
           displayName
         }
         channelName
         currentSlide
+        channelCode
       }
     }
   } 
 `;
 
 const useGetChannel = (channelId) => {
-  const result = useQuery(CHECK_CHANNEL, { variables: { channelId } });
-  const data = result.data ? result.data.getChannel : null;
+  const { loading, data } = useQuery(CHECK_CHANNEL, { variables: { channelId } });
+  const channelData = data ? data.getChannel : null;
 
-  return { data };
+  return { data: channelData, loading };
 };
 
 export default useGetChannel;

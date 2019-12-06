@@ -7,17 +7,16 @@ const CREATE_CHANNEL = gql`
     $channelCode: String!,
     $slideUrls: [String], 
     $fileUrl: String,
+    $slideRatioList: [Float]
   ) {
     createChannel(
       channelId: $channelId,
       channelCode: $channelCode,
       slideUrls: $slideUrls,
-      fileUrl: $fileUrl
+      fileUrl: $fileUrl,
+      slideRatioList: $slideRatioList
     ) { 
-      status 
-      channel { 
-        channelId
-      }
+      channelId
     }
   }
 `;
@@ -26,7 +25,7 @@ const useCreateChannel = () => {
   const [createChannel, result] = useMutation(CREATE_CHANNEL);
   const data = result.data
     ? result.data.createChannel
-    : { status: null, channel: { channelId: null } };
+    : null;
 
   return { mutate: createChannel, data };
 };

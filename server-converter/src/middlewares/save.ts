@@ -9,7 +9,7 @@ const destination: MulterHandler = (_, __, cb) => {
 
 const filename: MulterHandler = (req, file, cb) => {
   const extension = getExtension(file.originalname);
-  cb(null, `${req.body.channelId}_file.${extension}`);
+  cb(null, `${req.params.channelId}_file.${extension}`);
 };
 
 const fileFilter: MulterHandler = (_, file, callback) => {

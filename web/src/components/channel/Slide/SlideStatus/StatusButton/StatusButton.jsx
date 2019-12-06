@@ -8,5 +8,4 @@ const StatusButton = () => (
   </SmallButton>
 );
 
-
 export default StatusButton;
