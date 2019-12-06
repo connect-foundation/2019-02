@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useReducer } from 'react';
 import { useRouteMatch } from 'react-router-dom';
 import { ChannelContext } from '@/contexts';
 import {
@@ -6,6 +6,8 @@ import {
   useGetUserStatus,
   useGetChannel,
   useAddUserHistory,
+  toolBarInitState,
+  toolBarReducer,
 } from '@/hooks';
 import { Chat, Slide, ToolBar } from '@/components/channel';
 import { authByAnonymous } from '@/apis';
@@ -13,13 +15,16 @@ import S from './style';
 import { NO_EXIST_CHANNEL_MESSAGE, ENTERING_CHANNEL_MESSAGGGE } from '@/constants';
 import { LoadingModal, ErrorModal } from '@/components/common';
 
-
 const Channel = () => {
   const { params: { channelId } } = useRouteMatch();
   const { data, loading } = useGetChannel(channelId);
   const logIn = useLogin();
   const userStatus = useGetUserStatus();
   const { mutate } = useAddUserHistory();
+  const [toolBarState, toolBarDispatch] = useReducer(
+    toolBarReducer,
+    toolBarInitState,
+  );
 
   useEffect(() => {
     if (userStatus.token) return;
@@ -61,8 +66,16 @@ const Channel = () => {
       }}
     >
       <S.Channel>
-        <ToolBar />
-        <Slide channelId={channelId} />
+        {toolBarState.isToolBarActive && (
+        <ToolBar
+          toolBarDispatch={toolBarDispatch}
+          toolBarState={toolBarState}
+        />
+        )}
+        <Slide
+          channelId={channelId}
+          toolBarDispatch={toolBarDispatch}
+        />
         <Chat channelId={channelId} userId={userStatus.userId} />
       </S.Channel>
     </ChannelContext.Provider>

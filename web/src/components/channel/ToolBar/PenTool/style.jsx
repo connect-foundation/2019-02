@@ -6,7 +6,7 @@ import { px } from '@/styles';
 
 const PenToolIcon = styled(({ isPenToolActive }) => (
   <span>
-    <svg width="28" height="28">
+    <svg width="20" height="20">
       <path
         d={PEN_TOOL_ICON_PATH}
         style={{
@@ -16,10 +16,7 @@ const PenToolIcon = styled(({ isPenToolActive }) => (
       />
     </svg>
   </span>
-))`
-  width: ${px(28)};
-  height: ${px(28)};
-`;
+))``;
 
 PenToolIcon.propTypes = {
   isPenToolActive: PropTypes.bool.isRequired,
@@ -33,6 +30,7 @@ const S = {
     display: flex;
     flex-direction: column;
     align-items: center;
+    margin-top: ${px(15)};
   `,
   PenToolIcon,
 };
