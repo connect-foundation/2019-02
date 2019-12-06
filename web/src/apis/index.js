@@ -1,2 +1,2 @@
 export * from './auth';
-export { default as uploadFile } from './convert';
+export * from './convert';

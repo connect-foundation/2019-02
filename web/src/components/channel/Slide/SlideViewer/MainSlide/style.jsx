@@ -18,13 +18,6 @@ export default {
     z-index: 100;
     top: 50%;
     left: 50%;
-    ${({ fitHeight }) => (fitHeight ? `
-    width: auto;
-    height:100%;
-    ` : `
-    width: 100%;
-    height: auto;
-    `)};
     user-select: none;
     border-radius: 3px;
     box-shadow: 10px 2px 20px rgba(0, 0, 0, 0.1);
