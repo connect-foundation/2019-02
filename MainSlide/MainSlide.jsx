@@ -12,7 +12,6 @@ const MainSlide = (props) => {
   const {
     page,
     slideUrls,
-    // isToolBarActive,
     isPenToolActive,
   } = props;
   const [fitHeight, setFitHeight] = useState(false);
@@ -20,33 +19,6 @@ const MainSlide = (props) => {
   const canvasRef = useRef(null);
   const slideRatioList = useChannelSelector((state) => state.slideRatioList);
   const slideRatio = slideRatioList[page];
-
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    const ctx = canvas.getContext('2d');
-    const pos = { x: 0, y: 0 };
-    const setPosition = (event) => {
-      pos.x = event.clientX;
-      pos.y = event.clientY;
-    };
-    const draw = (event) => {
-      if (event.buttons !== 1) return;
-
-      ctx.beginPath();
-
-      ctx.lineWidth = 5;
-      ctx.lineCap = 'round';
-      ctx.strokeStyle = '#c0392b';
-
-      ctx.moveTo(pos.x, pos.y); // from
-      setPosition(event);
-      ctx.lineTo(pos.x, pos.y); // to
-
-      ctx.stroke();
-    };
-    canvas.addEventListener('mousemove', draw);
-    canvas.addEventListener('mousedown', setPosition);
-  }, []);
 
   useEffect(() => {
     const wrapperEl = wrapperRef.current;
