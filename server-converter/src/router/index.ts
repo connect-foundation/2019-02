@@ -22,12 +22,13 @@ router.post(
   removeTmp,
   (req, res) => {
     const { channelId } = req.params;
-    const { slideUrls, fileUrl } = req;
+    const { slideUrls, slideRatioList, fileUrl } = req;
 
     clearProgress(channelId);
     res.status(200).json({
       status: 'ok',
       slideUrls,
+      slideRatioList,
       fileUrl,
     });
   },

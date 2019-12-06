@@ -4,8 +4,6 @@ import {
   upload,
   saveTmp,
   removeTmp,
-  timeStart,
-  timeEnd,
 } from '../middlewares';
 
 const devRouter = Router();
@@ -17,10 +15,11 @@ devRouter.post(
   upload,
   removeTmp,
   (req, res) => {
-    const { slideUrls, fileUrl } = req;
+    const { slideUrls, slideRatioList, fileUrl } = req;
     res.status(200).json({
       status: 'ok',
       slideUrls,
+      slideRatioList,
       fileUrl,
     });
   },
