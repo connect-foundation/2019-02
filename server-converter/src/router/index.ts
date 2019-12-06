@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import devRouter from './dev';
 import {
+  requestQueue,
   auth,
   convert,
   upload,
@@ -13,8 +14,15 @@ import {
 
 const router = Router();
 
+const queueMiddleware = requestQueue({
+  queueLimit: 50,
+  activeLimit: 1,
+  cpuUsage: 90,
+});
+
 router.post(
   '/images/:channelId',
+  queueMiddleware,
   auth,
   saveTmp,
   convert,

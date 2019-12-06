@@ -10,7 +10,6 @@ class Job {
   }
 
   setState(emit, state, ...args) {
-    console.log(state);
     this.state = state;
     if (emit) this.queue.emit(state, this, ...args);
 
