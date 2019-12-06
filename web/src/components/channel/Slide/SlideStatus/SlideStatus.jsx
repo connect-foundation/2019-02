@@ -3,13 +3,15 @@ import PropTypes from 'prop-types';
 import S from './style';
 import StatusButton from './StatusButton';
 import SlideSyncButton from './SlideSyncButton';
-import NoteButton from './NoteButton';
 import FullScreenButton from './FullScreenButton';
 import { useChannelSelector } from '@/hooks';
 
-
 const SlideStatus = (props) => {
-  const { isSync, handleSync, setFullScreen } = props;
+  const {
+    isSync,
+    handleSync,
+    setFullScreen,
+  } = props;
   const isMaster = useChannelSelector((state) => state.isMaster);
 
   return (
@@ -23,7 +25,6 @@ const SlideStatus = (props) => {
           handleSync={handleSync}
         />
         )}
-        <NoteButton />
         <FullScreenButton setFullScreen={setFullScreen} />
       </S.Wrapper>
     </S.SlideStatus>
