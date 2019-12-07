@@ -1,7 +1,7 @@
 import React from 'react';
 import Popover from '@material-ui/core/Popover';
-import Typography from '@material-ui/core/Typography';
 import { SmallButton } from '@/components/common';
+import Factory from '../FlyingEmojiFactory';
 import S from './style';
 
 const FlyingEmojiButton = () => {
@@ -17,6 +17,20 @@ const FlyingEmojiButton = () => {
 
   const open = Boolean(anchorEl);
   const id = open ? 'simple-popover' : undefined;
+  let particles = [];
+  const update = () => {
+    particles = particles.filter((p) => p.move());
+    requestAnimationFrame(update.bind(this));
+  };
+  const sendEmoji = (type) => {
+    particles.push(
+      new Factory(type, {
+        x: (screen.width / 2),
+        y: screen.height,
+      }, (1 + Math.random() * 3)),
+    );
+    update();
+  };
 
   return (
     <>
@@ -40,23 +54,21 @@ const FlyingEmojiButton = () => {
           horizontal: 'center',
         }}
       >
-        <Typography>
-          <S.EmojiButton>
-            <span aria-label="like" role="img">❤️</span>
-          </S.EmojiButton>
-          <S.EmojiButton>
-            <span aria-label="shame" role="img">🤭</span>
-          </S.EmojiButton>
-          <S.EmojiButton>
-            <span aria-label="wondering" role="img">🤔</span>
-          </S.EmojiButton>
-          <S.EmojiButton>
-            <span aria-label="cry" role="img">😥</span>
-          </S.EmojiButton>
-          <S.EmojiButton>
-            <span aria-label="dropy" role="img">🐤</span>
-          </S.EmojiButton>
-        </Typography>
+        <S.EmojiButton onClick={sendEmoji('❤️')}>
+          <span aria-label="like" role="img">❤️</span>
+        </S.EmojiButton>
+        <S.EmojiButton onClick={sendEmoji('🤭')}>
+          <span aria-label="shame" role="img">🤭</span>
+        </S.EmojiButton>
+        <S.EmojiButton onClick={sendEmoji('🤔')}>
+          <span aria-label="wondering" role="img">🤔</span>
+        </S.EmojiButton>
+        <S.EmojiButton onClick={sendEmoji('😥')}>
+          <span aria-label="cry" role="img">😥</span>
+        </S.EmojiButton>
+        <S.EmojiButton onClick={sendEmoji('🐤')}>
+          <span aria-label="dropy" role="img">🐤</span>
+        </S.EmojiButton>
       </Popover>
     </>
   );
