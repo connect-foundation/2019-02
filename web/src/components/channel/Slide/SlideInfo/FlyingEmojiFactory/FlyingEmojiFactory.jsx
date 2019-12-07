@@ -1,7 +1,7 @@
 class FlyingEmojiFactory {
   constructor(emoji, coordinates, friction) {
-    this.emoji = this.emojiMaker(emoji);
-    this.steps = screen.height / 2;
+    this.emoji = this.setEmoji(emoji);
+    this.steps = document.querySelector('body').offsetHeight / 2;
     this.item = null;
     this.friction = friction;
     this.coordinates = coordinates;
@@ -10,27 +10,42 @@ class FlyingEmojiFactory {
     this.rotation = Math.random() > 0.8 ? '-' : '+';
     this.scale = 0.8 + Math.random();
     this.siner = 150 * Math.random();
-    this.flying = null;
+    this.appHeight = document.querySelector('body').offsetHeight;
   }
 
-  destroy() {
-    const oldEmoji = this.item;
-    oldEmoji.parentNode.removeChild(oldEmoji);
+  destroyEmoji() {
+    this.item.parentNode.removeChild(this.item);
   }
 
-  emojiMaker(type) {
+  // eslint-disable-next-line class-methods-use-this
+  setEmoji(type) {
     const flyingEmoji = document.createElement('div');
     flyingEmoji.innerText = type;
+    flyingEmoji.style.zIndex = 999;
+    flyingEmoji.style.position = 'absolute';
+
     return flyingEmoji;
   }
 
-  move() {
+  isAchieve() {
+    return this.position < -(this.appHeight);
+  }
+
+  getPosition() {
     this.position = this.position - this.friction;
-    const top = this.position;
-    const left = this.coordinates.x + Math.sin((this.position * Math.PI) / this.steps) * this.siner;
-    this.item.style.transform = `translateX(${left}px) translateY(${top}px) scale(${this.scale})`;
-    if (this.position < -(this.dimensions.height)) {
-      this.destroy();
+  }
+
+  getDirection() {
+    return this.coordinates.x + Math.sin((this.position * Math.PI) / this.steps) * this.siner;
+  }
+
+  flying() {
+    this.getPosition();
+    const height = this.position;
+    const direction = this.getDirection();
+    this.item.style.transform = `translateX(${direction}px) translateY(${height}px) scale(${this.scale})`;
+    if (this.isAchieve()) {
+      this.destroyEmoji();
       return false;
     }
     return true;
@@ -39,11 +54,11 @@ class FlyingEmojiFactory {
   render() {
     const background = document.querySelector('body');
     this.item = this.emoji;
-    console.log(this.item);
     background.appendChild(this.item);
+
     return {
-      width: this.item.width,
-      height: this.item.height,
+      width: this.item.offsetWidth,
+      height: this.item.offsetHeight,
     };
   }
 }

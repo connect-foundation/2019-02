@@ -1,36 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Popover from '@material-ui/core/Popover';
 import { SmallButton } from '@/components/common';
-import Factory from '../FlyingEmojiFactory';
-import S from './style';
+import FlyingEmojiPopover from '../FlyingEmojiPopover';
 
 const FlyingEmojiButton = () => {
-  const [anchorEl, setAnchorEl] = React.useState(null);
-
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-
+  const [anchorEl, setAnchorEl] = useState(null);
+  const handleClick = (event) => setAnchorEl(event.currentTarget);
+  const handleClose = () => setAnchorEl(null);
   const open = Boolean(anchorEl);
   const id = open ? 'simple-popover' : undefined;
-  let particles = [];
-  const update = () => {
-    particles = particles.filter((p) => p.move());
-    requestAnimationFrame(update.bind(this));
-  };
-  const sendEmoji = (type) => {
-    particles.push(
-      new Factory(type, {
-        x: (screen.width / 2),
-        y: screen.height,
-      }, (1 + Math.random() * 3)),
-    );
-    update();
-  };
 
   return (
     <>
@@ -54,21 +32,7 @@ const FlyingEmojiButton = () => {
           horizontal: 'center',
         }}
       >
-        <S.EmojiButton onClick={sendEmoji('❤️')}>
-          <span aria-label="like" role="img">❤️</span>
-        </S.EmojiButton>
-        <S.EmojiButton onClick={sendEmoji('🤭')}>
-          <span aria-label="shame" role="img">🤭</span>
-        </S.EmojiButton>
-        <S.EmojiButton onClick={sendEmoji('🤔')}>
-          <span aria-label="wondering" role="img">🤔</span>
-        </S.EmojiButton>
-        <S.EmojiButton onClick={sendEmoji('😥')}>
-          <span aria-label="cry" role="img">😥</span>
-        </S.EmojiButton>
-        <S.EmojiButton onClick={sendEmoji('🐤')}>
-          <span aria-label="dropy" role="img">🐤</span>
-        </S.EmojiButton>
+        <FlyingEmojiPopover handleClose={handleClose} />
       </Popover>
     </>
   );
