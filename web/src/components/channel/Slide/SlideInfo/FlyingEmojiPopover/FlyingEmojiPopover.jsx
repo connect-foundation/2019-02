@@ -1,17 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
 import Factory from '../FlyingEmojiFactory';
-
 import S from './style';
 
-const FlyingEmojiPopover = (props) => {
-  const { handleClose } = props;
+const FlyingEmojiPopover = () => {
   const [state, setState] = useState(null);
   let jobQueue = [];
   let requestId = null;
+  const isAchieve = () => jobQueue.length === 0 && requestId !== null;
   const startAnimation = () => {
     jobQueue = jobQueue.filter((job) => job.flying());
-    if (jobQueue.length === 0 && requestId !== null) {
+    if (isAchieve()) {
       cancelAnimationFrame(requestId);
       return;
     }
@@ -26,6 +24,7 @@ const FlyingEmojiPopover = (props) => {
         y: 0,
       }, (1 + Math.random() * 3)),
     );
+    setState(null);
     startAnimation();
   }, [state]);
 
@@ -34,7 +33,7 @@ const FlyingEmojiPopover = (props) => {
       <S.EmojiButton onClick={() => setState('❤️')}>
         <span aria-label="like" role="img">❤️</span>
       </S.EmojiButton>
-      <S.EmojiButton onClick={() => setState('🤭')} handleClose={handleClose}>
+      <S.EmojiButton onClick={() => setState('🤭')}>
         <span aria-label="shame" role="img">🤭</span>
       </S.EmojiButton>
       <S.EmojiButton onClick={() => setState('🤔')}>
@@ -48,10 +47,6 @@ const FlyingEmojiPopover = (props) => {
       </S.EmojiButton>
     </>
   );
-};
-
-FlyingEmojiPopover.propTypes = {
-  handleClose: PropTypes.func.isRequired,
 };
 
 export default FlyingEmojiPopover;
