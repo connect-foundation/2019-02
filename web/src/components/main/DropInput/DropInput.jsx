@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
 import { Button } from '@material-ui/core';
 import { uploadFile, subscribeProgress } from '@/apis';
 import createChannelId from '@/utils/uuid';
 import { useCreateChannel } from '@/hooks';
-import { LoadingModal, ErrorModal } from '@/components/common';
 import createFormData from '@/utils/createFormdata';
 import S from './style';
 import {
@@ -14,19 +14,18 @@ import {
 
 const ChannelCodeLength = 5;
 
-const DropInput = () => {
+const DropInput = (props) => {
   const { mutate, data } = useCreateChannel();
-  const [loadingMessage, setLoadingMessage] = useState(null);
-  const [isError, setIsError] = useState(false);
+  const { dropZoneDispatch } = props;
   const handleUpload = async (e) => {
-    setLoadingMessage(CREATING_CHANNEL_MESSAGE);
+    dropZoneDispatch({ type: 'setLoadingModal', payload: CREATING_CHANNEL_MESSAGE });
 
     const channelId = createChannelId();
     const channelCode = channelId.substring(0, ChannelCodeLength);
     const file = e.target.files[0];
     const formData = createFormData({ file });
     const unsubscribeProgress = subscribeProgress(channelId, ({ message }) => {
-      setLoadingMessage(message);
+      dropZoneDispatch({ type: 'setLoadingModal', payload: message });
     });
     const {
       status,
@@ -47,7 +46,7 @@ const DropInput = () => {
         },
       });
     } else {
-      setIsError(true);
+      dropZoneDispatch({ type: 'setErrorModal', payload: TEMP_ERROR_MESSAGE });
     }
   };
 
@@ -64,6 +63,7 @@ const DropInput = () => {
           type="file"
           style={{ display: 'none' }}
           onChange={handleUpload}
+          accept=".pdf"
         />
         <label htmlFor="upload-file">
           <Button variant="contained" component="span">
@@ -74,10 +74,12 @@ const DropInput = () => {
           </Button>
         </label>
       </S.DropInputWrapper>
-      {isError && <ErrorModal message={TEMP_ERROR_MESSAGE} />}
-      {loadingMessage && <LoadingModal message={loadingMessage} />}
     </>
   );
+};
+
+DropInput.propTypes = {
+  dropZoneDispatch: PropTypes.func.isRequired,
 };
 
 export default DropInput;
