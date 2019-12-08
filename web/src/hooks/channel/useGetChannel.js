@@ -23,7 +23,7 @@ const CHECK_CHANNEL = gql`
 
 const useGetChannel = (channelId) => {
   const { loading, data } = useQuery(CHECK_CHANNEL, { variables: { channelId } });
-  const channelData = data ? data.getChannel : null;
+  const channelData = loading ? null : data.getChannel;
 
   return { data: channelData, loading };
 };
