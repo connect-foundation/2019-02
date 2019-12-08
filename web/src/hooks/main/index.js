@@ -1,1 +1,1 @@
-export { dropZoneInitState, dropZoneReducer } from './dropZoneReducer';
+export { dropModalInitState, dropModalReducer } from './dropModalReducer';

@@ -1,17 +1,10 @@
-import React, { useReducer } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
 import S from './style';
 import { uploadFile, subscribeProgress } from '@/apis';
-import {
-  useCreateChannel,
-  dropZoneInitState,
-  dropZoneReducer,
-} from '@/hooks';
+import { useCreateChannel } from '@/hooks';
 import createFormData from '@/utils/createFormdata';
-import { LoadingModal, ErrorModal } from '@/components/common';
-import DropEmoji from '../DropEmoji';
-import DropText from '../DropText';
-import DropInput from '../DropInput';
 import getRandomItemOfList from '@/utils/random';
 import createChannelId from '@/utils/uuid';
 import checkFileTypeValidation from '@/utils/file';
@@ -25,20 +18,9 @@ import {
 const ChannelCodeLength = 5;
 const DefaultDropEmoji = '👇';
 
-const DropZone = () => {
+const DropZone = (props) => {
+  const { dropModalDispatch } = props;
   const { mutate, data } = useCreateChannel();
-  const [dropZoneState, dropZoneDispatch] = useReducer(
-    dropZoneReducer,
-    dropZoneInitState,
-  );
-  const {
-    isError,
-    errorMessage,
-    isLoading,
-    loadingMessage,
-    dropZoneEmoji,
-    isDragOver,
-  } = dropZoneState;
   const handleDrop = async (event) => {
     event.preventDefault();
 
@@ -48,10 +30,10 @@ const DropZone = () => {
     const file = files[0];
 
     if (checkFileTypeValidation(file)) {
-      dropZoneDispatch({ type: 'setLoadingModal', payload: CREATING_CHANNEL_MESSAGE });
+      dropModalDispatch({ type: 'setLoadingModal', payload: CREATING_CHANNEL_MESSAGE });
       const formData = createFormData({ file });
       const unsubscribeProgress = subscribeProgress(channelId, ({ message }) => {
-        dropZoneDispatch({ type: 'setLoadingModal', payload: message });
+        dropModalDispatch({ type: 'setLoadingModal', payload: message });
       });
       const {
         status,
@@ -72,17 +54,17 @@ const DropZone = () => {
           },
         });
       } else {
-        dropZoneDispatch({ type: 'setErrorModal', payload: TEMP_ERROR_MESSAGE });
+        dropModalDispatch({ type: 'setErrorModal', payload: TEMP_ERROR_MESSAGE });
       }
     } else {
-      dropZoneDispatch({ type: 'setErrorModal', payload: FILE_TYPE_VALIDATION_ERROR_MESSAGE });
+      dropModalDispatch({ type: 'setErrorModal', payload: FILE_TYPE_VALIDATION_ERROR_MESSAGE });
     }
   };
   const handleDragEnter = (event) => {
     event.preventDefault();
 
-    dropZoneDispatch({ type: 'setDragOver' });
-    dropZoneDispatch({ type: 'setDropZoneEmoji', payload: getRandomItemOfList(EMOJI_LIST) });
+    dropModalDispatch({ type: 'setDragOver' });
+    dropModalDispatch({ type: 'setDropZoneEmoji', payload: getRandomItemOfList(EMOJI_LIST) });
   };
   const handleDragOver = (event) => {
     event.preventDefault();
@@ -90,8 +72,8 @@ const DropZone = () => {
   const handleDragLeave = (event) => {
     event.preventDefault();
 
-    dropZoneDispatch({ type: 'setDragOver' });
-    dropZoneDispatch({ type: 'setDropZoneEmoji', payload: DefaultDropEmoji });
+    dropModalDispatch({ type: 'setDragOver' });
+    dropModalDispatch({ type: 'setDropZoneEmoji', payload: DefaultDropEmoji });
   };
 
   if (data) {
@@ -99,26 +81,17 @@ const DropZone = () => {
   }
 
   return (
-    <>
-      <S.DropModal>
-        <S.DropModalContent>
-          <DropEmoji emoji={dropZoneEmoji} />
-          <DropText dragOver={isDragOver} />
-        </S.DropModalContent>
-      </S.DropModal>
-      <S.DropZone
-        onDrop={handleDrop}
-        onDragEnter={handleDragEnter}
-        onDragOver={handleDragOver}
-        onDragLeave={handleDragLeave}
-      />
-      <DropInput
-        dropZoneDispatch={dropZoneDispatch}
-      />
-      {isError && <ErrorModal message={errorMessage} />}
-      {isLoading && <LoadingModal message={loadingMessage} />}
-    </>
+    <S.DropZone
+      onDrop={handleDrop}
+      onDragEnter={handleDragEnter}
+      onDragOver={handleDragOver}
+      onDragLeave={handleDragLeave}
+    />
   );
+};
+
+DropZone.propTypes = {
+  dropModalDispatch: PropTypes.func.isRequired,
 };
 
 export default DropZone;

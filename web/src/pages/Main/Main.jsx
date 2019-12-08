@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import {
   ChannelButton,
   MainLogo,
-  DropZone,
+  DropModal,
   CodeInput,
   ChannelListModal,
 } from '@/components/main';
@@ -15,7 +15,7 @@ const Main = () => {
   const [showDropModal, setShowDropModal] = useState(false);
   const [showChannelListModal, SetShowChannelListModal] = useState(false);
   const [channels, setChannels] = useState([]);
-  const DropModal = !isAnonymous ? <DropZone /> : (
+  const DragDropModal = !isAnonymous ? <DropModal /> : (
     <ErrorModal message="로그인한 사용자만 채널을 생성할 수 있습니다." />
   );
 
@@ -31,7 +31,7 @@ const Main = () => {
           <ChannelButton onClick={() => setShowDropModal(true)} />
         </S.Main>
       </S.MainWrapper>
-      {showDropModal && DropModal}
+      {showDropModal && DragDropModal}
       {showChannelListModal && <ChannelListModal channels={channels} />}
     </>
   );

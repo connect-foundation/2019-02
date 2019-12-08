@@ -1,13 +1,13 @@
-const dropZoneInitState = {
+const dropModalInitState = {
   isLoading: false,
   loadingMessage: '',
   isError: false,
   errorMessage: '',
   isDragOver: false,
-  dropZoneEmoji: '👇',
+  dropModalEmoji: '👇',
 };
 
-const dropZoneReducer = (state, action) => {
+const dropModalReducer = (state, action) => {
   switch (action.type) {
     case 'setLoadingModal':
       return {
@@ -29,7 +29,7 @@ const dropZoneReducer = (state, action) => {
     case 'setDropZoneEmoji':
       return {
         ...state,
-        dropZoneEmoji: action.payload,
+        dropModalEmoji: action.payload,
       };
     default:
       throw new Error();
@@ -37,6 +37,6 @@ const dropZoneReducer = (state, action) => {
 };
 
 export {
-  dropZoneInitState,
-  dropZoneReducer,
+  dropModalInitState,
+  dropModalReducer,
 };
