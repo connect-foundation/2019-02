@@ -7,4 +7,4 @@ export { default as CodeInput } from './CodeInput';
 export { default as ChannelListModal } from './ChannelListModal';
 export { default as DropModal } from './DropModal';
 export { default as DropZone } from './DropZone';
-export { default as DropCloseButton } from './DropCloseButton';
+export { default as DropModalCloseButton } from './DropModalCloseButton';
