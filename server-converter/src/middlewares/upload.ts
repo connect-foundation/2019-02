@@ -23,6 +23,7 @@ const uploadToObjectStorage = (
     Key: `${channelId}/${isFile ? 'files' : 'slides'}/${name}`,
     ACL: 'public-read',
     Body: readStream,
+    CacheControl: 'public, max-age=864000',
   };
 
   s3.upload(params, (err: any, data) => {

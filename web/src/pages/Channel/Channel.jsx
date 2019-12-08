@@ -48,7 +48,7 @@ const Channel = () => {
   if (!data || loading) {
     return (<LoadingModal message={ENTERING_CHANNEL_MESSAGGGE} />);
   }
-  if (data.status === 'not_exist') {
+  if (['not_exist', 'fail'].includes(data.status)) {
     return (<ErrorModal message={NO_EXIST_CHANNEL_MESSAGE} />);
   }
 

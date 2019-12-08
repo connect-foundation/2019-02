@@ -6,7 +6,7 @@ import {
 } from 'react-router-dom';
 import { CssBaseline } from '@material-ui/core';
 import { GlobalStyle } from './styles';
-import { Header, Wrapper } from './components/common';
+import { Header, Wrapper, ErrorModal } from './components/common';
 import {
   Main,
   Channel,
@@ -33,6 +33,9 @@ const App = () => (
           </Route>
           <Route path="/privacy-policy" exact>
             <PrivacyPolicy />
+          </Route>
+          <Route>
+            <ErrorModal message="존재하지 않는 페이지 입니다..." />
           </Route>
         </Switch>
       </Router>
