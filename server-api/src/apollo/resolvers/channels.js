@@ -12,6 +12,7 @@ const createChannelInfo = (
   channelCode,
   slideUrls,
   fileUrl,
+  slideRatioList,
 ) => ({
   channelId,
   channelCode,
@@ -19,6 +20,7 @@ const createChannelInfo = (
   masterId: user.userId,
   slideUrls,
   fileUrl,
+  slideRatioList,
 });
 
 const createChannel = async (_, {
@@ -26,6 +28,7 @@ const createChannel = async (_, {
   channelCode,
   slideUrls,
   fileUrl,
+  slideRatioList,
 }, { user }) => {
   const newChannel = new Channels(
     createChannelInfo(
@@ -34,6 +37,7 @@ const createChannel = async (_, {
       channelCode,
       slideUrls,
       fileUrl,
+      slideRatioList,
     ),
   );
 

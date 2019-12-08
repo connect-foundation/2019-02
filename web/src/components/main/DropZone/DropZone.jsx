@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Redirect } from 'react-router-dom';
 import S from './style';
-import { uploadFile } from '@/apis';
+import { uploadFile, subscribeProgress } from '@/apis';
 import { useCreateChannel } from '@/hooks';
 import createFormData from '@/utils/createFormdata';
 import { LoadingModal, ErrorModal } from '@/components/common';
@@ -20,24 +20,29 @@ const ChannelCodeLength = 5;
 
 const DropZone = () => {
   const { mutate, data } = useCreateChannel();
-  const [isLoading, setIsLoading] = useState(false);
+  const [loadingMessage, setLoadingMessage] = useState(null);
   const [isError, setIsError] = useState(false);
   const [dragOver, setDragOver] = useState(false);
   const [dropZoneEmoji, setDropZoneEmoji] = useState('👇');
   const handleDrop = async (event) => {
     event.preventDefault();
-    setIsLoading(true);
+    setLoadingMessage(CREATING_CHANNEL_MESSAGE);
 
     const channelId = createChannelId();
     const channelCode = channelId.substring(0, ChannelCodeLength);
     const { dataTransfer: { files } } = event;
     const file = files[0];
-    const formData = createFormData({ channelId, file });
+    const formData = createFormData({ file });
+    const unsubscribeProgress = subscribeProgress(channelId, ({ message }) => {
+      setLoadingMessage(message);
+    });
     const {
       status,
       slideUrls,
       fileUrl,
-    } = await uploadFile(formData);
+      slideRatioList,
+    } = await uploadFile(channelId, formData);
+    unsubscribeProgress();
 
     if (status === 'ok') {
       mutate({
@@ -46,6 +51,7 @@ const DropZone = () => {
           slideUrls,
           fileUrl,
           channelCode,
+          slideRatioList,
         },
       });
     } else {
@@ -90,7 +96,7 @@ const DropZone = () => {
       />
       <DropInput />
       {isError && <ErrorModal message={TEMP_ERROR_MESSAGE} />}
-      {isLoading && <LoadingModal message={CREATING_CHANNEL_MESSAGE} />}
+      {loadingMessage && <LoadingModal message={loadingMessage} />}
     </>
   );
 };

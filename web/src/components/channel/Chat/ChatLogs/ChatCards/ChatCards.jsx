@@ -18,7 +18,6 @@ const ChatCards = (props) => {
       }) => (
         <S.ChatLog key={`chat-log-${id}`}>
           <ChatCard
-            id={id}
             author={author}
             message={message}
             isLiked={likes.includes(userId)}

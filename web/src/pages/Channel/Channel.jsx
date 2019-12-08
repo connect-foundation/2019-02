@@ -5,7 +5,6 @@ import {
   useLogin,
   useGetUserStatus,
   useGetChannel,
-  useInitChat,
   useAddUserHistory,
   useEnteredListener,
   useLeaveListener,
@@ -31,7 +30,6 @@ const Channel = () => {
   const { listenerList } = useListenerListChanged(channelId);
   const enteredListener = useEnteredListener(channelId);
   const leaveListener = useLeaveListener(channelId);
-  useInitChat(channelId);
 
   useEffect(() => {
     if (userStatus.token) return;
@@ -79,6 +77,7 @@ const Channel = () => {
         isMaster: data.isMaster,
         fileUrl: data.channel.fileUrl,
         slideUrls: data.channel.slideUrls,
+        slideRatioList: data.channel.slideRatioList,
         initialSlide: data.channel.currentSlide,
         channelName: data.channel.channelName,
         masterName: data.channel.master.displayName,
@@ -92,7 +91,7 @@ const Channel = () => {
           channelId={channelId}
           listenerList={listenerList.length}
         />
-        <Chat channelId={channelId} />
+        <Chat channelId={channelId} userId={userStatus.userId} />
       </S.Channel>
     </ChannelContext.Provider>
   );

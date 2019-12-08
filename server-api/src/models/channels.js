@@ -35,6 +35,9 @@ const ChannelSchema = new Schema({
   slideUrls: {
     type: Array,
   },
+  slideRatioList: {
+    type: Array,
+  },
   fileUrl: {
     type: String,
   },
@@ -69,6 +72,7 @@ ChannelSchema.methods.toPayload = async function toChannelPayload(...objs) {
     'channelName',
     'maxHeadCount',
     'slideUrls',
+    'slideRatioList',
     'fileUrl',
     'channelStatus',
     'currentSlide',
