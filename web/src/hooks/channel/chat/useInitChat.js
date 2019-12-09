@@ -21,7 +21,10 @@ const GET_CHAT_LOGS = gql`
 
 const useInitChat = (channelId) => {
   const client = useApolloClient();
-  const [loadChats, query] = useLazyQuery(GET_CHAT_LOGS, { variables: { channelId } });
+  const [loadChats, query] = useLazyQuery(GET_CHAT_LOGS, {
+    variables: { channelId },
+    fetchPolicy: 'no-cache',
+  });
   const cleanChatCache = () => {
     client.writeQuery({
       query: GET_CHAT_CACHED,
