@@ -6,7 +6,9 @@ import {
   convert,
   upload,
   saveTmp,
+  checkSave,
   removeTmp,
+  requestEnd,
   setProgressPollingTopic,
   waitProgressPolling,
   clearProgress,
@@ -15,24 +17,29 @@ import {
 const router = Router();
 
 const queueMiddleware = requestQueue({
-  queueLimit: 50,
+  queueLimit: 20,
   activeLimit: 1,
   cpuUsage: 90,
 });
 
-router.post(
-  '/images/:channelId',
+const middlewares = [
   queueMiddleware,
   auth,
-  saveTmp,
+  [saveTmp, checkSave],
   convert,
   upload,
   removeTmp,
+].reduce((array:any, middleware) => array.concat(middleware, requestEnd), []);
+
+router.post(
+  '/images/:channelId',
+  ...middlewares,
   (req, res) => {
     const { channelId } = req.params;
     const { slideUrls, slideRatioList, fileUrl } = req;
 
     clearProgress(channelId);
+    res.emit('end');
     res.status(200).json({
       status: 'ok',
       slideUrls,
@@ -47,7 +54,10 @@ router.get(
   setProgressPollingTopic,
   waitProgressPolling,
 );
-
+setInterval(() => {
+  console.log(`queuelist: ${queueMiddleware.queue.queue.reduce((str, item) => `${str}  ${item.state}`, '')}`);
+  console.log(`activelist ${queueMiddleware.queue.active.reduce((str, item) => `${str}  ${item.state}`, '')}`);
+}, 4000);
 const appRouter = process.env.NODE_ENV === 'development' ? devRouter : router;
 
 export default appRouter;

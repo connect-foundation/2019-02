@@ -1,5 +1,5 @@
 import * as gm from 'gm';
-import { ReadStream, createReadStream } from 'fs';
+import { ReadStream, createReadStream, existsSync } from 'fs';
 import {
   getExtension,
 } from '../utils/pathParser';

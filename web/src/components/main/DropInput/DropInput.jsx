@@ -9,6 +9,7 @@ import createFormData from '@/utils/createFormdata';
 import S from './style';
 import {
   TEMP_ERROR_MESSAGE,
+  REJECT_ERROR_MESSAGE,
   CREATING_CHANNEL_MESSAGE,
 } from '@/constants';
 
@@ -33,6 +34,7 @@ const DropInput = (props) => {
       fileUrl,
       slideRatioList,
     } = await uploadFile(channelId, formData);
+
     unsubscribeProgress();
 
     if (status === 'ok') {
@@ -48,6 +50,8 @@ const DropInput = (props) => {
     } else {
       dropModalDispatch({ type: 'closeLoadingModal' });
       dropModalDispatch({ type: 'setErrorModal', payload: TEMP_ERROR_MESSAGE });
+      const payload = status === 'reject' ? REJECT_ERROR_MESSAGE : TEMP_ERROR_MESSAGE;
+      dropModalDispatch({ type: 'setErrorModal', payload });
     }
   };
 

@@ -1,5 +1,5 @@
 import * as AwsSdk from 'aws-sdk';
-import { createReadStream } from 'fs';
+import { createReadStream, existsSync } from 'fs';
 import { RequestHandler } from '../@types';
 import { noitfyProgress } from './progress';
 import { PROGRESS_UPLOADING } from '../constants';
@@ -33,31 +33,33 @@ const uploadToObjectStorage = (
   });
 });
 
-const uploadMiddleware: RequestHandler = (req, _, next) => {
-  const { channelId } = req.params;
-  const uploadFile: Promise<string> = uploadToObjectStorage(
-    req.file.path,
-    channelId,
-    'index',
-    true,
-  );
-  const uploadSlides: Promise<string>[] = req.slides.map((slide) => uploadToObjectStorage(
-    slide.path,
-    channelId,
-    `${slide.page}`,
-    false,
-  ));
+const uploadMiddleware: RequestHandler = (req:any, _, next) => {
+  if (existsSync(req.file.path)) {
+    const { channelId } = req.params;
+    const uploadFile: Promise<string> = uploadToObjectStorage(
+      req.file.path,
+      channelId,
+      'index',
+      true,
+    );
+    const uploadSlides: Promise<string>[] = req.slides.map((slide) => uploadToObjectStorage(
+      slide.path,
+      channelId,
+      `${slide.page}`,
+      false,
+    ));
 
-  noitfyProgress(channelId, { message: PROGRESS_UPLOADING });
-  Promise.all([uploadFile, ...uploadSlides])
-    .then((locations) => {
-      req.fileUrl = locations.shift();
-      req.slideUrls = locations;
-      next();
-    })
-    .catch((err) => {
-      throw new Error(err);
-    });
+    noitfyProgress(channelId, { message: PROGRESS_UPLOADING });
+    Promise.all([uploadFile, ...uploadSlides])
+      .then((locations) => {
+        req.fileUrl = locations.shift();
+        req.slideUrls = locations;
+        next();
+      })
+      .catch((err) => {
+        throw new Error(err);
+      });
+  }
 };
 
 export default uploadMiddleware;
