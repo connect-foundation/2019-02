@@ -13,6 +13,7 @@ const UserHistoryCard = (props) => {
     channelName,
     displayName,
   } = props;
+  const channelCode = channelId.substring(0, 5);
   const presentationStatus = channelStatus === 'on'
     ? { label: 'presentation-on', color: 'primary' }
     : { label: 'presentation-off', color: 'default' };
@@ -36,7 +37,9 @@ const UserHistoryCard = (props) => {
                 {presentationStatus.label}
               </SmallButton>
             </Typography>
-            <S.ChannelCode>채널코드 : abcde</S.ChannelCode>
+            <S.ChannelCode>
+              {`채널코드 : ${channelCode}`}
+            </S.ChannelCode>
           </S.HistoryCardRightDetail>
         </Link>
       </S.HistoryCard>
