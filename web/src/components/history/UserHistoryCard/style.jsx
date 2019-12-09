@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { Card } from '@material-ui/core';
-import Profile from '@@/tempProfile.png';
+import Profile from '@@/icon_bird_870x818.png';
 import { px, colorGray } from '@/styles';
 
 export default {
