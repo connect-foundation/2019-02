@@ -18,5 +18,6 @@ export const getFilename = (path: string): string => {
 export const getPdfFilePath = (channelId) => {
   const tmpPath = path.resolve(__dirname, '../../tmpFiles');
   const filename = `${channelId}_file.pdf`;
+  
   return `${tmpPath}/${filename}`;
 }

@@ -18,6 +18,10 @@ const requestQueue = (config) => {
     job.data.res.status(200).json({ status: 'reject' });
   });
 
+  const canCancel = (job) => {
+    return (job.state === 'process' && !job.data.req.isConverted);
+  }
+
   const queueMiddleware = (req, res, next) => {
     const data = { req, res, next };
     const job = queue.createJob(data);
@@ -27,7 +31,7 @@ const requestQueue = (config) => {
         job.data.req.endflag = true;
         queue.cancelJob(job);
       }
-      if (job.state === 'process' && !job.data.req.isConverted) {
+      if (canCancel(job)) {
         job.data.req.endflag = true;
         queue.completeJob(job, 'cancel');
       }
