@@ -13,6 +13,11 @@ const CodeInput = (props) => {
   const handleOnClick = () => {
     query({ variables: { channelCode } });
   };
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter') {
+      query({ variables: { channelCode } });
+    }
+  };
   const handleOnChange = (event) => {
     const { value } = event.target;
     const code = value.length > 5 ? value.substring(0, 5) : value;
@@ -38,6 +43,8 @@ const CodeInput = (props) => {
         placeholder={CODEINPUT_PLACEHOLDER}
         onChange={handleOnChange}
         value={channelCode}
+        onKeyDown={handleKeyDown}
+        autoFocus
       />
       <S.EnterButton
         type="button"

@@ -26,7 +26,17 @@ const ChannelListModal = (props) => {
 };
 
 ChannelListModal.propTypes = {
-  channels: PropTypes.arrayOf.isRequired,
+  channels: PropTypes.arrayOf(
+    PropTypes.shape({
+      channelCode: PropTypes.string.isRequired,
+      channelId: PropTypes.string.isRequired,
+      channelName: PropTypes.string.isRequired,
+      channelStatus: PropTypes.string.isRequired,
+      master: PropTypes.shape({
+        displayName: PropTypes.string.isRequired,
+      }).isRequired,
+    }),
+  ).isRequired,
 };
 
 export default ChannelListModal;
