@@ -2,26 +2,22 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { MenuItem } from '@material-ui/core';
 import { Link } from 'react-router-dom';
-import { useLogout } from '@/hooks';
 import S from './style';
 
 const LogoutPopover = (props) => {
-  const { handleClose } = props;
-  const logOut = useLogout();
-  const handleLogOut = () => {
-    handleClose();
-    logOut();
-  };
+  const {
+    onClickLogout,
+  } = props;
 
   return (
     <S.PopoverWrapper>
       <Link to="/mypage">
-        <MenuItem onClick={handleClose}>프로필</MenuItem>
+        <MenuItem>프로필</MenuItem>
       </Link>
-      <MenuItem onClick={handleLogOut}>
+      <MenuItem onClick={onClickLogout}>
         로그아웃
       </MenuItem>
-      <MenuItem onClick={handleClose}>
+      <MenuItem>
         도움말
       </MenuItem>
     </S.PopoverWrapper>
@@ -29,7 +25,7 @@ const LogoutPopover = (props) => {
 };
 
 LogoutPopover.propTypes = {
-  handleClose: PropTypes.func.isRequired,
+  onClickLogout: PropTypes.func.isRequired,
 };
 
 export default LogoutPopover;

@@ -1,17 +1,21 @@
 import React, { useState } from 'react';
 import {
-  AppBar, Toolbar, Typography, Popover,
+  AppBar,
+  Toolbar,
+  Typography,
+  Popover,
 } from '@material-ui/core';
 import LoginPopover from './LoginPopover';
 import LogoutPopover from './LogoutPopover';
-import { useGetUserStatus } from '@/hooks';
+import { useGetUserStatus, useLogout } from '@/hooks';
 import S from './style';
 
 const Header = () => {
-  const authentication = useGetUserStatus();
+  const { isLoggedIn, displayName } = useGetUserStatus();
+  const logOut = useLogout();
   const [anchorEl, setAnchorEl] = useState(null);
-  const handleClick = (event) => setAnchorEl(event.currentTarget);
-  const handleClose = () => setAnchorEl(null);
+  const openPopover = (event) => setAnchorEl(event.currentTarget);
+  const closePopover = () => setAnchorEl(null);
   const isOpened = Boolean(anchorEl);
   const id = isOpened ? 'simple-popover' : undefined;
 
@@ -22,31 +26,22 @@ const Header = () => {
           <Typography variant="h1">dropy</Typography>
         </a>
         <S.User>
-          {authentication.isLoggedIn ? (
-            <S.UserInfo
-              aria-describedby={id}
-              onClick={handleClick}
-            >
+          {isLoggedIn ? (
+            <S.UserInfo aria-describedby={id} onClick={openPopover}>
               <S.Profile />
-              <S.UserName>
-                {authentication.displayName}
-              </S.UserName>
+              <S.UserName>{displayName}</S.UserName>
               <S.DownIcon />
             </S.UserInfo>
           ) : (
-            <S.LoginBtn
-              aria-describedby={id}
-              onClick={handleClick}
-            >
-              로그인
-            </S.LoginBtn>
+            <S.LoginBtn aria-describedby={id} onClick={openPopover}>로그인</S.LoginBtn>
           )}
         </S.User>
         <Popover
           id={id}
           open={isOpened}
           anchorEl={anchorEl}
-          onClose={handleClose}
+          onClose={closePopover}
+          onExited={() => isLoggedIn && logOut()}
           anchorOrigin={{
             vertical: 'bottom',
             horizontal: 'right',
@@ -56,9 +51,9 @@ const Header = () => {
             horizontal: 'right',
           }}
         >
-          {authentication.isLoggedIn
-            ? <LogoutPopover handleClose={handleClose} />
-            : <LoginPopover handleClose={handleClose} />}
+          {isLoggedIn
+            ? <LogoutPopover onClickLogout={closePopover} />
+            : <LoginPopover handleClose={closePopover} />}
         </Popover>
       </Toolbar>
     </AppBar>
