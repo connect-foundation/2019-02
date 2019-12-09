@@ -16,16 +16,16 @@ const ChannelCodeLength = 5;
 
 const DropInput = (props) => {
   const { mutate, data } = useCreateChannel();
-  const { dropZoneDispatch } = props;
+  const { dropModalDispatch } = props;
   const handleUpload = async (e) => {
-    dropZoneDispatch({ type: 'setLoadingModal', payload: CREATING_CHANNEL_MESSAGE });
+    dropModalDispatch({ type: 'setLoadingModal', payload: CREATING_CHANNEL_MESSAGE });
 
     const channelId = createChannelId();
     const channelCode = channelId.substring(0, ChannelCodeLength);
     const file = e.target.files[0];
     const formData = createFormData({ file });
     const unsubscribeProgress = subscribeProgress(channelId, ({ message }) => {
-      dropZoneDispatch({ type: 'setLoadingModal', payload: message });
+      dropModalDispatch({ type: 'setLoadingModal', payload: message });
     });
     const {
       status,
@@ -46,7 +46,8 @@ const DropInput = (props) => {
         },
       });
     } else {
-      dropZoneDispatch({ type: 'setErrorModal', payload: TEMP_ERROR_MESSAGE });
+      dropModalDispatch({ type: 'closeLoadingModal' });
+      dropModalDispatch({ type: 'setErrorModal', payload: TEMP_ERROR_MESSAGE });
     }
   };
 
@@ -79,7 +80,7 @@ const DropInput = (props) => {
 };
 
 DropInput.propTypes = {
-  dropZoneDispatch: PropTypes.func.isRequired,
+  dropModalDispatch: PropTypes.func.isRequired,
 };
 
 export default DropInput;
