@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import Profile from '@@/tempProfile.png';
+import Profile from '@@/icon_bird_870x818.png';
 import Modal from '@material-ui/core/Modal';
 import { px, colorGray } from '@/styles';
 
