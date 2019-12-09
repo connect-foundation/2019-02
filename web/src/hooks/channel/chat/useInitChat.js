@@ -36,9 +36,7 @@ const useInitChat = (channelId) => {
     });
   };
   const writeChatCache = () => {
-    const isNotComponentMountEvent = !query.called || query.loading;
-
-    if (isNotComponentMountEvent) return;
+    if (!query.called || query.loading) return;
 
     const { chatLogs } = client.readQuery({ query: GET_CHAT_CACHED });
     const logs = query.data.getChatLogs;
@@ -62,7 +60,7 @@ const useInitChat = (channelId) => {
   }, []);
   useEffect(() => {
     writeChatCache();
-  }, [query.loading]);
+  }, [query]);
 };
 
 export default useInitChat;
