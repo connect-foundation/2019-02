@@ -14,7 +14,7 @@ export default {
     z-index: 999;
   `,
   CloseIcon: styled.img.attrs({
-    src: '/public/images/icon_X_button_512_512.png',
+    src: '/public/images/icon_x_512x512_white.png',
     alt: 'DropModal_close_icon',
   })`
     width: ${px(25)};
