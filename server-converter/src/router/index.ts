@@ -54,10 +54,7 @@ router.get(
   setProgressPollingTopic,
   waitProgressPolling,
 );
-setInterval(() => {
-  console.log(`queuelist: ${queueMiddleware.queue.queue.reduce((str, item) => `${str}  ${item.state}`, '')}`);
-  console.log(`activelist ${queueMiddleware.queue.active.reduce((str, item) => `${str}  ${item.state}`, '')}`);
-}, 4000);
+
 const appRouter = process.env.NODE_ENV === 'development' ? devRouter : router;
 
 export default appRouter;
