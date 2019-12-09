@@ -23,6 +23,7 @@ export default {
     background-size: contain;
     background-image: url(${Profile});
     margin-right: ${px(10)};
+    margin-bottom: ${px(30)};
   `,
   Setting: styled.div`
     position: absolute;
