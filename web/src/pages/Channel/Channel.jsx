@@ -1,39 +1,27 @@
 import React, { useEffect, useReducer } from 'react';
 import { useRouteMatch } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import { ChannelContext } from '@/contexts';
 import {
-  useLogin,
-  useGetUserStatus,
   useGetChannel,
   useAddUserHistory,
   toolBarInitState,
   toolBarReducer,
 } from '@/hooks';
 import { Chat, Slide, ToolBar } from '@/components/channel';
-import { authByAnonymous } from '@/apis';
 import S from './style';
 import { NO_EXIST_CHANNEL_MESSAGE, ENTERING_CHANNEL_MESSAGGGE } from '@/constants';
 import { LoadingModal, ErrorModal } from '@/components/common';
 
-const Channel = () => {
+const Channel = (props) => {
+  const { user } = props;
   const { params: { channelId } } = useRouteMatch();
   const { data, loading } = useGetChannel(channelId);
-  const logIn = useLogin();
-  const userStatus = useGetUserStatus();
   const { mutate } = useAddUserHistory();
   const [toolBarState, toolBarDispatch] = useReducer(
     toolBarReducer,
     toolBarInitState,
   );
-
-  useEffect(() => {
-    if (userStatus.token) return;
-    authByAnonymous().then(({ token, user }) => logIn({
-      token,
-      userId: user.userId,
-      isAnonymous: true,
-    }));
-  }, [userStatus]);
 
   useEffect(() => {
     if (data && data.status === 'ok') {
@@ -48,7 +36,7 @@ const Channel = () => {
   if (!data || loading) {
     return (<LoadingModal message={ENTERING_CHANNEL_MESSAGGGE} />);
   }
-  if (data.status === 'not_exist') {
+  if (['not_exist', 'fail'].includes(data.status)) {
     return (<ErrorModal message={NO_EXIST_CHANNEL_MESSAGE} />);
   }
 
@@ -67,19 +55,29 @@ const Channel = () => {
     >
       <S.Channel>
         {toolBarState.isToolBarActive && (
-        <ToolBar
-          toolBarDispatch={toolBarDispatch}
-          toolBarState={toolBarState}
-        />
+          <ToolBar
+            toolBarDispatch={toolBarDispatch}
+            toolBarState={toolBarState}
+          />
         )}
         <Slide
           channelId={channelId}
           toolBarDispatch={toolBarDispatch}
         />
-        <Chat channelId={channelId} userId={userStatus.userId} />
+        <Chat channelId={channelId} userId={user.userId} />
       </S.Channel>
     </ChannelContext.Provider>
   );
+};
+
+Channel.propTypes = {
+  user: PropTypes.shape({
+    displayName: PropTypes.string.isRequired,
+    isAnonymous: PropTypes.bool.isRequired,
+    isLoggedIn: PropTypes.bool.isRequired,
+    token: PropTypes.string.isRequired,
+    userId: PropTypes.string.isRequired,
+  }).isRequired,
 };
 
 export default Channel;

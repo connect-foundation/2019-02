@@ -32,7 +32,12 @@ const UserHistory = (props) => {
   };
   const historyCardList = data && data.length > 0
     ? data.filter(filterToDomain).map(mapToCardComponent)
-    : <p>아직 채널을 한번도 생성 안해보셨네요??</p>;
+    : (
+      <S.Alert>
+        <span aria-label="really" role="img">🤭</span>
+        아직 채널을 한번도 생성 안해보셨네요??
+      </S.Alert>
+    );
 
   return (
     <>

@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { Card } from '@material-ui/core';
-import { px, colorGray } from '@/styles';
+import { px } from '@/styles';
 
 
 export default {
@@ -11,7 +11,6 @@ export default {
     flex: 1;
     height: 100%;
     overflow: auto;
-    border-left: ${px(1)} solid${colorGray(3)};
   `,
   UserHistoryContents: styled.div`
     position: absolute;
@@ -25,5 +24,14 @@ export default {
     font-weight: bold;
     height: ${px(50)};
     padding: ${px(14)};
+  `,
+  Alert: styled(Card)`
+    text-align: center;
+    font-weight: bold;
+    font-size: ${px(30)};
+    padding: ${px(80)};
+    cursor: pointer;
+    margin: ${px(50)} ${px(100)};
+    min-width: ${px(700)};
   `,
 };

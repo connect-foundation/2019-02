@@ -2,10 +2,11 @@ import React, { useState } from 'react';
 import {
   ChannelButton,
   MainLogo,
-  DropZone,
+  DropModal,
   CodeInput,
   ChannelListModal,
 } from '@/components/main';
+import { NEED_LOGIN_ERROR_MESSAGE } from '@/constants';
 import { ErrorModal } from '@/components/common';
 import { useGetUserStatus } from '@/hooks';
 import S from './style';
@@ -15,23 +16,25 @@ const Main = () => {
   const [showDropModal, setShowDropModal] = useState(false);
   const [showChannelListModal, SetShowChannelListModal] = useState(false);
   const [channels, setChannels] = useState([]);
-  const DropModal = !isAnonymous ? <DropZone /> : (
-    <ErrorModal message="로그인한 사용자만 채널을 생성할 수 있습니다." />
+  const DragDropModal = !isAnonymous ? (
+    <DropModal setShowDropModal={setShowDropModal} />
+  ) : (
+    <ErrorModal message={NEED_LOGIN_ERROR_MESSAGE} />
   );
 
   return (
     <>
-      <S.MainWrapper>
-        <S.Main>
+      <S.Main>
+        <S.MainContent>
           <MainLogo />
           <CodeInput
             SetShowChannelListModal={SetShowChannelListModal}
             setChannels={setChannels}
           />
           <ChannelButton onClick={() => setShowDropModal(true)} />
-        </S.Main>
-      </S.MainWrapper>
-      {showDropModal && DropModal}
+        </S.MainContent>
+      </S.Main>
+      {showDropModal && DragDropModal}
       {showChannelListModal && <ChannelListModal channels={channels} />}
     </>
   );

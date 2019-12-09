@@ -13,6 +13,7 @@ export default {
     width: ${px(400)};
     height: 100%;
     padding: ${px(100)} 0;
+    border-right: ${px(1)} solid${colorGray(3)};
   `,
   Profile: styled.div`
     width: ${px(150)};

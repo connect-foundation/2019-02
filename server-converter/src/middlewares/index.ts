@@ -4,5 +4,7 @@ export { default as upload } from './upload';
 export { default as saveTmp } from './save';
 export { default as removeTmp } from './remove';
 export { default as requestQueue } from './queue';
+export { default as requestEnd } from './requestEnd';
+export { default as checkSave } from './checkSave';
 export * from './timer';
 export * from './progress';
