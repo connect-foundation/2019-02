@@ -3,21 +3,18 @@ import {
   AppBar,
   Toolbar,
   Typography,
-  Popover,
 } from '@material-ui/core';
 import LoginPopover from './LoginPopover';
 import LogoutPopover from './LogoutPopover';
-import { useGetUserStatus, useLogout } from '@/hooks';
+import { useGetUserStatus } from '@/hooks';
 import S from './style';
 
 const Header = () => {
   const { isLoggedIn, displayName } = useGetUserStatus();
-  const logOut = useLogout();
   const [anchorEl, setAnchorEl] = useState(null);
   const openPopover = (event) => setAnchorEl(event.currentTarget);
-  const closePopover = () => setAnchorEl(null);
-  const isOpened = Boolean(anchorEl);
-  const id = isOpened ? 'simple-popover' : undefined;
+  const isOpened = !!anchorEl;
+  const id = 'simple-popover';
 
   return (
     <AppBar position="static" elevation={0}>
@@ -36,25 +33,21 @@ const Header = () => {
             <S.LoginBtn aria-describedby={id} onClick={openPopover}>로그인</S.LoginBtn>
           )}
         </S.User>
-        <Popover
-          id={id}
-          open={isOpened}
-          anchorEl={anchorEl}
-          onClose={closePopover}
-          onExited={() => isLoggedIn && logOut()}
-          anchorOrigin={{
-            vertical: 'bottom',
-            horizontal: 'right',
-          }}
-          transformOrigin={{
-            vertical: 'top',
-            horizontal: 'right',
-          }}
-        >
-          {isLoggedIn
-            ? <LogoutPopover onClickLogout={closePopover} />
-            : <LoginPopover handleClose={closePopover} />}
-        </Popover>
+        {isLoggedIn ? (
+          <LogoutPopover
+            id={id}
+            isOpened={isOpened}
+            anchorEl={anchorEl}
+            onClose={() => setAnchorEl(null)}
+          />
+        ) : (
+          <LoginPopover
+            id={id}
+            isOpened={isOpened}
+            anchorEl={anchorEl}
+            onClose={() => setAnchorEl(null)}
+          />
+        )}
       </Toolbar>
     </AppBar>
   );

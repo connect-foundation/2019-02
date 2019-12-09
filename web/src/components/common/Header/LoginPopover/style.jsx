@@ -22,6 +22,7 @@ export default {
   `,
   TempError: styled.p`
     margin-top: 15px;
+    width: 280px;
     font-size: 14px;
     line-height: 18px;
     text-align: center;
