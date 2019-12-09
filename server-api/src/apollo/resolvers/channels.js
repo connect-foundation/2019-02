@@ -118,10 +118,14 @@ const setCurrentSlide = async (_, { channelId, currentSlide }, { user, pubsub })
   }
 };
 
+const checkListener = (list, user) => {
+  if (list.includes(user.userId)) return false;
+  return true;
+};
+
 const enteredListener = async (_, { channelId, listenerList }, { user, pubsub }) => {
-  if (listenerList.includes(user.userId)) return;
+  if (!checkListener(listenerList, user)) return;
   try {
-    listenerList.push(user.userId);
     const channel = await Channels.findOneAndUpdate(
       { channelId },
       { listenerList },
@@ -138,9 +142,13 @@ const enteredListener = async (_, { channelId, listenerList }, { user, pubsub })
 };
 
 const leaveListener = async (_, { channelId, listenerList }, { user, pubsub }) => {
-  if (!listenerList.includes(user.userId)) return;
+  console.log(listenerList);
+  console.log('leave', user.userId);
+  console.log(checkListener(listenerList, user));
+  if (checkListener(listenerList, user)) return;
   try {
     const newListenerList = listenerList.filter((listener) => user.userId !== listener);
+    console.log(newListenerList);
     const channel = await Channels.findOneAndUpdate(
       { channelId },
       { newListenerList },

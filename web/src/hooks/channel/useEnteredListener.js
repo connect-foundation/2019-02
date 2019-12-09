@@ -2,8 +2,8 @@ import gql from 'graphql-tag';
 import { useMutation } from '@apollo/react-hooks';
 
 const ENTERED_LISTENER = gql`
-  mutation UseEnteredListener($channelId: String!) {
-    enteredListener(channelId: $channelId) { 
+  mutation UseEnteredListener($channelId: String!, $listenerList: [String]) {
+    enteredListener(channelId: $channelId, listenerList: $listenerList) { 
       listenerList
     }
   }

@@ -6,16 +6,12 @@ import {
   useGetUserStatus,
   useGetChannel,
   useAddUserHistory,
-  useEnteredListener,
-  useLeaveListener,
-  useListenerListChanged,
 } from '@/hooks';
 import {
   Chat,
   Slide,
   ToolBar,
 } from '@/components/channel';
-import { useBeforeunload } from '@/components/common/BeforeUnload';
 import { authByAnonymous } from '@/apis';
 import S from './style';
 import { NO_EXIST_CHANNEL_MESSAGE, ENTERING_CHANNEL_MESSAGGGE } from '@/constants';
@@ -27,9 +23,6 @@ const Channel = () => {
   const logIn = useLogin();
   const userStatus = useGetUserStatus();
   const { mutate } = useAddUserHistory();
-  const { listenerList } = useListenerListChanged(channelId);
-  const enteredListener = useEnteredListener(channelId);
-  const leaveListener = useLeaveListener(channelId);
 
   useEffect(() => {
     if (userStatus.token) return;
@@ -42,12 +35,6 @@ const Channel = () => {
 
   useEffect(() => {
     if (data && data.status === 'ok') {
-      enteredListener.mutate({
-        variables: {
-          channelId,
-          listenerList,
-        },
-      });
       mutate({
         variables: {
           channelId,
@@ -55,14 +42,6 @@ const Channel = () => {
       });
     }
   }, [data]);
-  useBeforeunload(() => {
-    leaveListener.mutate({
-      variables: {
-        channelId,
-        listenerList,
-      },
-    });
-  });
 
   if (!data || loading) {
     return (<LoadingModal message={ENTERING_CHANNEL_MESSAGGGE} />);
@@ -87,10 +66,7 @@ const Channel = () => {
     >
       <S.Channel>
         <ToolBar />
-        <Slide
-          channelId={channelId}
-          listenerList={listenerList.length}
-        />
+        <Slide channelId={channelId} />
         <Chat channelId={channelId} userId={userStatus.userId} />
       </S.Channel>
     </ChannelContext.Provider>
