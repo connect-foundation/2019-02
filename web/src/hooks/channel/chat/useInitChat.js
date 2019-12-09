@@ -21,7 +21,10 @@ const GET_CHAT_LOGS = gql`
 
 const useInitChat = (channelId) => {
   const client = useApolloClient();
-  const [loadChats, query] = useLazyQuery(GET_CHAT_LOGS, { variables: { channelId } });
+  const [loadChats, query] = useLazyQuery(GET_CHAT_LOGS, {
+    variables: { channelId },
+    fetchPolicy: 'no-cache',
+  });
   const cleanChatCache = () => {
     client.writeQuery({
       query: GET_CHAT_CACHED,
@@ -36,9 +39,7 @@ const useInitChat = (channelId) => {
     });
   };
   const writeChatCache = () => {
-    const isNotComponentMountEvent = !query.called || query.loading;
-
-    if (isNotComponentMountEvent) return;
+    if (!query.called || query.loading) return;
 
     const { chatLogs } = client.readQuery({ query: GET_CHAT_CACHED });
     const logs = query.data.getChatLogs;
@@ -62,7 +63,7 @@ const useInitChat = (channelId) => {
   }, []);
   useEffect(() => {
     writeChatCache();
-  }, [query.loading]);
+  }, [query]);
 };
 
 export default useInitChat;

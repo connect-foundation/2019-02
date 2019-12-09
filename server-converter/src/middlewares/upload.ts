@@ -1,5 +1,5 @@
 import * as AwsSdk from 'aws-sdk';
-import { createReadStream } from 'fs';
+import { createReadStream, existsSync } from 'fs';
 import { RequestHandler } from '../@types';
 import { noitfyProgress } from './progress';
 import { PROGRESS_UPLOADING } from '../constants';
@@ -33,7 +33,8 @@ const uploadToObjectStorage = (
   });
 });
 
-const uploadMiddleware: RequestHandler = (req, _, next) => {
+const uploadMiddleware: RequestHandler = (req: any, _, next) => {
+  if (!existsSync(req.file.path)) next();
   const { channelId } = req.params;
   const uploadFile: Promise<string> = uploadToObjectStorage(
     req.file.path,

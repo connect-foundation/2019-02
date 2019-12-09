@@ -1,5 +1,6 @@
 export const EMOJI_LIST = ['😀', '😃', '🤣', '😍', '😘', '🥳', '😻', '😽', '😇', '🦄', '🤓', '😎', '🤩'];
 export const TEMP_ERROR_MESSAGE = '일시적인 오류입니다. 다시 시도해주세요.';
+export const REJECT_ERROR_MESSAGE = '대기량이 많습니다. 잠시 후 다시 시도해주세요.';
 export const FILE_TYPE_VALIDATION_ERROR_MESSAGE = 'dropy가 지원하지 않는 파일 형식입니다. 다시 시도해주세요.';
 export const CREATING_CHANNEL_MESSAGE = '슬라이드(PDF) 파일 저장 중';
 export const NO_EXIST_CHANNEL = '존재하지 않는 채널입니다...';
@@ -8,3 +9,4 @@ export const NO_EXIST_CHANNEL_MESSAGE = '존재하지 않는 채널입니다...'
 export const ENTERING_CHANNEL_MESSAGGGE = '채널 입장중';
 export const CODEINPUT_PLACEHOLDER = '채널 코드를 입력해주세요.';
 export const NEED_LOGIN_ERROR_MESSAGE = '로그인한 사용자만 채널을 생성할 수 있습니다.';
+export const CHANNEL_CODE_LENGTH = 5;

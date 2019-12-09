@@ -4,7 +4,8 @@ import { RequestHandler } from '../@types';
 import { noitfyProgress } from './progress';
 import { PROGRESS_CONVERTING } from '../constants';
 
-const convertMiddleware: RequestHandler = (req, _, next) => {
+const convertMiddleware: RequestHandler = (req: any, _, next) => {
+  req.isConverted = true;
   const { channelId } = req.params;
   const converterOptions = {
     quality: 100,
