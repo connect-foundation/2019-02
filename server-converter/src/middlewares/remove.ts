@@ -1,11 +1,12 @@
 import { unlink } from 'fs';
 import { RequestHandler } from '../@types';
+import { getPdfFilePath } from '../utils/pathParser';
 
 const removeMiddleware: RequestHandler = (req:any, res, next) => {
-  // TODO: 1IP 일때, 큐에서 삭제된 프로세스 파일 삭제 필요
+  const filePath = req.file ? req.file.path : getPdfFilePath(req.params.channelId);
   const slides = req.slides ? req.slides.map((slide) => slide.path) : [];
   const removeTmpFiles: Promise<void>[] = [
-    req.file.path,
+    filePath,
     ...slides,
   ].map((path: string) => new Promise((resolve, reject) => {
     unlink(path, (err) => {
