@@ -11,9 +11,8 @@ import {
   TEMP_ERROR_MESSAGE,
   REJECT_ERROR_MESSAGE,
   CREATING_CHANNEL_MESSAGE,
+  CHANNEL_CODE_LENGTH,
 } from '@/constants';
-
-const ChannelCodeLength = 5;
 
 const DropInput = (props) => {
   const { mutate, data } = useCreateChannel();
@@ -22,7 +21,7 @@ const DropInput = (props) => {
     dropModalDispatch({ type: 'setLoadingModal', payload: CREATING_CHANNEL_MESSAGE });
 
     const channelId = createChannelId();
-    const channelCode = channelId.substring(0, ChannelCodeLength);
+    const channelCode = channelId.substring(0, CHANNEL_CODE_LENGTH);
     const file = e.target.files[0];
     const formData = createFormData({ file });
     const unsubscribeProgress = subscribeProgress(channelId, ({ message }) => {

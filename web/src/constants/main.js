@@ -9,3 +9,4 @@ export const NO_EXIST_CHANNEL_MESSAGE = '존재하지 않는 채널입니다...'
 export const ENTERING_CHANNEL_MESSAGGGE = '채널 입장중';
 export const CODEINPUT_PLACEHOLDER = '채널 코드를 입력해주세요.';
 export const NEED_LOGIN_ERROR_MESSAGE = '로그인한 사용자만 채널을 생성할 수 있습니다.';
+export const CHANNEL_CODE_LENGTH = 5;
