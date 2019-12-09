@@ -21,7 +21,7 @@ const GoogleButton = (props) => {
       clientId={process.env.GOOGLE_ID}
       render={() => (
         <S.GoogleLoginButton onClick={() => showError()}>
-          구글 로그인
+          구글로 로그인
         </S.GoogleLoginButton>
       )}
       onSuccess={handleResponse}

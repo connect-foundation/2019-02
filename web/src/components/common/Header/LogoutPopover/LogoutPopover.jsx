@@ -1,35 +1,50 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { MenuItem } from '@material-ui/core';
+import { MenuItem, Popover } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import { useLogout } from '@/hooks';
 import S from './style';
 
 const LogoutPopover = (props) => {
-  const { handleClose } = props;
+  const {
+    id,
+    isOpened,
+    anchorEl,
+    onClose,
+  } = props;
   const logOut = useLogout();
-  const handleLogOut = () => {
-    handleClose();
-    logOut();
+  const [isClickedLogout, setIsClickedLogout] = useState(false);
+  const handleClickLogout = () => {
+    setIsClickedLogout(true);
+    onClose();
   };
 
   return (
-    <S.PopoverWrapper>
-      <Link to="/mypage">
-        <MenuItem onClick={handleClose}>프로필</MenuItem>
-      </Link>
-      <MenuItem onClick={handleLogOut}>
-        로그아웃
-      </MenuItem>
-      <MenuItem onClick={handleClose}>
-        도움말
-      </MenuItem>
-    </S.PopoverWrapper>
+    <Popover
+      id={id}
+      open={isOpened}
+      anchorEl={anchorEl}
+      onClose={onClose}
+      onExited={() => isClickedLogout && logOut()}
+      anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+      transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+    >
+      <S.PopoverWrapper>
+        <Link to="/mypage">
+          <MenuItem onClick={onClose}>프로필</MenuItem>
+        </Link>
+        <MenuItem onClick={handleClickLogout}>로그아웃</MenuItem>
+        <MenuItem onClick={onClose}>도움말</MenuItem>
+      </S.PopoverWrapper>
+    </Popover>
   );
 };
 
 LogoutPopover.propTypes = {
-  handleClose: PropTypes.func.isRequired,
+  id: PropTypes.string,
+  isOpened: PropTypes.bool.isRequired,
+  anchorEl: PropTypes.object,
+  onClose: PropTypes.func.isRequired,
 };
 
 export default LogoutPopover;

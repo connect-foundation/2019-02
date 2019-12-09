@@ -6,7 +6,12 @@ import {
 } from 'react-router-dom';
 import { CssBaseline } from '@material-ui/core';
 import { GlobalStyle } from './styles';
-import { Header, Wrapper, ErrorModal } from './components/common';
+import {
+  Header,
+  Wrapper,
+  ErrorModal,
+  Auth,
+} from './components/common';
 import {
   Main,
   Channel,
@@ -26,7 +31,7 @@ const App = () => (
             <Main />
           </Route>
           <Route path="/channels/:channelId" exact>
-            <Channel />
+            <Auth render={({ user }) => <Channel user={user} />} />
           </Route>
           <Route path="/mypage" exact>
             <MyPage />

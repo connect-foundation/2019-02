@@ -1,42 +1,46 @@
 import Queue from '../core/queue';
-import endMiddleware from './end';
+import { clearProgress } from '../middlewares';
 
 const requestQueue = (config) => {
   const queue = new Queue(config);
 
-  queue.on('process', (job, done) => {
+  queue.on('process', (job, complete) => {
     job.data.res.once('end', () => {
-      done();
+      complete('complete');
     });
-    job.data.next();
+    if (!job.data.req.endflag) job.data.next();
   });
 
   queue.on('reject', (job) => {
-    job.data.res.json({ status: 'reject', message: 'sorry, queue is full...' });
+    const { channelId } = job.data.req.params;
+
+    clearProgress(channelId);
+    job.data.res.status(200).json({ status: 'reject' });
   });
+
+  const canCancel = (job) => {
+    return (job.state === 'process' && !job.data.req.isConverted);
+  }
 
   const queueMiddleware = (req, res, next) => {
     const data = { req, res, next };
     const job = queue.createJob(data);
 
     res.once('close', () => {
-      // TODO: BUGFIX
       if (job.state === 'queue') {
-        job.data.res.status(204).end();
+        job.data.req.endflag = true;
         queue.cancelJob(job);
+      }
+      if (canCancel(job)) {
+        job.data.req.endflag = true;
+        queue.completeJob(job, 'cancel');
       }
     });
   };
 
-  const result = (req, res, next) => {
-    endMiddleware(req, res, () => {
-      queueMiddleware(req, res, next);
-    });
-  };
+  queueMiddleware.queue = queue;
 
-  result.queue = queue;
-
-  return result;
+  return queueMiddleware;
 };
 
 export default requestQueue;
