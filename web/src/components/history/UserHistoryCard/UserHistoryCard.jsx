@@ -19,14 +19,14 @@ const UserHistoryCard = (props) => {
 
   return (
     <>
-      <Link to={`/channels/${channelId}`}>
-        <S.HistoryCard>
+      <S.HistoryCard>
+        <Link to={`/channels/${channelId}`}>
           <S.HistoryCardLeftDetail>
             <Typography variant="subtitle1" color="textSecondary">
-              {updatedAt}
+              {`${updatedAt} ~ 2020년 1월 15일`}
             </Typography>
             <Typography component="h5" variant="h5">
-              {channelName}
+              {`${channelName} | ${displayName}`}
             </Typography>
           </S.HistoryCardLeftDetail>
           <S.HistoryCardRightDetail>
@@ -36,15 +36,10 @@ const UserHistoryCard = (props) => {
                 {presentationStatus.label}
               </SmallButton>
             </Typography>
-            <Typography component="h6" variant="h6">
-              {displayName}
-            </Typography>
+            <S.ChannelCode>채널코드 : abcde</S.ChannelCode>
           </S.HistoryCardRightDetail>
-          <S.HistoryCardMiddleDetail>
-            <S.Profile />
-          </S.HistoryCardMiddleDetail>
-        </S.HistoryCard>
-      </Link>
+        </Link>
+      </S.HistoryCard>
     </>
   );
 };

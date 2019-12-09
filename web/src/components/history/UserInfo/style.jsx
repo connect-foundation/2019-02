@@ -10,10 +10,10 @@ export default {
     flex-grow: 0;
     align-items: center;
     flex-direction: column;
-    width: ${px(400)};
+    width: ${px(350)};
     height: 100%;
     padding: ${px(100)} 0;
-    border-right: ${px(1)} solid${colorGray(3)};
+    border-right: ${px(1)} solid ${colorGray(3)};
   `,
   Profile: styled.div`
     width: ${px(150)};
@@ -26,8 +26,9 @@ export default {
   `,
   Setting: styled.div`
     position: absolute;
-    top: ${px(80)};
-    left: ${px(360)};
+    font-size: ${px(20)};
+    top: ${px(70)};
+    left: ${px(300)};
     cursor: pointer;
   `,
   SettingModal: styled(Modal)`
