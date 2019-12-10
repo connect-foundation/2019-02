@@ -1,10 +1,16 @@
-const toolBarInitState = {
+const initialChannelState = {
+  isChat: false,
   isToolBarActive: false,
   isPenToolActive: false,
 };
 
-const toolBarReducer = (state, action) => {
+const channelReducer = (state, action) => {
   switch (action.type) {
+    case 'SET_ISCHAT':
+      return {
+        ...state,
+        isChat: action.payload.isChat,
+      };
     case 'toolBarActive':
       return {
         ...state,
@@ -16,11 +22,11 @@ const toolBarReducer = (state, action) => {
         isPenToolActive: !state.isPenToolActive,
       };
     default:
-      throw new Error();
+      return state;
   }
 };
 
 export {
-  toolBarInitState,
-  toolBarReducer,
+  channelReducer,
+  initialChannelState,
 };

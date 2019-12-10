@@ -14,7 +14,7 @@ export default {
     flex-direction: column;
     justify-content: center;
     cursor: pointer;
-    ${(props) => (props.direction === 'back'
+    ${(props) => (!props.direction
     ? 'left: 0'
     : 'right: 0')};
     &:hover{
@@ -26,7 +26,7 @@ export default {
   ArrowWrapper: styled.div`
     height: ${px(40)};
     width: ${px(40)};
-    align-self: ${(props) => (props.direction === 'back'
+    align-self: ${(props) => (!props.direction
     ? 'flex-start'
     : 'flex-end')};
     display: flex;

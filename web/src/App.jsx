@@ -6,12 +6,9 @@ import {
 } from 'react-router-dom';
 import { CssBaseline } from '@material-ui/core';
 import { GlobalStyle } from './styles';
-import {
-  Header,
-  Wrapper,
-  ErrorModal,
-  Auth,
-} from './components/common';
+import { ErrorModal, Auth } from './components/common';
+import { Layout } from './components/base';
+import { NOT_FOUND } from './constants';
 import {
   Main,
   Channel,
@@ -23,28 +20,21 @@ const App = () => (
   <>
     <GlobalStyle />
     <CssBaseline />
-    <Wrapper>
-      <Router>
-        <Header />
+    <Router>
+      <Layout>
         <Switch>
-          <Route path="/" exact>
-            <Main />
-          </Route>
-          <Route path="/channels/:channelId" exact>
-            <Auth render={({ user }) => <Channel user={user} />} />
-          </Route>
-          <Route path="/mypage" exact>
-            <MyPage />
-          </Route>
-          <Route path="/privacy-policy" exact>
-            <PrivacyPolicy />
-          </Route>
-          <Route>
-            <ErrorModal message="존재하지 않는 페이지 입니다..." />
-          </Route>
+          <Route exact path="/" component={Main} />
+          <Route
+            exact
+            path="/channels/:channelId"
+            component={() => <Auth render={({ user }) => <Channel user={user} />} />}
+          />
+          <Route exact path="/mypage" component={MyPage} />
+          <Route exact path="/privacy-policy" component={PrivacyPolicy} />
+          <Route component={() => <ErrorModal message={NOT_FOUND} />} />
         </Switch>
-      </Router>
-    </Wrapper>
+      </Layout>
+    </Router>
   </>
 );
 

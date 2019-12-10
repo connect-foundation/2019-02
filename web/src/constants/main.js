@@ -4,6 +4,7 @@ export const REJECT_ERROR_MESSAGE = '대기량이 많습니다. 잠시 후 다�
 export const FILE_TYPE_VALIDATION_ERROR_MESSAGE = 'dropy가 지원하지 않는 파일 형식입니다. 다시 시도해주세요.';
 export const CREATING_CHANNEL_MESSAGE = '슬라이드(PDF) 파일 저장 중';
 export const NO_EXIST_CHANNEL = '존재하지 않는 채널입니다...';
+export const NOT_FOUND = '404 존재하지 않는 페이지입니다...';
 export const PROGRESS_LAST_MESSAGE = '슬라이드 파일들 업로드 중';
 export const NO_EXIST_CHANNEL_MESSAGE = '존재하지 않는 채널입니다...';
 export const ENTERING_CHANNEL_MESSAGGGE = '채널 입장중';
