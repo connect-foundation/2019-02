@@ -30,14 +30,15 @@ const UserHistory = (props) => {
       />
     );
   };
+  const noneHistoryCardRender = (
+    <S.Alert>
+      <span aria-label="really" role="img">🤭</span>
+      <span>기록이 없어요.</span>
+    </S.Alert>
+  );
   const historyCardList = data && data.length > 0
     ? data.filter(filterToDomain).map(mapToCardComponent)
-    : (
-      <S.Alert>
-        <span aria-label="really" role="img">🤭</span>
-        기록이 없어요.
-      </S.Alert>
-    );
+    : noneHistoryCardRender;
 
   return (
     <>
@@ -53,9 +54,10 @@ const UserHistory = (props) => {
               리스너로 참여한 채널 목록
             </S.UserHistoryTitle>
           )}
-
         <S.UserHistoryContents>
-          {historyCardList}
+          {historyCardList.length === 0
+            ? noneHistoryCardRender
+            : historyCardList}
         </S.UserHistoryContents>
       </S.UserHistory>
     </>
