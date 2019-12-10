@@ -8,6 +8,7 @@ import { CssBaseline } from '@material-ui/core';
 import { GlobalStyle } from './styles';
 import { ErrorModal, Auth } from './components/common';
 import { Layout } from './components/base';
+import { NOT_FOUND } from './constants';
 import {
   Main,
   Channel,
@@ -30,7 +31,7 @@ const App = () => (
           />
           <Route exact path="/mypage" component={MyPage} />
           <Route exact path="/privacy-policy" component={PrivacyPolicy} />
-          <Route component={ErrorModal} />
+          <Route component={() => <ErrorModal message={NOT_FOUND} />} />
         </Switch>
       </Layout>
     </Router>
