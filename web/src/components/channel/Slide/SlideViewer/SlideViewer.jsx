@@ -9,12 +9,11 @@ import {
 } from '@/hooks';
 import { moveSlide, moveSlidePossible } from '@/utils/slide';
 import { FullScreen } from '@/components/common';
+import { KEYCODE_BACK, KEYCODE_FOWARD } from '@/constants';
 import Indicator from './Indicator';
 import MainSlide from './MainSlide';
 import PageNumber from './PageNumber';
 
-const KEYCODE_BACK = 37;
-const KEYCODE_FOWARD = 39;
 
 const SlideViewer = (props) => {
   const {
@@ -36,8 +35,9 @@ const SlideViewer = (props) => {
     currentSlide,
   );
   const directionKey = {};
-  directionKey[KEYCODE_BACK] = 'back';
-  directionKey[KEYCODE_FOWARD] = 'foward';
+
+  directionKey[KEYCODE_BACK] = false;
+  directionKey[KEYCODE_FOWARD] = true;
 
   const handleSetPage = (direction) => () => {
     const sync = !isMaster && isSync ? currentSlide : page;

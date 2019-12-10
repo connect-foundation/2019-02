@@ -11,7 +11,7 @@ const Indicator = (props) => {
       direction={direction}
     >
       <S.ArrowWrapper direction={direction}>
-        {direction === 'back'
+        {!direction
           ? <S.ArrowBack />
           : <S.ArrowFoward />}
       </S.ArrowWrapper>
