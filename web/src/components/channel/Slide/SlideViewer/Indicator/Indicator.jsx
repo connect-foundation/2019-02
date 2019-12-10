@@ -8,11 +8,10 @@ const Indicator = (props) => {
   return (
     <S.Indicator
       onClick={handleSetPage(direction)}
-      // onKeyDown={}
       direction={direction}
     >
       <S.ArrowWrapper direction={direction}>
-        {direction === 'back'
+        {!direction
           ? <S.ArrowBack />
           : <S.ArrowFoward />}
       </S.ArrowWrapper>
