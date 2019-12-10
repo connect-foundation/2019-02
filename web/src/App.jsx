@@ -7,7 +7,7 @@ import {
 import { CssBaseline } from '@material-ui/core';
 import { GlobalStyle } from './styles';
 import { ErrorModal, Auth } from './components/common';
-import Layout from './components/base';
+import { Layout } from './components/base';
 import {
   Main,
   Channel,

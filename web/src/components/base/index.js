@@ -1,1 +1,2 @@
-export { default } from './Layout.jsx';
+export { default as Layout } from './Layout';
+export { default as ChannelProvider } from './ChannelProvider';

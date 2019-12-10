@@ -27,6 +27,5 @@ module.exports = {
 		"jsx-a11y/label-has-associated-control": "off",
 		"react/require-default-props": "off",
 		"react/forbid-prop-types": "off",
-		"import/extensions": "off",
 	}
 };

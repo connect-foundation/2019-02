@@ -1,13 +1,13 @@
 import React, { useEffect, useReducer } from 'react';
 import { useRouteMatch } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import { ChannelContext } from '@/contexts';
 import {
   useGetChannel,
   useAddUserHistory,
   toolBarInitState,
   toolBarReducer,
 } from '@/hooks';
+import { ChannelProvider } from '@/components/base';
 import { Chat, Slide, ToolBar } from '@/components/channel';
 import S from './style';
 import { NO_EXIST_CHANNEL_MESSAGE, ENTERING_CHANNEL_MESSAGGGE } from '@/constants';
@@ -41,7 +41,7 @@ const Channel = (props) => {
   }
 
   return (
-    <ChannelContext.Provider
+    <ChannelProvider
       value={{
         isMaster: data.isMaster,
         fileUrl: data.channel.fileUrl,
@@ -66,7 +66,7 @@ const Channel = (props) => {
         />
         <Chat channelId={channelId} userId={user.userId} />
       </S.Channel>
-    </ChannelContext.Provider>
+    </ChannelProvider>
   );
 };
 
