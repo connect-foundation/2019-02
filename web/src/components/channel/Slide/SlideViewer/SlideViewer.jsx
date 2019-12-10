@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import S from './style';
 import {
@@ -12,6 +12,9 @@ import { FullScreen } from '@/components/common';
 import Indicator from './Indicator';
 import MainSlide from './MainSlide';
 import PageNumber from './PageNumber';
+
+const KEYCODE_BACK = 37;
+const KEYCODE_FOWARD = 39;
 
 const SlideViewer = (props) => {
   const {
@@ -32,6 +35,10 @@ const SlideViewer = (props) => {
     page,
     currentSlide,
   );
+  const directionKey = {};
+  directionKey[KEYCODE_BACK] = 'back';
+  directionKey[KEYCODE_FOWARD] = 'foward';
+
   const handleSetPage = (direction) => () => {
     const sync = !isMaster && isSync ? currentSlide : page;
     if (!moveSlidePossible(direction, sync, slideUrls.length)) return;
@@ -42,6 +49,17 @@ const SlideViewer = (props) => {
       moveSlide(page, direction, setPage);
     }
   };
+  const handleKeyDown = useCallback((event) => {
+    const key = event.keyCode;
+    if (Object.keys(directionKey).includes(key.toString())) {
+      handleSetPage(directionKey[key])();
+    }
+  }, [page]);
+
+  useEffect(() => {
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [handleKeyDown]);
 
   useEffect(() => {
     if (!isMaster) return;
@@ -49,7 +67,7 @@ const SlideViewer = (props) => {
   }, [page]);
 
   const screenChange = (e) => setFullScreen(e);
-  const IndicatorRender = ['back', 'foward'].map((direction) => (
+  const IndicatorRender = Object.values(directionKey).map((direction) => (
     <Indicator
       key={direction}
       direction={direction}
