@@ -28,7 +28,7 @@ const SlideViewer = (props) => {
   } = props;
   const { mutate } = useSetCurrentSlide();
   const { currentSlide } = useSlideChanged(channelId);
-  const { slideUrls, isMaster } = useChannelSelector((state) => state);
+  const { slideUrls, isMaster, isChat } = useChannelSelector((state) => state);
   const syncSlide = useSyncSlide(
     isMaster,
     isSync,
@@ -50,11 +50,12 @@ const SlideViewer = (props) => {
     }
   };
   const handleKeyDown = useCallback((event) => {
+    if (isChat) return;
     const key = event.keyCode;
     if (Object.keys(directionKey).includes(key.toString())) {
       handleSetPage(directionKey[key])();
     }
-  }, [page]);
+  }, [page, isChat]);
 
   useEffect(() => {
     window.addEventListener('keydown', handleKeyDown);
