@@ -39,13 +39,13 @@ const uploadMiddleware: RequestHandler = (req: any, _, next) => {
   const uploadFile: Promise<string> = uploadToObjectStorage(
     req.file.path,
     channelId,
-    'index',
+    req.file.originalname,
     true,
   );
   const uploadSlides: Promise<string>[] = req.slides.map((slide) => uploadToObjectStorage(
     slide.path,
     channelId,
-    `${slide.page}`,
+    `${slide.page}.jpg`,
     false,
   ));
 
