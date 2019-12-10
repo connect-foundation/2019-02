@@ -26,6 +26,7 @@ module.exports = {
 		"import/no-unresolved": "off",
 		"jsx-a11y/label-has-associated-control": "off",
 		"react/require-default-props": "off",
-		"react/forbid-prop-types": "off"
+		"react/forbid-prop-types": "off",
+		"import/extensions": "off",
 	}
 };
