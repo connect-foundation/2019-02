@@ -22,7 +22,6 @@ export default {
     border-radius: 3px;
     box-shadow: 10px 2px 20px rgba(0, 0, 0, 0.1);
     transform: translate(-50%, -50%);
-    visibility: hidden;
   `,
   Canvas: styled.canvas`
     position: absolute;

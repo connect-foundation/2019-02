@@ -10,7 +10,7 @@ class Job {
   }
 
   setState(emit, state, ...args) {
-    console.log(state);
+    console.log(state, this.data.req.params.channelId);
     this.state = state;
     if (emit) this.queue.emit(state, this, ...args);
 

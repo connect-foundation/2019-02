@@ -64,13 +64,22 @@ const createChannel = async (_, {
 };
 
 const getChannel = async (_, { channelId }, { user }) => {
+  const response = {
+    status: 'fail',
+    isMaster: false,
+    channel: null,
+  };
+
+  if (!user) return response;
+
   try {
     const channel = await Channels.findOne({ channelId });
+
+    if (!channel) return response;
+
     const master = await Users.findOne({ userId: channel.masterId });
     const status = channel ? 'ok' : 'not_exist';
     const isMaster = !!channel && !!user && channel.masterId === user.userId;
-    if (!channel) return { status, isMaster };
-
     const payload = await channel.toPayload({ master });
 
     return {

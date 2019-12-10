@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import ErrorEmoji from './ErrorEmoji';
 import ErrorText from './ErrorText';
+import BackButton from './BackButton';
 import S from './style';
 
 const ErrorModal = (props) => {
@@ -12,6 +13,7 @@ const ErrorModal = (props) => {
       <S.ErrorModalContent>
         <ErrorEmoji />
         <ErrorText message={message} />
+        <BackButton />
       </S.ErrorModalContent>
     </S.ErrorModal>
   );

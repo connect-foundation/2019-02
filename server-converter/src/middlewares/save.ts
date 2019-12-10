@@ -7,7 +7,8 @@ const destination: MulterHandler = (_, __, cb) => {
   cb(null, path.resolve(__dirname, '../../tmpFiles'));
 };
 
-const filename: MulterHandler = (req, file, cb) => {
+const filename: MulterHandler = (req: any, file, cb) => {
+  req.isSaved = true;
   const extension = getExtension(file.originalname);
   cb(null, `${req.params.channelId}_file.${extension}`);
 };
@@ -25,5 +26,6 @@ const saveMiddleware: RequestHandler = multer({
   fileFilter,
   storage: multer.diskStorage({ destination, filename }),
 }).single('file');
+
 
 export default saveMiddleware;

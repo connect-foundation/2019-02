@@ -11,11 +11,9 @@ const UserInfoButton = (props) => {
   return (
     <>
       <S.UserInfoButton onClick={setHistoryStateType('speaker')}>
-        <span role="img" aria-label="speaker-img">🐤</span>
       스피커 히스토리 보기
       </S.UserInfoButton>
       <S.UserInfoButton onClick={setHistoryStateType('listener')}>
-        <span role="img" aria-label="speaker-img">🦉</span>
       리스너 히스토리 보기
       </S.UserInfoButton>
     </>

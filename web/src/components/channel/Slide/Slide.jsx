@@ -13,7 +13,7 @@ import SlideInfo from './SlideInfo';
 import { useBeforeunload } from '@/components/common/BeforeUnload';
 
 const Slide = (props) => {
-  const { channelId } = props;
+  const { channelId, toolBarDispatch } = props;
   const { currentSlide } = useSlideChanged(channelId);
   const [isSync, setSync] = useState(true);
   const [checkListener, setCheckListener] = useState(true);
@@ -50,6 +50,7 @@ const Slide = (props) => {
         isSync={isSync}
         handleSync={handleSync}
         setFullScreen={setFullScreen}
+        toolBarDispatch={toolBarDispatch}
       />
       <SlideViewer
         isSync={isSync}
@@ -67,7 +68,7 @@ const Slide = (props) => {
 
 Slide.propTypes = {
   channelId: PropTypes.string.isRequired,
-  // listenerList: PropTypes.number.isRequired,
+  toolBarDispatch: PropTypes.func.isRequired,
 };
 
 export default Slide;

@@ -1,11 +1,14 @@
 import { Router } from 'express';
 import devRouter from './dev';
 import {
+  requestQueue,
   auth,
   convert,
   upload,
   saveTmp,
+  checkSave,
   removeTmp,
+  requestEnd,
   setProgressPollingTopic,
   waitProgressPolling,
   clearProgress,
@@ -13,21 +16,34 @@ import {
 
 const router = Router();
 
-router.post(
-  '/images/:channelId',
+const queueMiddleware = requestQueue({
+  queueLimit: 20,
+  activeLimit: 1,
+  cpuUsage: 90,
+});
+
+const middlewares = [
+  queueMiddleware,
   auth,
-  saveTmp,
+  [saveTmp, checkSave],
   convert,
   upload,
   removeTmp,
+].reduce((array:any, middleware) => array.concat(middleware, requestEnd), []);
+
+router.post(
+  '/images/:channelId',
+  ...middlewares,
   (req, res) => {
     const { channelId } = req.params;
-    const { slideUrls, fileUrl } = req;
+    const { slideUrls, slideRatioList, fileUrl } = req;
 
     clearProgress(channelId);
+    res.emit('end');
     res.status(200).json({
       status: 'ok',
       slideUrls,
+      slideRatioList,
       fileUrl,
     });
   },

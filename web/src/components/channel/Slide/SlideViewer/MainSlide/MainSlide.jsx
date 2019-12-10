@@ -20,9 +20,6 @@ const MainSlide = (props) => {
     current.style.width = fitHeight ? 'auto' : '100%';
     current.style.height = fitHeight ? '100%' : 'auto';
     current.src = slideUrls[page];
-    window.requestAnimationFrame(() => {
-      current.style.visibility = 'visible';
-    });
   };
   const resizeCanvas = (fitHeight, width, height) => {
     const canvasWidth = fitHeight ? height * slideRatio : width;
@@ -48,7 +45,6 @@ const MainSlide = (props) => {
     };
     const handleResize = () => applyImageRatio();
 
-    imageRef.current.style.visibility = 'hidden';
     handleResize();
     window.addEventListener('resize', handleResize);
 
