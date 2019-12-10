@@ -1,5 +1,5 @@
 import React from 'react';
-import Logo from '@@/dropyLogo.png';
+import Logo from '@@/logo_bird_1442X1048.png';
 import S from './style';
 
 const MainLogo = () => (

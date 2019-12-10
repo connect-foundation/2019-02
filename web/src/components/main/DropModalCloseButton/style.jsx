@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import closeIcon from '@@/icon_x_512x512_white.png';
 import { px } from '@/styles/themeUtil';
 
 export default {
@@ -14,7 +15,7 @@ export default {
     z-index: 999;
   `,
   CloseIcon: styled.img.attrs({
-    src: '/public/images/icon_x_512x512_white.png',
+    src: closeIcon,
     alt: 'DropModal_close_icon',
   })`
     width: ${px(25)};
