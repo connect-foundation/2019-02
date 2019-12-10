@@ -6,27 +6,25 @@ import { copyToClipboard } from '@/utils/dom';
 import S from './style';
 
 const CodeShareButton = () => {
-  const [open, setOpen] = useState(false);
+  const [toolTipOpen, setToolTipOpen] = useState(false);
   const channelCode = useChannelSelector((state) => state.channelCode);
   const handleTooltipClose = () => {
-    setOpen(false);
+    setToolTipOpen(false);
   };
   const handleTooltipOpen = () => {
-    setOpen(true);
+    setToolTipOpen(true);
     copyToClipboard(channelCode);
     setTimeout(() => {
-      setOpen(false);
+      setToolTipOpen(false);
     }, 3000);
   };
 
   return (
     <ClickAwayListener onClickAway={handleTooltipClose}>
       <Tooltip
-        PopperProps={{
-          disablePortal: true,
-        }}
+        PopperProps={{ disablePortal: true }}
         onClose={handleTooltipClose}
-        open={open}
+        open={toolTipOpen}
         disableFocusListener
         disableHoverListener
         disableTouchListener
