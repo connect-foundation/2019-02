@@ -78,6 +78,7 @@ const S = {
     cursor: pointer;
     &:hover{
       text-decoration: underline;
+      color: ${({ theme }) => theme.palette.link};
     }
   `,
   AreaButtons: styled.div`

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import S from './style';
-import { useGetQuestion, useDispatch } from '@/hooks';
+import { useGetQuestion, useDispatch, useChannelSelector } from '@/hooks';
 
 const ChatCard = (props) => {
   const {
@@ -13,9 +13,12 @@ const ChatCard = (props) => {
   } = props;
   const [tokens] = useGetQuestion(message);
   const dispatch = useDispatch();
-
+  const slideUrls = useChannelSelector((state) => state.slideUrls);
   const handleSetPage = (token) => () => {
     const nextPage = token.split('#')[1];
+    if (nextPage > slideUrls.length) return;
+
+    dispatch({ type: 'SET_ISSYNC', payload: { isSync: false } });
     dispatch({ type: 'SET_PAGE', payload: { page: nextPage - 1 } });
   };
 
