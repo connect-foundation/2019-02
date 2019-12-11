@@ -2,7 +2,7 @@ const useGetQuestion = (text) => {
   const regex = /(#\d+)/g;
   const questions = [...text.matchAll(regex)];
   const isQuestion = !!questions.length;
-  const tags = questions.map((q) => q[0]);
+  const tags = questions.map((question) => question[0]);
 
   if (!isQuestion) return [null];
 
@@ -19,8 +19,9 @@ const useGetQuestion = (text) => {
     const last = origin[index + 1];
     const token = text.substring(start, last);
     const isQtag = !!tags.includes(token);
+    const id = index + token;
 
-    array.push({ token, isQtag });
+    array.push({ id, token, isQtag });
 
     return array;
   }, []);

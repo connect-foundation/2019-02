@@ -15,39 +15,37 @@ import Indicator from './Indicator';
 import MainSlide from './MainSlide';
 import PageNumber from './PageNumber';
 
-
 const SlideViewer = (props) => {
+  const { isFullScreen, setFullScreen } = props;
   const {
     channelId,
-    isFullScreen,
-    setFullScreen,
-  } = props;
-  const { mutate } = useSetCurrentSlide();
-  const { currentSlide } = useSlideChanged(channelId);
-  const {
     slideUrls,
     isMaster,
     isChat,
     isSync,
     page,
   } = useChannelSelector((state) => state);
+  const { mutate } = useSetCurrentSlide();
+  const { currentSlide } = useSlideChanged(channelId);
   const dispatch = useDispatch();
-  const syncSlide = useSyncSlide(
+  const syncSlide = useSyncSlide({
     isMaster,
     isSync,
     page,
     currentSlide,
-  );
+  });
   const directionKey = {};
 
   directionKey[KEYCODE_BACK] = false;
   directionKey[KEYCODE_FOWARD] = true;
+
   const setPage = (next) => {
     dispatch({ type: 'SET_PAGE', payload: { page: next } });
   };
   const handleSetPage = (direction) => () => {
-    const sync = !isMaster && isSync ? currentSlide : page;
-    if (!moveSlidePossible(direction, sync, slideUrls.length)) return;
+    const syncIndex = !isMaster && isSync ? currentSlide : page;
+
+    if (!moveSlidePossible(direction, syncIndex, slideUrls.length)) return;
     if (!isMaster && isSync) {
       dispatch({ type: 'SET_ISSYNC', payload: { isSync: false } });
       moveSlide(currentSlide, direction, setPage);
@@ -105,7 +103,6 @@ const SlideViewer = (props) => {
 };
 
 SlideViewer.propTypes = {
-  channelId: PropTypes.string.isRequired,
   isFullScreen: PropTypes.bool.isRequired,
   setFullScreen: PropTypes.func.isRequired,
 };

@@ -1,9 +1,19 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+import {
+  useChannelSelector,
+  useSlideChanged,
+  useDispatch,
+} from '@/hooks';
 import { SmallButton } from '@/components/common';
 
-const SlideSyncButton = (props) => {
-  const { isSync, handleSync } = props;
+const SlideSyncButton = () => {
+  const { channelId, isSync } = useChannelSelector((state) => state);
+  const { currentSlide } = useSlideChanged(channelId);
+  const dispatch = useDispatch();
+  const handleSync = (state) => () => {
+    dispatch({ type: 'SET_PAGE', payload: { page: currentSlide } });
+    dispatch({ type: 'SET_ISSYNC', payload: { isSync: state } });
+  };
   const color = isSync ? 'secondary' : 'inherit';
 
   return (
@@ -15,11 +25,6 @@ const SlideSyncButton = (props) => {
       스피커 동기화
     </SmallButton>
   );
-};
-
-SlideSyncButton.propTypes = {
-  isSync: PropTypes.bool.isRequired,
-  handleSync: PropTypes.func.isRequired,
 };
 
 export default SlideSyncButton;
