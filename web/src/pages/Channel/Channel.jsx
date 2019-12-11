@@ -1,16 +1,19 @@
-import React, { useEffect, useReducer } from 'react';
+import React, { useState, useEffect, useReducer } from 'react';
 import { useRouteMatch } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import { ChannelContext } from '@/contexts';
+import { SubscriptionClient } from 'subscriptions-transport-ws';
 import {
   useGetChannel,
   useAddUserHistory,
   toolBarInitState,
   toolBarReducer,
+  useEnteredListener,
+  useLeaveListener,
 } from '@/hooks';
+import { ChannelProvider } from '@/components/base';
 import { Chat, Slide, ToolBar } from '@/components/channel';
 import S from './style';
-import { NO_EXIST_CHANNEL_MESSAGE, ENTERING_CHANNEL_MESSAGGGE } from '@/constants';
+import { NO_EXIST_CHANNEL_MESSAGE, ENTERING_CHANNEL_MESSAGGGE, GRAPHQL_WS_API } from '@/constants';
 import { LoadingModal, ErrorModal } from '@/components/common';
 
 const Channel = (props) => {
@@ -22,6 +25,37 @@ const Channel = (props) => {
     toolBarReducer,
     toolBarInitState,
   );
+
+  const subscriptionClient = new SubscriptionClient(GRAPHQL_WS_API, {
+    reconnect: true,
+  });
+  const [checkListener, setCheckListener] = useState(true);
+  const enteredListener = useEnteredListener(channelId);
+  const leaveListener = useLeaveListener(channelId);
+  useEffect(() => () => {
+    if (!checkListener) subscriptionClient.close();
+  });
+
+  subscriptionClient.onDisconnected(() => {
+    const { listenerList } = data;
+    // leaveListener.mutate({
+    //   variables: {
+    //     channelId,
+    //     listenerList,
+    //   },
+    // });
+  });
+
+  if (checkListener && data) {
+    const { listenerList } = data;
+    enteredListener.mutate({
+      variables: {
+        channelId,
+        listenerList,
+      },
+    });
+    setCheckListener(false);
+  }
 
   useEffect(() => {
     if (data && data.status === 'ok') {
@@ -41,7 +75,7 @@ const Channel = (props) => {
   }
 
   return (
-    <ChannelContext.Provider
+    <ChannelProvider
       value={{
         isMaster: data.isMaster,
         fileUrl: data.channel.fileUrl,
@@ -66,7 +100,7 @@ const Channel = (props) => {
         />
         <Chat channelId={channelId} userId={user.userId} />
       </S.Channel>
-    </ChannelContext.Provider>
+    </ChannelProvider>
   );
 };
 

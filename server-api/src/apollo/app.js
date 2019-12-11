@@ -26,6 +26,9 @@ const apolloServer = new ApolloServer({
         user: token ? verifyToken(token) : null,
         pubsub,
       })),
+    onDisconnect: () => {
+      console.log('out!!!!!!!!!!!!🤭작동하는군요!');
+    },
   },
 });
 

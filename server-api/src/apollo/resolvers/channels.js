@@ -151,13 +151,9 @@ const enteredListener = async (_, { channelId, listenerList }, { user, pubsub })
 };
 
 const leaveListener = async (_, { channelId, listenerList }, { user, pubsub }) => {
-  console.log(listenerList);
-  console.log('leave', user.userId);
-  console.log(checkListener(listenerList, user));
   if (checkListener(listenerList, user)) return;
   try {
     const newListenerList = listenerList.filter((listener) => user.userId !== listener);
-    console.log(newListenerList);
     const channel = await Channels.findOneAndUpdate(
       { channelId },
       { newListenerList },
