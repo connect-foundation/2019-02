@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import S from './style';
+import { useGetQuestion, useDispatch, useChannelSelector } from '@/hooks';
 
 const ChatCard = (props) => {
   const {
@@ -10,11 +11,27 @@ const ChatCard = (props) => {
     likesCount,
     handleClickLike,
   } = props;
+  const [tokens] = useGetQuestion(message);
+  const dispatch = useDispatch();
+  const slideUrls = useChannelSelector((state) => state.slideUrls);
+  const handleSetPage = (token) => () => {
+    const nextPage = token.split('#')[1];
+    if (nextPage > slideUrls.length) return;
+
+    dispatch({ type: 'SET_ISSYNC', payload: { isSync: false } });
+    dispatch({ type: 'SET_PAGE', payload: { page: nextPage - 1 } });
+  };
 
   return (
-    <S.ChatCard>
+    <S.ChatCard isQuestion={tokens ? 1 : 0}>
       <S.Author>{author.displayName}</S.Author>
-      <S.Message>{message}</S.Message>
+      <S.Message>
+        {!tokens ? message : tokens.map(({ token, isQtag }, index) => (isQtag ? (
+          <S.Question key={index} onClick={handleSetPage(token)}>
+            {token}
+          </S.Question>
+        ) : token))}
+      </S.Message>
       <S.AreaButtons>
         <S.LikeButton onClick={handleClickLike}>
           <S.LikeIcon isActive={isLiked} />

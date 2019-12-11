@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { useSlideChanged } from '@/hooks';
+import { useChannelSelector, useSlideChanged, useDispatch } from '@/hooks';
 import S from './style';
 import SlideStatus from './SlideStatus';
 import SlideViewer from './SlideViewer';
@@ -9,12 +9,12 @@ import SlideInfo from './SlideInfo';
 const Slide = (props) => {
   const { channelId, toolBarDispatch } = props;
   const { currentSlide } = useSlideChanged(channelId);
-  const [isSync, setSync] = useState(true);
+  const isSync = useChannelSelector((state) => state.isSync);
   const [isFullScreen, setFullScreen] = useState(false);
-  const [page, setPage] = useState(0);
+  const dispatch = useDispatch();
   const handleSync = (state) => () => {
-    setPage(currentSlide);
-    setSync(state);
+    dispatch({ type: 'SET_PAGE', payload: { page: currentSlide } });
+    dispatch({ type: 'SET_ISSYNC', payload: { isSync: state } });
   };
 
   return (
@@ -26,12 +26,8 @@ const Slide = (props) => {
         toolBarDispatch={toolBarDispatch}
       />
       <SlideViewer
-        isSync={isSync}
-        setSync={setSync}
         isFullScreen={isFullScreen}
         setFullScreen={setFullScreen}
-        page={page}
-        setPage={setPage}
         channelId={channelId}
       />
       <SlideInfo />
