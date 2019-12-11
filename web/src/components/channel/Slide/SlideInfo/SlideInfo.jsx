@@ -19,9 +19,9 @@ const SlideInfo = () => {
         </S.MasterName>
       </S.TitleWrapper>
       <S.SlideButtonsWrapper>
+        <FlyingEmojiButton />
         <SlideDownloadButton />
         <CodeShareButton />
-        <FlyingEmojiButton />
       </S.SlideButtonsWrapper>
     </S.SlideInfo>
   );

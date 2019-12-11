@@ -1,40 +1,51 @@
-import React, { useState } from 'react';
-import Popover from '@material-ui/core/Popover';
-import { SmallButton } from '@/components/common';
-import FlyingEmojiPopover from '../FlyingEmojiPopover';
+import React, { useState, useEffect } from 'react';
+import Factory from '../FlyingEmojiFactory';
+import S from './style';
 
 const FlyingEmojiButton = () => {
-  const [anchorEl, setAnchorEl] = useState(null);
-  const handleClick = (event) => setAnchorEl(event.currentTarget);
-  const handleClose = () => setAnchorEl(null);
-  const open = Boolean(anchorEl);
-  const id = open ? 'simple-popover' : undefined;
+  const [state, setState] = useState(null);
+  let jobQueue = [];
+  let requestId = null;
+  const isAchieve = () => jobQueue.length === 0 && requestId !== null;
+  const startAnimation = () => {
+    jobQueue = jobQueue.filter((job) => job.flying());
+    if (isAchieve()) {
+      cancelAnimationFrame(requestId);
+      return;
+    }
+    requestId = requestAnimationFrame(startAnimation.bind(this));
+  };
+  useEffect(() => {
+    if (!state) return;
+    const body = document.querySelector('body');
+    jobQueue.push(
+      new Factory(state, {
+        x: (body.offsetWidth / 2),
+        y: 0,
+      }, (1 + Math.random() * 3)),
+    );
+    setState(null);
+    startAnimation();
+  }, [state]);
 
   return (
-    <>
-      <SmallButton
-        onClick={handleClick}
-      >
-        <span aria-label="flying-emoji-button" role="img">👩🏻‍🎨</span>
-        <span>감정표현</span>
-      </SmallButton>
-      <Popover
-        id={id}
-        open={open}
-        anchorEl={anchorEl}
-        onClose={handleClose}
-        anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'center',
-        }}
-        transformOrigin={{
-          vertical: 'top',
-          horizontal: 'center',
-        }}
-      >
-        <FlyingEmojiPopover handleClose={handleClose} />
-      </Popover>
-    </>
+    <S.EmojiSmallButton>
+      <S.EmojiButton onClick={() => setState('❤️')}>
+        <span aria-label="like" role="img">❤️</span>
+      </S.EmojiButton>
+      <S.EmojiButton onClick={() => setState('🤭')}>
+        <span aria-label="shame" role="img">🤭</span>
+      </S.EmojiButton>
+      <S.EmojiButton onClick={() => setState('🤔')}>
+        <span aria-label="wondering" role="img">🤔</span>
+      </S.EmojiButton>
+      <S.EmojiButton onClick={() => setState('😥')}>
+        <span aria-label="cry" role="img">😥</span>
+      </S.EmojiButton>
+      <S.EmojiButton onClick={() => setState('🐤')}>
+        <span aria-label="dropy" role="img">🐤</span>
+      </S.EmojiButton>
+    </S.EmojiSmallButton>
   );
 };
 
