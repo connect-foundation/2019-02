@@ -54,18 +54,22 @@ class SlideConverter implements SlideConverterSpec {
 
   private async convertPdfToSlides(inputPath: string, outputPath: string): Promise<SlideInfo[]> {
     const count = await SlideConverter.getSlidesCount(inputPath);
-    const promises = [];
+    const slideInfos = [];
+    const pageArr = [];
 
+    for (let page = 1; page <= count; page += 1) pageArr.push(page);
     this.totalSlideCount = count;
 
-    for (let page = 1; page <= count; page += 1) {
-      const readStream = createReadStream(inputPath);
-      const slideInfoPromise = this.writeSlide(readStream, outputPath, page);
+    await pageArr.reduce((chain, page) => {
+      const nextChain = chain.then(async () => {
+        const readStream = createReadStream(inputPath);
+        const slideInfo = await this.writeSlide(readStream, outputPath, page);
 
-      promises.push(slideInfoPromise);
-    }
+        slideInfos.push(slideInfo);
+      });
 
-    const slideInfos = await Promise.all(promises);
+      return nextChain;
+    }, Promise.resolve(null));
 
     return slideInfos;
   }
