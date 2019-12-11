@@ -13,8 +13,8 @@ class Queue extends EventEmitter {
   private activeLimit: number;
   private queueLimit: number;
   private activeCount: number;
-  private queue: Job[];
-  private active: Job[];
+  queue: Job[];
+  active: Job[];
 
   constructor(config) {
     super();
@@ -59,7 +59,7 @@ class Queue extends EventEmitter {
     process.nextTick(() => {
       if (!this.canQueue()) return job.setState(true, 'reject');
       if (this.canStart() && this.queue.length === 0) return this.startJob(job);
-      return this.queueJob(job);
+      return this.enqueueJob(job);
     });
 
     process.nextTick(this.checkQueue.bind(this));
@@ -69,8 +69,8 @@ class Queue extends EventEmitter {
   startJob(job) {
     this.activeCount += 1;
     this.active.push(job);
-    job.setState(true, 'process', () => {
-      this.completeJob(job);
+    job.setState(true, 'process', (state) => {
+      this.completeJob(job, state);
     });
 
     return job;
@@ -93,39 +93,39 @@ class Queue extends EventEmitter {
     return job;
   }
 
-  completeJob(job) {
-    const index = this.active.indexOf(job);
-
-    if (index < 0) {
+  completeJob(job, state) {
+    if (this.active.length < 0) {
       throw new Error('request complete but not found');
-    } else {
-      this.active.splice(index, 1);
-      this.activeCount -= 1;
     }
+    this.active.pop();
+    if (this.activeCount !== 0) this.activeCount -= 1;
 
-    job.setState(false, 'complete');
-    process.nextTick(this.checkQueue.bind(this));
+    job.setState(false, state);
+    process.nextTick(this.checkQueue.bind(this, job));
   }
 
-  queueJob = (job) => {
+  enqueueJob = (job) => {
     this.queue.push(job);
-    job.setState(true, 'queue');
+    job.setState(true, 'queue', () => {
+      this.cancelJob(job);
+    });
 
     return job;
   };
 
   cancelJob(job) {
     this.dequeueJob(job);
-    job.setState(false, 'cancel');
+    job.setState(false, 'cancel-dequeue');
 
     return job;
   }
 
-  checkQueue() {
-    if (this.canStart() && this.queue.length > 0) {
-      const job = this.dequeueJob();
-
-      this.startJob(job);
+  checkQueue(job = null) {
+    if (job && job.state === 'cancel') {
+      job.data.next();
+    } else if (this.canStart() && this.queue.length > 0) {
+      const nextjob = this.dequeueJob();
+      this.startJob(nextjob);
     }
   }
 

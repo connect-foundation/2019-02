@@ -21,8 +21,8 @@ export default createMuiTheme({
       light: '#fff9db',
       main: '#F1F3F5',
     },
-    naver: '#2db400',
-    kakao: '#fee102',
+    naver: '#04d404',
+    kakao: '#ffe812',
     google: '#fff',
     dropyGray: {
       0: '#f8f9fa',

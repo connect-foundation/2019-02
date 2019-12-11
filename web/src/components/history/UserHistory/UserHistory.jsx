@@ -7,7 +7,7 @@ import S from './style';
 
 const UserHistory = (props) => {
   const { historyState } = props;
-  const { userId, displayName } = useGetUserStatus();
+  const { userId } = useGetUserStatus();
   const { data, loading } = useGetUserHistories();
 
   if (loading) return <p>데이터 가져오는 중...</p>;
@@ -30,9 +30,15 @@ const UserHistory = (props) => {
       />
     );
   };
+  const noneHistoryCardRender = (
+    <S.Alert>
+      <span aria-label="really" role="img">🤭</span>
+      <span>기록이 없어요.</span>
+    </S.Alert>
+  );
   const historyCardList = data && data.length > 0
     ? data.filter(filterToDomain).map(mapToCardComponent)
-    : <p>아직 채널을 한번도 생성 안해보셨네요??</p>;
+    : noneHistoryCardRender;
 
   return (
     <>
@@ -40,19 +46,18 @@ const UserHistory = (props) => {
         {historyState === 'speaker'
           ? (
             <S.UserHistoryTitle>
-              {displayName}
-              님이 스피커로 방문하셨던 채널이에요!
+              스피커로 참여한 채널 목록
             </S.UserHistoryTitle>
           )
           : (
             <S.UserHistoryTitle>
-              {displayName}
-              님이 리스너로 방문하셨던 채널이에요!
+              리스너로 참여한 채널 목록
             </S.UserHistoryTitle>
           )}
-
         <S.UserHistoryContents>
-          {historyCardList}
+          {historyCardList.length === 0
+            ? noneHistoryCardRender
+            : historyCardList}
         </S.UserHistoryContents>
       </S.UserHistory>
     </>

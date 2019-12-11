@@ -1,10 +1,13 @@
 import { unlink } from 'fs';
 import { RequestHandler } from '../@types';
+import { getPdfFilePath } from '../utils/pathParser';
 
-const removeMiddleware: RequestHandler = (req, _, next) => {
+const removeMiddleware: RequestHandler = (req:any, res, next) => {
+  const filePath = req.file ? req.file.path : getPdfFilePath(req.params.channelId);
+  const slides = req.slides ? req.slides.map((slide) => slide.path) : [];
   const removeTmpFiles: Promise<void>[] = [
-    req.file.path,
-    ...req.slides.map((slide) => slide.path),
+    filePath,
+    ...slides,
   ].map((path: string) => new Promise((resolve, reject) => {
     unlink(path, (err) => {
       if (err) reject();
@@ -13,7 +16,13 @@ const removeMiddleware: RequestHandler = (req, _, next) => {
   }));
 
   Promise.all(removeTmpFiles)
-    .then(() => next())
+    .then(() => {
+      if (req.endflag) {
+        req.isCanceled = true;
+        res.emit('end');
+        res.status(204).end();
+      } else next();
+    })
     .catch((err) => { throw err; });
 };
 

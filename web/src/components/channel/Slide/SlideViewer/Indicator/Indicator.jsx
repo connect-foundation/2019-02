@@ -8,10 +8,10 @@ const Indicator = (props) => {
   return (
     <S.Indicator
       onClick={handleSetPage(direction)}
-      direction={direction}
+      direction={direction ? 1 : 0}
     >
-      <S.ArrowWrapper direction={direction}>
-        {direction === 'back'
+      <S.ArrowWrapper direction={direction ? 1 : 0}>
+        {!direction
           ? <S.ArrowBack />
           : <S.ArrowFoward />}
       </S.ArrowWrapper>
@@ -20,7 +20,7 @@ const Indicator = (props) => {
 };
 
 Indicator.propTypes = {
-  direction: PropTypes.string.isRequired,
+  direction: PropTypes.bool.isRequired,
   handleSetPage: PropTypes.func.isRequired,
 };
 

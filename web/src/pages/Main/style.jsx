@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 export default {
-  MainWrapper: styled.div`
+  Main: styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
@@ -9,7 +9,7 @@ export default {
     background-color: white;
     flex: 1;
   `,
-  Main: styled.div`
+  MainContent: styled.div`
     display: flex;
     flex-direction: column;
     justify-content: center;

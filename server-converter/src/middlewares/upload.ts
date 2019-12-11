@@ -1,5 +1,5 @@
 import * as AwsSdk from 'aws-sdk';
-import { createReadStream } from 'fs';
+import { createReadStream, existsSync } from 'fs';
 import { RequestHandler } from '../@types';
 import { noitfyProgress } from './progress';
 import { PROGRESS_UPLOADING } from '../constants';
@@ -23,6 +23,7 @@ const uploadToObjectStorage = (
     Key: `${channelId}/${isFile ? 'files' : 'slides'}/${name}`,
     ACL: 'public-read',
     Body: readStream,
+    CacheControl: 'public, max-age=864000',
   };
 
   s3.upload(params, (err: any, data) => {
@@ -32,18 +33,19 @@ const uploadToObjectStorage = (
   });
 });
 
-const uploadMiddleware: RequestHandler = (req, _, next) => {
+const uploadMiddleware: RequestHandler = (req: any, _, next) => {
+  if (!existsSync(req.file.path)) next();
   const { channelId } = req.params;
   const uploadFile: Promise<string> = uploadToObjectStorage(
     req.file.path,
     channelId,
-    'index',
+    req.file.originalname,
     true,
   );
   const uploadSlides: Promise<string>[] = req.slides.map((slide) => uploadToObjectStorage(
     slide.path,
     channelId,
-    `${slide.page}`,
+    `${slide.page}.jpg`,
     false,
   ));
 
