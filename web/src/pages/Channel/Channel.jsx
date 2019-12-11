@@ -43,6 +43,7 @@ const Channel = (props) => {
   return (
     <ChannelProvider
       value={{
+        channelId,
         isMaster: data.isMaster,
         fileUrl: data.channel.fileUrl,
         slideUrls: data.channel.slideUrls,

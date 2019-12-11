@@ -37,6 +37,7 @@ export default createMuiTheme({
       9: '#212529',
     },
     dropyYellow: {
+      light: '#FFFDF1',
       0: '#fff9db',
       1: '#fff3bf',
       2: '#ffec99',

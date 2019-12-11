@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { px, colorGray } from '@/styles';
+import { px, colorGray, colorYellow } from '@/styles';
 import { CHAT_LIKE_ICON_PATH } from '@/constants';
 
 const LikeIcon = styled(({ isActive, className }) => (
@@ -42,7 +42,20 @@ const S = {
     padding: ${px(6)} ${px(19)};
     border-radius: ${px(3)};
     box-shadow: 0px 2px 10px rgba(73, 80, 87, 0.16);
-    background-color: #fff;
+    background-color: ${({ isQuestion }) => (
+    isQuestion
+      ? colorYellow('light')
+      : '#fff'
+  )};
+    animation: ${({ isQuestion }) => (
+    isQuestion
+      ? 'colorChange 0.8s ease-out'
+      : 'none'
+  )};
+    @keyframes colorChange {
+      0% { background-color: ${colorYellow(2)}; }
+      100% { background-color: ${colorYellow('light')};}
+    }
   `,
   Author: styled.em`
     display: block;
@@ -58,6 +71,14 @@ const S = {
     word-wrap: break-word;
     white-space: pre-wrap;
     color: ${colorGray(8)};
+  `,
+  Question: styled.span`
+    font-weight: bold;
+    color: '#000'; 
+    cursor: pointer;
+    &:hover{
+      text-decoration: underline;
+    }
   `,
   AreaButtons: styled.div`
     height: ${px(20)};

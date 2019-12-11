@@ -6,6 +6,7 @@ import {
   useSetCurrentSlide,
   useSlideChanged,
   useSyncSlide,
+  useDispatch,
 } from '@/hooks';
 import { moveSlide, moveSlidePossible } from '@/utils/slide';
 import { FullScreen } from '@/components/common';
@@ -18,16 +19,19 @@ import PageNumber from './PageNumber';
 const SlideViewer = (props) => {
   const {
     channelId,
-    isSync,
-    setSync,
-    page,
-    setPage,
     isFullScreen,
     setFullScreen,
   } = props;
   const { mutate } = useSetCurrentSlide();
   const { currentSlide } = useSlideChanged(channelId);
-  const { slideUrls, isMaster, isChat } = useChannelSelector((state) => state);
+  const {
+    slideUrls,
+    isMaster,
+    isChat,
+    isSync,
+    page,
+  } = useChannelSelector((state) => state);
+  const dispatch = useDispatch();
   const syncSlide = useSyncSlide(
     isMaster,
     isSync,
@@ -38,12 +42,14 @@ const SlideViewer = (props) => {
 
   directionKey[KEYCODE_BACK] = false;
   directionKey[KEYCODE_FOWARD] = true;
-
+  const setPage = (next) => {
+    dispatch({ type: 'SET_PAGE', payload: { page: next } });
+  };
   const handleSetPage = (direction) => () => {
     const sync = !isMaster && isSync ? currentSlide : page;
     if (!moveSlidePossible(direction, sync, slideUrls.length)) return;
     if (!isMaster && isSync) {
-      setSync(false);
+      dispatch({ type: 'SET_ISSYNC', payload: { isSync: false } });
       moveSlide(currentSlide, direction, setPage);
     } else {
       moveSlide(page, direction, setPage);
@@ -67,7 +73,7 @@ const SlideViewer = (props) => {
     mutate({ variables: { channelId, currentSlide: page } });
   }, [page]);
 
-  const screenChange = (e) => setFullScreen(e);
+  const screenChange = (event) => setFullScreen(event);
   const IndicatorRender = Object.values(directionKey).map((direction) => (
     <Indicator
       key={direction}
@@ -100,10 +106,6 @@ const SlideViewer = (props) => {
 
 SlideViewer.propTypes = {
   channelId: PropTypes.string.isRequired,
-  isSync: PropTypes.bool.isRequired,
-  setSync: PropTypes.func.isRequired,
-  page: PropTypes.number.isRequired,
-  setPage: PropTypes.func.isRequired,
   isFullScreen: PropTypes.bool.isRequired,
   setFullScreen: PropTypes.func.isRequired,
 };
