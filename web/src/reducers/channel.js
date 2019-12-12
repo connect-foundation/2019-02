@@ -51,6 +51,11 @@ const channelReducer = (state, action) => {
         ...state,
         storedCanvasUrl: action.payload,
       };
+    case 'SET_CHANNEL_NAME':
+      return {
+        ...state,
+        channelName: action.payload,
+      };
     default:
       return state;
   }
