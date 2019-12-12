@@ -13,6 +13,7 @@ const GET_CHAT_LOGS = gql`
         displayName
       }
       message
+      isQuestion
       likes
       createdAt
     }

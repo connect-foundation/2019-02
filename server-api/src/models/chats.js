@@ -24,6 +24,10 @@ const ChatSchema = new Schema({
     type: Array,
     default: [],
   },
+  isQuestion: {
+    type: Boolean,
+    required: true,
+  },
   createdAt: {
     type: Date,
     default: Date.now,
@@ -43,6 +47,7 @@ ChatSchema.methods.toPayload = function toChatPayload(...objs) {
     'author',
     'message',
     'likes',
+    'isQuestion',
     'createdAt',
   ], chat, { author }, ...objs);
 };
