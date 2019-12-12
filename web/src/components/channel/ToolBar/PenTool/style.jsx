@@ -30,7 +30,7 @@ const S = {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-top: ${px(15)};
+    padding-top: ${px(15)};
   `,
   PenToolIcon,
 };

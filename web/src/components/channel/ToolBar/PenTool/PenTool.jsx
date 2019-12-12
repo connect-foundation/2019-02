@@ -1,11 +1,12 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import S from './style';
+import { useDispatch, useChannelSelector } from '@/hooks';
 
-const PenTool = (props) => {
-  const { isPenToolActive, toolBarDispatch } = props;
+const PenTool = () => {
+  const dispatch = useDispatch();
+  const isPenToolActive = useChannelSelector((state) => state.isPenToolActive);
   const handleOnclick = () => {
-    toolBarDispatch({ type: 'penToolActive' });
+    dispatch({ type: 'penToolActive' });
   };
 
   return (
@@ -13,11 +14,6 @@ const PenTool = (props) => {
       <S.PenToolIcon isPenToolActive={isPenToolActive} />
     </S.PenTool>
   );
-};
-
-PenTool.propTypes = {
-  isPenToolActive: PropTypes.bool.isRequired,
-  toolBarDispatch: PropTypes.func.isRequired,
 };
 
 export default PenTool;

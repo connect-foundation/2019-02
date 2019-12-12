@@ -4,10 +4,13 @@ import PropTypes from 'prop-types';
 import {
   useGetChannel,
   useAddUserHistory,
-  useChannelSelector,
 } from '@/hooks';
 import { ChannelProvider } from '@/components/base';
-import { Chat, Slide, ToolBar } from '@/components/channel';
+import {
+  Chat,
+  Slide,
+  ToolBar,
+} from '@/components/channel';
 import S from './style';
 import { NO_EXIST_CHANNEL_MESSAGE, ENTERING_CHANNEL_MESSAGGGE } from '@/constants';
 import { LoadingModal, ErrorModal } from '@/components/common';
@@ -17,7 +20,6 @@ const Channel = (props) => {
   const { params: { channelId } } = useRouteMatch();
   const { data, loading } = useGetChannel(channelId);
   const { mutate } = useAddUserHistory();
-  const isToolBarActive = useChannelSelector((state) => state.isToolBarActive);
 
   useEffect(() => {
     if (data && data.status === 'ok') {
@@ -50,7 +52,7 @@ const Channel = (props) => {
       }}
     >
       <S.Channel>
-        {isToolBarActive && <ToolBar />}
+        <ToolBar />
         <Slide channelId={channelId} />
         <Chat channelId={channelId} userId={user.userId} />
       </S.Channel>

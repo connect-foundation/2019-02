@@ -7,7 +7,7 @@ import SlideViewer from './SlideViewer';
 import SlideInfo from './SlideInfo';
 
 const Slide = (props) => {
-  const { channelId, toolBarDispatch } = props;
+  const { channelId } = props;
   const { currentSlide } = useSlideChanged(channelId);
   const [isSync, setSync] = useState(true);
   const [isFullScreen, setFullScreen] = useState(false);
@@ -23,7 +23,6 @@ const Slide = (props) => {
         isSync={isSync}
         handleSync={handleSync}
         setFullScreen={setFullScreen}
-        toolBarDispatch={toolBarDispatch}
       />
       <SlideViewer
         isSync={isSync}
@@ -41,7 +40,6 @@ const Slide = (props) => {
 
 Slide.propTypes = {
   channelId: PropTypes.string.isRequired,
-  toolBarDispatch: PropTypes.func.isRequired,
 };
 
 export default Slide;

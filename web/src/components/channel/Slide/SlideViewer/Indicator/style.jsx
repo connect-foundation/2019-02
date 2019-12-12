@@ -6,7 +6,7 @@ export default {
   Indicator: styled.div`
     height: 100%;
     min-width: ${px(80)};
-    width: 40%;
+    width: 10%;
     position: absolute;
     z-index: 200;
     top: 0;
@@ -22,6 +22,7 @@ export default {
         opacity: 1;
       }
     }
+    border: 1px solid red;
   `,
   ArrowWrapper: styled.div`
     height: ${px(40)};

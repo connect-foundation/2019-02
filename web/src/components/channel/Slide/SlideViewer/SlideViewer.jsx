@@ -67,7 +67,10 @@ const SlideViewer = (props) => {
     mutate({ variables: { channelId, currentSlide: page } });
   }, [page]);
 
-  const screenChange = (e) => setFullScreen(e);
+  const handleScreenOnChange = (event) => {
+    setFullScreen(event);
+    window.dispatchEvent(new Event('resize'));
+  };
   const IndicatorRender = Object.values(directionKey).map((direction) => (
     <Indicator
       key={direction}
@@ -81,7 +84,7 @@ const SlideViewer = (props) => {
       <S.SlideViewer>
         <FullScreen
           enabled={isFullScreen}
-          onChange={screenChange}
+          onChange={handleScreenOnChange}
         >
           <MainSlide
             page={syncSlide}

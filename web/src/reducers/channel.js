@@ -2,6 +2,8 @@ const initialChannelState = {
   isChat: false,
   isToolBarActive: false,
   isPenToolActive: false,
+  canvasSize: {},
+  storedCanvasUrl: '',
 };
 
 const channelReducer = (state, action) => {
@@ -20,6 +22,16 @@ const channelReducer = (state, action) => {
       return {
         ...state,
         isPenToolActive: !state.isPenToolActive,
+      };
+    case 'setCanvasSize':
+      return {
+        ...state,
+        canvasSize: action.payload,
+      };
+    case 'setCanvasUrl':
+      return {
+        ...state,
+        storedCanvasUrl: action.payload,
       };
     default:
       return state;

@@ -25,9 +25,10 @@ export default {
   `,
   Canvas: styled.canvas`
     position: absolute;
-    z-index: 200;
+    z-index: 900;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+    border: 1px solid blue;
   `,
 };
