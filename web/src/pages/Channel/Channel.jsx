@@ -12,16 +12,24 @@ import {
   Slide,
   ToolBar,
 } from '@/components/channel';
+import {
+  LoadingModal,
+  ErrorModal,
+  SettingModal,
+} from '@/components/common';
 import S from './style';
 import { NO_EXIST_CHANNEL_MESSAGE, ENTERING_CHANNEL_MESSAGGGE } from '@/constants';
-import { LoadingModal, ErrorModal, SettingModal } from '@/components/common';
 
 const Channel = (props) => {
   const { user } = props;
   const { params: { channelId } } = useRouteMatch();
   const { data, loading } = useGetChannel(channelId);
   const { mutate } = useAddUserHistory();
-  const { isModalOpened, openModal, closeModal } = useModal();
+  const {
+    isModalOpened,
+    openModal,
+    closeModal,
+  } = useModal();
 
   useEffect(() => {
     if (data && data.status === 'ok') {

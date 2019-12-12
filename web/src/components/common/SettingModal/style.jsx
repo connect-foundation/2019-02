@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { px, colorGray } from '@/styles/themeUtil';
+import { px, colorGray, colorCommon } from '@/styles/themeUtil';
 import { IconListener, IconMonitor } from '@/assets/icons';
 
 const S = {
@@ -19,7 +19,7 @@ const S = {
     left: 50%;
     box-sizing: border-box;
     width: ${px(500)};
-    background-color: #fff;
+    background-color: ${colorCommon('white')};
     transform: translate(-50%, -50%);
   `,
   ButtonCloseModal: styled.button.attrs({ type: 'button' })`

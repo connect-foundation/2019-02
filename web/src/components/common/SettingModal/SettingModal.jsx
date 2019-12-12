@@ -20,18 +20,19 @@ const SettingModal = (props) => {
   const { closeSettingModal } = props;
   const [index, setIndex] = useState(0);
   const { title, SettingComponent } = settings[index] || {};
+  const categories = settings.map(({ IconComponent }, i) => (
+    <S.Category key={`setting_icon_${i * i}`}>
+      <S.CategoryButton onClick={() => setIndex(i)}>
+        <IconComponent isActive={i === index} />
+      </S.CategoryButton>
+    </S.Category>
+  ));
 
   return (
     <S.SettingModal>
       <S.ModalContent>
         <S.Categories>
-          {settings.map(({ IconComponent }, i) => (
-            <S.Category key={`setting_icon_${i * i}`}>
-              <S.CategoryButton onClick={() => setIndex(i)}>
-                <IconComponent isActive={i === index} />
-              </S.CategoryButton>
-            </S.Category>
-          ))}
+          {categories}
         </S.Categories>
         <S.Content>
           <S.Title>{title}</S.Title>

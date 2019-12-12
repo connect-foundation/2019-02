@@ -3,7 +3,7 @@ import S from './style';
 
 const SettingPresentation = () => {
   const [title, setTitle] = useState('채널 제목 테스트용 더미 데이터');
-  const handleTitleChanged = (event) => setTitle(event.target.value.substring(0, 50));
+  const handleTitleChanged = (event) => setTitle(event.target.value.substring(0, 20));
 
   return (
     <S.SettingPresentation>

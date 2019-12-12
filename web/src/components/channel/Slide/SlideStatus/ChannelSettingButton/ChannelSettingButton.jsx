@@ -8,7 +8,7 @@ const ChannelSettingButton = (props) => {
   return (
     <SmallButton onClick={openSettingModal}>
       <span aria-label="sync" role="img">⚙️</span>
-      채널설정
+      <span>채널설정</span>
     </SmallButton>
   );
 };
