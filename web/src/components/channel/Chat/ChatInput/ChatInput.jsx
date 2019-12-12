@@ -15,7 +15,7 @@ const ChatInput = (props) => {
   const [message, setMessage] = useState('');
   const dispatch = useDispatch();
   const { mutate } = useAddChat();
-  const { channelId } = props;
+  const { channelId, setQuestionToggle } = props;
   const limit = useChannelSelector((state) => state.slideUrls.length);
 
   const sendMessage = () => {
@@ -23,6 +23,7 @@ const ChatInput = (props) => {
     const { isQuestion } = pipe(parseMessage, checkIsQuestion)({ text: message, limit });
     mutate({ variables: { channelId, message, isQuestion } });
     setMessage('');
+    setQuestionToggle(false);
   };
   const handleChangeInput = (event) => {
     setMessage(event.target.value);
@@ -62,6 +63,7 @@ const ChatInput = (props) => {
 
 ChatInput.propTypes = {
   channelId: PropTypes.string.isRequired,
+  setQuestionToggle: PropTypes.func.isRequired,
 };
 
 export default ChatInput;

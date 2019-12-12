@@ -32,7 +32,7 @@ const Chat = (props) => {
             userId={userId}
             questionToggle={questionToggle}
           />
-          <ChatInput channelId={channelId} />
+          <ChatInput channelId={channelId} setQuestionToggle={setQuestionToggle} />
         </>
       )}
     </S.Chat>
