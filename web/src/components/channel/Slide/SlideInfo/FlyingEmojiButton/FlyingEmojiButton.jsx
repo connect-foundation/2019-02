@@ -32,7 +32,9 @@ const FlyingEmojiButton = (props) => {
     const { type, positionX, positionY } = broadcastEmoji;
     const fullScreenPositionX = body.offsetWidth - 150;
     const getFlyingEmojiSpeed = 3 + Math.random() * 8;
-    const samePosition = isFullScreen ? { x: fullScreenPositionX, y: 0 } : { x: positionX, y: positionY };
+    const samePosition = isFullScreen
+      ? { x: fullScreenPositionX, y: 0 }
+      : { x: positionX, y: positionY };
     jobQueue.push(
       new Factory(
         type,
