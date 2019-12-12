@@ -9,6 +9,7 @@ import S from './style';
 const Chat = (props) => {
   const { channelId, userId } = props;
   const [isClosed, setIsClosed] = useState(false);
+  const [questionToggle, setQuestionToggle] = useState(false);
 
   useInitChat(channelId);
   useChatChanged(channelId);
@@ -17,6 +18,8 @@ const Chat = (props) => {
     <S.Chat isClosed={isClosed}>
       <ChatSort
         isClosed={isClosed}
+        questionToggle={questionToggle}
+        setQuestionToggle={setQuestionToggle}
         toggleChatBox={() => {
           window.dispatchEvent(new Event('resize'));
           setIsClosed(!isClosed);
@@ -24,7 +27,11 @@ const Chat = (props) => {
       />
       {!isClosed && (
         <>
-          <ChatLogs channelId={channelId} userId={userId} />
+          <ChatLogs
+            channelId={channelId}
+            userId={userId}
+            questionToggle={questionToggle}
+          />
           <ChatInput channelId={channelId} />
         </>
       )}

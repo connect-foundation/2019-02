@@ -6,7 +6,7 @@ export default {
     box-sizing: border-box;
     width: 100%;
     height: 100%;
-    padding: ${px(35)} 0;
+    padding: ${px(25)} 0 ${px(40)} 0;
   `,
   SlideWrapper: styled.div`
     width:100%;

@@ -11,7 +11,7 @@ import S from './style';
 
 const ChatLogs = (props) => {
   const scrollWrapRef = useRef(null);
-  const { userId } = props;
+  const { userId, questionToggle } = props;
   const { loading, chatCache } = useGetChatsCached();
 
   if (loading) return <p>loading...</p>;
@@ -21,7 +21,10 @@ const ChatLogs = (props) => {
   const sortCallback = sortByRecent
     ? (prev, next) => prev.createdAt - next.createdAt
     : (prev, next) => next.likes.length - prev.likes.length;
-  const chatLogs = logs.sort(sortCallback);
+
+  const chatLogsSort = logs.sort(sortCallback);
+  const chatLogs = questionToggle ? chatLogsSort.filter((log) => log.isQuestion) : chatLogsSort;
+
   const changeScrollTop = (always) => () => {
     const scrollWrapEl = scrollWrapRef.current;
     const targetTop = sortByRecent ? computeScrollEndTop(scrollWrapEl) : 0;
@@ -52,6 +55,7 @@ const ChatLogs = (props) => {
 
 ChatLogs.propTypes = {
   userId: PropTypes.string.isRequired,
+  questionToggle: PropTypes.bool.isRequired,
 };
 
 export default ChatLogs;

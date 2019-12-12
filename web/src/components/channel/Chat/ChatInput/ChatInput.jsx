@@ -1,6 +1,11 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { useAddChat, useDispatch } from '@/hooks';
+import {
+  useAddChat,
+  useChannelSelector,
+  useDispatch,
+} from '@/hooks';
+import { pipe, parseMessage, checkIsQuestion } from '@/utils';
 import { CHAT_INPUT_PLACEHOLDER } from '@/constants';
 import S from './style';
 
@@ -11,10 +16,12 @@ const ChatInput = (props) => {
   const dispatch = useDispatch();
   const { mutate } = useAddChat();
   const { channelId } = props;
+  const limit = useChannelSelector((state) => state.slideUrls.length);
+
   const sendMessage = () => {
     if (message === '') return;
-
-    mutate({ variables: { channelId, message } });
+    const { isQuestion } = pipe(parseMessage, checkIsQuestion)({ text: message, limit });
+    mutate({ variables: { channelId, message, isQuestion } });
     setMessage('');
   };
   const handleChangeInput = (event) => {
