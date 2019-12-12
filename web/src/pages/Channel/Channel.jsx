@@ -1,14 +1,16 @@
-import React, { useEffect, useReducer } from 'react';
+import React, { useEffect } from 'react';
 import { useRouteMatch } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import {
   useGetChannel,
   useAddUserHistory,
-  toolBarInitState,
-  toolBarReducer,
 } from '@/hooks';
 import { ChannelProvider } from '@/components/base';
-import { Chat, Slide, ToolBar } from '@/components/channel';
+import {
+  Chat,
+  Slide,
+  ToolBar,
+} from '@/components/channel';
 import S from './style';
 import { NO_EXIST_CHANNEL_MESSAGE, ENTERING_CHANNEL_MESSAGGGE } from '@/constants';
 import { LoadingModal, ErrorModal } from '@/components/common';
@@ -18,10 +20,6 @@ const Channel = (props) => {
   const { params: { channelId } } = useRouteMatch();
   const { data, loading } = useGetChannel(channelId);
   const { mutate } = useAddUserHistory();
-  const [toolBarState, toolBarDispatch] = useReducer(
-    toolBarReducer,
-    toolBarInitState,
-  );
 
   useEffect(() => {
     if (data && data.status === 'ok') {
@@ -55,16 +53,8 @@ const Channel = (props) => {
       }}
     >
       <S.Channel>
-        {toolBarState.isToolBarActive && (
-          <ToolBar
-            toolBarDispatch={toolBarDispatch}
-            toolBarState={toolBarState}
-          />
-        )}
-        <Slide
-          channelId={channelId}
-          toolBarDispatch={toolBarDispatch}
-        />
+        <ToolBar />
+        <Slide channelId={channelId} />
         <Chat channelId={channelId} userId={user.userId} />
       </S.Channel>
     </ChannelProvider>

@@ -1,7 +1,7 @@
 import React, { useReducer } from 'react';
 import PropTypes from 'prop-types';
 import S from './style';
-import { dropModalInitState, dropModalReducer } from '@/hooks';
+import { dropModalInitState, dropModalReducer } from '@/reducers';
 import { LoadingModal, ErrorModal } from '@/components/common';
 import {
   DropEmoji,

@@ -4,6 +4,7 @@ import S from './style';
 import StatusButton from './StatusButton';
 import SlideSyncButton from './SlideSyncButton';
 import FullScreenButton from './FullScreenButton';
+import NoteButton from './NoteButton';
 import { useChannelSelector } from '@/hooks';
 
 const SlideStatus = (props) => {
@@ -18,6 +19,7 @@ const SlideStatus = (props) => {
         && (
         <SlideSyncButton />
         )}
+        <NoteButton />
         <FullScreenButton setFullScreen={setFullScreen} />
       </S.Wrapper>
     </S.SlideStatus>
