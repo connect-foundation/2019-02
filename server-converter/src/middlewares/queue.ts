@@ -18,9 +18,7 @@ const requestQueue = (config) => {
     job.data.res.status(200).json({ status: 'reject' });
   });
 
-  const canCancel = (job) => {
-    return (job.state === 'process' && !job.data.req.isConverted);
-  }
+  const canCancel = (job) => (job.state === 'process' && !job.data.req.isConverted);
 
   const queueMiddleware = (req, res, next) => {
     const data = { req, res, next };
