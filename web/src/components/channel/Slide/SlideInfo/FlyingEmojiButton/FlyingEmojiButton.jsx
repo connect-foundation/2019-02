@@ -15,7 +15,7 @@ const FlyingEmojiButton = (props) => {
   const isBroadcastData = () => broadcastEmoji !== undefined && emoji === null;
   const isReadyBroadcastData = () => emoji === null || broadcastEmoji === undefined;
   const isAchieve = () => jobQueue.length === 0 && requestId !== null;
-
+  const body = document.querySelector('body');
   if (isBroadcastData()) setEmoji(broadcastEmoji.type);
 
   const startAnimation = () => {
@@ -30,13 +30,14 @@ const FlyingEmojiButton = (props) => {
   useEffect(() => {
     if (isReadyBroadcastData()) return;
     const { type, positionX, positionY } = broadcastEmoji;
-    const fullScreenPositionX = screen.width - 150;
+    const fullScreenPositionX = body.offsetWidth - 150;
+    const getFlyingEmojiSpeed = 3 + Math.random() * 8;
     const samePosition = isFullScreen ? { x: fullScreenPositionX, y: 0 } : { x: positionX, y: positionY };
     jobQueue.push(
       new Factory(
         type,
         samePosition,
-        (1 + Math.random() * 10),
+        getFlyingEmojiSpeed,
         isFullScreen,
       ),
     );
@@ -45,7 +46,6 @@ const FlyingEmojiButton = (props) => {
   }, [broadcastEmoji]);
 
   const emojiMaker = (e, type) => {
-    const body = document.querySelector('body');
     const positionX = e.clientX;
     const positionY = body.offsetHeight - e.clientY;
     mutate({
@@ -63,17 +63,11 @@ const FlyingEmojiButton = (props) => {
       <S.EmojiButton onClick={(e) => emojiMaker(e, '❤️')}>
         <span aria-label="like" role="img">❤️</span>
       </S.EmojiButton>
-      <S.EmojiButton onClick={(e) => emojiMaker(e, '🤭')}>
-        <span aria-label="shame" role="img">🤭</span>
+      <S.EmojiButton onClick={(e) => emojiMaker(e, '👍')}>
+        <span aria-label="great" role="img">👍</span>
       </S.EmojiButton>
       <S.EmojiButton onClick={(e) => emojiMaker(e, '🤔')}>
         <span aria-label="wondering" role="img">🤔</span>
-      </S.EmojiButton>
-      <S.EmojiButton onClick={(e) => emojiMaker(e, '😥')}>
-        <span aria-label="cry" role="img">😥</span>
-      </S.EmojiButton>
-      <S.EmojiButton onClick={(e) => emojiMaker(e, '🐤')}>
-        <span aria-label="dropy" role="img">🐤</span>
       </S.EmojiButton>
     </S.EmojiSmallButton>
   );
