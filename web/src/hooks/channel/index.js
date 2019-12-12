@@ -1,4 +1,5 @@
 export * from './chat';
+export * from './settings';
 export * from './slide';
 export { default as useChannelSelector } from './useChannelSelector';
 export { default as useCreateChannel } from './useCreateChannel';

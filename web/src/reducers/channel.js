@@ -45,6 +45,12 @@ const channelReducer = (state, action) => {
         ...state,
         page: action.payload.page,
       };
+    case 'SET_CHANNEL_NAME':
+      console.log(action);
+      return {
+        ...state,
+        channelName: action.payload,
+      };
     default:
       return state;
   }
