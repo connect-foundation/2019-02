@@ -6,7 +6,7 @@ import SlideInfo from './SlideInfo';
 import S from './style';
 
 const Slide = (props) => {
-  const { openSettingModal } = props;
+  const { channelId, openSettingModal } = props;
   const [isFullScreen, setFullScreen] = useState(false);
 
   return (
@@ -19,12 +19,16 @@ const Slide = (props) => {
         isFullScreen={isFullScreen}
         setFullScreen={setFullScreen}
       />
-      <SlideInfo />
+      <SlideInfo
+        channelId={channelId}
+        isFullScreen={isFullScreen}
+      />
     </S.Slide>
   );
 };
 
 Slide.propTypes = {
+  channelId: PropTypes.string.isRequired,
   openSettingModal: PropTypes.func.isRequired,
 };
 
