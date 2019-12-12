@@ -57,6 +57,23 @@ const ChannelSchema = new Schema({
   },
 });
 
+ChannelSchema.statics.updateChannelName = async function updateChannelName(
+  channelId,
+  userId,
+  channelName,
+) {
+  const ChannelModel = this;
+  const channel = await ChannelModel.findOne({ channelId });
+
+  if (!channel) return null;
+  if (channel.masterId !== userId) return null;
+
+  channel.channelName = channelName;
+  await channel.save();
+
+  return channel;
+};
+
 ChannelSchema.methods.toPayload = async function toChannelPayload(...objs) {
   const channel = this;
   const master = await Users.findOne({ userId: channel.masterId });
