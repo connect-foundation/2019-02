@@ -5,10 +5,10 @@ import { useAddEmoji, useCreateEmoji } from '@/hooks';
 import S from './style';
 
 const FlyingEmojiButton = (props) => {
+  const { channelId, isFullScreen } = props;
   let jobQueue = [];
   let requestId = null;
 
-  const { channelId } = props;
   const broadcastEmoji = useCreateEmoji(channelId);
   const { mutate } = useAddEmoji();
   const [emoji, setEmoji] = useState(null);
@@ -75,6 +75,7 @@ const FlyingEmojiButton = (props) => {
 
 FlyingEmojiButton.propTypes = {
   channelId: PropTypes.string.isRequired,
+  isFullScreen: PropTypes.bool.isRequired,
 };
 
 export default FlyingEmojiButton;
