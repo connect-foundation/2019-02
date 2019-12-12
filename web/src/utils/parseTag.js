@@ -1,4 +1,4 @@
-const tagParser = (token, limit) => {
+const parseTag = (token, limit) => {
   const nextPage = +token.split('#')[1];
   const isExist = !!nextPage && nextPage <= limit;
 
@@ -16,7 +16,7 @@ const checkIsQuestion = ({ matchTags, text, limit }) => {
   const tags = matchTags.map((tag) => tag[0]);
   const questions = tags.length
     ? tags.filter((tag) => {
-      const { isExist } = tagParser(tag, limit);
+      const { isExist } = parseTag(tag, limit);
 
       return isExist;
     })
@@ -60,7 +60,7 @@ const getToken = ({
   }, []));
 
 export {
-  tagParser,
+  parseTag,
   parseMessage,
   checkIsQuestion,
   getSliceIndex,

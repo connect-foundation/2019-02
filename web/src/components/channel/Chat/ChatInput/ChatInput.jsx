@@ -10,7 +10,7 @@ import {
   parseMessage,
   checkIsQuestion,
 } from '@/utils';
-import { CHAT_INPUT_PLACEHOLDER } from '@/constants';
+import { CHAT_INPUT_PLACEHOLDER, CHAT_ANONYMOUS_PLACEHOLDER } from '@/constants';
 import S from './style';
 
 const KEYCODE_ENTER = 13;
@@ -21,10 +21,12 @@ const ChatInput = (props) => {
   const { mutate } = useAddChat();
   const { channelId, setQuestionToggle } = props;
   const limit = useChannelSelector((state) => state.slideUrls.length);
+  const anonymousChat = useChannelSelector((state) => state.anonymousChat);
 
   const sendMessage = () => {
     if (message === '') return;
     const { isQuestion } = pipe(parseMessage, checkIsQuestion)({ text: message, limit });
+
     mutate({ variables: { channelId, message, isQuestion } });
     setMessage('');
     setQuestionToggle(false);
@@ -48,12 +50,14 @@ const ChatInput = (props) => {
   return (
     <S.ChatInput>
       <S.MessageInput
-        placeholder={CHAT_INPUT_PLACEHOLDER}
+        placeholder={anonymousChat
+          ? CHAT_INPUT_PLACEHOLDER
+          : CHAT_ANONYMOUS_PLACEHOLDER}
         onChange={handleChangeInput}
         onKeyDown={handleKeyDownInput}
         onFocus={handleFocus(true)}
         onBlur={handleFocus(false)}
-        value={message}
+        anonymousChat={anonymousChat}
       />
       <S.SendButton
         type="button"
