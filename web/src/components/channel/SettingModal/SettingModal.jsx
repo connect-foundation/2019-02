@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import { Modal } from '@/components/common';
 import SettingPresentation from './SettingPresentation';
 import S from './style';
 
@@ -17,7 +18,7 @@ const settings = [
 ];
 
 const SettingModal = (props) => {
-  const { closeSettingModal } = props;
+  const { closeSettingModal, isModalOpened } = props;
   const [index, setIndex] = useState(0);
   const { title, SettingComponent } = settings[index] || {};
   const categories = settings.map(({ IconComponent }, i) => (
@@ -29,22 +30,23 @@ const SettingModal = (props) => {
   ));
 
   return (
-    <S.SettingModal>
-      <S.ModalContent>
+    <Modal isShown={isModalOpened}>
+      <S.Content>
         <S.Categories>
           {categories}
         </S.Categories>
-        <S.Content>
+        <S.SettingContent>
           <S.Title>{title}</S.Title>
           {SettingComponent && <SettingComponent />}
-        </S.Content>
+        </S.SettingContent>
         <S.ButtonCloseModal onClick={closeSettingModal} />
-      </S.ModalContent>
-    </S.SettingModal>
+      </S.Content>
+    </Modal>
   );
 };
 
 SettingModal.propTypes = {
+  isModalOpened: PropTypes.bool.isRequired,
   closeSettingModal: PropTypes.func.isRequired,
 };
 
