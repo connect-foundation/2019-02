@@ -1,11 +1,12 @@
 class FlyingEmojiFactory {
-  constructor(emoji, coordinates, friction) {
+  constructor(emoji, coordinates, friction, isFullScreen) {
     this.emoji = this.setEmoji(emoji);
     this.steps = document.querySelector('body').offsetHeight / 2;
     this.item = null;
     this.friction = friction;
     this.coordinates = coordinates;
     this.position = -(this.coordinates.y);
+    this.isFullScreen = isFullScreen;
     this.dimensions = this.render();
     this.rotation = Math.random() > 0.8 ? '-' : '+';
     this.scale = 2 + Math.random();
@@ -39,7 +40,7 @@ class FlyingEmojiFactory {
   }
 
   setOpacity() {
-    this.opacity -= 0.004;
+    this.opacity -= 0.008;
   }
 
   getDirection() {
@@ -63,8 +64,13 @@ class FlyingEmojiFactory {
 
   render() {
     const background = document.querySelector('body');
+    const fullScreen = document.querySelector('.fullscreen');
     this.item = this.emoji;
-    background.appendChild(this.item);
+    if (this.isFullScreen) {
+      fullScreen.appendChild(this.item);
+    } else {
+      background.appendChild(this.item);
+    }
 
     return {
       width: this.item.offsetWidth,
