@@ -34,6 +34,7 @@ const getSliceIndex = ({
   const sliceIndex = matchTags.reduce((result, tag) => {
     const { index } = tag;
     const lastIndex = tag[0].length + index;
+
     if (index) result.push(index);
     result.push(lastIndex);
 

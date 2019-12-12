@@ -5,7 +5,11 @@ import {
   useChannelSelector,
   useDispatch,
 } from '@/hooks';
-import { pipe, parseMessage, checkIsQuestion } from '@/utils';
+import {
+  pipe,
+  parseMessage,
+  checkIsQuestion,
+} from '@/utils';
 import { CHAT_INPUT_PLACEHOLDER } from '@/constants';
 import S from './style';
 

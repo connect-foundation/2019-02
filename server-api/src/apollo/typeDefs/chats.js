@@ -14,7 +14,11 @@ extend type Query {
 }
 
 extend type Mutation {
-  addChat(channelId: String!, message: String!, isQuestion: Boolean!): Chat
+  addChat(
+    channelId: String!, 
+    message: String!, 
+    isQuestion: Boolean!
+  ): Chat
   likeChat(chatId: String!): Chat
 }
 

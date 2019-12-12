@@ -29,11 +29,8 @@ const ChatCard = (props) => {
   };
   const renderQuestion = () => tokens.map(({ id, token, isQtag }) => {
     const { isExist } = tagParser(token, slideUrls.length);
-    const state = isQtag && isExist
-      ? 'question'
-      : isQtag && !isExist
-        ? 'disable'
-        : 'nomal';
+    const noneQuestion = isQtag && !isExist ? 'disable' : 'nomal';
+    const state = isQtag && isExist ? 'question' : noneQuestion;
 
     return ({
       question:

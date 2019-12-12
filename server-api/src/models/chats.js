@@ -26,7 +26,7 @@ const ChatSchema = new Schema({
   },
   isQuestion: {
     type: Boolean,
-    required: true,
+    required: false,
   },
   createdAt: {
     type: Date,
