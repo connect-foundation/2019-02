@@ -51,16 +51,25 @@ const ChannelSchema = new Schema({
     required: true,
     default: 0,
   },
+  anonymousChat: {
+    type: Boolean,
+    default: true,
+  },
+  emojiEffect: {
+    type: Boolean,
+    default: true,
+  },
   createdAt: {
     type: Date,
     default: Date.now(),
   },
 });
 
-ChannelSchema.statics.updateChannelName = async function updateChannelName(
+ChannelSchema.statics.updateChannelOption = async function updateChannelOption(
   channelId,
   userId,
-  channelName,
+  option,
+  optionValue,
 ) {
   const ChannelModel = this;
   const channel = await ChannelModel.findOne({ channelId });
@@ -68,7 +77,7 @@ ChannelSchema.statics.updateChannelName = async function updateChannelName(
   if (!channel) return null;
   if (channel.masterId !== userId) return null;
 
-  channel.channelName = channelName;
+  channel[option] = optionValue;
   await channel.save();
 
   return channel;
@@ -83,12 +92,15 @@ ChannelSchema.methods.toPayload = async function toChannelPayload(...objs) {
     'master',
     'channelName',
     'maxHeadCount',
+    'expiredAt',
     'slideUrls',
     'slideRatioList',
     'fileUrl',
     'channelStatus',
     'currentSlide',
     'channelCode',
+    'anonymousChat',
+    'emojiEffect',
   ], channel, { master }, ...objs);
 };
 

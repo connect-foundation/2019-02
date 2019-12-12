@@ -128,7 +128,9 @@ const setCurrentSlide = async (_, { channelId, currentSlide }, { user, pubsub })
 
 const updateChannelName = async (_, { channelId, channelName }, { user }) => {
   try {
-    const channel = await Channels.updateChannelName(channelId, user.userId, channelName);
+    const channel = await Channels.updateChannelOption(
+      channelId, user.userId, 'channelName', channelName,
+    );
     const payload = channel ? channel.toPayload({ master: user }) : null;
 
     return payload;

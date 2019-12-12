@@ -4,12 +4,15 @@ type Channel {
   master: User 
   channelName: String
   maxHeadCount: Int
+  expiredAt: Date
   slideUrls: [String]
   slideRatioList: [Float]
   fileUrl: String
-  channelCode: String!
+  channelCode: String
   channelStatus: String
-  currentSlide: Int!
+  currentSlide: Int
+  anonymousChat: Boolean
+  emojiEffect: Boolean
 }
 
 type getChannelResponse {

@@ -10,6 +10,7 @@ const resolvers = merge({
   require('./channels'),
   require('./chats'),
   require('./histories'),
+  require('./flyingEmojis'),
 ]);
 
 module.exports = resolvers;
