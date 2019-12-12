@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import {
   useGetChannel,
   useAddUserHistory,
+  useModal,
 } from '@/hooks';
 import { ChannelProvider } from '@/components/base';
 import {
@@ -13,21 +14,18 @@ import {
 } from '@/components/channel';
 import S from './style';
 import { NO_EXIST_CHANNEL_MESSAGE, ENTERING_CHANNEL_MESSAGGGE } from '@/constants';
-import { LoadingModal, ErrorModal } from '@/components/common';
+import { LoadingModal, ErrorModal, SettingModal } from '@/components/common';
 
 const Channel = (props) => {
   const { user } = props;
   const { params: { channelId } } = useRouteMatch();
   const { data, loading } = useGetChannel(channelId);
   const { mutate } = useAddUserHistory();
+  const { isModalOpened, openModal, closeModal } = useModal();
 
   useEffect(() => {
     if (data && data.status === 'ok') {
-      mutate({
-        variables: {
-          channelId,
-        },
-      });
+      mutate({ variables: { channelId } });
     }
   }, [data]);
 
@@ -53,9 +51,14 @@ const Channel = (props) => {
       }}
     >
       <S.Channel>
-        <ToolBar />
-        <Slide channelId={channelId} />
+        {data.isMaster && (
+          <ToolBar />
+        )}
+        <Slide channelId={channelId} openSettingModal={openModal} />
         <Chat channelId={channelId} userId={user.userId} />
+        {(data.isMaster && isModalOpened) && (
+          <SettingModal channelId={channelId} closeSettingModal={closeModal} />
+        )}
       </S.Channel>
     </ChannelProvider>
   );
