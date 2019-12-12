@@ -4,6 +4,8 @@ const initialChannelState = {
   isPenToolActive: false,
   canvasSize: {},
   storedCanvasUrl: '',
+  isSync: true,
+  page: 0,
 };
 
 const channelReducer = (state, action) => {
@@ -32,6 +34,16 @@ const channelReducer = (state, action) => {
       return {
         ...state,
         storedCanvasUrl: action.payload,
+
+    case 'SET_ISSYNC':
+      return {
+        ...state,
+        isSync: action.payload.isSync,
+      };
+    case 'SET_PAGE':
+      return {
+        ...state,
+        page: action.payload.page,
       };
     default:
       return state;
