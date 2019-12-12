@@ -3,24 +3,11 @@ import { px, colorGray, colorCommon } from '@/styles/themeUtil';
 import { IconListener, IconMonitor } from '@/assets/icons';
 
 const S = {
-  SettingModal: styled.div`
-    position: fixed;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    z-index: 10000;
-    background-color: ${colorGray(9)}E6;
-  `,
-  ModalContent: styled.div`
+  Content: styled.div`
     display: flex;
-    position: absolute;
-    top: 50%;
-    left: 50%;
     box-sizing: border-box;
     width: ${px(500)};
     background-color: ${colorCommon('white')};
-    transform: translate(-50%, -50%);
   `,
   ButtonCloseModal: styled.button.attrs({ type: 'button' })`
     position: absolute;
@@ -76,7 +63,7 @@ const S = {
     text-align: center;
     cursor: pointer;
   `,
-  Content: styled.div`
+  SettingContent: styled.div`
     display: flex;
     flex: 1 1 auto;
     flex-direction: column;

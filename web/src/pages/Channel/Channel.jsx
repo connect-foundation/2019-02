@@ -11,11 +11,11 @@ import {
   Chat,
   Slide,
   ToolBar,
+  SettingModal,
 } from '@/components/channel';
 import {
   LoadingModal,
   ErrorModal,
-  SettingModal,
 } from '@/components/common';
 import S from './style';
 import { NO_EXIST_CHANNEL_MESSAGE, ENTERING_CHANNEL_MESSAGGGE } from '@/constants';
@@ -64,8 +64,12 @@ const Channel = (props) => {
         )}
         <Slide channelId={channelId} openSettingModal={openModal} />
         <Chat channelId={channelId} userId={user.userId} />
-        {(data.isMaster && isModalOpened) && (
-          <SettingModal channelId={channelId} closeSettingModal={closeModal} />
+        {data.isMaster && (
+          <SettingModal
+            channelId={channelId}
+            isModalOpened={isModalOpened}
+            closeSettingModal={closeModal}
+          />
         )}
       </S.Channel>
     </ChannelProvider>

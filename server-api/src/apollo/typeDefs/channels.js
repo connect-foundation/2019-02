@@ -35,8 +35,9 @@ extend type Mutation {
     slideUrls: [String], 
     fileUrl: String,
     slideRatioList: [Float],
-  ): Channel,
+  ): Channel
   setCurrentSlide(channelId: String!, currentSlide: Int!): Channel
+  updateChannelName(channelId: String!, channelName: String!): Channel
 }
 
 extend type Subscription {
