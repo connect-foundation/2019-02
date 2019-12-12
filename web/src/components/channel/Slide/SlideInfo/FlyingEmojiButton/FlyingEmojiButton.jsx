@@ -30,7 +30,8 @@ const FlyingEmojiButton = (props) => {
   useEffect(() => {
     if (isReadyBroadcastData()) return;
     const { type, positionX, positionY } = broadcastEmoji;
-    const samePosition = { x: positionX, y: positionY };
+    const fullScreenPositionX = screen.width - 150;
+    const samePosition = isFullScreen ? { x: fullScreenPositionX, y: 0 } : { x: positionX, y: positionY };
     jobQueue.push(
       new Factory(
         type,

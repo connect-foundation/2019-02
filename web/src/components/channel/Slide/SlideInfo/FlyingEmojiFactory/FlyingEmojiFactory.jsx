@@ -7,12 +7,12 @@ class FlyingEmojiFactory {
     this.coordinates = coordinates;
     this.position = -(this.coordinates.y);
     this.isFullScreen = isFullScreen;
-    this.dimensions = this.render();
+    this.scale = isFullScreen ? 4.5 + Math.random() : 3 + Math.random();
     this.rotation = Math.random() > 0.8 ? '-' : '+';
-    this.scale = 2 + Math.random();
     this.siner = 50 * Math.random();
     this.opacity = 1.0;
     this.appHeight = document.querySelector('body').offsetHeight;
+    this.dimensions = this.render();
   }
 
   destroyEmoji() {
@@ -45,7 +45,6 @@ class FlyingEmojiFactory {
 
   getDirection() {
     return this.coordinates.x + Math.sin((this.position * Math.PI) / this.steps) * this.siner;
-    // return this.coordinates.x;
   }
 
   flying() {
