@@ -34,7 +34,7 @@ const channelReducer = (state, action) => {
       return {
         ...state,
         storedCanvasUrl: action.payload,
-
+      };
     case 'SET_ISSYNC':
       return {
         ...state,
