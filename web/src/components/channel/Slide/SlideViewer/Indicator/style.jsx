@@ -22,7 +22,6 @@ export default {
         opacity: 1;
       }
     }
-    border: 1px solid red;
   `,
   ArrowWrapper: styled.div`
     height: ${px(40)};

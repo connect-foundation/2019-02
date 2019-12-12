@@ -6,7 +6,7 @@ const PenTool = () => {
   const dispatch = useDispatch();
   const isPenToolActive = useChannelSelector((state) => state.isPenToolActive);
   const handleOnclick = () => {
-    dispatch({ type: 'penToolActive' });
+    dispatch({ type: 'PEN_TOOL_ACTIVE' });
   };
 
   return (

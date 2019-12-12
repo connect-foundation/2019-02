@@ -29,7 +29,7 @@ const MainSlide = (props) => {
     const canvasHeight = fitHeight ? wrapperHeight : wrapperWidth / slideRatio;
 
     dispatch({
-      type: 'setCanvasSize',
+      type: 'SET_CANVAS_SIZE',
       payload: {
         canvasWidth,
         canvasHeight,
@@ -53,7 +53,7 @@ const MainSlide = (props) => {
         if (prevCanvas !== null) {
           const prevCanvasUrl = prevCanvas.toDataURL();
           dispatch({
-            type: 'setCanvasUrl',
+            type: 'SET_CANVAS_URL',
             payload: prevCanvasUrl,
           });
         }

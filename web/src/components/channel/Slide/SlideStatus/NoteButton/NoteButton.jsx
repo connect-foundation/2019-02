@@ -6,7 +6,7 @@ const NoteButton = () => {
   const dispatch = useDispatch();
   const handleOnClick = () => {
     window.dispatchEvent(new Event('resize'));
-    dispatch({ type: 'toolBarActive' });
+    dispatch({ type: 'TOOLBAR_ACTIVE' });
   };
 
   return (

@@ -13,22 +13,22 @@ const channelReducer = (state, action) => {
         ...state,
         isChat: action.payload.isChat,
       };
-    case 'toolBarActive':
+    case 'TOOLBAR_ACTIVE':
       return {
         ...state,
         isToolBarActive: !state.isToolBarActive,
       };
-    case 'penToolActive':
+    case 'PEN_TOOL_ACTIVE':
       return {
         ...state,
         isPenToolActive: !state.isPenToolActive,
       };
-    case 'setCanvasSize':
+    case 'SET_CANVAS_SIZE':
       return {
         ...state,
         canvasSize: action.payload,
       };
-    case 'setCanvasUrl':
+    case 'SET_CANVAS_URL':
       return {
         ...state,
         storedCanvasUrl: action.payload,
