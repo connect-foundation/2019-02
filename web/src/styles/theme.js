@@ -115,17 +115,37 @@ export default createMuiTheme({
     },
     MuiSwitch: {
       colorPrimary: {
-        color: '#f8f9fa !important',
+        color: '#fff !important',
+      },
+      root: {
+        width: 40,
+        height: 24,
+        padding: 0,
+        display: 'flex',
       },
       switchBase: {
+        padding: 4,
+        color: '#fff',
         '&$checked': {
-          transform: 'translateX(60%)',
+          transform: 'translateX(15px)',
+          color: '#fff',
+          '& + $track': {
+            opacity: 1,
+            backgroundColor: '#f8f9fa',
+          },
         },
       },
-      track: {
-        'background-color': '#868e96',
-        opacity: '1 !important',
+      thumb: {
+        width: 16,
+        height: 16,
+        boxShadow: 'none',
       },
+      track: {
+        borderRadius: 12,
+        opacity: 1,
+        backgroundColor: '#868e96',
+      },
+      checked: {},
     },
   },
 });
