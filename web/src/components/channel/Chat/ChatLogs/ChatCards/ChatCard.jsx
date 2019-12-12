@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-indent */
 import React from 'react';
 import PropTypes from 'prop-types';
 import S from './style';
@@ -6,7 +7,7 @@ import {
   useDispatch,
   useChannelSelector,
 } from '@/hooks';
-import tagParser from '@/utils/tagParser';
+import { tagParser } from '@/utils';
 
 const ChatCard = (props) => {
   const {
@@ -16,9 +17,9 @@ const ChatCard = (props) => {
     likesCount,
     handleClickLike,
   } = props;
-  const [tokens] = useGetQuestion(message);
   const dispatch = useDispatch();
   const slideUrls = useChannelSelector((state) => state.slideUrls);
+  const tokens = useGetQuestion({ text: message, limit: slideUrls.length });
   const handleSetPage = (token) => () => {
     const { nextPage, isExist } = tagParser(token, slideUrls.length);
     if (!isExist) return;
@@ -28,11 +29,20 @@ const ChatCard = (props) => {
   };
   const renderQuestion = () => tokens.map(({ id, token, isQtag }) => {
     const { isExist } = tagParser(token, slideUrls.length);
-    return (isQtag && isExist ? (
-      <S.Question key={id} onClick={handleSetPage(token)}>
-        {token}
-      </S.Question>
-    ) : token);
+    const noneQuestion = isQtag && !isExist ? 'disable' : 'nomal';
+    const state = isQtag && isExist ? 'question' : noneQuestion;
+
+    return ({
+      question:
+        <S.Question key={id} onClick={handleSetPage(token)}>
+          {token}
+        </S.Question>,
+      disable:
+        <S.DisableQ key={id}>
+          {token}
+        </S.DisableQ>,
+      nomal: token,
+    }[state]);
   });
 
   return (

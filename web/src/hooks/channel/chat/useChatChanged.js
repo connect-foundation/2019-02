@@ -25,6 +25,7 @@ const CHAT_CHANGED = gql`
       }
       message
       likes
+      isQuestion
       createdAt
     }
   }

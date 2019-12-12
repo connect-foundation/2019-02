@@ -5,6 +5,7 @@ type Chat {
   author: User
   message: String
   likes: [String]
+  isQuestion: Boolean
   createdAt: Date
 }
 
@@ -13,7 +14,11 @@ extend type Query {
 }
 
 extend type Mutation {
-  addChat(channelId: String!, message: String!): Chat
+  addChat(
+    channelId: String!, 
+    message: String!, 
+    isQuestion: Boolean!
+  ): Chat
   likeChat(chatId: String!): Chat
 }
 

@@ -2,8 +2,8 @@ import gql from 'graphql-tag';
 import { useMutation } from '@apollo/react-hooks';
 
 const ADD_CHAT = gql`
-  mutation AddChat($channelId: String!, $message: String!) {
-    addChat(channelId: $channelId, message: $message) {
+  mutation AddChat($channelId: String!, $message: String!, $isQuestion: Boolean!) {
+    addChat(channelId: $channelId, message: $message, isQuestion: $isQuestion) {
       id
     }
   }

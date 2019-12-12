@@ -28,5 +28,6 @@ module.exports = {
 		"react/require-default-props": "off",
 		"react/forbid-prop-types": "off",
 		"no-param-reassign": "off",
+		"no-nested-ternary": "off",
 	}
 };

@@ -47,15 +47,6 @@ const S = {
       ? colorYellow('light')
       : '#fff'
   )};
-    animation: ${({ isQuestion }) => (
-    isQuestion
-      ? 'colorChange 0.8s ease-out'
-      : 'none'
-  )};
-    @keyframes colorChange {
-      0% { background-color: ${colorYellow(2)}; }
-      100% { background-color: ${colorYellow('light')};}
-    }
   `,
   Author: styled.em`
     display: block;
@@ -80,6 +71,9 @@ const S = {
       text-decoration: underline;
       color: ${({ theme }) => theme.palette.link};
     }
+  `,
+  DisableQ: styled.span`
+    color: ${colorGray(6)}; 
   `,
   AreaButtons: styled.div`
     height: ${px(20)};
