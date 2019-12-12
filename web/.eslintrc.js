@@ -27,5 +27,7 @@ module.exports = {
 		"jsx-a11y/label-has-associated-control": "off",
 		"react/require-default-props": "off",
 		"react/forbid-prop-types": "off",
+		"no-param-reassign": "off",
+		"no-nested-ternary": "off",
 	}
 };

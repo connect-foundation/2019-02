@@ -3,13 +3,14 @@ const Chat = require('../../models/chats');
 
 const CHAT_CHANGED = 'CHAT_CHANGED';
 
-const addChat = async (_, { channelId, message }, { user, pubsub }) => {
+const addChat = async (_, { channelId, message, isQuestion }, { user, pubsub }) => {
   try {
     const newChat = await new Chat({
       channelId,
       userId: user.userId,
       displayName: user.displayName,
       message,
+      isQuestion,
     }).save();
     const payload = newChat.toPayload({ author: user });
 

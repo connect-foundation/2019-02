@@ -4,16 +4,19 @@ import React, {
 } from 'react';
 import PropTypes from 'prop-types';
 import S from './style';
-import { useChannelSelector } from '@/hooks';
+import { useChannelSelector, useDispatch } from '@/hooks';
 import { pxToNum } from '@/utils/dom';
+import SlideCanvas from './SlideCanvas';
+
 
 const MainSlide = (props) => {
   const { page, slideUrls } = props;
+  const { slideRatioList, isPenToolActive } = useChannelSelector((state) => state);
+  const slideRatio = slideRatioList[page];
+  const dispatch = useDispatch();
   const wrapperRef = useRef(null);
   const imageRef = useRef(null);
   const canvasRef = useRef(null);
-  const slideRatioList = useChannelSelector((state) => state.slideRatioList);
-  const slideRatio = slideRatioList[page];
   const resizeSlide = (fitHeight) => {
     const { current } = imageRef;
 
@@ -21,29 +24,42 @@ const MainSlide = (props) => {
     current.style.height = fitHeight ? '100%' : 'auto';
     current.src = slideUrls[page];
   };
-  const resizeCanvas = (fitHeight, width, height) => {
-    const canvasWidth = fitHeight ? height * slideRatio : width;
-    const canvasHeight = fitHeight ? height : width / slideRatio;
+  const resizeCanvas = (fitHeight, wrapperWidth, wrapperHeight) => {
+    const canvasWidth = fitHeight ? wrapperHeight * slideRatio : wrapperWidth;
+    const canvasHeight = fitHeight ? wrapperHeight : wrapperWidth / slideRatio;
 
-    canvasRef.current.style.width = `${canvasWidth}px`;
-    canvasRef.current.style.height = `${canvasHeight}px`;
+    dispatch({
+      type: 'SET_CANVAS_SIZE',
+      payload: {
+        canvasWidth,
+        canvasHeight,
+      },
+    });
   };
 
   useEffect(() => {
     const wrapperEl = wrapperRef.current;
-    const applyImageRatio = () => {
+    const handleResize = () => {
       window.requestAnimationFrame(() => {
         const style = window.getComputedStyle(wrapperEl);
-        const width = pxToNum(style.width);
-        const height = pxToNum(style.height);
-        const wrapperRatio = width / height;
+        const wrapperWidth = pxToNum(style.width);
+        const wrapperHeight = pxToNum(style.height);
+        const wrapperRatio = wrapperWidth / wrapperHeight;
         const fitHeight = wrapperRatio > slideRatio;
 
         resizeSlide(fitHeight);
-        resizeCanvas(fitHeight, width, height);
+        const prevCanvas = canvasRef.current;
+
+        if (prevCanvas !== null) {
+          const prevCanvasUrl = prevCanvas.toDataURL();
+          dispatch({
+            type: 'SET_CANVAS_URL',
+            payload: prevCanvasUrl,
+          });
+        }
+        resizeCanvas(fitHeight, wrapperWidth, wrapperHeight);
       });
     };
-    const handleResize = () => applyImageRatio();
 
     handleResize();
     window.addEventListener('resize', handleResize);
@@ -57,7 +73,7 @@ const MainSlide = (props) => {
     <S.MainSlide>
       <S.SlideWrapper ref={wrapperRef}>
         <S.SlideImg ref={imageRef} alt="slide" />
-        <S.Canvas ref={canvasRef} />
+        {isPenToolActive && <SlideCanvas ref={canvasRef} />}
       </S.SlideWrapper>
     </S.MainSlide>
   );

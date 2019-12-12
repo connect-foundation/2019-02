@@ -1,35 +1,39 @@
-import React, { useEffect, useReducer } from 'react';
+import React, { useEffect } from 'react';
 import { useRouteMatch } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import {
   useGetChannel,
   useAddUserHistory,
-  toolBarInitState,
-  toolBarReducer,
+  useModal,
 } from '@/hooks';
 import { ChannelProvider } from '@/components/base';
-import { Chat, Slide, ToolBar } from '@/components/channel';
+import {
+  Chat,
+  Slide,
+  ToolBar,
+} from '@/components/channel';
+import {
+  LoadingModal,
+  ErrorModal,
+  SettingModal,
+} from '@/components/common';
 import S from './style';
 import { NO_EXIST_CHANNEL_MESSAGE, ENTERING_CHANNEL_MESSAGGGE } from '@/constants';
-import { LoadingModal, ErrorModal } from '@/components/common';
 
 const Channel = (props) => {
   const { user } = props;
   const { params: { channelId } } = useRouteMatch();
   const { data, loading } = useGetChannel(channelId);
   const { mutate } = useAddUserHistory();
-  const [toolBarState, toolBarDispatch] = useReducer(
-    toolBarReducer,
-    toolBarInitState,
-  );
+  const {
+    isModalOpened,
+    openModal,
+    closeModal,
+  } = useModal();
 
   useEffect(() => {
     if (data && data.status === 'ok') {
-      mutate({
-        variables: {
-          channelId,
-        },
-      });
+      mutate({ variables: { channelId } });
     }
   }, [data]);
 
@@ -43,6 +47,7 @@ const Channel = (props) => {
   return (
     <ChannelProvider
       value={{
+        channelId,
         isMaster: data.isMaster,
         fileUrl: data.channel.fileUrl,
         slideUrls: data.channel.slideUrls,
@@ -54,17 +59,14 @@ const Channel = (props) => {
       }}
     >
       <S.Channel>
-        {toolBarState.isToolBarActive && (
-          <ToolBar
-            toolBarDispatch={toolBarDispatch}
-            toolBarState={toolBarState}
-          />
+        {data.isMaster && (
+          <ToolBar />
         )}
-        <Slide
-          channelId={channelId}
-          toolBarDispatch={toolBarDispatch}
-        />
+        <Slide channelId={channelId} openSettingModal={openModal} />
         <Chat channelId={channelId} userId={user.userId} />
+        {(data.isMaster && isModalOpened) && (
+          <SettingModal channelId={channelId} closeSettingModal={closeModal} />
+        )}
       </S.Channel>
     </ChannelProvider>
   );

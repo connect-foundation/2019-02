@@ -13,16 +13,15 @@ const S = {
     background-color: #fff;
   `,
   SortButton: styled.button.attrs({ type: 'button' })`
-    float: right;
+    float: ${({ isSort }) => (isSort ? 'right' : 'left')};
     font-size: ${px(14)};
     line-height: ${px(25)};
     vertical-align: top;
     color: ${colorGray(8)};
-    & + & {
-      margin-right: ${px(8)};
-    }
+    margin-left: ${px(8)};
+    
     &[aria-selected="true"] {
-      color: ${colorYellow(9)}
+      color: ${colorYellow(9)};
     }
     cursor: pointer;
   `,
@@ -30,6 +29,7 @@ const S = {
     size: 'small',
     color: 'primary',
   })`
+  float:left;
   .MuiButtonBase-root {
     transition: none;
   }
