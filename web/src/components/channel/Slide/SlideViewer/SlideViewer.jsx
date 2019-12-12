@@ -6,6 +6,7 @@ import {
   useSetCurrentSlide,
   useSlideChanged,
   useSyncSlide,
+  useDispatch,
 } from '@/hooks';
 import { moveSlide, moveSlidePossible } from '@/utils/slide';
 import { FullScreen } from '@/components/common';
@@ -14,36 +15,39 @@ import Indicator from './Indicator';
 import MainSlide from './MainSlide';
 import PageNumber from './PageNumber';
 
-
 const SlideViewer = (props) => {
+  const { isFullScreen, setFullScreen } = props;
   const {
     channelId,
+    slideUrls,
+    isMaster,
+    isChat,
     isSync,
-    setSync,
     page,
-    setPage,
-    isFullScreen,
-    setFullScreen,
-  } = props;
+  } = useChannelSelector((state) => state);
   const { mutate } = useSetCurrentSlide();
   const { currentSlide } = useSlideChanged(channelId);
-  const { slideUrls, isMaster, isChat } = useChannelSelector((state) => state);
-  const syncSlide = useSyncSlide(
+  const dispatch = useDispatch();
+  const syncSlide = useSyncSlide({
     isMaster,
     isSync,
     page,
     currentSlide,
-  );
+  });
   const directionKey = {};
 
   directionKey[KEYCODE_BACK] = false;
   directionKey[KEYCODE_FOWARD] = true;
 
+  const setPage = (next) => {
+    dispatch({ type: 'SET_PAGE', payload: { page: next } });
+  };
   const handleSetPage = (direction) => () => {
-    const sync = !isMaster && isSync ? currentSlide : page;
-    if (!moveSlidePossible(direction, sync, slideUrls.length)) return;
+    const syncIndex = !isMaster && isSync ? currentSlide : page;
+
+    if (!moveSlidePossible(direction, syncIndex, slideUrls.length)) return;
     if (!isMaster && isSync) {
-      setSync(false);
+      dispatch({ type: 'SET_ISSYNC', payload: { isSync: false } });
       moveSlide(currentSlide, direction, setPage);
     } else {
       moveSlide(page, direction, setPage);
@@ -67,7 +71,10 @@ const SlideViewer = (props) => {
     mutate({ variables: { channelId, currentSlide: page } });
   }, [page]);
 
-  const screenChange = (e) => setFullScreen(e);
+  const handleScreenOnChange = (event) => {
+    setFullScreen(event);
+    window.dispatchEvent(new Event('resize'));
+  };
   const IndicatorRender = Object.values(directionKey).map((direction) => (
     <Indicator
       key={direction}
@@ -81,7 +88,7 @@ const SlideViewer = (props) => {
       <S.SlideViewer>
         <FullScreen
           enabled={isFullScreen}
-          onChange={screenChange}
+          onChange={handleScreenOnChange}
         >
           <MainSlide
             page={syncSlide}
@@ -99,11 +106,6 @@ const SlideViewer = (props) => {
 };
 
 SlideViewer.propTypes = {
-  channelId: PropTypes.string.isRequired,
-  isSync: PropTypes.bool.isRequired,
-  setSync: PropTypes.func.isRequired,
-  page: PropTypes.number.isRequired,
-  setPage: PropTypes.func.isRequired,
   isFullScreen: PropTypes.bool.isRequired,
   setFullScreen: PropTypes.func.isRequired,
 };

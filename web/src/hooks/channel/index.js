@@ -1,6 +1,6 @@
 export * from './chat';
+export * from './settings';
 export * from './slide';
-export { toolBarInitState, toolBarReducer } from './toolBarReducer';
 export { default as useChannelSelector } from './useChannelSelector';
 export { default as useCreateChannel } from './useCreateChannel';
 export { default as useGetChannel } from './useGetChannel';
@@ -9,3 +9,5 @@ export { default as useEnteredListener } from './useEnteredListener';
 export { default as useLeaveListener } from './useLeaveListener';
 export { default as useListenerListChanged } from './useListenerListChanged';
 export { default as useDispatch } from './useDispatch';
+export { default as useCreateEmoji } from './useCreateEmoji';
+export { default as useAddEmoji } from './useAddEmoji';

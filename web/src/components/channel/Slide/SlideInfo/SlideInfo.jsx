@@ -5,9 +5,10 @@ import S from './style';
 import { useChannelSelector } from '@/hooks';
 import CodeShareButton from './CodeShareButton';
 import SlideDownloadButton from './SlideDownloadButton';
+import FlyingEmojiButton from './FlyingEmojiButton';
 
 const SlideInfo = (props) => {
-  const { listenerList } = props;
+  const { isFullScreen, listenerList } = props;
   const channelName = useChannelSelector((state) => state.channelName);
   const masterName = useChannelSelector((state) => state.masterName);
 
@@ -31,6 +32,7 @@ const SlideInfo = (props) => {
         </S.PeopleWrapper>
       </S.ChannelSummaryWrapper>
       <S.SlideButtonsWrapper>
+        <FlyingEmojiButton isFullScreen={isFullScreen} />
         <SlideDownloadButton />
         <CodeShareButton />
       </S.SlideButtonsWrapper>
@@ -39,6 +41,7 @@ const SlideInfo = (props) => {
 };
 
 SlideInfo.propTypes = {
+  isFullScreen: PropTypes.bool.isRequired,
   listenerList: PropTypes.number.isRequired,
 };
 

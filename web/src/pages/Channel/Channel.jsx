@@ -1,43 +1,51 @@
-import React, { useState, useEffect, useReducer } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouteMatch } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { SubscriptionClient } from 'subscriptions-transport-ws';
 import {
   useGetChannel,
   useAddUserHistory,
-  toolBarInitState,
-  toolBarReducer,
   useEnteredListener,
   useLeaveListener,
+  useModal,
 } from '@/hooks';
 import { ChannelProvider } from '@/components/base';
-import { Chat, Slide, ToolBar } from '@/components/channel';
+import {
+  Chat,
+  Slide,
+  ToolBar,
+  SettingModal,
+} from '@/components/channel';
+import {
+  LoadingModal,
+  ErrorModal,
+} from '@/components/common';
 import S from './style';
 import { NO_EXIST_CHANNEL_MESSAGE, ENTERING_CHANNEL_MESSAGGGE, GRAPHQL_WS_API } from '@/constants';
-import { LoadingModal, ErrorModal } from '@/components/common';
 
 const Channel = (props) => {
   const { user } = props;
   const { params: { channelId } } = useRouteMatch();
   const { data, loading } = useGetChannel(channelId);
   const { mutate } = useAddUserHistory();
-  const [toolBarState, toolBarDispatch] = useReducer(
-    toolBarReducer,
-    toolBarInitState,
-  );
+  const {
+    isModalOpened,
+    openModal,
+    closeModal,
+  } = useModal();
 
   const subscriptionClient = new SubscriptionClient(GRAPHQL_WS_API, {
     reconnect: true,
   });
   const [checkListener, setCheckListener] = useState(true);
   const enteredListener = useEnteredListener(channelId);
-  const leaveListener = useLeaveListener(channelId);
+  // const leaveListener = useLeaveListener(channelId);
   useEffect(() => () => {
     if (!checkListener) subscriptionClient.close();
   });
 
   subscriptionClient.onDisconnected(() => {
-    const { listenerList } = data;
+    // const { listenerList } = data;
     // leaveListener.mutate({
     //   variables: {
     //     channelId,
@@ -46,24 +54,20 @@ const Channel = (props) => {
     // });
   });
 
-  if (checkListener && data) {
-    const { listenerList } = data;
-    enteredListener.mutate({
-      variables: {
-        channelId,
-        listenerList,
-      },
-    });
-    setCheckListener(false);
-  }
+  // if (checkListener && data) {
+  //   const { listenerList } = data;
+  //   enteredListener.mutate({
+  //     variables: {
+  //       channelId,
+  //       listenerList,
+  //     },
+  //   });
+  //   setCheckListener(false);
+  // }
 
   useEffect(() => {
     if (data && data.status === 'ok') {
-      mutate({
-        variables: {
-          channelId,
-        },
-      });
+      mutate({ variables: { channelId } });
     }
   }, [data]);
 
@@ -77,6 +81,7 @@ const Channel = (props) => {
   return (
     <ChannelProvider
       value={{
+        channelId,
         isMaster: data.isMaster,
         fileUrl: data.channel.fileUrl,
         slideUrls: data.channel.slideUrls,
@@ -88,17 +93,18 @@ const Channel = (props) => {
       }}
     >
       <S.Channel>
-        {toolBarState.isToolBarActive && (
-          <ToolBar
-            toolBarDispatch={toolBarDispatch}
-            toolBarState={toolBarState}
+        {data.isMaster && (
+          <ToolBar />
+        )}
+        <Slide channelId={channelId} openSettingModal={openModal} />
+        <Chat channelId={channelId} userId={user.userId} />
+        {data.isMaster && (
+          <SettingModal
+            channelId={channelId}
+            isModalOpened={isModalOpened}
+            closeSettingModal={closeModal}
           />
         )}
-        <Slide
-          channelId={channelId}
-          toolBarDispatch={toolBarDispatch}
-        />
-        <Chat channelId={channelId} userId={user.userId} />
       </S.Channel>
     </ChannelProvider>
   );

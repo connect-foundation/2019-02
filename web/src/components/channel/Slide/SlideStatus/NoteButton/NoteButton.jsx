@@ -1,11 +1,12 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { SmallButton } from '@/components/common';
+import { useDispatch } from '@/hooks';
 
-const NoteButton = (props) => {
-  const { toolBarDispatch } = props;
+const NoteButton = () => {
+  const dispatch = useDispatch();
   const handleOnClick = () => {
-    toolBarDispatch({ type: 'toolBarActive' });
+    window.dispatchEvent(new Event('resize'));
+    dispatch({ type: 'TOOLBAR_ACTIVE' });
   };
 
   return (
@@ -14,10 +15,6 @@ const NoteButton = (props) => {
       <span>필기도구</span>
     </SmallButton>
   );
-};
-
-NoteButton.propTypes = {
-  toolBarDispatch: PropTypes.func.isRequired,
 };
 
 export default NoteButton;

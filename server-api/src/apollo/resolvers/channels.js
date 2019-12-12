@@ -169,6 +169,17 @@ const leaveListener = async (_, { channelId, listenerList }, { user, pubsub }) =
   }
 };
 
+const updateChannelName = async (_, { channelId, channelName }, { user }) => {
+  try {
+    const channel = await Channels.updateChannelName(channelId, user.userId, channelName);
+    const payload = channel ? channel.toPayload({ master: user }) : null;
+
+    return payload;
+  } catch (err) {
+    throw new ApolloError(err.message);
+  }
+};
+
 const listenerListChanged = {
   subscribe: withFilter(
     (_, __, { pubsub }) => pubsub.asyncIterator(LISTENER_LIST_CHANGED),
@@ -193,6 +204,7 @@ const resolvers = {
     setCurrentSlide,
     enteredListener,
     leaveListener,
+    updateChannelName,
   },
   Subscription: {
     slideChanged,
