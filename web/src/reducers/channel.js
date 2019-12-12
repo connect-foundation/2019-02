@@ -46,7 +46,6 @@ const channelReducer = (state, action) => {
         page: action.payload.page,
       };
     case 'SET_CHANNEL_NAME':
-      console.log(action);
       return {
         ...state,
         channelName: action.payload,
