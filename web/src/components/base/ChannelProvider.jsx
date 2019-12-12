@@ -5,11 +5,12 @@ import { initialChannelState, channelReducer } from '@/reducers';
 
 const ChannelProvider = (props) => {
   const { children, value } = props;
-  const [channelState, dispatch] = useReducer(channelReducer, initialChannelState);
+  const state = { ...value, ...initialChannelState };
+  const [channelState, dispatch] = useReducer(channelReducer, state);
 
   return (
     <DispatchContext.Provider value={dispatch}>
-      <ChannelContext.Provider value={{ ...value, ...channelState }}>
+      <ChannelContext.Provider value={channelState}>
         {children}
       </ChannelContext.Provider>
     </DispatchContext.Provider>
