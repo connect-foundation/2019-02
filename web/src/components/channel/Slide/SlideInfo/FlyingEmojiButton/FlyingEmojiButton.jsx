@@ -1,13 +1,23 @@
 import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import Factory from '../FlyingEmojiFactory';
+import { useAddEmoji, useCreateEmoji } from '@/hooks';
 import S from './style';
 
-const FlyingEmojiButton = () => {
-  const [state, setState] = useState(null);
-  const [position, setPosition] = useState({ x: null, y: null });
+const FlyingEmojiButton = (props) => {
   let jobQueue = [];
   let requestId = null;
+
+  const { channelId } = props;
+  const broadcastEmoji = useCreateEmoji(channelId);
+  const { mutate } = useAddEmoji();
+  const [emoji, setEmoji] = useState(null);
+  const isBroadcastData = () => broadcastEmoji !== undefined && emoji === null;
+  const isReadyBroadcastData = () => emoji === null || broadcastEmoji === undefined;
   const isAchieve = () => jobQueue.length === 0 && requestId !== null;
+
+  if (isBroadcastData()) setEmoji(broadcastEmoji.type);
+
   const startAnimation = () => {
     jobQueue = jobQueue.filter((job) => job.flying());
     if (isAchieve()) {
@@ -16,20 +26,30 @@ const FlyingEmojiButton = () => {
     }
     requestId = requestAnimationFrame(startAnimation.bind(this));
   };
+
   useEffect(() => {
-    if (!state) return;
-    console.log(position);
+    if (isReadyBroadcastData()) return;
+    const { type, positionX, positionY } = broadcastEmoji;
+    const samePosition = { x: positionX, y: positionY };
     jobQueue.push(
-      new Factory(state, position, (1 + Math.random() * 5)),
+      new Factory(type, samePosition, (1 + Math.random() * 5)),
     );
-    setState(null);
     startAnimation();
-  }, [state]);
+    setEmoji(null);
+  }, [broadcastEmoji]);
 
   const emojiMaker = (e, type) => {
     const body = document.querySelector('body');
-    setPosition({ x: e.clientX, y: body.offsetHeight - e.clientY });
-    setState(type);
+    const positionX = e.clientX;
+    const positionY = body.offsetHeight - e.clientY;
+    mutate({
+      variables: {
+        channelId,
+        type,
+        positionX,
+        positionY,
+      },
+    });
   };
 
   return (
@@ -51,6 +71,10 @@ const FlyingEmojiButton = () => {
       </S.EmojiButton>
     </S.EmojiSmallButton>
   );
+};
+
+FlyingEmojiButton.propTypes = {
+  channelId: PropTypes.string.isRequired,
 };
 
 export default FlyingEmojiButton;

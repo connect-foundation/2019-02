@@ -34,7 +34,7 @@ const Slide = (props) => {
         setPage={setPage}
         channelId={channelId}
       />
-      <SlideInfo />
+      <SlideInfo channelId={channelId} />
     </S.Slide>
   );
 };

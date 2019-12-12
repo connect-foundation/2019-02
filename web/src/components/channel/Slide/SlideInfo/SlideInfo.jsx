@@ -1,11 +1,13 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import S from './style';
 import { useChannelSelector } from '@/hooks';
 import CodeShareButton from './CodeShareButton';
 import SlideDownloadButton from './SlideDownloadButton';
 import FlyingEmojiButton from './FlyingEmojiButton';
 
-const SlideInfo = () => {
+const SlideInfo = (props) => {
+  const { channelId } = props;
   const channelName = useChannelSelector((state) => state.channelName);
   const masterName = useChannelSelector((state) => state.masterName);
 
@@ -19,12 +21,16 @@ const SlideInfo = () => {
         </S.MasterName>
       </S.TitleWrapper>
       <S.SlideButtonsWrapper>
-        <FlyingEmojiButton />
+        <FlyingEmojiButton channelId={channelId} />
         <SlideDownloadButton />
         <CodeShareButton />
       </S.SlideButtonsWrapper>
     </S.SlideInfo>
   );
+};
+
+SlideInfo.propTypes = {
+  channelId: PropTypes.string.isRequired,
 };
 
 export default SlideInfo;

@@ -2,6 +2,24 @@ const { withFilter } = require('apollo-server-express');
 
 const START_FLYING_EMOJI = 'START_FLYING_EMOJI';
 
+const broadcastEmoji = (_, {
+  channelId,
+  type,
+  positionX,
+  positionY,
+}, { pubsub }) => {
+  const payload = {
+    channelId,
+    type,
+    positionX,
+    positionY,
+  };
+
+  pubsub.publish(START_FLYING_EMOJI, { startFlyingEmoji: payload });
+
+  return payload;
+};
+
 const startFlyingEmoji = {
   subscribe: withFilter(
     (_, __, { pubsub }) => pubsub.asyncIterator(START_FLYING_EMOJI),
@@ -10,6 +28,9 @@ const startFlyingEmoji = {
 };
 
 const resolvers = {
+  Mutation: {
+    broadcastEmoji,
+  },
   Subscription: {
     startFlyingEmoji,
   },
