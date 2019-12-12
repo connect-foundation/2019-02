@@ -1,3 +1,12 @@
+import {
+  FULL_SCREEN_SCALE,
+  NORMAL_SCREEN_SCALE,
+  OPACITY,
+  ROTATION,
+  SINER,
+  BACKGROUND,
+} from '@/constants';
+
 class FlyingEmojiFactory {
   constructor(emoji, coordinates, friction, isFullScreen) {
     this.emoji = this.setEmoji(emoji);
@@ -7,10 +16,10 @@ class FlyingEmojiFactory {
     this.coordinates = coordinates;
     this.position = -(this.coordinates.y);
     this.isFullScreen = isFullScreen;
-    this.scale = isFullScreen ? 4.5 + Math.random() : 3 + Math.random();
-    this.rotation = Math.random() > 0.8 ? '-' : '+';
-    this.siner = 50 * Math.random();
-    this.opacity = 1.0;
+    this.scale = isFullScreen ? FULL_SCREEN_SCALE() : NORMAL_SCREEN_SCALE();
+    this.rotation = ROTATION();
+    this.siner = SINER();
+    this.opacity = OPACITY;
     this.appHeight = document.querySelector('body').offsetHeight;
     this.dimensions = this.render();
   }
@@ -50,10 +59,12 @@ class FlyingEmojiFactory {
   flying() {
     this.getPosition();
     this.setOpacity();
+
     const height = this.position;
     const direction = this.getDirection();
     this.item.style.transform = `translateX(${direction}px) translateY(${height}px) scale(${this.scale})`;
     this.item.style.opacity = this.opacity;
+
     if (this.isAchieve()) {
       this.destroyEmoji();
       return false;
@@ -62,9 +73,10 @@ class FlyingEmojiFactory {
   }
 
   render() {
-    const background = document.querySelector('body');
+    const background = BACKGROUND;
     const fullScreen = document.querySelector('.fullscreen');
     this.item = this.emoji;
+
     if (this.isFullScreen) {
       fullScreen.appendChild(this.item);
     } else {
