@@ -1,1 +1,2 @@
-export { default as channelReducer, initialChannelState } from './channel';
+export { dropModalInitState, dropModalReducer } from './dropModalReducer';
+export { channelReducer, initialChannelState } from './channel';

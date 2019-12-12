@@ -6,7 +6,7 @@ export default {
   Indicator: styled.div`
     height: 100%;
     min-width: ${px(80)};
-    width: 40%;
+    width: 10%;
     position: absolute;
     z-index: 200;
     top: 0;

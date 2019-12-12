@@ -23,11 +23,4 @@ export default {
     box-shadow: 10px 2px 20px rgba(0, 0, 0, 0.1);
     transform: translate(-50%, -50%);
   `,
-  Canvas: styled.canvas`
-    position: absolute;
-    z-index: 200;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-  `,
 };
