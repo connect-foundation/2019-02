@@ -65,11 +65,10 @@ const ChannelSchema = new Schema({
   },
 });
 
-ChannelSchema.statics.updateChannelOption = async function updateChannelOption(
+ChannelSchema.statics.updateChannelOptions = async function updateChannelOptions(
   channelId,
   userId,
-  option,
-  optionValue,
+  channelOptions,
 ) {
   const ChannelModel = this;
   const channel = await ChannelModel.findOne({ channelId });
@@ -77,31 +76,42 @@ ChannelSchema.statics.updateChannelOption = async function updateChannelOption(
   if (!channel) return null;
   if (channel.masterId !== userId) return null;
 
-  channel[option] = optionValue;
+  Object.keys(channelOptions).forEach((key) => {
+    channel[key] = channelOptions[key];
+  });
+
   await channel.save();
 
   return channel;
 };
 
-ChannelSchema.methods.toPayload = async function toChannelPayload(...objs) {
+ChannelSchema.methods.toPayload = async function toChannelPayload(type, ...objs) {
   const channel = this;
   const master = await Users.findOne({ userId: channel.masterId });
 
-  return assignFilter([
+  const data = assignFilter([
+    'id',
     'channelId',
     'master',
-    'channelName',
-    'maxHeadCount',
-    'expiredAt',
     'slideUrls',
     'slideRatioList',
     'fileUrl',
     'channelStatus',
     'currentSlide',
     'channelCode',
+  ], channel, { master }, ...objs);
+
+  const channelOptions = assignFilter([
+    'id',
+    'channelName',
+    'maxHeadCount',
+    'expiredAt',
     'anonymousChat',
     'emojiEffect',
   ], channel, { master }, ...objs);
+
+  if (type === 'channelOptions') return { ...channelOptions };
+  return { ...data, channelOptions };
 };
 
 module.exports = mongoose.model('channels', ChannelSchema);
