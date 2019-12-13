@@ -6,7 +6,7 @@ export default {
     box-sizing: border-box;
     width: 100%;
     height: 100%;
-    padding: ${px(35)} 0;
+    padding: ${px(25)} 0 ${px(40)} 0;
   `,
   SlideWrapper: styled.div`
     width:100%;
@@ -21,13 +21,6 @@ export default {
     user-select: none;
     border-radius: 3px;
     box-shadow: 10px 2px 20px rgba(0, 0, 0, 0.1);
-    transform: translate(-50%, -50%);
-  `,
-  Canvas: styled.canvas`
-    position: absolute;
-    z-index: 200;
-    top: 50%;
-    left: 50%;
     transform: translate(-50%, -50%);
   `,
 };

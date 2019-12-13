@@ -24,6 +24,7 @@ export default createMuiTheme({
     naver: '#04d404',
     kakao: '#ffe812',
     google: '#fff',
+    link: '#4780CE',
     dropyGray: {
       0: '#f8f9fa',
       1: '#f1f3f5',
@@ -37,6 +38,7 @@ export default createMuiTheme({
       9: '#212529',
     },
     dropyYellow: {
+      light: '#FFFBE5',
       0: '#fff9db',
       1: '#fff3bf',
       2: '#ffec99',
@@ -113,17 +115,37 @@ export default createMuiTheme({
     },
     MuiSwitch: {
       colorPrimary: {
-        color: '#f8f9fa !important',
+        color: '#fff !important',
+      },
+      root: {
+        width: 40,
+        height: 24,
+        padding: 0,
+        display: 'flex',
       },
       switchBase: {
+        padding: 4,
+        color: '#fff',
         '&$checked': {
-          transform: 'translateX(60%)',
+          transform: 'translateX(15px)',
+          color: '#fff',
+          '& + $track': {
+            opacity: 1,
+            backgroundColor: '#f8f9fa',
+          },
         },
       },
-      track: {
-        'background-color': '#868e96',
-        opacity: '1 !important',
+      thumb: {
+        width: 16,
+        height: 16,
+        boxShadow: 'none',
       },
+      track: {
+        borderRadius: 12,
+        opacity: 1,
+        backgroundColor: '#868e96',
+      },
+      checked: {},
     },
   },
 });

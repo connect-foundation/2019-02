@@ -6,11 +6,13 @@ const GET_USER_HISTORIES = gql`
     getHistories {
       channel {
         channelId
-        channelName
         channelStatus
         master {
           userId
           displayName
+        }
+        channelOptions{
+          channelName
         }
       }
       updatedAt

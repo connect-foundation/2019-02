@@ -6,7 +6,7 @@ export default {
   Indicator: styled.div`
     height: 100%;
     min-width: ${px(80)};
-    width: 40%;
+    width: 10%;
     position: absolute;
     z-index: 200;
     top: 0;
@@ -14,7 +14,7 @@ export default {
     flex-direction: column;
     justify-content: center;
     cursor: pointer;
-    ${(props) => (props.direction === 'back'
+    ${(props) => (!props.direction
     ? 'left: 0'
     : 'right: 0')};
     &:hover{
@@ -26,7 +26,7 @@ export default {
   ArrowWrapper: styled.div`
     height: ${px(40)};
     width: ${px(40)};
-    align-self: ${(props) => (props.direction === 'back'
+    align-self: ${(props) => (!props.direction
     ? 'flex-start'
     : 'flex-end')};
     display: flex;

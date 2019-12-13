@@ -1,35 +1,39 @@
-import React, { useEffect, useReducer } from 'react';
+import React, { useEffect } from 'react';
 import { useRouteMatch } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import { ChannelContext } from '@/contexts';
 import {
   useGetChannel,
   useAddUserHistory,
-  toolBarInitState,
-  toolBarReducer,
+  useModal,
 } from '@/hooks';
-import { Chat, Slide, ToolBar } from '@/components/channel';
+import { ChannelProvider } from '@/components/base';
+import {
+  Chat,
+  Slide,
+  ToolBar,
+  SettingModal,
+} from '@/components/channel';
+import {
+  LoadingModal,
+  ErrorModal,
+} from '@/components/common';
 import S from './style';
 import { NO_EXIST_CHANNEL_MESSAGE, ENTERING_CHANNEL_MESSAGGGE } from '@/constants';
-import { LoadingModal, ErrorModal } from '@/components/common';
 
 const Channel = (props) => {
   const { user } = props;
   const { params: { channelId } } = useRouteMatch();
   const { data, loading } = useGetChannel(channelId);
   const { mutate } = useAddUserHistory();
-  const [toolBarState, toolBarDispatch] = useReducer(
-    toolBarReducer,
-    toolBarInitState,
-  );
+  const {
+    isModalOpened,
+    openModal,
+    closeModal,
+  } = useModal();
 
   useEffect(() => {
     if (data && data.status === 'ok') {
-      mutate({
-        variables: {
-          channelId,
-        },
-      });
+      mutate({ variables: { channelId } });
     }
   }, [data]);
 
@@ -41,32 +45,35 @@ const Channel = (props) => {
   }
 
   return (
-    <ChannelContext.Provider
+    <ChannelProvider
       value={{
+        channelId,
         isMaster: data.isMaster,
         fileUrl: data.channel.fileUrl,
         slideUrls: data.channel.slideUrls,
         slideRatioList: data.channel.slideRatioList,
         initialSlide: data.channel.currentSlide,
-        channelName: data.channel.channelName,
         masterName: data.channel.master.displayName,
         channelCode: data.channel.channelCode,
+        channelName: data.channel.channelOptions.channelName,
+        anonymousChat: data.channel.channelOptions.anonymousChat,
       }}
     >
       <S.Channel>
-        {toolBarState.isToolBarActive && (
-          <ToolBar
-            toolBarDispatch={toolBarDispatch}
-            toolBarState={toolBarState}
+        {data.isMaster && (
+          <ToolBar />
+        )}
+        <Slide channelId={channelId} openSettingModal={openModal} />
+        <Chat channelId={channelId} userId={user.userId} />
+        {data.isMaster && (
+          <SettingModal
+            channelId={channelId}
+            isModalOpened={isModalOpened}
+            closeSettingModal={closeModal}
           />
         )}
-        <Slide
-          channelId={channelId}
-          toolBarDispatch={toolBarDispatch}
-        />
-        <Chat channelId={channelId} userId={user.userId} />
       </S.Channel>
-    </ChannelContext.Provider>
+    </ChannelProvider>
   );
 };
 

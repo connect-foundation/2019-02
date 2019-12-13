@@ -2,7 +2,8 @@ export const CHAT_ADDED = 'CHAT_ADDED';
 export const CHAT_UPDATED = 'CHAT_UPDATED';
 export const CHAT_SORT_BY_RECENT = 'CHAT_SORT_BY_RECENT';
 export const CHAT_SORT_BY_LIKE = 'CHAT_SORT_BY_LIKE';
-export const CHAT_INPUT_PLACEHOLDER = '질문 또는 의견을 남겨주세요.';
+export const CHAT_INPUT_PLACEHOLDER = '질문(#페이지 번호) 또는 의견을 남겨주세요.';
+export const CHAT_ANONYMOUS_PLACEHOLDER = '해당 채널은 익명 채팅이 불가능합니다. 로그인 해주세요.';
 export const CHAT_LIKE_ICON_PATH = [
   'M13.8724 6.29782C13.9624 5.23536 13.0093 4.92528 12.6316 4.92528C11.1659',
   '4.92478 9.69903 4.92528 8.23335 4.92403C8.44431 4.44656 8.70159 3.18104',

@@ -51,21 +51,48 @@ const ChannelSchema = new Schema({
     required: true,
     default: 0,
   },
+  anonymousChat: {
+    type: Boolean,
+    default: true,
+  },
+  emojiEffect: {
+    type: Boolean,
+    default: true,
+  },
   createdAt: {
     type: Date,
     default: Date.now(),
   },
 });
 
-ChannelSchema.methods.toPayload = async function toChannelPayload(...objs) {
+ChannelSchema.statics.updateChannelOptions = async function updateChannelOptions(
+  channelId,
+  userId,
+  channelOptions,
+) {
+  const ChannelModel = this;
+  const channel = await ChannelModel.findOne({ channelId });
+
+  if (!channel) return null;
+  if (channel.masterId !== userId) return null;
+
+  Object.keys(channelOptions).forEach((key) => {
+    channel[key] = channelOptions[key];
+  });
+
+  await channel.save();
+
+  return channel;
+};
+
+ChannelSchema.methods.toPayload = async function toChannelPayload(type, ...objs) {
   const channel = this;
   const master = await Users.findOne({ userId: channel.masterId });
 
-  return assignFilter([
+  const data = assignFilter([
+    'id',
     'channelId',
     'master',
-    'channelName',
-    'maxHeadCount',
     'slideUrls',
     'slideRatioList',
     'fileUrl',
@@ -73,6 +100,18 @@ ChannelSchema.methods.toPayload = async function toChannelPayload(...objs) {
     'currentSlide',
     'channelCode',
   ], channel, { master }, ...objs);
+
+  const channelOptions = assignFilter([
+    'id',
+    'channelName',
+    'maxHeadCount',
+    'expiredAt',
+    'anonymousChat',
+    'emojiEffect',
+  ], channel, { master }, ...objs);
+
+  if (type === 'channelOptions') return { ...channelOptions };
+  return { ...data, channelOptions };
 };
 
 module.exports = mongoose.model('channels', ChannelSchema);

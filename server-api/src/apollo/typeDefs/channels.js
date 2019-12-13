@@ -1,15 +1,32 @@
 const typeDefs = `
 type Channel {
+  id: String
   channelId: String
   master: User 
-  channelName: String
-  maxHeadCount: Int
   slideUrls: [String]
   slideRatioList: [Float]
   fileUrl: String
-  channelCode: String!
+  channelCode: String
   channelStatus: String
-  currentSlide: Int!
+  currentSlide: Int
+  channelOptions: ChannelOptions
+}
+
+type ChannelOptions {
+  id: String,
+  channelName: String
+  maxHeadCount: Int
+  expiredAt: Date
+  anonymousChat: Boolean
+  emojiEffect: Boolean
+}
+
+input ChannelOptionsInput {
+  channelName: String
+  maxHeadCount: Int
+  expiredAt: Date
+  anonymousChat: Boolean
+  emojiEffect: Boolean
 }
 
 type getChannelResponse {
@@ -35,12 +52,14 @@ extend type Mutation {
     slideUrls: [String], 
     fileUrl: String,
     slideRatioList: [Float],
-  ): Channel,
+  ): Channel
   setCurrentSlide(channelId: String!, currentSlide: Int!): Channel
+  updateChannelOptions(channelId: String!, channelOptions: ChannelOptionsInput): ChannelOptions
 }
 
 extend type Subscription {
   slideChanged(channelId: String!): Channel
+  optionChanged(channelId: String!): ChannelOptions
 }
 `;
 

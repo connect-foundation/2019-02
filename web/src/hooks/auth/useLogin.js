@@ -25,7 +25,12 @@ const useLogin = () => {
     window.localStorage.setItem(TOKEN_KEY, token);
     window.localStorage.setItem('DROPY_USER_ID', userId);
     window.localStorage.setItem('DROPY_USERNAME', displayName);
-    client.writeQuery({ query: GET_USER_STATUS, data });
+
+    if (isAnonymous) {
+      client.writeQuery({ query: GET_USER_STATUS, data });
+    } else {
+      window.location.reload();
+    }
   };
 
   return logIn;

@@ -4,6 +4,7 @@ const Histories = require('../../models/histories');
 const Users = require('../../models/users');
 
 const SLIDE_CHANGED = 'SLIDE_CHANGED';
+const OPTION_CHANGED = 'OPTION_CHANGED';
 
 const createChannelInfo = (
   user,
@@ -52,7 +53,7 @@ const createChannel = async (_, {
 
   try {
     const channel = await newChannel.save();
-    const payload = await channel.toPayload({ master: user });
+    const payload = await channel.toPayload('channel', { id: channelId, master: user });
 
     await newHistory.save();
 
@@ -79,7 +80,7 @@ const getChannel = async (_, { channelId }, { user }) => {
     const master = await Users.findOne({ userId: channel.masterId });
     const status = channel ? 'ok' : 'not_exist';
     const isMaster = !!channel && !!user && channel.masterId === user.userId;
-    const payload = await channel.toPayload({ master });
+    const payload = await channel.toPayload('channel', { id: channelId, master });
 
     return {
       status,
@@ -97,7 +98,7 @@ const getChannelsByCode = async (_, { channelCode }) => {
     const status = channels ? 'ok' : 'not_exist';
     const refindedChannels = channels.map(async (channel) => {
       const master = await Users.findOne({ userId: channel.masterId });
-      return channel.toPayload({ master });
+      return channel.toPayload('channel', { id: channel.channelId, master });
     });
 
     return {
@@ -116,9 +117,22 @@ const setCurrentSlide = async (_, { channelId, currentSlide }, { user, pubsub })
       { currentSlide },
       { new: true },
     );
-    const payload = await channel.toPayload({ master: user });
+    const payload = await channel.toPayload('channel', { id: channelId, master: user });
 
     pubsub.publish(SLIDE_CHANGED, { slideChanged: payload });
+
+    return payload;
+  } catch (err) {
+    throw new ApolloError(err.message);
+  }
+};
+
+const updateChannelOptions = async (_, { channelId, channelOptions }, { user, pubsub }) => {
+  try {
+    const channel = await Channels.updateChannelOptions(channelId, user.userId, channelOptions);
+    const payload = await channel.toPayload('channelOptions', { id: channelId });
+
+    pubsub.publish(OPTION_CHANGED, { optionChanged: payload });
 
     return payload;
   } catch (err) {
@@ -133,6 +147,14 @@ const slideChanged = {
   ),
 };
 
+const optionChanged = {
+  subscribe: withFilter(
+    (_, __, { pubsub }) => pubsub.asyncIterator(OPTION_CHANGED),
+    (payload, variables) => payload.optionChanged.id === variables.channelId,
+  ),
+};
+
+
 const resolvers = {
   Query: {
     getChannel,
@@ -141,9 +163,11 @@ const resolvers = {
   Mutation: {
     createChannel,
     setCurrentSlide,
+    updateChannelOptions,
   },
   Subscription: {
     slideChanged,
+    optionChanged,
   },
 };
 
