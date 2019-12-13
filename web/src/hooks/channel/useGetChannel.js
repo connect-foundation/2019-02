@@ -13,9 +13,12 @@ const CHECK_CHANNEL = gql`
         master{
           displayName
         }
-        channelName
         currentSlide
         channelCode
+        channelOptions{
+          channelName
+          anonymousChat
+        }
       }
     }
   } 

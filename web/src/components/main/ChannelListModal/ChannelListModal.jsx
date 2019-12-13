@@ -9,7 +9,7 @@ const ChannelListModal = (props) => {
     <ChannelCard
       key={channel.channelId}
       channelId={channel.channelId}
-      channelName={channel.channelName}
+      channelName={channel.channelOptions.channelName}
       channelCode={channel.channelCode}
       channelStatus={channel.channelStatus}
       masterName={channel.master.displayName}

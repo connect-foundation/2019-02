@@ -10,6 +10,7 @@ const GlobalStyle = createGlobalStyle`
 
   html, body {
     height: 100%;
+    min-width: 1150px;
   }
   
   ol, ul {

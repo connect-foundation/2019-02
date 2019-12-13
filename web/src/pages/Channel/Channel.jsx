@@ -53,9 +53,10 @@ const Channel = (props) => {
         slideUrls: data.channel.slideUrls,
         slideRatioList: data.channel.slideRatioList,
         initialSlide: data.channel.currentSlide,
-        channelName: data.channel.channelName,
         masterName: data.channel.master.displayName,
         channelCode: data.channel.channelCode,
+        channelName: data.channel.channelOptions.channelName,
+        anonymousChat: data.channel.channelOptions.anonymousChat,
       }}
     >
       <S.Channel>

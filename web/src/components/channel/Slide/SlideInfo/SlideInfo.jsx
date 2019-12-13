@@ -1,15 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import S from './style';
-import { useChannelSelector } from '@/hooks';
+import { useChannelSelector, useChannelNameChanged } from '@/hooks';
 import CodeShareButton from './CodeShareButton';
 import SlideDownloadButton from './SlideDownloadButton';
 import FlyingEmojiButton from './FlyingEmojiButton';
 
 const SlideInfo = (props) => {
   const { isFullScreen } = props;
-  const channelName = useChannelSelector((state) => state.channelName);
+  const channelId = useChannelSelector((state) => state.channelId);
   const masterName = useChannelSelector((state) => state.masterName);
+  const { channelName } = useChannelNameChanged(channelId);
 
   return (
     <S.SlideInfo>

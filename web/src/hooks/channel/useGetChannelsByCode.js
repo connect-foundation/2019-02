@@ -7,9 +7,11 @@ const GET_CHANNELS_BY_CODE = gql`
       status
       channels {
         channelId
-        channelName
         channelCode
         channelStatus
+        channelOptions{
+          channelName
+        }
         master{
           displayName
         }

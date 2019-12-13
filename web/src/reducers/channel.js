@@ -1,11 +1,11 @@
 const initialChannelState = {
   isChat: false,
+  isSync: true,
+  page: 0,
   isToolBarActive: false,
   isPenToolActive: false,
   canvasSize: {},
   storedCanvasUrl: '',
-  isSync: true,
-  page: 0,
 };
 
 const channelReducer = (state, action) => {
@@ -14,6 +14,16 @@ const channelReducer = (state, action) => {
       return {
         ...state,
         isChat: action.payload.isChat,
+      };
+    case 'SET_ISSYNC':
+      return {
+        ...state,
+        isSync: action.payload.isSync,
+      };
+    case 'SET_PAGE':
+      return {
+        ...state,
+        page: action.payload.page,
       };
     case 'TOOLBAR_ACTIVE':
       return {
@@ -34,21 +44,6 @@ const channelReducer = (state, action) => {
       return {
         ...state,
         storedCanvasUrl: action.payload,
-      };
-    case 'SET_ISSYNC':
-      return {
-        ...state,
-        isSync: action.payload.isSync,
-      };
-    case 'SET_PAGE':
-      return {
-        ...state,
-        page: action.payload.page,
-      };
-    case 'SET_CHANNEL_NAME':
-      return {
-        ...state,
-        channelName: action.payload,
       };
     default:
       return state;
