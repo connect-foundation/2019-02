@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import devRouter from './dev';
+import performanceRouter from './performance';
 import {
   requestQueue,
   auth,
@@ -14,7 +15,7 @@ import {
   clearProgress,
 } from '../middlewares';
 
-const router = Router();
+const prodRouter = Router();
 
 const queueMiddleware = requestQueue({
   queueLimit: 20,
@@ -31,7 +32,7 @@ const middlewares = [
   removeTmp,
 ].reduce((array:any, middleware) => array.concat(middleware, requestEnd), []);
 
-router.post(
+prodRouter.post(
   '/images/:channelId',
   ...middlewares,
   (req, res) => {
@@ -49,12 +50,19 @@ router.post(
   },
 );
 
-router.get(
+prodRouter.get(
   '/progress/:channelId',
   setProgressPollingTopic,
   waitProgressPolling,
 );
 
-const appRouter = process.env.NODE_ENV === 'development' ? devRouter : router;
+const router = ((env) => {
+  let appRouter = prodRouter;
 
-export default appRouter;
+  if (env === 'performance') appRouter = performanceRouter;
+  if (env === 'development') appRouter = devRouter;
+
+  return appRouter;
+})(process.env.NODE_ENV);
+
+export default router;

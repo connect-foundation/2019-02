@@ -1,9 +1,17 @@
-export type SubscribeProgressCallback = (page: number, totalPage: number) => void;
+import * as EventEmitter from 'events';
 
-export interface SlideConverterSpec {
-  convertToSlides: (inputPath: string, outputPath: string) => Promise<SlideInfo[]>;
-  subscribeProgress: (callback: SubscribeProgressCallback) => void;
-  unsubscribeProgress: () => void;
+export type SubscribeProgressCallback = (page: number, totalPage: number) => void;
+export type OutputNaming = (page: number) => string;
+
+export interface ConverterEngine extends EventEmitter {
+  init: () => Promise<void>,
+  convert: () => Promise<SlideInfo[]>
+}
+
+export interface GmOptimizeOptions {
+  quality: number;
+  resolution: number;
+  compression: string;
 }
 
 export interface SlideImageOptions {

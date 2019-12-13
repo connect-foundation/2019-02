@@ -1,8 +1,8 @@
 import { RequestHandler } from '../@types';
 import { clearProgress, removeTmp } from '../middlewares';
 
-const requestEnd: RequestHandler = (req: any, res, next) => {
-  if(!req.endflag) return next();
+const requestEnd: RequestHandler = (req: any, res, next): void => {
+  if (!req.endflag) return next();
   const { channelId } = req.params;
 
   clearProgress(channelId);
