@@ -63,6 +63,14 @@ class PdfConverter extends EventEmitter implements ConverterEngine {
     }
   }
 
+  async stop(): Promise<void> {
+    // TODO
+  }
+
+  async clearOutput(): Promise<void> {
+    // TODO
+  }
+
   getPageLength() {
     return this.pageLength;
   }
