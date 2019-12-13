@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import {
   useAddChat,
   useChannelSelector,
+  useAnonymousChanged,
+  useGetUserStatus,
   useDispatch,
 } from '@/hooks';
 import {
@@ -19,9 +21,10 @@ const ChatInput = (props) => {
   const [message, setMessage] = useState('');
   const dispatch = useDispatch();
   const { mutate } = useAddChat();
+  const { isAnonymous } = useGetUserStatus();
   const { channelId, setQuestionToggle } = props;
   const limit = useChannelSelector((state) => state.slideUrls.length);
-  const anonymousChat = useChannelSelector((state) => state.anonymousChat);
+  const { anonymousChat } = useAnonymousChanged(channelId);
 
   const sendMessage = () => {
     if (message === '') return;
@@ -50,14 +53,14 @@ const ChatInput = (props) => {
   return (
     <S.ChatInput>
       <S.MessageInput
-        placeholder={anonymousChat
+        placeholder={anonymousChat || !isAnonymous
           ? CHAT_INPUT_PLACEHOLDER
           : CHAT_ANONYMOUS_PLACEHOLDER}
         onChange={handleChangeInput}
         onKeyDown={handleKeyDownInput}
         onFocus={handleFocus(true)}
         onBlur={handleFocus(false)}
-        anonymousChat={anonymousChat}
+        anonymousChat={!anonymousChat && isAnonymous}
       />
       <S.SendButton
         type="button"

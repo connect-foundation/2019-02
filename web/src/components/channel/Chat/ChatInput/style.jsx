@@ -15,7 +15,7 @@ const S = {
   `,
   MessageInput: styled.textarea.attrs(({ anonymousChat }) => ({
     type: 'text',
-    disabled: !anonymousChat,
+    disabled: anonymousChat,
   }))`
     box-sizing: border-box;
     width: ${px(238)};

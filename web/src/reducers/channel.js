@@ -2,7 +2,6 @@ const initialChannelState = {
   isChat: false,
   isSync: true,
   page: 0,
-  anonymousChat: true,
   isToolBarActive: false,
   isPenToolActive: false,
   canvasSize: {},
@@ -26,11 +25,6 @@ const channelReducer = (state, action) => {
         ...state,
         page: action.payload.page,
       };
-    case 'SET_ANONYMOUS_CHAT':
-      return {
-        ...state,
-        anonymousChat: action.payload.anonymousChat,
-      };
     case 'TOOLBAR_ACTIVE':
       return {
         ...state,
@@ -50,11 +44,6 @@ const channelReducer = (state, action) => {
       return {
         ...state,
         storedCanvasUrl: action.payload,
-      };
-    case 'SET_CHANNEL_NAME':
-      return {
-        ...state,
-        channelName: action.payload,
       };
     default:
       return state;

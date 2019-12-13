@@ -25,7 +25,7 @@ const UserHistory = (props) => {
         channelId={channel.channelId}
         channelStatus={channel.channelStatus}
         updatedAt={updatedDate}
-        channelName={channel.channelName}
+        channelName={channel.channelOptions.channelName}
         displayName={channel.master.displayName}
       />
     );
