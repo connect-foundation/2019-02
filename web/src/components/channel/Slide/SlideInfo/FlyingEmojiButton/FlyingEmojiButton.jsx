@@ -4,9 +4,9 @@ import Factory from '../FlyingEmojiFactory';
 import { useAddEmoji, useCreateEmoji, useChannelSelector } from '@/hooks';
 import {
   FULL_SCREEN_POSITION,
-  NORMAL_SCREEN_POSITION,
   GET_FLYING_EMOJI_SPEED,
   GET_EMOJI_POSITION,
+  GET_EMOJI_TYPE,
   LOVE,
   LIKE,
   WONDERING,
@@ -37,14 +37,17 @@ const FlyingEmojiButton = (props) => {
 
   useEffect(() => {
     if (isReadyBroadcastData()) return;
-    const { type, positionX, positionY } = broadcastEmoji;
+
+    const { type } = broadcastEmoji;
+    const emojiPosition = GET_EMOJI_POSITION(type);
+    const emojiType = GET_EMOJI_TYPE(type);
     const samePosition = isFullScreen
       ? FULL_SCREEN_POSITION
-      : { x: positionX, y: positionY };
+      : { x: emojiPosition.x, y: emojiPosition.y };
 
     jobQueue.push(
       new Factory(
-        type,
+        emojiType,
         samePosition,
         GET_FLYING_EMOJI_SPEED(),
         isFullScreen,
@@ -54,30 +57,19 @@ const FlyingEmojiButton = (props) => {
     setEmoji(null);
   }, [broadcastEmoji]);
 
-  const emojiMaker = (event, emojiType) => {
-    const normalPosition = NORMAL_SCREEN_POSITION(event);
-    const positionX = normalPosition.x;
-    const positionY = normalPosition.y;
-    const type = emojiType[1];
-    mutate({
-      variables: {
-        channelId,
-        type,
-        positionX,
-        positionY,
-      },
-    });
+  const emojiMaker = (type) => {
+    mutate({ variables: { channelId, type } });
   };
 
   return (
     <S.EmojiSmallButton>
-      <S.EmojiButton className="emoji-love" onClick={(event) => emojiMaker(event, LOVE)}>
+      <S.EmojiButton className="emoji-love" onClick={() => emojiMaker(LOVE)}>
         <span aria-label="love" role="img">❤️</span>
       </S.EmojiButton>
-      <S.EmojiButton className="emoji-like" onClick={(event) => emojiMaker(event, LIKE)}>
+      <S.EmojiButton className="emoji-like" onClick={() => emojiMaker(LIKE)}>
         <span aria-label="like" role="img">👍</span>
       </S.EmojiButton>
-      <S.EmojiButton className="emoji-wondering" onClick={(event) => emojiMaker(event, WONDERING)}>
+      <S.EmojiButton className="emoji-wondering" onClick={() => emojiMaker(WONDERING)}>
         <span aria-label="wondering" role="img">🤔</span>
       </S.EmojiButton>
     </S.EmojiSmallButton>

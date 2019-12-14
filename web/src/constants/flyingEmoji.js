@@ -1,8 +1,8 @@
 const body = document.querySelector('body');
 
-export const LOVE = ['LOVE', '❤️'];
-export const LIKE = ['LIKE', '👍'];
-export const WONDERING = ['WONDERING', '🤔'];
+export const LOVE = 'LOVE';
+export const LIKE = 'LIKE';
+export const WONDERING = 'WONDERING';
 export const FULL_SCREEN_POSITION = { x: body.offsetWidth - 150, y: 0 };
 export const NORMAL_SCREEN_POSITION = (event) => ({
   x: event.clientX,
@@ -16,6 +16,15 @@ export const ROTATION = () => (Math.random() > 0.8 ? '-' : '+');
 export const SINER = () => 50 * Math.random();
 export const BACKGROUND = body;
 export const FULL_SCREEN = document.querySelector('.fullscreen');
+export const GET_EMOJI_TYPE = (type) => {
+  const EMOJI_TYPE = {
+    LOVE: () => '❤️',
+    LIKE: () => '👍',
+    WONDERING: () => '🤔',
+  };
+
+  return EMOJI_TYPE[type]();
+};
 export const GET_EMOJI_POSITION = (type) => {
   const EMOJI_TYPE = {
     LOVE: () => document.querySelector('.emoji-love'),
@@ -26,7 +35,7 @@ export const GET_EMOJI_POSITION = (type) => {
   const clientRect = emoji.getBoundingClientRect();
 
   return {
-    x: clientRect.left,
+    x: clientRect.left + 20,
     y: body.offsetHeight - clientRect.top,
   };
 };
