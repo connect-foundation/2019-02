@@ -41,7 +41,7 @@ export const GET_EMOJI_POSITION = (type) => {
 };
 export const PREVENT_FLYING_EMOJI = () => {
   const countFlyingEmoji = document.querySelectorAll('.flying-emoji').length;
-  const maxEmojiCount = () => countFlyingEmoji && countFlyingEmoji > 200;
+  const maxEmojiCount = () => countFlyingEmoji && countFlyingEmoji > 300;
 
   if (maxEmojiCount()) return false;
   return true;
