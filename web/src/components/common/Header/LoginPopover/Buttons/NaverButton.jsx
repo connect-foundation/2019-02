@@ -1,14 +1,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import NaverLogin from 'react-naver-login';
+import NaverLogin from '@/utils/naverLogin';
+import { useLogin } from '@/hooks';
 import { authByNaver } from '@/apis';
 import { NAVER_AUTH_CALLBACK } from '@/constants';
 import S from './style';
 
 const NaverButton = (props) => {
-  const { showError } = props;
-  const handleResponse = ({ accessToken }) => {
-    authByNaver(accessToken);
+  const { handleClose } = props;
+  const logIn = useLogin();
+  const handleResponse = async (accessToken) => {
+    const { token, user: { displayName, userId } } = await authByNaver(accessToken);
+
+    if (token) {
+      logIn({ token, userId, displayName });
+    }
   };
   const handleFailure = (error) => {
     console.error(error);
@@ -17,9 +23,13 @@ const NaverButton = (props) => {
   return (
     <NaverLogin
       clientId={process.env.NAVER_ID}
-      callbackUrl={NAVER_AUTH_CALLBACK}
-      render={() => (
-        <S.NaverLoginButton onClick={() => showError()}>
+      callbackUrl="http://localhost:8000/login"
+      render={({ onClick }) => (
+        <S.NaverLoginButton onClick={() => {
+          handleClose();
+          onClick();
+        }}
+        >
           네이버 로그인
         </S.NaverLoginButton>
       )}
@@ -30,7 +40,7 @@ const NaverButton = (props) => {
 };
 
 NaverButton.propTypes = {
-  showError: PropTypes.func.isRequired,
+  handleClose: PropTypes.func.isRequired,
 };
 
 export default NaverButton;

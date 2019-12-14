@@ -14,6 +14,7 @@ import {
   Channel,
   MyPage,
   PrivacyPolicy,
+  Login,
 } from './pages';
 
 const App = () => (
