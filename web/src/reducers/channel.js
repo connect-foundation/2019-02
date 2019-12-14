@@ -5,7 +5,7 @@ const initialChannelState = {
   isToolBarActive: false,
   isPenToolActive: false,
   canvasSize: {},
-  storedCanvasUrl: '',
+  canvasHistory: [],
 };
 
 const channelReducer = (state, action) => {
@@ -40,10 +40,10 @@ const channelReducer = (state, action) => {
         ...state,
         canvasSize: action.payload,
       };
-    case 'SET_CANVAS_URL':
+    case 'UPDATE_CANVAS_HISTORY':
       return {
         ...state,
-        storedCanvasUrl: action.payload,
+        canvasHistory: action.payload.canvasHistory,
       };
     default:
       return state;

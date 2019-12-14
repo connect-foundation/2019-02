@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 export default {
-  Canvas: styled.canvas`
+  CanvasWrapper: styled.div`
     position: absolute;
     z-index: 900;
     top: 50%;
