@@ -6,6 +6,10 @@ import {
   FULL_SCREEN_POSITION,
   NORMAL_SCREEN_POSITION,
   GET_FLYING_EMOJI_SPEED,
+  GET_EMOJI_POSITION,
+  LOVE,
+  LIKE,
+  WONDERING,
 } from '@/constants';
 import S from './style';
 
@@ -14,7 +18,6 @@ const FlyingEmojiButton = (props) => {
   const { isFullScreen } = props;
   let jobQueue = [];
   let requestId = null;
-
   const broadcastEmoji = useCreateEmoji(channelId);
   const { mutate } = useAddEmoji();
   const [emoji, setEmoji] = useState(null);
@@ -51,10 +54,11 @@ const FlyingEmojiButton = (props) => {
     setEmoji(null);
   }, [broadcastEmoji]);
 
-  const emojiMaker = (event, type) => {
+  const emojiMaker = (event, emojiType) => {
     const normalPosition = NORMAL_SCREEN_POSITION(event);
     const positionX = normalPosition.x;
     const positionY = normalPosition.y;
+    const type = emojiType[1];
     mutate({
       variables: {
         channelId,
@@ -67,13 +71,13 @@ const FlyingEmojiButton = (props) => {
 
   return (
     <S.EmojiSmallButton>
-      <S.EmojiButton onClick={(event) => emojiMaker(event, '❤️')}>
-        <span aria-label="like" role="img">❤️</span>
+      <S.EmojiButton className="emoji-love" onClick={(event) => emojiMaker(event, LOVE)}>
+        <span aria-label="love" role="img">❤️</span>
       </S.EmojiButton>
-      <S.EmojiButton onClick={(event) => emojiMaker(event, '👍')}>
-        <span aria-label="great" role="img">👍</span>
+      <S.EmojiButton className="emoji-like" onClick={(event) => emojiMaker(event, LIKE)}>
+        <span aria-label="like" role="img">👍</span>
       </S.EmojiButton>
-      <S.EmojiButton onClick={(event) => emojiMaker(event, '🤔')}>
+      <S.EmojiButton className="emoji-wondering" onClick={(event) => emojiMaker(event, WONDERING)}>
         <span aria-label="wondering" role="img">🤔</span>
       </S.EmojiButton>
     </S.EmojiSmallButton>
