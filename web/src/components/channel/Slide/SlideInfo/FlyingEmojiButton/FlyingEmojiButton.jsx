@@ -42,7 +42,7 @@ const FlyingEmojiButton = (props) => {
     const emojiPosition = GET_EMOJI_POSITION(type);
     const emojiType = GET_EMOJI_TYPE(type);
     const samePosition = isFullScreen
-      ? FULL_SCREEN_POSITION
+      ? FULL_SCREEN_POSITION()
       : { x: emojiPosition.x, y: emojiPosition.y };
 
     jobQueue.push(
