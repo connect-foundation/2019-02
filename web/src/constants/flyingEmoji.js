@@ -39,3 +39,10 @@ export const GET_EMOJI_POSITION = (type) => {
     y: body.offsetHeight - clientRect.top,
   };
 };
+export const PREVENT_FLYING_EMOJI = () => {
+  const countFlyingEmoji = document.querySelectorAll('.flying-emoji').length;
+  const maxEmojiCount = () => countFlyingEmoji && countFlyingEmoji > 200;
+
+  if (maxEmojiCount()) return false;
+  return true;
+};

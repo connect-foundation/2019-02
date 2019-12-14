@@ -4,6 +4,7 @@ import Factory from '../FlyingEmojiFactory';
 import { useAddEmoji, useCreateEmoji, useChannelSelector } from '@/hooks';
 import {
   FULL_SCREEN_POSITION,
+  PREVENT_FLYING_EMOJI,
   GET_FLYING_EMOJI_SPEED,
   GET_EMOJI_POSITION,
   GET_EMOJI_TYPE,
@@ -41,6 +42,7 @@ const FlyingEmojiButton = (props) => {
     const { type } = broadcastEmoji;
     const emojiPosition = GET_EMOJI_POSITION(type);
     const emojiType = GET_EMOJI_TYPE(type);
+    if (!PREVENT_FLYING_EMOJI()) return;
     const samePosition = isFullScreen
       ? FULL_SCREEN_POSITION()
       : { x: emojiPosition.x, y: emojiPosition.y };
