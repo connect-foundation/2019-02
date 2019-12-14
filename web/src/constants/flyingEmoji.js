@@ -3,7 +3,7 @@ const body = document.querySelector('body');
 export const LOVE = 'LOVE';
 export const LIKE = 'LIKE';
 export const WONDERING = 'WONDERING';
-export const FULL_SCREEN_POSITION = () => ({ x: body.offsetWidth - 80, y: 0 });
+export const FULL_SCREEN_POSITION = () => ({ x: document.querySelector('.fullscreen').offsetWidth - 80, y: 0 });
 export const NORMAL_SCREEN_POSITION = (event) => ({
   x: event.clientX,
   y: body.offsetHeight - event.clientY,
