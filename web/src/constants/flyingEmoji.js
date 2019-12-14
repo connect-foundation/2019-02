@@ -35,7 +35,7 @@ export const GET_EMOJI_POSITION = (type) => {
   const clientRect = emoji.getBoundingClientRect();
 
   return {
-    x: clientRect.left + 20,
+    x: window.pageXOffset + clientRect.left + 20,
     y: body.offsetHeight - clientRect.top,
   };
 };
