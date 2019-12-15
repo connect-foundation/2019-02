@@ -1,8 +1,14 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import UserHistoryCard from '../UserHistoryCard';
 import { LoadingModal } from '@/components/common';
-import { LODING_HISTORY_MESSAGE } from '@/constants';
+import {
+  LODING_HISTORY_MESSAGE,
+  HISTORY_SPEAKER_TITLE,
+  ALERT_HISTORY_SPEAKER_TITLE,
+  HISTORY_LISTENER_TITLE,
+  ALERT_HISTORY_LISTENER_TITLE,
+} from '@/constants';
 import { useGetUserHistories, useGetUserStatus } from '@/hooks';
 import dateParser from '@/utils/date';
 import S from './style';
@@ -50,12 +56,12 @@ const UserHistory = (props) => {
         {historyState === 'speaker'
           ? (
             <S.UserHistoryTitle>
-              스피커로 참여한 채널 목록
+              {HISTORY_SPEAKER_TITLE}
             </S.UserHistoryTitle>
           )
           : (
             <S.UserHistoryTitle>
-              리스너로 참여한 채널 목록
+              {HISTORY_LISTENER_TITLE}
             </S.UserHistoryTitle>
           )}
         <S.UserHistoryContents>
