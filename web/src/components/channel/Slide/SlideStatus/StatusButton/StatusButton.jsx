@@ -8,8 +8,6 @@ const StatusButton = () => {
   const emoji = channelStatus === PRESENTATION_ON ? '🐥' : '🐣';
   const color = channelStatus === PRESENTATION_ON ? 'primary' : 'secondary';
 
-  console.log(channelStatus);
-
   return (
     <SmallButton color={color}>
       <span aria-label="sync" role="img">{emoji}</span>
