@@ -30,11 +30,13 @@ class SimpleGm {
     return pages;
   }
 
-  inputPath: string;
-  outputPath: string;
-  readStream: fs.ReadStream;
-  state: gm.State;
-  page: number;
+  private inputPath: string;
+  private outputPath: string;
+  private readStream: fs.ReadStream;
+  private state: gm.State;
+  private page: number;
+  public isWritten: boolean;
+
 
   constructor(inputPath: string, outputPath: string) {
     this.inputPath = inputPath;

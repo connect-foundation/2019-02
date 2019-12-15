@@ -1,5 +1,7 @@
 import * as Path from 'path';
 import * as EventEmitter from 'events';
+import * as fs from 'fs';
+import { promisify } from 'util';
 import {
   ConverterEngine,
   OutputNaming,
@@ -71,13 +73,27 @@ class PdfConverter extends EventEmitter implements ConverterEngine {
     this.done = true;
   }
 
-  async stop(): Promise<void> {
-    this.slides = [];
+  async stop(clearOutput): Promise<void> {
     this.end();
+    if (clearOutput) await this.clearOutput();
+  }
+
+  async clear(): Promise<void> {
+    await this.clearOutput();
+    await this.clearInput();
+  }
+
+  async clearInput(): Promise<void> {
+    const removeFile = promisify(fs.unlink.bind(fs));
+
+    await removeFile(this.inputPath);
   }
 
   async clearOutput(): Promise<void> {
-    // TODO
+    const removeFile = promisify(fs.unlink.bind(fs));
+    const removeAllOutput = this.slides.map(({ path }) => removeFile(path));
+
+    await Promise.all(removeAllOutput);
   }
 
   getPageLength() {
