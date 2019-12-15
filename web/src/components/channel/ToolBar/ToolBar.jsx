@@ -1,6 +1,7 @@
 import React from 'react';
 import S from './style';
 import PenTool from './PenTool';
+import EraserTool from './EraserTool';
 import { useChannelSelector } from '@/hooks';
 
 const ToolBar = () => {
@@ -11,6 +12,7 @@ const ToolBar = () => {
       {isToolBarActive && (
       <S.ToolBarContent>
         <PenTool />
+        <EraserTool />
       </S.ToolBarContent>
       )}
     </S.ToolBar>

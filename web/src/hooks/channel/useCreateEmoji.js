@@ -6,8 +6,6 @@ const START_FLYING_EMOJI = gql`
   subscription StartFlyingEmoji($channelId: String!) {
     startFlyingEmoji(channelId: $channelId) {
       type
-      positionX
-      positionY
     }
   }
 `;

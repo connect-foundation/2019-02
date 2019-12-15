@@ -12,7 +12,7 @@ const SettingModal = (props) => {
       <S.Content>
         <S.SettingContent>
           <S.Title>채널 설정</S.Title>
-          <SettingInput />
+          <SettingInput closeSettingModal={closeSettingModal} />
         </S.SettingContent>
         <S.ButtonCloseModal onClick={closeSettingModal} />
       </S.Content>

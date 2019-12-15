@@ -1,26 +1,24 @@
 import React from 'react';
 import styled from 'styled-components';
-import PropTypes from 'prop-types';
 import { PEN_TOOL_ICON_PATH } from '@/constants';
+import { colorGray, colorPrimary } from '@/styles/themeUtil';
 import { px } from '@/styles';
 
-const PenToolIcon = styled(({ isPenToolActive }) => (
-  <span>
+const PenToolIcon = styled(({ className }) => (
+  <span className={className}>
     <svg width="20" height="20">
       <path
         d={PEN_TOOL_ICON_PATH}
-        style={{
-          transition: 'fill .2s',
-          fill: isPenToolActive ? '#F08C00' : '#CED4DA',
-        }}
+        style={{ fill: 'currentColor' }}
       />
     </svg>
   </span>
-))``;
-
-PenToolIcon.propTypes = {
-  isPenToolActive: PropTypes.bool.isRequired,
-};
+))`
+  color: ${(props) => (
+    props.isPenToolActive
+      ? colorPrimary('main')
+      : colorGray(6))};
+`;
 
 const S = {
   PenTool: styled.div`

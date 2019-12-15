@@ -10,15 +10,20 @@ import { ChannelProvider } from '@/components/base';
 import {
   Chat,
   Slide,
-  ToolBar,
   SettingModal,
+  Entrance,
+  ToolBar,
 } from '@/components/channel';
 import {
   LoadingModal,
   ErrorModal,
 } from '@/components/common';
 import S from './style';
-import { NO_EXIST_CHANNEL_MESSAGE, ENTERING_CHANNEL_MESSAGGGE } from '@/constants';
+import {
+  NO_EXIST_CHANNEL_MESSAGE,
+  ENTERING_CHANNEL_MESSAGGGE,
+  PRESENTATION_ON,
+} from '@/constants';
 
 const Channel = (props) => {
   const { user } = props;
@@ -44,35 +49,38 @@ const Channel = (props) => {
     return (<ErrorModal message={NO_EXIST_CHANNEL_MESSAGE} />);
   }
 
+  const { isMaster, channel } = data;
+  const channelContext = {
+    channelId,
+    isMaster,
+    fileUrl: channel.fileUrl,
+    slideUrls: channel.slideUrls,
+    slideRatioList: channel.slideRatioList,
+    initialSlide: channel.currentSlide,
+    masterName: channel.master.displayName,
+    channelCode: channel.channelCode,
+    channelStatus: isMaster ? PRESENTATION_ON : channel.channelStatus,
+    channelName: channel.channelOptions.channelName,
+    anonymousChat: channel.channelOptions.anonymousChat,
+    emojiEffect: data.channel.channelOptions.emojiEffect,
+  };
+
   return (
-    <ChannelProvider
-      value={{
-        channelId,
-        isMaster: data.isMaster,
-        fileUrl: data.channel.fileUrl,
-        slideUrls: data.channel.slideUrls,
-        slideRatioList: data.channel.slideRatioList,
-        initialSlide: data.channel.currentSlide,
-        masterName: data.channel.master.displayName,
-        channelCode: data.channel.channelCode,
-        channelName: data.channel.channelOptions.channelName,
-        anonymousChat: data.channel.channelOptions.anonymousChat,
-      }}
-    >
-      <S.Channel>
-        {data.isMaster && (
+    <ChannelProvider value={channelContext}>
+      <Entrance>
+        <S.Channel>
           <ToolBar />
-        )}
-        <Slide channelId={channelId} openSettingModal={openModal} />
-        <Chat channelId={channelId} userId={user.userId} />
-        {data.isMaster && (
+          <Slide channelId={channelId} openSettingModal={openModal} />
+          <Chat channelId={channelId} userId={user.userId} />
+          {data.isMaster && (
           <SettingModal
             channelId={channelId}
             isModalOpened={isModalOpened}
             closeSettingModal={closeModal}
           />
-        )}
-      </S.Channel>
+          )}
+        </S.Channel>
+      </Entrance>
     </ChannelProvider>
   );
 };

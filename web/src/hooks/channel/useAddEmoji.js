@@ -5,18 +5,12 @@ const BROADCAST_EMOJI = gql`
   mutation BroadcastEmoji(
     $channelId: String!,
     $type: String,
-    $positionX: Int,
-    $positionY: Int,
     ) {
     broadcastEmoji(
       channelId: $channelId,
       type: $type,
-      positionX: $positionX,
-      positionY: $positionY
     ) {
       type
-      positionX
-      positionY
     }
   }
 `;

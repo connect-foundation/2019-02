@@ -1,25 +1,36 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import {
   useUpdateChannelOptions,
   useChannelSelector,
 } from '@/hooks';
 import S from './style';
 
-const SettingPresentation = () => {
+const SettingPresentation = (props) => {
+  const { closeSettingModal } = props;
   const { mutate } = useUpdateChannelOptions();
-  const channel = useChannelSelector((state) => state);
-  const [newChannelName, setChannelName] = useState(channel.channelName);
-  const [newAnonymousChat, setAnonymousChat] = useState(channel.anonymousChat);
+  const {
+    channelId,
+    channelName,
+    anonymousChat,
+    emojiEffect,
+  } = useChannelSelector((state) => state);
+  const [newChannelName, setChannelName] = useState(channelName);
+  const [newAnonymousChat, setAnonymousChat] = useState(anonymousChat);
+  const [flyingEmojiEffect, setFlyingEmojiEffect] = useState(emojiEffect);
   const handleChannelNameChanged = (event) => setChannelName(event.target.value.substring(0, 20));
   const changeChannelOptions = () => {
     mutate({
       variables: {
-        channelId: channel.channelId,
+        channelId,
         channelOptions: {
-          channelName: newChannelName, anonymousChat: newAnonymousChat,
+          channelName: newChannelName,
+          anonymousChat: newAnonymousChat,
+          emojiEffect: flyingEmojiEffect,
         },
       },
     });
+    closeSettingModal();
   };
 
   return (
@@ -48,8 +59,8 @@ const SettingPresentation = () => {
         <S.InputRow>
         플라잉 이모지 허용
           <S.SwitchButton
-            onChange={() => null}
-            checked
+            onChange={() => setFlyingEmojiEffect(!flyingEmojiEffect)}
+            checked={flyingEmojiEffect}
           />
         </S.InputRow>
       </S.InputWrapper>
@@ -58,6 +69,10 @@ const SettingPresentation = () => {
       </S.AreaButtons>
     </S.SettingPresentation>
   );
+};
+
+SettingPresentation.propTypes = {
+  closeSettingModal: PropTypes.func.isRequired,
 };
 
 export default SettingPresentation;

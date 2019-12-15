@@ -50,6 +50,22 @@ class Converter {
     }
   }
 
+  async stop(clearOutput?: boolean): Promise<void> {
+    return this.engine.stop(clearOutput);
+  }
+
+  async clear(): Promise<void> {
+    return this.engine.clear();
+  }
+
+  async clearInput(): Promise<void> {
+    return this.engine.clearInput();
+  }
+
+  async clearOutput(): Promise<void> {
+    return this.engine.clearOutput();
+  }
+
   private logError(err) {
     console.error(`[Converter Error] ${err.message}`);
   }
