@@ -9,19 +9,24 @@ import S from './style';
 const SettingPresentation = (props) => {
   const { closeSettingModal } = props;
   const { mutate } = useUpdateChannelOptions();
-  const channel = useChannelSelector((state) => state);
-  const [newChannelName, setChannelName] = useState(channel.channelName);
-  const [newAnonymousChat, setAnonymousChat] = useState(channel.anonymousChat);
-  const [emojiEffect, setEmojiEffect] = useState(channel.emojiEffect);
+  const {
+    channelId,
+    channelName,
+    anonymousChat,
+    emojiEffect,
+  } = useChannelSelector((state) => state);
+  const [newChannelName, setChannelName] = useState(channelName);
+  const [newAnonymousChat, setAnonymousChat] = useState(anonymousChat);
+  const [flyingEmojiEffect, setFlyingEmojiEffect] = useState(emojiEffect);
   const handleChannelNameChanged = (event) => setChannelName(event.target.value.substring(0, 20));
   const changeChannelOptions = () => {
     mutate({
       variables: {
-        channelId: channel.channelId,
+        channelId,
         channelOptions: {
           channelName: newChannelName,
           anonymousChat: newAnonymousChat,
-          emojiEffect,
+          emojiEffect: flyingEmojiEffect,
         },
       },
     });
@@ -54,17 +59,13 @@ const SettingPresentation = (props) => {
         <S.InputRow>
         플라잉 이모지 허용
           <S.SwitchButton
-            onChange={() => setEmojiEffect(!emojiEffect)}
-            checked={emojiEffect}
+            onChange={() => setFlyingEmojiEffect(!flyingEmojiEffect)}
+            checked={flyingEmojiEffect}
           />
         </S.InputRow>
       </S.InputWrapper>
       <S.AreaButtons>
-        <S.SaveButton
-          onClick={changeChannelOptions}
-        >
-        저장하기
-        </S.SaveButton>
+        <S.SaveButton onClick={changeChannelOptions}>저장하기</S.SaveButton>
       </S.AreaButtons>
     </S.SettingPresentation>
   );
