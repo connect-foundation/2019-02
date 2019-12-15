@@ -4,6 +4,7 @@ const Histories = require('../../models/histories');
 const Users = require('../../models/users');
 
 const SLIDE_CHANGED = 'SLIDE_CHANGED';
+const CHANNEL_STATUS_CHANGED = 'CHANNEL_STATUS_CHANGED';
 const OPTION_CHANGED = 'OPTION_CHANGED';
 
 const createChannelInfo = (
@@ -127,6 +128,15 @@ const setCurrentSlide = async (_, { channelId, currentSlide }, { user, pubsub })
   }
 };
 
+const setChannelStatus = async (_, { channelId, status }, { user, pubsub }) => {
+  const channel = await Channels.findAndUpdateStatus(channelId, user.userId, status);
+  const payload = channel;
+
+  pubsub.publish(CHANNEL_STATUS_CHANGED, { channelStatusChanged: payload });
+
+  return payload;
+};
+
 const updateChannelOptions = async (_, { channelId, channelOptions }, { user, pubsub }) => {
   try {
     const channel = await Channels.updateChannelOptions(channelId, user.userId, channelOptions);
@@ -147,6 +157,13 @@ const slideChanged = {
   ),
 };
 
+const channelStatusChanged = {
+  subscribe: withFilter(
+    (_, __, { pubsub }) => pubsub.asyncIterator(CHANNEL_STATUS_CHANGED),
+    (payload, variables) => payload.channelStatusChanged.channelId === variables.channelId,
+  ),
+};
+
 const optionChanged = {
   subscribe: withFilter(
     (_, __, { pubsub }) => pubsub.asyncIterator(OPTION_CHANGED),
@@ -163,10 +180,12 @@ const resolvers = {
   Mutation: {
     createChannel,
     setCurrentSlide,
+    setChannelStatus,
     updateChannelOptions,
   },
   Subscription: {
     slideChanged,
+    channelStatusChanged,
     optionChanged,
   },
 };
