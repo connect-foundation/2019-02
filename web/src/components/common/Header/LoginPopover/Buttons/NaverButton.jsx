@@ -1,30 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import NaverLogin from '@/utils/naverLogin';
-import { useLogin } from '@/hooks';
-import { authByNaver } from '@/apis';
-import { NAVER_AUTH_CALLBACK } from '@/constants';
+import { NaverLogin } from '@/components/base';
 import S from './style';
 
 const NaverButton = (props) => {
   const { handleClose } = props;
-  const logIn = useLogin();
-  const handleResponse = async (accessToken) => {
-    const { token, user: { displayName, userId } } = await authByNaver(accessToken);
-
-    if (token) {
-      logIn({ token, userId, displayName });
-    }
-  };
-  const handleFailure = (error) => {
-    console.error(error);
-  };
-
   return (
     <NaverLogin
-      clientId={process.env.NAVER_ID}
-      callbackUrl="http://localhost:8000/login"
-      render={({ onClick }) => (
+      component={({ onClick }) => (
         <S.NaverLoginButton onClick={() => {
           handleClose();
           onClick();
@@ -33,8 +16,6 @@ const NaverButton = (props) => {
           네이버 로그인
         </S.NaverLoginButton>
       )}
-      onSuccess={handleResponse}
-      onFailure={handleFailure}
     />
   );
 };

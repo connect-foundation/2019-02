@@ -32,7 +32,7 @@ const LoginPopover = (props) => {
     >
       <S.PopoverWrapper>
         <S.BtnWrapper>
-          <NaverButton handleClose={onClose}/>
+          <NaverButton handleClose={onClose} />
         </S.BtnWrapper>
         <S.BtnWrapper>
           <KakaoButton handleClose={onClose} />

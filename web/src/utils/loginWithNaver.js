@@ -1,16 +1,17 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
-
-const NAVER_ID_SDK_URL = 'https://static.nid.naver.com/js/naveridlogin_js_sdk_2.0.0.js';
+import { NAVER_ID_SDK_URL } from '@/constants';
 
 const initLoginButton = (props) => {
-  if (!('browser' in process)) {
-    return;
-  }
-  const {
-    clientId, callbackUrl, onSuccess, onFailure,
-  } = props;
+  if (!('browser' in process)) return;
+
   const { naver } = window;
+  const {
+    clientId,
+    callbackUrl,
+    onSuccess,
+    onFailure,
+  } = props;
 
   const naverLogin = new naver.LoginWithNaverId(
     {
@@ -43,11 +44,10 @@ const appendNaverButton = () => {
   if (document && document.querySelectorAll('#naverIdLogin').length === 0) {
     const naverId = document.createElement('div');
     naverId.id = 'naverIdLogin';
-    naverId.style.position = 'absolute';
-    naverId.style.top = '-10000px';
     document.body.appendChild(naverId);
   }
 };
+
 const loadScript = (props) => {
   if (document && document.querySelectorAll('#naver-login-sdk').length === 0) {
     const script = document.createElement('script');
@@ -58,11 +58,9 @@ const loadScript = (props) => {
   }
 };
 
-class LoginNaver extends React.Component {
+class LoginWithNaver extends React.Component {
   componentDidMount() {
-    if (!('browser' in process)) {
-      return;
-    }
+    if (!('browser' in process)) return;
     appendNaverButton();
     loadScript(this.props);
   }
@@ -81,8 +79,8 @@ class LoginNaver extends React.Component {
   }
 }
 
-LoginNaver.propTypes = {
+LoginWithNaver.propTypes = {
   render: PropTypes.func,
 };
 
-export default LoginNaver;
+export { LoginWithNaver, loadScript };

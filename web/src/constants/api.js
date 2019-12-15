@@ -9,5 +9,6 @@ export const GRAPHQL_WS_API = `${WS_HOST}/graphql`;
 export const KAKAO_AUTH_API = `${API_HOST}/auth/kakao`;
 export const GOOGLE_AUTH_API = `${API_HOST}/auth/google`;
 export const NAVER_AUTH_API = `${API_HOST}/auth/naver`;
-export const NAVER_AUTH_CALLBACK = `${API_HOST}/auth/naver/callback`;
+export const NAVER_AUTH_CALLBACK = 'http://localhost:8000/login/callback';
 export const ANONYMOUS_AUTH_API = `${API_HOST}/auth/anonymous`;
+export const NAVER_ID_SDK_URL = 'https://static.nid.naver.com/js/naveridlogin_js_sdk_2.0.0.js';
