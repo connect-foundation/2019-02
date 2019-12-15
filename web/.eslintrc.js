@@ -29,5 +29,6 @@ module.exports = {
 		"react/forbid-prop-types": "off",
 		"no-param-reassign": "off",
 		"no-nested-ternary": "off",
+		"consistent-return": "off",
 	}
 };
