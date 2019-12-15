@@ -106,6 +106,10 @@ class DropyCanvas {
     return this.tempCanvasHistory;
   }
 
+  resetTempCanvasHistory() {
+    this.tempCanvasHistory = [];
+  }
+
   reDrawContent(canvasHistory, context) {
     const newPosition = [];
     canvasHistory.forEach((history, index) => {
