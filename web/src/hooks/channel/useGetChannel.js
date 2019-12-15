@@ -19,6 +19,7 @@ const CHECK_CHANNEL = gql`
         channelOptions{
           channelName
           anonymousChat
+          emojiEffect
         }
       }
     }

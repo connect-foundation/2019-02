@@ -62,15 +62,13 @@ const Channel = (props) => {
     channelStatus: isMaster ? PRESENTATION_ON : channel.channelStatus,
     channelName: channel.channelOptions.channelName,
     anonymousChat: channel.channelOptions.anonymousChat,
+    emojiEffect: data.channel.channelOptions.emojiEffect,
   };
 
   return (
     <ChannelProvider value={channelContext}>
       <Entrance>
         <S.Channel>
-          {data.isMaster && (
-          <ToolBar />
-          )}
           <Slide channelId={channelId} openSettingModal={openModal} />
           <Chat channelId={channelId} userId={user.userId} />
           {data.isMaster && (
