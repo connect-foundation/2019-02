@@ -31,6 +31,7 @@ class FlyingEmojiFactory {
   // eslint-disable-next-line class-methods-use-this
   setEmoji(type) {
     const flyingEmoji = document.createElement('div');
+    flyingEmoji.className = 'flying-emoji';
     flyingEmoji.innerText = type;
     flyingEmoji.style.opacity = this.opacity;
     flyingEmoji.style.zIndex = 999;
@@ -59,7 +60,6 @@ class FlyingEmojiFactory {
   flying() {
     this.getPosition();
     this.setOpacity();
-
     const height = this.position;
     const direction = this.getDirection();
     this.item.style.transform = `translateX(${direction}px) translateY(${height}px) scale(${this.scale})`;

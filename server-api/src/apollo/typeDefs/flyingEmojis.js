@@ -2,12 +2,10 @@ const typeDefs = `
 type Emoji {
   channelId: String
   type: String
-  positionX: Int
-  positionY: Int
 }
 
 extend type Mutation {
-  broadcastEmoji(channelId: String!, type: String, positionX: Int, positionY: Int): Emoji
+  broadcastEmoji(channelId: String!, type: String): Emoji
 }
 
 extend type Subscription {
