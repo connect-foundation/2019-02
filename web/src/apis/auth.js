@@ -1,6 +1,7 @@
 import {
   KAKAO_AUTH_API,
   GOOGLE_AUTH_API,
+  NAVER_AUTH_API,
   ANONYMOUS_AUTH_API,
 } from '@/constants';
 import { get, post } from './http';
@@ -45,8 +46,17 @@ const authByGoogle = async (accessToken) => {
  * @param {string} accessToken
  * @returns {{ token: string , user: any }} object
  */
-const authByNaver = async () => {
-  // TODO
+const authByNaver = async (accessToken) => {
+  const response = await get({
+    url: NAVER_AUTH_API,
+    query: {
+      access_token: accessToken,
+    },
+  });
+  const token = response.headers.get('x-auth-token');
+  const user = await response.json();
+
+  return { token, user };
 };
 
 const authByAnonymous = async () => {

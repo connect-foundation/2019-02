@@ -11,9 +11,10 @@ const Users = require('../models/users');
  */
 const setProviderToUpsert = (provider) => (_, __, profile, done) => {
   const userId = `${provider}_${profile.id}`;
-  const { displayName } = profile;
+  const { displayName, name } = profile;
+  const username = provider === 'naver' ? name : displayName;
 
-  Users.upsert(userId, displayName)
+  Users.upsert(userId, username)
     .then((user) => done(null, {
       userId: user.userId,
       displayName: user.displayName,
