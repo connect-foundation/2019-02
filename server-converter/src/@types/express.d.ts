@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { SlideInfo } from './converter';
+import Converter from '../core/Converter';
 
 declare global {
   namespace Express {
@@ -9,6 +10,11 @@ declare global {
           fileUrl: string;
           slideUrls: string[];
           slideRatioList: number[]
+          isConverted: boolean;
+          converter: Converter;
+          endflag: boolean;
+          isSaved: boolean;
+          isCanceled: boolean;
       }
   }
 }

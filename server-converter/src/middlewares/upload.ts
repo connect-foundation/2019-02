@@ -57,7 +57,7 @@ const uploadMiddleware: RequestHandler = (req: any, _, next) => {
       next();
     })
     .catch((err) => {
-      throw new Error(err);
+      next(err);
     });
 };
 

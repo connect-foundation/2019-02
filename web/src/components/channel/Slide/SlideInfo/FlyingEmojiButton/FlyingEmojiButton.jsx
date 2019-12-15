@@ -4,8 +4,13 @@ import Factory from '../FlyingEmojiFactory';
 import { useAddEmoji, useCreateEmoji, useChannelSelector } from '@/hooks';
 import {
   FULL_SCREEN_POSITION,
-  NORMAL_SCREEN_POSITION,
   GET_FLYING_EMOJI_SPEED,
+  GET_EMOJI_POSITION,
+  GET_EMOJI_TYPE,
+  PREVENT_FLYING_EMOJI,
+  LOVE,
+  LIKE,
+  WONDERING,
 } from '@/constants';
 import S from './style';
 
@@ -15,11 +20,17 @@ const FlyingEmojiButton = (props) => {
   let jobQueue = [];
   let requestId = null;
 
+  const [isFocused, setIsFocused] = useState(true);
+  window.onfocus = () => { setIsFocused(true); };
+  window.onblur = () => { setIsFocused(false); };
+
   const broadcastEmoji = useCreateEmoji(channelId);
   const { mutate } = useAddEmoji();
   const [emoji, setEmoji] = useState(null);
   const isBroadcastData = () => broadcastEmoji !== undefined && emoji === null;
-  const isReadyBroadcastData = () => emoji === null || broadcastEmoji === undefined;
+  const isNotReadyBroadcastData = () => emoji === null
+    || broadcastEmoji === undefined
+    || !isFocused;
   const isAchieve = () => jobQueue.length === 0 && requestId !== null;
   if (isBroadcastData()) setEmoji(broadcastEmoji.type);
 
@@ -33,16 +44,19 @@ const FlyingEmojiButton = (props) => {
   };
 
   useEffect(() => {
-    if (isReadyBroadcastData()) return;
-    const { type, positionX, positionY } = broadcastEmoji;
-    const samePosition = isFullScreen
-      ? FULL_SCREEN_POSITION
-      : { x: positionX, y: positionY };
+    if (isNotReadyBroadcastData()) return;
+    PREVENT_FLYING_EMOJI();
+    const { type } = broadcastEmoji;
+    const emojiPosition = GET_EMOJI_POSITION(type);
+    const emojiType = GET_EMOJI_TYPE(type);
+    const startPosition = isFullScreen
+      ? FULL_SCREEN_POSITION()
+      : { x: emojiPosition.x, y: emojiPosition.y };
 
     jobQueue.push(
       new Factory(
-        type,
-        samePosition,
+        emojiType,
+        startPosition,
         GET_FLYING_EMOJI_SPEED(),
         isFullScreen,
       ),
@@ -51,29 +65,19 @@ const FlyingEmojiButton = (props) => {
     setEmoji(null);
   }, [broadcastEmoji]);
 
-  const emojiMaker = (event, type) => {
-    const normalPosition = NORMAL_SCREEN_POSITION(event);
-    const positionX = normalPosition.x;
-    const positionY = normalPosition.y;
-    mutate({
-      variables: {
-        channelId,
-        type,
-        positionX,
-        positionY,
-      },
-    });
+  const emojiMaker = (type) => {
+    mutate({ variables: { channelId, type } });
   };
 
   return (
     <S.EmojiSmallButton>
-      <S.EmojiButton onClick={(event) => emojiMaker(event, '❤️')}>
-        <span aria-label="like" role="img">❤️</span>
+      <S.EmojiButton className="emoji-love" onClick={() => emojiMaker(LOVE)}>
+        <span aria-label="love" role="img">❤️</span>
       </S.EmojiButton>
-      <S.EmojiButton onClick={(event) => emojiMaker(event, '👍')}>
-        <span aria-label="great" role="img">👍</span>
+      <S.EmojiButton className="emoji-like" onClick={() => emojiMaker(LIKE)}>
+        <span aria-label="like" role="img">👍</span>
       </S.EmojiButton>
-      <S.EmojiButton onClick={(event) => emojiMaker(event, '🤔')}>
+      <S.EmojiButton className="emoji-wondering" onClick={() => emojiMaker(WONDERING)}>
         <span aria-label="wondering" role="img">🤔</span>
       </S.EmojiButton>
     </S.EmojiSmallButton>

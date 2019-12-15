@@ -61,6 +61,7 @@ const ChatInput = (props) => {
         onFocus={handleFocus(true)}
         onBlur={handleFocus(false)}
         anonymousChat={!anonymousChat && isAnonymous}
+        value={message}
       />
       <S.SendButton
         type="button"
