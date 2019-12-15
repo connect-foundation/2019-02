@@ -65,6 +65,23 @@ const ChannelSchema = new Schema({
   },
 });
 
+ChannelSchema.statics.findAndUpdateStatus = async function findAndUpdateStatus(
+  channelId,
+  userId,
+  status,
+) {
+  const ChannelModel = this;
+  const channel = await ChannelModel.findOne({ channelId });
+
+  if (!channel) return null;
+  if (channel.masterId !== userId) return null;
+
+  channel.channelStatus = status;
+  await channel.save();
+
+  return channel;
+};
+
 ChannelSchema.statics.updateChannelOptions = async function updateChannelOptions(
   channelId,
   userId,

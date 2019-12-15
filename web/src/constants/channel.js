@@ -16,3 +16,6 @@ export const PEN_TOOL_ICON_PATH = [
 ].join(' ');
 export const KEYCODE_BACK = 37;
 export const KEYCODE_FOWARD = 39;
+export const MESSAGE_ON_BROWSER_CLOSE = '채널을 나가시겠습니까?';
+export const PRESENTATION_ON = 'on';
+export const PRESENTATION_OFF = 'off';
