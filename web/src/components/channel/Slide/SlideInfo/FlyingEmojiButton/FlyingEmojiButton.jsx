@@ -7,6 +7,7 @@ import {
   GET_FLYING_EMOJI_SPEED,
   GET_EMOJI_POSITION,
   GET_EMOJI_TYPE,
+  PREVENT_FLYING_EMOJI,
   LOVE,
   LIKE,
   WONDERING,
@@ -27,7 +28,9 @@ const FlyingEmojiButton = (props) => {
   const { mutate } = useAddEmoji();
   const [emoji, setEmoji] = useState(null);
   const isBroadcastData = () => broadcastEmoji !== undefined && emoji === null;
-  const isNotReadyBroadcastData = () => emoji === null || broadcastEmoji === undefined || !isFocused;
+  const isNotReadyBroadcastData = () => emoji === null
+    || broadcastEmoji === undefined
+    || !isFocused;
   const isAchieve = () => jobQueue.length === 0 && requestId !== null;
   if (isBroadcastData()) setEmoji(broadcastEmoji.type);
 
@@ -42,7 +45,7 @@ const FlyingEmojiButton = (props) => {
 
   useEffect(() => {
     if (isNotReadyBroadcastData()) return;
-
+    PREVENT_FLYING_EMOJI();
     const { type } = broadcastEmoji;
     const emojiPosition = GET_EMOJI_POSITION(type);
     const emojiType = GET_EMOJI_TYPE(type);
