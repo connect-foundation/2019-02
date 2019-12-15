@@ -16,6 +16,7 @@ const convertMiddleware: RequestHandler = (req: any, res, next) => {
 
   converter.init().then(() => {
     converter.engine.on('progress', ({ page, length }) => noitfyProgress(channelId, {
+      status: `convert`,
       message: `${PROGRESS_CONVERTING}: ${page}/${length} 완료`,
     }));
     converter.convert().then((slides) => {

@@ -1,10 +1,12 @@
 import Queue from '../core/queue';
-import { clearProgress } from '../middlewares';
+import { clearProgress, noitfyProgress } from '../middlewares';
+import { TIMEOUT_MESSAGE } from '../constants';
 
 const requestQueue = (config) => {
   const queue = new Queue(config);
 
   const cleanListeners= (job) => {
+    clearProgress(job.data.req.params.channelId);
     job.data.res.removeAllListeners('end');
   }
 
@@ -32,6 +34,10 @@ const requestQueue = (config) => {
         queue.cancelJob(job);
       }
       if (job.state === 'process') {
+        noitfyProgress(req.params.channelId, {
+          status: 'timeout',
+          message: TIMEOUT_MESSAGE
+        })
         cleanListeners(job);
         queue.stopJob(job);
       }

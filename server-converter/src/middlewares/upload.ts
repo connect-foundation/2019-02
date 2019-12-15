@@ -49,7 +49,10 @@ const uploadMiddleware: RequestHandler = (req: any, _, next) => {
     false,
   ));
 
-  noitfyProgress(channelId, { message: PROGRESS_UPLOADING });
+  noitfyProgress(channelId, { 
+    statue:'upload',
+    message: PROGRESS_UPLOADING 
+  });
   Promise.all([uploadFile, ...uploadSlides])
     .then((locations) => {
       req.fileUrl = locations.shift();
