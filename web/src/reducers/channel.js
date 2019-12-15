@@ -4,8 +4,17 @@ const initialChannelState = {
   page: 0,
   isToolBarActive: false,
   isPenToolActive: false,
+  isEraserToolActive: false,
   canvasSize: {},
-  storedCanvasUrl: '',
+  canvasHistory: [],
+  toolOption: {
+    toolType: '',
+    toolStyleOption: {
+      lineWidth: 0,
+      lineCap: '',
+      lineColor: '',
+    },
+  },
 };
 
 const channelReducer = (state, action) => {
@@ -34,17 +43,34 @@ const channelReducer = (state, action) => {
       return {
         ...state,
         isPenToolActive: !state.isPenToolActive,
+        toolOption: action.payload.toolOption,
+      };
+    case 'ERASER_TOOL_ACTIVE':
+      return {
+        ...state,
+        isEraserToolActive: true,
+      };
+    case 'ERASER_TOOL_INACTIVE':
+      return {
+        ...state,
+        isEraserToolActive: false,
       };
     case 'SET_CANVAS_SIZE':
       return {
         ...state,
         canvasSize: action.payload,
       };
-    case 'SET_CANVAS_URL':
+    case 'UPDATE_CANVAS_HISTORY':
       return {
         ...state,
-        storedCanvasUrl: action.payload,
+        canvasHistory: action.payload.canvasHistory,
       };
+    case 'RESET_CANVAS_HISTORY':
+      return {
+        ...state,
+        canvasHistory: action.payload.canvasHistory,
+      };
+
     default:
       return state;
   }

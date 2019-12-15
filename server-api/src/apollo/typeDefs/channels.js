@@ -54,11 +54,13 @@ extend type Mutation {
     slideRatioList: [Float],
   ): Channel
   setCurrentSlide(channelId: String!, currentSlide: Int!): Channel
+  setChannelStatus(channelId: String!, status: String!): Channel
   updateChannelOptions(channelId: String!, channelOptions: ChannelOptionsInput): ChannelOptions
 }
 
 extend type Subscription {
   slideChanged(channelId: String!): Channel
+  channelStatusChanged(channelId: String!): Channel
   optionChanged(channelId: String!): ChannelOptions
 }
 `;
