@@ -4,7 +4,6 @@ import Factory from '../FlyingEmojiFactory';
 import { useAddEmoji, useCreateEmoji, useChannelSelector } from '@/hooks';
 import {
   FULL_SCREEN_POSITION,
-  PREVENT_FLYING_EMOJI,
   GET_FLYING_EMOJI_SPEED,
   GET_EMOJI_POSITION,
   GET_EMOJI_TYPE,
@@ -19,11 +18,16 @@ const FlyingEmojiButton = (props) => {
   const { isFullScreen } = props;
   let jobQueue = [];
   let requestId = null;
+
+  const [isFocused, setIsFocused] = useState(true);
+  window.onfocus = () => { setIsFocused(true); };
+  window.onblur = () => { setIsFocused(false); };
+
   const broadcastEmoji = useCreateEmoji(channelId);
   const { mutate } = useAddEmoji();
   const [emoji, setEmoji] = useState(null);
   const isBroadcastData = () => broadcastEmoji !== undefined && emoji === null;
-  const isReadyBroadcastData = () => emoji === null || broadcastEmoji === undefined;
+  const isNotReadyBroadcastData = () => emoji === null || broadcastEmoji === undefined || !isFocused;
   const isAchieve = () => jobQueue.length === 0 && requestId !== null;
   if (isBroadcastData()) setEmoji(broadcastEmoji.type);
 
@@ -37,12 +41,11 @@ const FlyingEmojiButton = (props) => {
   };
 
   useEffect(() => {
-    if (isReadyBroadcastData()) return;
+    if (isNotReadyBroadcastData()) return;
 
     const { type } = broadcastEmoji;
     const emojiPosition = GET_EMOJI_POSITION(type);
     const emojiType = GET_EMOJI_TYPE(type);
-    if (!PREVENT_FLYING_EMOJI()) return;
     const startPosition = isFullScreen
       ? FULL_SCREEN_POSITION()
       : { x: emojiPosition.x, y: emojiPosition.y };
