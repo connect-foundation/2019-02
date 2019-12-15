@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import {
   useUpdateChannelOptions,
   useChannelSelector,
 } from '@/hooks';
 import S from './style';
 
-const SettingPresentation = () => {
+const SettingPresentation = (props) => {
+  const { closeSettingModal } = props;
   const { mutate } = useUpdateChannelOptions();
   const channel = useChannelSelector((state) => state);
   const [newChannelName, setChannelName] = useState(channel.channelName);
@@ -23,6 +25,7 @@ const SettingPresentation = () => {
         },
       },
     });
+    closeSettingModal();
   };
 
   return (
@@ -57,10 +60,18 @@ const SettingPresentation = () => {
         </S.InputRow>
       </S.InputWrapper>
       <S.AreaButtons>
-        <S.SaveButton onClick={changeChannelOptions}>저장하기</S.SaveButton>
+        <S.SaveButton
+          onClick={changeChannelOptions}
+        >
+        저장하기
+        </S.SaveButton>
       </S.AreaButtons>
     </S.SettingPresentation>
   );
+};
+
+SettingPresentation.propTypes = {
+  closeSettingModal: PropTypes.func.isRequired,
 };
 
 export default SettingPresentation;
