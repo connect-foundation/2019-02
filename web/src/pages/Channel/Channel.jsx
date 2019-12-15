@@ -10,7 +10,6 @@ import { ChannelProvider } from '@/components/base';
 import {
   Chat,
   Slide,
-  ToolBar,
   SettingModal,
   Entrance,
 } from '@/components/channel';
