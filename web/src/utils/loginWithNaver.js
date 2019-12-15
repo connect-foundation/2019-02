@@ -19,7 +19,7 @@ const initLoginButton = (props) => {
       clientId,
       isPopup: true,
       callbackHandle: true,
-      loginButton: { color: 'green', type: 3, height: 60 },
+      loginButton: {},
     },
   );
 
@@ -44,6 +44,8 @@ const appendNaverButton = () => {
   if (document && document.querySelectorAll('#naverIdLogin').length === 0) {
     const naverId = document.createElement('div');
     naverId.id = 'naverIdLogin';
+    naverId.style.position = 'absolute';
+    naverId.style.top = '-10000px';
     document.body.appendChild(naverId);
   }
 };
