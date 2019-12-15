@@ -10,13 +10,16 @@ const SettingPresentation = () => {
   const channel = useChannelSelector((state) => state);
   const [newChannelName, setChannelName] = useState(channel.channelName);
   const [newAnonymousChat, setAnonymousChat] = useState(channel.anonymousChat);
+  const [emojiEffect, setEmojiEffect] = useState(channel.emojiEffect);
   const handleChannelNameChanged = (event) => setChannelName(event.target.value.substring(0, 20));
   const changeChannelOptions = () => {
     mutate({
       variables: {
         channelId: channel.channelId,
         channelOptions: {
-          channelName: newChannelName, anonymousChat: newAnonymousChat,
+          channelName: newChannelName,
+          anonymousChat: newAnonymousChat,
+          emojiEffect,
         },
       },
     });
@@ -48,8 +51,8 @@ const SettingPresentation = () => {
         <S.InputRow>
         플라잉 이모지 허용
           <S.SwitchButton
-            onChange={() => null}
-            checked
+            onChange={() => setEmojiEffect(!emojiEffect)}
+            checked={emojiEffect}
           />
         </S.InputRow>
       </S.InputWrapper>

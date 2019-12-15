@@ -57,6 +57,7 @@ const Channel = (props) => {
         channelCode: data.channel.channelCode,
         channelName: data.channel.channelOptions.channelName,
         anonymousChat: data.channel.channelOptions.anonymousChat,
+        emojiEffect: data.channel.channelOptions.emojiEffect,
       }}
     >
       <S.Channel>
