@@ -12,6 +12,7 @@ import {
   Slide,
   SettingModal,
   Entrance,
+  ToolBar,
 } from '@/components/channel';
 import {
   LoadingModal,
@@ -68,6 +69,7 @@ const Channel = (props) => {
     <ChannelProvider value={channelContext}>
       <Entrance>
         <S.Channel>
+          <ToolBar />
           <Slide channelId={channelId} openSettingModal={openModal} />
           <Chat channelId={channelId} userId={user.userId} />
           {data.isMaster && (
