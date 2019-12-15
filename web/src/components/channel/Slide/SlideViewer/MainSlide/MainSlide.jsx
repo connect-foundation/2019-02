@@ -7,7 +7,7 @@ import SlideCanvas from './SlideCanvas';
 
 const MainSlide = (props) => {
   const { page, slideUrls } = props;
-  const { slideRatioList, isPenToolActive } = useChannelSelector((state) => state);
+  const { slideRatioList } = useChannelSelector((state) => state);
   const dispatch = useDispatch();
   const slideRatio = slideRatioList[page];
   const wrapperRef = useRef(null);
@@ -59,7 +59,7 @@ const MainSlide = (props) => {
     <S.MainSlide>
       <S.SlideWrapper ref={wrapperRef}>
         <S.SlideImg ref={imageRef} alt="slide" />
-        {isPenToolActive && <SlideCanvas />}
+        <SlideCanvas />
       </S.SlideWrapper>
     </S.MainSlide>
   );
