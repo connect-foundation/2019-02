@@ -6,7 +6,6 @@ import {
   upload,
   saveTmp,
   removeTmp,
-  requestEnd,
 } from '../middlewares';
 
 const devRouter = Router();
@@ -23,7 +22,7 @@ const middlewares = [
   convert,
   upload,
   removeTmp,
-].reduce((array, middleware) => array.concat(middleware, requestEnd), []);
+];
 
 devRouter.post(
   '/images/:channelId',

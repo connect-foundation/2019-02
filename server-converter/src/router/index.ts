@@ -7,9 +7,7 @@ import {
   convert,
   upload,
   saveTmp,
-  checkSave,
   removeTmp,
-  requestEnd,
   setProgressPollingTopic,
   waitProgressPolling,
   clearProgress,
@@ -26,11 +24,11 @@ const queueMiddleware = requestQueue({
 const middlewares = [
   queueMiddleware,
   auth,
-  [saveTmp, checkSave],
+  saveTmp,
   convert,
   upload,
   removeTmp,
-].reduce((array:any, middleware) => array.concat(middleware, requestEnd), []);
+]
 
 prodRouter.post(
   '/images/:channelId',
@@ -64,5 +62,11 @@ const router = ((env) => {
 
   return appRouter;
 })(process.env.NODE_ENV);
+
+setInterval(() => {
+  console.log(`queuelist: ${queueMiddleware.queue.queue.reduce((str, item) => `${str}  ${item.state}`, '')}`);
+  console.log(`activelist ${queueMiddleware.queue.active.reduce((str, item) => `${str}  ${item.state}`, '')}`);
+}, 2000);
+
 
 export default router;

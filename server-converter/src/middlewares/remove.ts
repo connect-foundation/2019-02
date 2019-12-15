@@ -16,13 +16,7 @@ const removeMiddleware: RequestHandler = (req:any, res, next) => {
   }));
 
   Promise.all(removeTmpFiles)
-    .then(() => {
-      if (req.endflag) {
-        req.isCanceled = true;
-        res.emit('end');
-        res.status(204).end();
-      } else next();
-    })
+    .then(() => { next(); })
     .catch((err) => { throw err; });
 };
 

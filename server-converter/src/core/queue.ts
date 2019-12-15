@@ -44,17 +44,17 @@ class Queue extends EventEmitter {
     }
   }
 
-  async setQueueLimit() {
+  async checkMem(job) {
     const { freeMemMb } = await mem.free();
 
-    if (freeMemMb < 0) {
-      this.queueLimit = 0;
+    if (freeMemMb <= 0) {
+      job.setState(true, 'reject');
     }
   }
 
   createJob(data) {
-    this.setQueueLimit();
     const job = new Job(this, data);
+    this.checkMem(job);
 
     process.nextTick(() => {
       if (!this.canQueue()) return job.setState(true, 'reject');
@@ -69,11 +69,32 @@ class Queue extends EventEmitter {
   startJob(job) {
     this.activeCount += 1;
     this.active.push(job);
-    job.setState(true, 'process', (state) => {
-      this.completeJob(job, state);
+    job.setState(true, 'process', () => {
+      this.completeJob(job);
     });
 
     return job;
+  }
+
+  completeJob(job) {
+    this.dequeueActive();
+    job.setState(false, 'complete');
+    process.nextTick(this.checkQueue.bind(this));
+  }
+
+  stopJob(job){
+    this.dequeueActive();
+    job.setState(false, 'stop');
+    //TODO: callStopProcess(); //템프에 파일있으면 다 지우기, 컨버팅 멈추기
+    process.nextTick(this.checkQueue.bind(this));
+  }
+
+  dequeueActive() {
+    if (this.active.length < 0) {
+      throw new Error('request complete but not found');
+    }
+    this.active.pop();
+    if (this.activeCount !== 0) this.activeCount -= 1;
   }
 
   dequeueJob(job = null) {
@@ -93,40 +114,25 @@ class Queue extends EventEmitter {
     return job;
   }
 
-  completeJob(job, state) {
-    if (this.active.length < 0) {
-      throw new Error('request complete but not found');
-    }
-    this.active.pop();
-    if (this.activeCount !== 0) this.activeCount -= 1;
-
-    job.setState(false, state);
-    process.nextTick(this.checkQueue.bind(this, job));
-  }
-
   enqueueJob = (job) => {
     this.queue.push(job);
-    job.setState(true, 'queue', () => {
-      this.cancelJob(job);
-    });
+    job.setState(false, 'queue');
 
     return job;
   };
 
-  cancelJob(job) {
-    this.dequeueJob(job);
-    job.setState(false, 'cancel-dequeue');
-
-    return job;
-  }
-
-  checkQueue(job = null) {
-    if (job && job.state === 'cancel') {
-      job.data.next();
-    } else if (this.canStart() && this.queue.length > 0) {
+  checkQueue() {
+    if(this.canStart() && this.queue.length > 0) {
       const nextjob = this.dequeueJob();
       this.startJob(nextjob);
     }
+  }
+
+  cancelJob(job) {
+    this.dequeueJob(job);
+    job.setState(false, 'cancle-queue');
+
+    return job;
   }
 
   canQueue() {

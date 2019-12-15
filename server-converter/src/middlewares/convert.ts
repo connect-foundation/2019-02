@@ -2,9 +2,11 @@ import * as path from 'path';
 import { Converter } from '../core';
 import { RequestHandler, OutputNaming } from '../@types';
 import { noitfyProgress } from './progress';
-import { PROGRESS_CONVERTING } from '../constants';
+import { PROGRESS_CONVERTING, CONVERT_TIMEOUT,  } from '../constants';
 
-const convertMiddleware: RequestHandler = (req: any, _, next) => {
+const convertMiddleware: RequestHandler = (req: any, res, next) => {
+  res.setTimeout(CONVERT_TIMEOUT, () => {res.emit('close');});
+
   req.isConverted = true;
   const { channelId } = req.params;
   const naming: OutputNaming = (page: number) => `${channelId}_${page}`;
