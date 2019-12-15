@@ -50,8 +50,16 @@ class Converter {
     }
   }
 
-  async stop(): Promise<void> {
-    return this.engine.stop();
+  async stop(clearOutput?: boolean): Promise<void> {
+    return this.engine.stop(clearOutput);
+  }
+
+  async clear(): Promise<void> {
+    return this.engine.clear();
+  }
+
+  async clearInput(): Promise<void> {
+    return this.engine.clearInput();
   }
 
   async clearOutput(): Promise<void> {

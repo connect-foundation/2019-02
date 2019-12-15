@@ -1,5 +1,7 @@
 import * as Path from 'path';
 import * as EventEmitter from 'events';
+import * as fs from 'fs';
+import { promisify } from 'util';
 import {
   ConverterEngine,
   OutputNaming,
@@ -12,7 +14,9 @@ class PdfConverter extends EventEmitter implements ConverterEngine {
   private outputPath: string;
   private outputNaming: OutputNaming;
   private sgms: SimpleGm[];
+  private slides: SlideInfo[];
   private pageLength: number;
+  private done: boolean;
 
   constructor(
     inputPath: string,
@@ -24,7 +28,9 @@ class PdfConverter extends EventEmitter implements ConverterEngine {
     this.outputPath = outputPath;
     this.outputNaming = outputNaming;
     this.sgms = [];
+    this.slides = [];
     this.pageLength = 0;
+    this.done = false;
   }
 
   async init(): Promise<void> {
@@ -41,34 +47,53 @@ class PdfConverter extends EventEmitter implements ConverterEngine {
   }
 
   async convert(): Promise<SlideInfo[]> {
-    const slideInfos: SlideInfo[] = [];
-    const handleConvertFinished = (slideInfo: SlideInfo) => {
-      const { page } = slideInfo;
-
-      slideInfos.push(slideInfo);
-      this.emit('progress', { page, length: this.pageLength });
+    const convertDone = (slide: SlideInfo) => {
+      this.slides.push(slide);
+      this.emit('progress', { page: slide.page, length: this.pageLength });
     };
+    const convertStopped = () => {
+      if (this.done) throw new Error('all convert done');
+    };
+    const convertChain = this.sgms.reduce(
+      (chain, sgm) => chain
+        .then(convertStopped)
+        .then(() => sgm.optimize().write().then(convertDone)),
+      Promise.resolve(null),
+    );
 
-    try {
-      this.sgms.forEach((sgm) => sgm.resetStream());
-      await this.sgms.reduce((chain, sgm) => (
-        chain.then(() => sgm.optimize().write().then(handleConvertFinished))
-      ), Promise.resolve(null));
-      this.removeAllListeners('progress');
+    await convertChain
+      .then(() => this.end())
+      .catch(() => this.end());
 
-      return slideInfos;
-    } catch (err) {
-      this.removeAllListeners('progress');
-      throw err;
-    }
+    return this.slides;
   }
 
-  async stop(): Promise<void> {
-    // TODO
+  end(): void {
+    this.removeAllListeners('progress');
+    this.done = true;
+  }
+
+  async stop(clearOutput): Promise<void> {
+    this.end();
+    if (clearOutput) await this.clearOutput();
+  }
+
+  async clear(): Promise<void> {
+    await this.clearOutput();
+    await this.clearInput();
+  }
+
+  async clearInput(): Promise<void> {
+    const removeFile = promisify(fs.unlink.bind(fs));
+
+    await removeFile(this.inputPath);
   }
 
   async clearOutput(): Promise<void> {
-    // TODO
+    const removeFile = promisify(fs.unlink.bind(fs));
+    const removeAllOutput = this.slides.map(({ path }) => removeFile(path));
+
+    await Promise.all(removeAllOutput);
   }
 
   getPageLength() {

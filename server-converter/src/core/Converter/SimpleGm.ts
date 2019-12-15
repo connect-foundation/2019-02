@@ -30,12 +30,13 @@ class SimpleGm {
     return pages;
   }
 
-  inputPath: string;
-  outputPath: string;
-  readStream: fs.ReadStream;
-  writeStream: fs.WriteStream;
-  state: gm.State;
-  page: number;
+  private inputPath: string;
+  private outputPath: string;
+  private readStream: fs.ReadStream;
+  private state: gm.State;
+  private page: number;
+  public isWritten: boolean;
+
 
   constructor(inputPath: string, outputPath: string) {
     this.inputPath = inputPath;
@@ -45,7 +46,7 @@ class SimpleGm {
   }
 
   async write(): Promise<SlideInfo> {
-    const stream: fs.WriteStream = this.writeStream;
+    const stream: fs.WriteStream = fs.createWriteStream(this.outputPath);
     const outputPath: string = <string>stream.path;
     const slideInfo: SlideInfo = { path: outputPath, ratio: 1.7777777777777777, page: this.page };
     const size: any = await promisify(this.state.size.bind(this.state));
@@ -67,10 +68,11 @@ class SimpleGm {
     return this;
   }
 
-  resetStream() {
+  resetStream(): SimpleGm {
     this.readStream = fs.createReadStream(this.inputPath);
-    this.writeStream = fs.createWriteStream(this.outputPath);
     this.state = gm(this.readStream, `${this.readStream.path}[${this.page - 1}]`);
+
+    return this;
   }
 
   optimize(): SimpleGm {
