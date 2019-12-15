@@ -44,7 +44,7 @@ const ChannelSchema = new Schema({
   channelStatus: {
     type: String,
     required: true,
-    default: 'on',
+    default: 'off',
   },
   currentSlide: {
     type: Number,

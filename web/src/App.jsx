@@ -6,8 +6,8 @@ import {
 } from 'react-router-dom';
 import { CssBaseline } from '@material-ui/core';
 import { GlobalStyle } from './styles';
-import { ErrorModal, Auth } from './components/common';
-import { Layout } from './components/base';
+import { ErrorModal, Auth, Empty } from './components/common';
+import { Layout, NaverLogin } from './components/base';
 import { NOT_FOUND } from './constants';
 import {
   Main,
@@ -20,6 +20,7 @@ const App = () => (
   <>
     <GlobalStyle />
     <CssBaseline />
+    <NaverLogin />
     <Router>
       <Layout>
         <Switch>
@@ -30,6 +31,7 @@ const App = () => (
             component={() => <Auth render={({ user }) => <Channel user={user} />} />}
           />
           <Route exact path="/mypage" component={MyPage} />
+          <Route exact path="/login/callback" component={Empty} />
           <Route exact path="/privacy-policy" component={PrivacyPolicy} />
           <Route component={() => <ErrorModal message={NOT_FOUND} />} />
         </Switch>

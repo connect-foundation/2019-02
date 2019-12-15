@@ -17,11 +17,13 @@ const SlideStatus = (props) => {
       <StatusButton />
       <S.Wrapper>
         {isMaster ? (
-          <ChannelSettingButton openSettingModal={openSettingModal} />
+          <>
+            <ChannelSettingButton openSettingModal={openSettingModal} />
+            <NoteButton />
+          </>
         ) : (
           <SlideSyncButton />
         )}
-        <NoteButton />
         <FullScreenButton setFullScreen={setFullScreen} />
       </S.Wrapper>
     </S.SlideStatus>
