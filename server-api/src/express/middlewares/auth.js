@@ -3,10 +3,10 @@ const { createToken } = require('../../utils/token');
 
 const setAuth = (req, res, next) => {
   if (!req.user) return res.send(401, 'User Not Authenticated');
-  const userName = req.provider === 'naver' ? req.user.name : req.user.displayName;
+
   req.auth = {
     userId: req.user.userId,
-    displayName: userName,
+    displayName: req.user.displayName,
     isAnonymous: false,
   };
 
