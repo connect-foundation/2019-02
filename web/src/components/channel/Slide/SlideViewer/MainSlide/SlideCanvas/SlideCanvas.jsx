@@ -1,25 +1,13 @@
 import React, { useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import S from './style';
-import { useChannelSelector, useDispatch } from '@/hooks';
+import { useChannelSelector } from '@/hooks';
 
 const SlideCanvas = (props) => {
   const { canvasWidth, canvasHeight } = props;
   const canvasRef = useRef(null);
   const canvas = canvasRef.current;
-  const dispatch = useDispatch();
-  const {
-    isEraserToolActive,
-    isPenToolActive,
-    dropyCanvas,
-  } = useChannelSelector((state) => state);
-
-  useEffect(() => {
-    if (canvas === null) return;
-    const context = canvas.getContext('2d');
-
-    dropyCanvas.clearCanvas(context);
-  }, [isEraserToolActive]);
+  const { isPenToolActive, dropyCanvas } = useChannelSelector((state) => state);
 
   useEffect(() => {
     if (canvas === null) {
@@ -33,7 +21,6 @@ const SlideCanvas = (props) => {
     }
 
     return () => {
-      dispatch({ type: 'ERASER_TOOL_INACTIVE' });
       dropyCanvas.removeEventListener(canvas);
     };
   }, [canvas, canvasWidth, canvasHeight, isPenToolActive]);

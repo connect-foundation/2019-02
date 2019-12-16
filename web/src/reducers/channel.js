@@ -4,7 +4,6 @@ const initialChannelState = {
   page: 0,
   isToolBarActive: false,
   isPenToolActive: false,
-  isEraserToolActive: false,
 };
 
 const channelReducer = (state, action) => {
@@ -33,16 +32,6 @@ const channelReducer = (state, action) => {
       return {
         ...state,
         isPenToolActive: !state.isPenToolActive,
-      };
-    case 'ERASER_TOOL_ACTIVE':
-      return {
-        ...state,
-        isEraserToolActive: true,
-      };
-    case 'ERASER_TOOL_INACTIVE':
-      return {
-        ...state,
-        isEraserToolActive: false,
       };
     default:
       return state;

@@ -108,12 +108,16 @@ class DropyCanvas {
     return this.history;
   }
 
+  getContext() {
+    return this.context;
+  }
+
   resetHistory() {
     this.history = [];
   }
 
-  clearCanvas(context) {
-    context.clearRect(0, 0, this.width, this.height);
+  clearCanvas() {
+    this.context.clearRect(0, 0, this.width, this.height);
     this.resetHistory();
   }
 

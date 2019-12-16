@@ -1,11 +1,11 @@
 import React from 'react';
 import S from './style';
-import { useDispatch } from '@/hooks';
+import { useChannelSelector } from '@/hooks';
 
 const EraserTool = () => {
-  const dispatch = useDispatch();
+  const { dropyCanvas } = useChannelSelector((state) => state);
   const handleOnclick = () => {
-    dispatch({ type: 'ERASER_TOOL_ACTIVE' });
+    dropyCanvas.clearCanvas();
   };
 
   return (
