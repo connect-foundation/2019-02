@@ -1,11 +1,20 @@
 const initialChannelState = {
   isChat: false,
-  isToolBarActive: false,
-  isPenToolActive: false,
-  canvasSize: {},
-  storedCanvasUrl: '',
   isSync: true,
   page: 0,
+  isToolBarActive: false,
+  isPenToolActive: false,
+  isEraserToolActive: false,
+  canvasSize: {},
+  canvasHistory: [],
+  toolOption: {
+    toolType: '',
+    toolStyleOption: {
+      lineWidth: 0,
+      lineCap: '',
+      lineColor: '',
+    },
+  },
 };
 
 const channelReducer = (state, action) => {
@@ -14,26 +23,6 @@ const channelReducer = (state, action) => {
       return {
         ...state,
         isChat: action.payload.isChat,
-      };
-    case 'TOOLBAR_ACTIVE':
-      return {
-        ...state,
-        isToolBarActive: !state.isToolBarActive,
-      };
-    case 'PEN_TOOL_ACTIVE':
-      return {
-        ...state,
-        isPenToolActive: !state.isPenToolActive,
-      };
-    case 'SET_CANVAS_SIZE':
-      return {
-        ...state,
-        canvasSize: action.payload,
-      };
-    case 'SET_CANVAS_URL':
-      return {
-        ...state,
-        storedCanvasUrl: action.payload,
       };
     case 'SET_ISSYNC':
       return {
@@ -45,11 +34,43 @@ const channelReducer = (state, action) => {
         ...state,
         page: action.payload.page,
       };
-    case 'SET_CHANNEL_NAME':
+    case 'TOOLBAR_ACTIVE':
       return {
         ...state,
-        channelName: action.payload,
+        isToolBarActive: !state.isToolBarActive,
       };
+    case 'PEN_TOOL_ACTIVE':
+      return {
+        ...state,
+        isPenToolActive: !state.isPenToolActive,
+        toolOption: action.payload.toolOption,
+      };
+    case 'ERASER_TOOL_ACTIVE':
+      return {
+        ...state,
+        isEraserToolActive: true,
+      };
+    case 'ERASER_TOOL_INACTIVE':
+      return {
+        ...state,
+        isEraserToolActive: false,
+      };
+    case 'SET_CANVAS_SIZE':
+      return {
+        ...state,
+        canvasSize: action.payload,
+      };
+    case 'UPDATE_CANVAS_HISTORY':
+      return {
+        ...state,
+        canvasHistory: action.payload.canvasHistory,
+      };
+    case 'RESET_CANVAS_HISTORY':
+      return {
+        ...state,
+        canvasHistory: action.payload.canvasHistory,
+      };
+
     default:
       return state;
   }

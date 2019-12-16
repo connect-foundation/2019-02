@@ -34,7 +34,7 @@ const ChatLogs = (props) => {
       return;
     }
 
-    const isAllowedRange = targetTop - scrollWrapEl.scrollTop < 600;
+    const isAllowedRange = targetTop - scrollWrapEl.scrollTop < 700;
 
     if (changeType === CHAT_ADDED && isAllowedRange) {
       scrollWrapEl.scrollTop = targetTop;

@@ -55,7 +55,11 @@ router.route('/kakao')
  * HTTP/1.1 401 User Not Authenticated
  */
 router.route('/naver')
-  .post(
+  .get(
+    (req, _, next) => {
+      req.provider = 'naver';
+      next();
+    },
     passport.authenticate('naver-token', { session: false }),
     setAuth,
     generateToken,

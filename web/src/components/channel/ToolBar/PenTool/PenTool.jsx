@@ -5,8 +5,21 @@ import { useDispatch, useChannelSelector } from '@/hooks';
 const PenTool = () => {
   const dispatch = useDispatch();
   const isPenToolActive = useChannelSelector((state) => state.isPenToolActive);
+  const penToolOption = {
+    toolType: 'pen',
+    toolStyleOption: {
+      lineWidth: 2,
+      lineCap: 'round',
+      lineColor: 'red',
+    },
+  };
   const handleOnclick = () => {
-    dispatch({ type: 'PEN_TOOL_ACTIVE' });
+    dispatch({
+      type: 'PEN_TOOL_ACTIVE',
+      payload: {
+        toolOption: penToolOption,
+      },
+    });
   };
 
   return (

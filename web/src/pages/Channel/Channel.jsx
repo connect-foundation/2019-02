@@ -1,27 +1,29 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useRouteMatch } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import { SubscriptionClient } from 'subscriptions-transport-ws';
 import {
   useGetChannel,
   useAddUserHistory,
-  useEnteredListener,
-  useLeaveListener,
   useModal,
 } from '@/hooks';
 import { ChannelProvider } from '@/components/base';
 import {
   Chat,
   Slide,
-  ToolBar,
   SettingModal,
+  Entrance,
+  ToolBar,
 } from '@/components/channel';
 import {
   LoadingModal,
   ErrorModal,
 } from '@/components/common';
 import S from './style';
-import { NO_EXIST_CHANNEL_MESSAGE, ENTERING_CHANNEL_MESSAGGGE, GRAPHQL_WS_API } from '@/constants';
+import {
+  NO_EXIST_CHANNEL_MESSAGE,
+  ENTERING_CHANNEL_MESSAGGGE,
+  PRESENTATION_ON,
+} from '@/constants';
 
 const Channel = (props) => {
   const { user } = props;
@@ -33,37 +35,6 @@ const Channel = (props) => {
     openModal,
     closeModal,
   } = useModal();
-
-  const subscriptionClient = new SubscriptionClient(GRAPHQL_WS_API, {
-    reconnect: true,
-  });
-  const [checkListener, setCheckListener] = useState(true);
-  const enteredListener = useEnteredListener(channelId);
-  // const leaveListener = useLeaveListener(channelId);
-  useEffect(() => () => {
-    if (!checkListener) subscriptionClient.close();
-  });
-
-  subscriptionClient.onDisconnected(() => {
-    // const { listenerList } = data;
-    // leaveListener.mutate({
-    //   variables: {
-    //     channelId,
-    //     listenerList,
-    //   },
-    // });
-  });
-
-  // if (checkListener && data) {
-  //   const { listenerList } = data;
-  //   enteredListener.mutate({
-  //     variables: {
-  //       channelId,
-  //       listenerList,
-  //     },
-  //   });
-  //   setCheckListener(false);
-  // }
 
   useEffect(() => {
     if (data && data.status === 'ok') {
@@ -78,34 +49,38 @@ const Channel = (props) => {
     return (<ErrorModal message={NO_EXIST_CHANNEL_MESSAGE} />);
   }
 
+  const { isMaster, channel } = data;
+  const channelContext = {
+    channelId,
+    isMaster,
+    fileUrl: channel.fileUrl,
+    slideUrls: channel.slideUrls,
+    slideRatioList: channel.slideRatioList,
+    initialSlide: channel.currentSlide,
+    masterName: channel.master.displayName,
+    channelCode: channel.channelCode,
+    channelStatus: isMaster ? PRESENTATION_ON : channel.channelStatus,
+    channelName: channel.channelOptions.channelName,
+    anonymousChat: channel.channelOptions.anonymousChat,
+    emojiEffect: data.channel.channelOptions.emojiEffect,
+  };
+
   return (
-    <ChannelProvider
-      value={{
-        channelId,
-        isMaster: data.isMaster,
-        fileUrl: data.channel.fileUrl,
-        slideUrls: data.channel.slideUrls,
-        slideRatioList: data.channel.slideRatioList,
-        initialSlide: data.channel.currentSlide,
-        channelName: data.channel.channelName,
-        masterName: data.channel.master.displayName,
-        channelCode: data.channel.channelCode,
-      }}
-    >
-      <S.Channel>
-        {data.isMaster && (
+    <ChannelProvider value={channelContext}>
+      <Entrance channelId={channelId} isMaster={isMaster}>
+        <S.Channel>
           <ToolBar />
-        )}
-        <Slide channelId={channelId} openSettingModal={openModal} />
-        <Chat channelId={channelId} userId={user.userId} />
-        {data.isMaster && (
+          <Slide channelId={channelId} openSettingModal={openModal} />
+          <Chat channelId={channelId} userId={user.userId} />
+          {data.isMaster && (
           <SettingModal
             channelId={channelId}
             isModalOpened={isModalOpened}
             closeSettingModal={closeModal}
           />
-        )}
-      </S.Channel>
+          )}
+        </S.Channel>
+      </Entrance>
     </ChannelProvider>
   );
 };

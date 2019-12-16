@@ -13,9 +13,10 @@ const S = {
     box-shadow: 0 ${px(2)} ${px(20)} rgba(0, 0, 0, 0.03);
     background-color: #fff;
   `,
-  MessageInput: styled.textarea.attrs({
+  MessageInput: styled.textarea.attrs(({ anonymousChat }) => ({
     type: 'text',
-  })`
+    disabled: anonymousChat,
+  }))`
     box-sizing: border-box;
     width: ${px(238)};
     height: ${px(84)};
@@ -24,7 +25,8 @@ const S = {
     background: transparent;
     font-size: ${px(16)};
     line-height: ${px(21)};
-    word-break: break-all;
+    word-break: break-word;
+    word-wrap: break-word;
     color: ${colorGray(9)};
     resize: none;
     &::placeholder,

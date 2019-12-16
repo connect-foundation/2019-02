@@ -1,22 +1,17 @@
-import React, {
-  useEffect,
-  useRef,
-} from 'react';
+import React, { useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import S from './style';
 import { useChannelSelector, useDispatch } from '@/hooks';
 import { pxToNum } from '@/utils/dom';
 import SlideCanvas from './SlideCanvas';
 
-
 const MainSlide = (props) => {
   const { page, slideUrls } = props;
-  const { slideRatioList, isPenToolActive } = useChannelSelector((state) => state);
-  const slideRatio = slideRatioList[page];
+  const { slideRatioList } = useChannelSelector((state) => state);
   const dispatch = useDispatch();
+  const slideRatio = slideRatioList[page];
   const wrapperRef = useRef(null);
   const imageRef = useRef(null);
-  const canvasRef = useRef(null);
   const resizeSlide = (fitHeight) => {
     const { current } = imageRef;
 
@@ -48,15 +43,6 @@ const MainSlide = (props) => {
         const fitHeight = wrapperRatio > slideRatio;
 
         resizeSlide(fitHeight);
-        const prevCanvas = canvasRef.current;
-
-        if (prevCanvas !== null) {
-          const prevCanvasUrl = prevCanvas.toDataURL();
-          dispatch({
-            type: 'SET_CANVAS_URL',
-            payload: prevCanvasUrl,
-          });
-        }
         resizeCanvas(fitHeight, wrapperWidth, wrapperHeight);
       });
     };
@@ -73,7 +59,7 @@ const MainSlide = (props) => {
     <S.MainSlide>
       <S.SlideWrapper ref={wrapperRef}>
         <S.SlideImg ref={imageRef} alt="slide" />
-        {isPenToolActive && <SlideCanvas ref={canvasRef} />}
+        <SlideCanvas />
       </S.SlideWrapper>
     </S.MainSlide>
   );

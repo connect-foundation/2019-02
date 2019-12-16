@@ -2,15 +2,23 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import People from '@@/people.svg';
 import S from './style';
-import { useChannelSelector } from '@/hooks';
+import {
+  useChannelSelector,
+  useChannelNameChanged,
+  useEmojiChanged,
+} from '@/hooks';
 import CodeShareButton from './CodeShareButton';
 import SlideDownloadButton from './SlideDownloadButton';
 import FlyingEmojiButton from './FlyingEmojiButton';
 
 const SlideInfo = (props) => {
   const { isFullScreen, listenerList } = props;
-  const channelName = useChannelSelector((state) => state.channelName);
-  const masterName = useChannelSelector((state) => state.masterName);
+  // const channelName = useChannelSelector((state) => state.channelName);
+  // const masterName = useChannelSelector((state) => state.masterName);
+  // const { isFullScreen } = props;
+  const { channelId, masterName } = useChannelSelector((state) => state);
+  const { channelName } = useChannelNameChanged(channelId);
+  const { emojiEffect } = useEmojiChanged(channelId);
 
   return (
     <S.SlideInfo>
@@ -32,7 +40,7 @@ const SlideInfo = (props) => {
         </S.PeopleWrapper>
       </S.ChannelSummaryWrapper>
       <S.SlideButtonsWrapper>
-        <FlyingEmojiButton isFullScreen={isFullScreen} />
+        {emojiEffect && <FlyingEmojiButton isFullScreen={isFullScreen} />}
         <SlideDownloadButton />
         <CodeShareButton />
       </S.SlideButtonsWrapper>

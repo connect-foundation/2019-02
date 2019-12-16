@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import {
   useAddChat,
   useChannelSelector,
+  useAnonymousChanged,
+  useGetUserStatus,
   useDispatch,
 } from '@/hooks';
 import {
@@ -10,7 +12,7 @@ import {
   parseMessage,
   checkIsQuestion,
 } from '@/utils';
-import { CHAT_INPUT_PLACEHOLDER } from '@/constants';
+import { CHAT_INPUT_PLACEHOLDER, CHAT_ANONYMOUS_PLACEHOLDER } from '@/constants';
 import S from './style';
 
 const KEYCODE_ENTER = 13;
@@ -19,12 +21,15 @@ const ChatInput = (props) => {
   const [message, setMessage] = useState('');
   const dispatch = useDispatch();
   const { mutate } = useAddChat();
+  const { isAnonymous } = useGetUserStatus();
   const { channelId, setQuestionToggle } = props;
   const limit = useChannelSelector((state) => state.slideUrls.length);
+  const { anonymousChat } = useAnonymousChanged(channelId);
 
   const sendMessage = () => {
     if (message === '') return;
     const { isQuestion } = pipe(parseMessage, checkIsQuestion)({ text: message, limit });
+
     mutate({ variables: { channelId, message, isQuestion } });
     setMessage('');
     setQuestionToggle(false);
@@ -48,11 +53,14 @@ const ChatInput = (props) => {
   return (
     <S.ChatInput>
       <S.MessageInput
-        placeholder={CHAT_INPUT_PLACEHOLDER}
+        placeholder={anonymousChat || !isAnonymous
+          ? CHAT_INPUT_PLACEHOLDER
+          : CHAT_ANONYMOUS_PLACEHOLDER}
         onChange={handleChangeInput}
         onKeyDown={handleKeyDownInput}
         onFocus={handleFocus(true)}
         onBlur={handleFocus(false)}
+        anonymousChat={!anonymousChat && isAnonymous}
         value={message}
       />
       <S.SendButton

@@ -7,7 +7,7 @@ import {
   useDispatch,
   useChannelSelector,
 } from '@/hooks';
-import { tagParser } from '@/utils';
+import { parseTag } from '@/utils';
 
 const ChatCard = (props) => {
   const {
@@ -21,14 +21,14 @@ const ChatCard = (props) => {
   const slideUrls = useChannelSelector((state) => state.slideUrls);
   const tokens = useGetQuestion({ text: message, limit: slideUrls.length });
   const handleSetPage = (token) => () => {
-    const { nextPage, isExist } = tagParser(token, slideUrls.length);
+    const { nextPage, isExist } = parseTag(token, slideUrls.length);
     if (!isExist) return;
 
     dispatch({ type: 'SET_ISSYNC', payload: { isSync: false } });
     dispatch({ type: 'SET_PAGE', payload: { page: nextPage - 1 } });
   };
   const renderQuestion = () => tokens.map(({ id, token, isQtag }) => {
-    const { isExist } = tagParser(token, slideUrls.length);
+    const { isExist } = parseTag(token, slideUrls.length);
     const noneQuestion = isQtag && !isExist ? 'disable' : 'nomal';
     const state = isQtag && isExist ? 'question' : noneQuestion;
 

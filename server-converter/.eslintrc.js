@@ -27,5 +27,6 @@ module.exports = {
 		"lines-between-class-members": "off",
 		"no-param-reassign": "off",
 		"class-methods-use-this": "off",
+		"consistent-return": "off"
 	}
 }

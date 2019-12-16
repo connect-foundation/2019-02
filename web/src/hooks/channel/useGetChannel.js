@@ -13,10 +13,15 @@ const CHECK_CHANNEL = gql`
         master{
           displayName
         }
-        channelName
         currentSlide
         channelCode
         listenerList
+        channelStatus
+        channelOptions{
+          channelName
+          anonymousChat
+          emojiEffect
+        }
       }
     }
   } 

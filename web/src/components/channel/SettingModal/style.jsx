@@ -6,6 +6,7 @@ const S = {
   Content: styled.div`
     display: flex;
     box-sizing: border-box;
+    border-radius: ${px(3)};
     width: ${px(500)};
     background-color: ${colorCommon('white')};
   `,
@@ -19,7 +20,7 @@ const S = {
     &::before,
     &::after {
       position: absolute;
-      top: 50%:
+      top: 50%;
       right: 50%;
       width: ${px(2)};
       height: ${px(16)};

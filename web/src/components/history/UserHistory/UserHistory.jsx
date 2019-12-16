@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import UserHistoryCard from '../UserHistoryCard';
+import { LoadingModal } from '@/components/common';
+import { LODING_HISTORY_MESSAGE } from '@/constants';
 import { useGetUserHistories, useGetUserStatus } from '@/hooks';
 import dateParser from '@/utils/date';
 import S from './style';
@@ -10,7 +12,9 @@ const UserHistory = (props) => {
   const { userId } = useGetUserStatus();
   const { data, loading } = useGetUserHistories();
 
-  if (loading) return <p>데이터 가져오는 중...</p>;
+  if (!data || loading) {
+    return (<LoadingModal message={LODING_HISTORY_MESSAGE} />);
+  }
 
   const filterToDomain = ({ channel: { master } }) => (historyState === 'speaker'
     ? master.userId === userId
@@ -25,7 +29,7 @@ const UserHistory = (props) => {
         channelId={channel.channelId}
         channelStatus={channel.channelStatus}
         updatedAt={updatedDate}
-        channelName={channel.channelName}
+        channelName={channel.channelOptions.channelName}
         displayName={channel.master.displayName}
       />
     );

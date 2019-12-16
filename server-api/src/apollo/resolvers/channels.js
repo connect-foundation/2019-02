@@ -1,10 +1,12 @@
+
 const { withFilter, ApolloError } = require('apollo-server-express');
 const Channels = require('../../models/channels');
 const Histories = require('../../models/histories');
 const Users = require('../../models/users');
 
 const SLIDE_CHANGED = 'SLIDE_CHANGED';
-const LISTENER_LIST_CHANGED = 'LISTENER_LIST_CHANGED';
+const CHANNEL_STATUS_CHANGED = 'CHANNEL_STATUS_CHANGED';
+const OPTION_CHANGED = 'OPTION_CHANGED';
 
 const createChannelInfo = (
   user,
@@ -53,7 +55,7 @@ const createChannel = async (_, {
 
   try {
     const channel = await newChannel.save();
-    const payload = await channel.toPayload({ master: user });
+    const payload = await channel.toPayload('channel', { id: channelId, master: user });
 
     await newHistory.save();
 
@@ -80,7 +82,7 @@ const getChannel = async (_, { channelId }, { user }) => {
     const master = await Users.findOne({ userId: channel.masterId });
     const status = channel ? 'ok' : 'not_exist';
     const isMaster = !!channel && !!user && channel.masterId === user.userId;
-    const payload = await channel.toPayload({ master });
+    const payload = await channel.toPayload('channel', { id: channelId, master });
 
     return {
       status,
@@ -98,7 +100,7 @@ const getChannelsByCode = async (_, { channelCode }) => {
     const status = channels ? 'ok' : 'not_exist';
     const refindedChannels = channels.map(async (channel) => {
       const master = await Users.findOne({ userId: channel.masterId });
-      return channel.toPayload({ master });
+      return channel.toPayload('channel', { id: channel.channelId, master });
     });
 
     return {
@@ -117,7 +119,7 @@ const setCurrentSlide = async (_, { channelId, currentSlide }, { user, pubsub })
       { currentSlide },
       { new: true },
     );
-    const payload = await channel.toPayload({ master: user });
+    const payload = await channel.toPayload('channel', { id: channelId, master: user });
 
     pubsub.publish(SLIDE_CHANGED, { slideChanged: payload });
 
@@ -127,64 +129,26 @@ const setCurrentSlide = async (_, { channelId, currentSlide }, { user, pubsub })
   }
 };
 
-const checkListener = (list, user) => {
-  if (list.includes(user.userId)) return false;
-  return true;
+const setChannelStatus = async (_, { channelId, status }, { user, pubsub }) => {
+  const channel = await Channels.findAndUpdateStatus(channelId, user.userId, status);
+  const payload = channel;
+
+  pubsub.publish(CHANNEL_STATUS_CHANGED, { channelStatusChanged: payload });
+
+  return payload;
 };
 
-const enteredListener = async (_, { channelId, listenerList }, { user, pubsub }) => {
-  if (!checkListener(listenerList, user)) return;
+const updateChannelOptions = async (_, { channelId, channelOptions }, { user, pubsub }) => {
   try {
-    const channel = await Channels.findOneAndUpdate(
-      { channelId },
-      { listenerList },
-      { new: true },
-    );
-    const payload = await channel.toPayload({});
+    const channel = await Channels.updateChannelOptions(channelId, user.userId, channelOptions);
+    const payload = await channel.toPayload('channelOptions', { id: channelId });
 
-    pubsub.publish(LISTENER_LIST_CHANGED, { listenerListChanged: payload });
+    pubsub.publish(OPTION_CHANGED, { optionChanged: payload });
 
     return payload;
   } catch (err) {
     throw new ApolloError(err.message);
   }
-};
-
-const leaveListener = async (_, { channelId, listenerList }, { user, pubsub }) => {
-  if (checkListener(listenerList, user)) return;
-  try {
-    const newListenerList = listenerList.filter((listener) => user.userId !== listener);
-    const channel = await Channels.findOneAndUpdate(
-      { channelId },
-      { newListenerList },
-      { new: true },
-    );
-    const payload = await channel.toPayload({});
-
-    pubsub.publish(LISTENER_LIST_CHANGED, { listenerListChanged: payload });
-
-    return payload;
-  } catch (err) {
-    throw new ApolloError(err.message);
-  }
-};
-
-const updateChannelName = async (_, { channelId, channelName }, { user }) => {
-  try {
-    const channel = await Channels.updateChannelName(channelId, user.userId, channelName);
-    const payload = channel ? channel.toPayload({ master: user }) : null;
-
-    return payload;
-  } catch (err) {
-    throw new ApolloError(err.message);
-  }
-};
-
-const listenerListChanged = {
-  subscribe: withFilter(
-    (_, __, { pubsub }) => pubsub.asyncIterator(LISTENER_LIST_CHANGED),
-    (payload, variables) => payload.listenerListChanged.channelId === variables.channelId,
-  ),
 };
 
 const slideChanged = {
@@ -194,6 +158,21 @@ const slideChanged = {
   ),
 };
 
+const channelStatusChanged = {
+  subscribe: withFilter(
+    (_, __, { pubsub }) => pubsub.asyncIterator(CHANNEL_STATUS_CHANGED),
+    (payload, variables) => payload.channelStatusChanged.channelId === variables.channelId,
+  ),
+};
+
+const optionChanged = {
+  subscribe: withFilter(
+    (_, __, { pubsub }) => pubsub.asyncIterator(OPTION_CHANGED),
+    (payload, variables) => payload.optionChanged.id === variables.channelId,
+  ),
+};
+
+
 const resolvers = {
   Query: {
     getChannel,
@@ -202,13 +181,13 @@ const resolvers = {
   Mutation: {
     createChannel,
     setCurrentSlide,
-    enteredListener,
-    leaveListener,
-    updateChannelName,
+    setChannelStatus,
+    updateChannelOptions,
   },
   Subscription: {
     slideChanged,
-    listenerListChanged,
+    channelStatusChanged,
+    optionChanged,
   },
 };
 

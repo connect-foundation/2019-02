@@ -5,14 +5,10 @@ const START_FLYING_EMOJI = 'START_FLYING_EMOJI';
 const broadcastEmoji = (_, {
   channelId,
   type,
-  positionX,
-  positionY,
 }, { pubsub }) => {
   const payload = {
     channelId,
     type,
-    positionX,
-    positionY,
   };
 
   pubsub.publish(START_FLYING_EMOJI, { startFlyingEmoji: payload });

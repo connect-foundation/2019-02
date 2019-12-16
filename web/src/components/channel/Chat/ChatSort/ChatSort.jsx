@@ -38,20 +38,22 @@ const ChatSort = (props) => {
           >
             질문보기
           </S.SortButton>
-          <S.SortButton
-            aria-selected={sortType === CHAT_SORT_BY_RECENT}
-            isSort
-            onClick={() => handleClick(CHAT_SORT_BY_RECENT)}
-          >
+          <S.FlexWrapper>
+            <S.SortButton
+              aria-selected={sortType === CHAT_SORT_BY_RECENT}
+              isSort
+              onClick={() => handleClick(CHAT_SORT_BY_RECENT)}
+            >
             최신순
-          </S.SortButton>
-          <S.SortButton
-            aria-selected={sortType === CHAT_SORT_BY_LIKE}
-            isSort
-            onClick={() => handleClick(CHAT_SORT_BY_LIKE)}
-          >
+            </S.SortButton>
+            <S.SortButton
+              aria-selected={sortType === CHAT_SORT_BY_LIKE}
+              isSort
+              onClick={() => handleClick(CHAT_SORT_BY_LIKE)}
+            >
             공감순
-          </S.SortButton>
+            </S.SortButton>
+          </S.FlexWrapper>
         </>
       )}
     </S.ChatSort>
