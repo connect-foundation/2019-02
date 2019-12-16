@@ -24,6 +24,7 @@ const apolloServer = new ApolloServer({
   subscriptions: {
     onConnect: async ({ token, channelId, isMaster }) => {
       const user = token ? verifyToken(token) : null;
+
       const context = {
         user,
         channelId,

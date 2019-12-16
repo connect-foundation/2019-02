@@ -7,6 +7,7 @@ const Users = require('../../models/users');
 const SLIDE_CHANGED = 'SLIDE_CHANGED';
 const CHANNEL_STATUS_CHANGED = 'CHANNEL_STATUS_CHANGED';
 const OPTION_CHANGED = 'OPTION_CHANGED';
+const LISTENER_LIST_CHANGED = 'LISTENER_LIST_CHANGED';
 
 const createChannelInfo = (
   user,
@@ -151,6 +152,52 @@ const updateChannelOptions = async (_, { channelId, channelOptions }, { user, pu
   }
 };
 
+const checkListener = (listenerList, user) => listenerList.filter((value) => value === user);
+const enteredListener = async (_, { channelId, listenerList }, { user, pubsub }) => {
+  console.log(checkListener(listenerList, user));
+  if (!checkListener(listenerList, user)) return;
+  try {
+    const channel = await Channels.findOneAndUpdate(
+      { channelId },
+      { listenerList },
+      { new: true },
+    );
+    const payload = await channel.toPayload({});
+
+    pubsub.publish(LISTENER_LIST_CHANGED, { listenerListChanged: payload });
+
+    return payload;
+  } catch (err) {
+    throw new ApolloError(err.message);
+  }
+};
+
+const leaveListener = async (_, { channelId, listenerList }, { user, pubsub }) => {
+  if (checkListener(listenerList, user)) return;
+  try {
+    const newListenerList = listenerList.filter((listener) => user.userId !== listener);
+    const channel = await Channels.findOneAndUpdate(
+      { channelId },
+      { newListenerList },
+      { new: true },
+    );
+    const payload = await channel.toPayload({});
+
+    pubsub.publish(LISTENER_LIST_CHANGED, { listenerListChanged: payload });
+
+    return payload;
+  } catch (err) {
+    throw new ApolloError(err.message);
+  }
+};
+
+const listenerListChanged = {
+  subscribe: withFilter(
+    (_, __, { pubsub }) => pubsub.asyncIterator(LISTENER_LIST_CHANGED),
+    (payload, variables) => payload.listenerListChanged.channelId === variables.channelId,
+  ),
+};
+
 const slideChanged = {
   subscribe: withFilter(
     (_, __, { pubsub }) => pubsub.asyncIterator(SLIDE_CHANGED),
@@ -183,11 +230,14 @@ const resolvers = {
     setCurrentSlide,
     setChannelStatus,
     updateChannelOptions,
+    enteredListener,
+    leaveListener,
   },
   Subscription: {
     slideChanged,
     channelStatusChanged,
     optionChanged,
+    listenerListChanged,
   },
 };
 

@@ -67,7 +67,11 @@ const Channel = (props) => {
 
   return (
     <ChannelProvider value={channelContext}>
-      <Entrance channelId={channelId} isMaster={isMaster}>
+      <Entrance
+        channelId={channelId}
+        isMaster={isMaster}
+        userId={user.userId}
+      >
         <S.Channel>
           <ToolBar />
           <Slide channelId={channelId} openSettingModal={openModal} />

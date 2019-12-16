@@ -9,6 +9,7 @@ type Channel {
   channelCode: String
   channelStatus: String
   currentSlide: Int
+  listenerList: [String]
   channelOptions: ChannelOptions
 }
 type ChannelOptions {
@@ -50,11 +51,14 @@ extend type Mutation {
   setCurrentSlide(channelId: String!, currentSlide: Int!): Channel
   setChannelStatus(channelId: String!, status: String!): Channel
   updateChannelOptions(channelId: String!, channelOptions: ChannelOptionsInput): ChannelOptions
+  enteredListener(channelId: String!, listenerList: [String]): Channel
+  leaveListener(channelId: String!, listenerList: [String]): Channel
 }
 extend type Subscription {
   slideChanged(channelId: String!): Channel
   channelStatusChanged(channelId: String!): Channel
   optionChanged(channelId: String!): ChannelOptions
+  listenerListChanged(channelId: String, listenerList: [String]): Channel
 }
 `;
 
