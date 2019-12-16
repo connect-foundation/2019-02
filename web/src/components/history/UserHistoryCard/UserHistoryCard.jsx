@@ -16,7 +16,7 @@ const UserHistoryCard = (props) => {
   const channelCode = channelId !== null ? channelId.substring(0, 5) : 'null';
   const presentationStatus = channelStatus === 'on'
     ? { label: 'presentation-on', color: 'primary' }
-    : { label: 'presentation-off', color: 'default' };
+    : { label: 'presentation-off', color: 'secondary' };
 
   return (
     <>
