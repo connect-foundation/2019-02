@@ -6,14 +6,11 @@ import {
 } from './utils';
 
 class DropyCanvas {
-  constructor(width, height) {
-    this.width = width;
-    this.height = height;
-  }
-
   init() {
+    this.width = 0;
+    this.height = 0;
     this.prevPosition = { x: 0, y: 0 };
-    this.tempCanvasHistory = [];
+    this.history = [];
     this.toolType = null;
     this.lineWidth = null;
     this.lineCap = null;
@@ -55,11 +52,11 @@ class DropyCanvas {
   }
 
   handleMouseUp() {
-    this.tempCanvasHistory.push([]);
+    this.history.push([]);
   }
 
   handleMouseLeave() {
-    this.tempCanvasHistory.push([]);
+    this.history.push([]);
   }
 
   addEventListener(canvasElement) {
@@ -74,7 +71,7 @@ class DropyCanvas {
     const ratioX = this.width / mousePositionX;
     const ratioY = this.height / mousePositionY;
 
-    this.tempCanvasHistory.push([ratioX, ratioY]);
+    this.history.push([ratioX, ratioY]);
   }
 
   saveMousePosition(x, y) {
@@ -86,7 +83,7 @@ class DropyCanvas {
     this.context = context;
   }
 
-  setTool(toolOption) {
+  setToolStyle(toolOption) {
     const {
       toolType,
       toolStyleOption: {
@@ -102,19 +99,27 @@ class DropyCanvas {
     this.strokeStyle = lineColor;
   }
 
-  getTempCanvasHistory() {
-    return this.tempCanvasHistory;
+  setSize(width, height) {
+    this.width = width;
+    this.height = height;
   }
 
-  resetTempCanvasHistory() {
-    this.tempCanvasHistory = [];
+  getHistory() {
+    return this.history;
   }
 
-  reDrawContent(canvasHistory, context) {
+  resetHistory() {
+    this.history = [];
+  }
+
+  clearCanvas(context) {
+    context.clearRect(0, 0, this.width, this.height);
+    this.resetHistory();
+  }
+
+  reDrawContent(context) {
     const newPosition = [];
-    canvasHistory.forEach((history, index) => {
-      const ratioX = history[0];
-      const ratioY = history[1];
+    this.history.forEach(([ratioX, ratioY], index) => {
       const { currPositionX, currPositionY } = ratioToRealPosition(
         ratioX,
         ratioY,
@@ -126,9 +131,7 @@ class DropyCanvas {
 
       if (index === 0) return;
 
-      const prevNewPosition = newPosition[index - 1];
-      const prevNewPositionX = prevNewPosition[0];
-      const prevNewPositionY = prevNewPosition[1];
+      const [prevNewPositionX, prevNewPositionY] = newPosition[index - 1];
 
       context.lineWidth = this.lineWidth;
       context.lineCap = this.lineCap;
