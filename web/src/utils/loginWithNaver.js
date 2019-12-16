@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { NAVER_ID_SDK_URL } from '@/constants';
+import { NAVER_ID_SDK_URL, FAKE_BTN_TOP_OFFSET } from '@/constants';
 
 const checkBrowser = () => !('browser' in process);
 const selectNode = (selector) => document.querySelector(selector);
@@ -54,7 +54,7 @@ const appendNaverButton = () => {
   const naverId = document.createElement('div');
   naverId.id = 'naverIdLogin';
   naverId.style.position = 'absolute';
-  naverId.style.top = '-10000px';
+  naverId.style.top = FAKE_BTN_TOP_OFFSET;
   document.body.appendChild(naverId);
 };
 
