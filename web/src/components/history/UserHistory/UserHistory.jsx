@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import UserHistoryCard from '../UserHistoryCard';
 import { LoadingModal } from '@/components/common';
@@ -50,24 +50,29 @@ const UserHistory = (props) => {
     ? data.filter(filterToDomain).map(mapToCardComponent)
     : noneHistoryCardRender;
 
+  const isDataExist = () => historyCardList.length > 0;
+  const isSpeaker = () => historyState === 'speaker';
+
   return (
     <>
       <S.UserHistory>
-        {historyState === 'speaker'
+        {isSpeaker()
           ? (
             <S.UserHistoryTitle>
-              {HISTORY_SPEAKER_TITLE}
+              {isDataExist()
+                ? HISTORY_SPEAKER_TITLE
+                : ALERT_HISTORY_SPEAKER_TITLE}
             </S.UserHistoryTitle>
           )
           : (
             <S.UserHistoryTitle>
-              {HISTORY_LISTENER_TITLE}
+              {isDataExist()
+                ? HISTORY_LISTENER_TITLE
+                : ALERT_HISTORY_LISTENER_TITLE}
             </S.UserHistoryTitle>
           )}
         <S.UserHistoryContents>
-          {historyCardList.length === 0
-            ? noneHistoryCardRender
-            : historyCardList}
+          {isDataExist() && historyCardList}
         </S.UserHistoryContents>
       </S.UserHistory>
     </>
