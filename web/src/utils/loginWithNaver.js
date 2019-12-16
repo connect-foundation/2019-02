@@ -1,9 +1,25 @@
-import * as React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { NAVER_ID_SDK_URL } from '@/constants';
 
+const checkBrowser = () => !('browser' in process);
+const selectNode = (selector) => document.querySelector(selector);
+const checkNode = (selector) => document && !document.querySelectorAll(selector).length;
+const handleLogin = (naverLogin) => {
+  const { opener } = window;
+  const { accessToken } = naverLogin.accessToken;
+
+  naverLogin.getLoginStatus((status) => {
+    if (status) {
+      opener.naver.successCallback(accessToken);
+    } else {
+      opener.failureCallback();
+    }
+    window.close();
+  });
+};
 const initLoginButton = (props) => {
-  if (!('browser' in process)) return;
+  if (checkBrowser()) return;
 
   const { naver } = window;
   const {
@@ -12,7 +28,6 @@ const initLoginButton = (props) => {
     onSuccess,
     onFailure,
   } = props;
-
   const naverLogin = new naver.LoginWithNaverId(
     {
       callbackUrl,
@@ -29,60 +44,55 @@ const initLoginButton = (props) => {
     naver.successCallback = (data) => onSuccess(data);
     naver.failureCallback = onFailure;
   } else {
-    naverLogin.getLoginStatus((status) => {
-      if (status) {
-        window.opener.naver.successCallback(naverLogin.accessToken.accessToken);
-      } else {
-        window.opener.failureCallback();
-      }
-      window.close();
-    });
+    handleLogin(naverLogin);
   }
 };
 
 const appendNaverButton = () => {
-  if (document && document.querySelectorAll('#naverIdLogin').length === 0) {
-    const naverId = document.createElement('div');
-    naverId.id = 'naverIdLogin';
-    naverId.style.position = 'absolute';
-    naverId.style.top = '-10000px';
-    document.body.appendChild(naverId);
-  }
+  if (!checkNode('#naverIdLogin')) return;
+
+  const naverId = document.createElement('div');
+  naverId.id = 'naverIdLogin';
+  naverId.style.position = 'absolute';
+  naverId.style.top = '-10000px';
+  document.body.appendChild(naverId);
 };
 
 const loadScript = (props) => {
-  if (document && document.querySelectorAll('#naver-login-sdk').length === 0) {
-    const script = document.createElement('script');
-    script.id = 'naver-login-sdk';
-    script.src = NAVER_ID_SDK_URL;
-    script.onload = () => initLoginButton(props);
-    document.head.appendChild(script);
-  }
+  if (!checkNode('#naver-login-sdk')) return;
+
+  const script = document.createElement('script');
+  script.id = 'naver-login-sdk';
+  script.src = NAVER_ID_SDK_URL;
+  script.onload = () => initLoginButton(props);
+  document.head.appendChild(script);
 };
 
-class LoginWithNaver extends React.Component {
-  componentDidMount() {
-    if (!('browser' in process)) return;
-    appendNaverButton();
-    loadScript(this.props);
-  }
+const LoginWithNaver = (props) => {
+  const { render } = props;
 
-  render() {
-    const { render } = this.props;
-    return (
-      render({
+  useEffect(() => {
+    if (checkBrowser()) return;
+
+    appendNaverButton();
+    loadScript(props);
+  }, []);
+
+  return (
+    <>
+      {render({
         onClick: () => {
-          if (!document || !document.querySelector('#naverIdLogin').firstChild) return;
-          const naverLoginButton = document.querySelector('#naverIdLogin').firstChild;
+          if (!document || !selectNode('#naverIdLogin').firstChild) return;
+          const naverLoginButton = selectNode('#naverIdLogin').firstChild;
           naverLoginButton.click();
         },
-      })
-    );
-  }
-}
+      })}
+    </>
+  );
+};
 
 LoginWithNaver.propTypes = {
   render: PropTypes.func,
 };
 
-export { LoginWithNaver, loadScript };
+export default LoginWithNaver;
