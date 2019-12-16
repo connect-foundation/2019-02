@@ -2,12 +2,15 @@ import * as gm from 'gm';
 import * as fs from 'fs';
 import { promisify } from 'util';
 import { GmOptimizeOptions, SlideInfo } from '../../@types/converter';
+import { fixRatio } from './utils';
 
 const optimizeOptions: GmOptimizeOptions = {
   quality: 100,
   resolution: 144,
   compression: 'JPEG2000',
 };
+
+const DEFAULT_IMAGE_RATIO = 1.77777;
 
 class SimpleGm {
   static createAndSelect(inputPath: string, outputPath: string, page: number) {
@@ -35,29 +38,38 @@ class SimpleGm {
   private readStream: fs.ReadStream;
   private state: gm.State;
   private page: number;
-  public isWritten: boolean;
 
 
   constructor(inputPath: string, outputPath: string) {
     this.inputPath = inputPath;
     this.outputPath = outputPath;
+    this.readStream = null;
+    this.state = null;
     this.page = 0;
-    this.resetStream();
+  }
+
+  async getRatio(): Promise<number> {
+    this.reset();
+
+    const size: any = await promisify(this.state.size.bind(this.state))();
+    const ratio: number = size.width / size.height;
+
+    return ratio;
   }
 
   async write(): Promise<SlideInfo> {
     const stream: fs.WriteStream = fs.createWriteStream(this.outputPath);
     const outputPath: string = <string>stream.path;
-    const slideInfo: SlideInfo = { path: outputPath, ratio: 1.7777777777777777, page: this.page };
-    const size: any = await promisify(this.state.size.bind(this.state));
-    const ratio: number = size.width / size.height;
-
-    if (!Number.isNaN(ratio)) slideInfo.ratio = ratio;
+    const ratio: number = fixRatio(await this.getRatio()) || DEFAULT_IMAGE_RATIO;
+    const slideInfo: SlideInfo = {
+      path: outputPath,
+      ratio,
+      page: this.page,
+    };
 
     return new Promise((resolve) => {
       stream.once('close', () => resolve(slideInfo));
-      this.resetStream();
-      this.optimize();
+      this.reset().optimize();
       this.state.stream('jpeg').pipe(stream);
     });
   }
@@ -68,7 +80,7 @@ class SimpleGm {
     return this;
   }
 
-  resetStream(): SimpleGm {
+  reset(): SimpleGm {
     this.readStream = fs.createReadStream(this.inputPath);
     this.state = gm(this.readStream, `${this.readStream.path}[${this.page - 1}]`);
 

@@ -2,7 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import UserHistoryCard from '../UserHistoryCard';
 import { LoadingModal } from '@/components/common';
-import { LODING_HISTORY_MESSAGE } from '@/constants';
+import {
+  LODING_HISTORY_MESSAGE,
+  HISTORY_SPEAKER_TITLE,
+  ALERT_HISTORY_SPEAKER_TITLE,
+  HISTORY_LISTENER_TITLE,
+  ALERT_HISTORY_LISTENER_TITLE,
+} from '@/constants';
 import { useGetUserHistories, useGetUserStatus } from '@/hooks';
 import dateParser from '@/utils/date';
 import S from './style';
@@ -34,34 +40,33 @@ const UserHistory = (props) => {
       />
     );
   };
-  const noneHistoryCardRender = (
-    <S.Alert>
-      <span aria-label="really" role="img">🤭</span>
-      <span>기록이 없어요.</span>
-    </S.Alert>
-  );
   const historyCardList = data && data.length > 0
     ? data.filter(filterToDomain).map(mapToCardComponent)
-    : noneHistoryCardRender;
+    : [];
+
+  const isDataExist = () => historyCardList.length > 0;
+  const isSpeaker = () => historyState === 'speaker';
 
   return (
     <>
       <S.UserHistory>
-        {historyState === 'speaker'
+        {isSpeaker()
           ? (
             <S.UserHistoryTitle>
-              스피커로 참여한 채널 목록
+              {isDataExist()
+                ? HISTORY_SPEAKER_TITLE
+                : ALERT_HISTORY_SPEAKER_TITLE}
             </S.UserHistoryTitle>
           )
           : (
             <S.UserHistoryTitle>
-              리스너로 참여한 채널 목록
+              {isDataExist()
+                ? HISTORY_LISTENER_TITLE
+                : ALERT_HISTORY_LISTENER_TITLE}
             </S.UserHistoryTitle>
           )}
         <S.UserHistoryContents>
-          {historyCardList.length === 0
-            ? noneHistoryCardRender
-            : historyCardList}
+          {isDataExist() && historyCardList}
         </S.UserHistoryContents>
       </S.UserHistory>
     </>
