@@ -40,15 +40,9 @@ const UserHistory = (props) => {
       />
     );
   };
-  const noneHistoryCardRender = (
-    <S.Alert>
-      <span aria-label="really" role="img">🤭</span>
-      <span>기록이 없어요.</span>
-    </S.Alert>
-  );
   const historyCardList = data && data.length > 0
     ? data.filter(filterToDomain).map(mapToCardComponent)
-    : noneHistoryCardRender;
+    : [];
 
   const isDataExist = () => historyCardList.length > 0;
   const isSpeaker = () => historyState === 'speaker';
