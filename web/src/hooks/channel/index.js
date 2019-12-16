@@ -6,8 +6,6 @@ export { default as useChannelStatusChanged } from './useChannelStatusChanged';
 export { default as useCreateChannel } from './useCreateChannel';
 export { default as useGetChannel } from './useGetChannel';
 export { default as useGetChannelsByCode } from './useGetChannelsByCode';
-export { default as useEnteredListener } from './useEnteredListener';
-export { default as useLeaveListener } from './useLeaveListener';
 export { default as useListenerListChanged } from './useListenerListChanged';
 export { default as useDispatch } from './useDispatch';
 export { default as useCreateEmoji } from './useCreateEmoji';

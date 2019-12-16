@@ -6,7 +6,7 @@ import SlideInfo from './SlideInfo';
 import S from './style';
 
 const Slide = (props) => {
-  const { channelId, openSettingModal } = props;
+  const { channelId, openSettingModal, listenerList } = props;
   const [isFullScreen, setFullScreen] = useState(false);
 
   return (
@@ -22,7 +22,7 @@ const Slide = (props) => {
       <SlideInfo
         channelId={channelId}
         isFullScreen={isFullScreen}
-        listenerList={3}
+        listenerList={listenerList}
       />
     </S.Slide>
   );
@@ -31,6 +31,7 @@ const Slide = (props) => {
 Slide.propTypes = {
   channelId: PropTypes.string.isRequired,
   openSettingModal: PropTypes.func.isRequired,
+  listenerList: PropTypes.number.isRequired,
 };
 
 export default Slide;

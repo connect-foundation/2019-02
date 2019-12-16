@@ -22,19 +22,36 @@ const apolloServer = new ApolloServer({
     pubsub,
   })),
   subscriptions: {
-    onConnect: async ({ token, channelId, isMaster }) => {
+    onConnect: async ({
+      token,
+      channelId,
+      isMaster,
+      listenerList,
+    }) => {
       const user = token ? verifyToken(token) : null;
 
       const context = {
         user,
         channelId,
         isMaster,
+        listenerList,
         pubsub,
       };
-
-      if (!isMaster) return context;
+      if (!channelId) return;
 
       /* Hotfix: 추후 코드 리팩토링 */
+      const isExistListenerList = () => listenerList.includes(user.userId);
+      if (!isExistListenerList()) {
+        listenerList.push(user.userId);
+        const channelListenerList = await Channels.findOneAndUpdate(
+          { channelId },
+          { listenerList },
+        );
+        const payload = await channelListenerList.toPayload({});
+        pubsub.publish('LISTENER_LIST_CHANGED', { listenerListChanged: payload });
+      }
+      if (!isMaster) return context;
+
       const channel = await Channels.findAndUpdateStatus(channelId, user.userId, 'on');
       pubsub.publish('CHANNEL_STATUS_CHANGED', { channelStatusChanged: channel });
 
@@ -42,15 +59,30 @@ const apolloServer = new ApolloServer({
     },
     onDisconnect: async (_, { initPromise }) => {
       const context = await initPromise;
+      if (!context) return;
+      console.log(context);
       const {
         user,
         channelId,
         isMaster,
       } = context;
 
-      if (!isMaster) return context;
 
       /* Hotfix: 추후 코드 리팩토링 */
+      const isExistListenerList = () => context.listenerList.includes(user.userId);
+
+      if (isExistListenerList()) {
+        const listenerList = context.listenerList.filter((value) => value !== user.userId);
+        const channelListenerList = await Channels.findOneAndUpdate(
+          { channelId },
+          { listenerList },
+        );
+        const payload = await channelListenerList.toPayload({});
+        pubsub.publish('LISTENER_LIST_CHANGED', { listenerListChanged: payload });
+      }
+
+      if (!isMaster) return context;
+
       const channel = await Channels.findAndUpdateStatus(channelId, user.userId, 'off');
       context.pubsub.publish('CHANNEL_STATUS_CHANGED', { channelStatusChanged: channel });
 

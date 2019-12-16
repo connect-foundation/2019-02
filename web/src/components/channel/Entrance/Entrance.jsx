@@ -6,22 +6,21 @@ const Entrance = ({
   children,
   channelId,
   isMaster,
-  userId,
+  listenerList,
 }) => {
   useEffect(() => {
     wsParams.channelId = channelId;
     wsParams.isMaster = isMaster;
+    wsParams.listenerList = listenerList;
     wsClient.connect();
-    console.log(userId);
-    console.log('입장하였습니다.');
 
     return () => {
       wsClient.close();
-      console.log('퇴장하였습니다.');
       wsParams.channelId = null;
       wsParams.isMaster = false;
+      wsParams.listenerList = listenerList;
     };
-  }, [channelId, isMaster]);
+  }, [channelId, isMaster, listenerList]);
 
   return <>{children}</>;
 };
@@ -30,7 +29,7 @@ Entrance.propTypes = {
   children: PropTypes.element.isRequired,
   channelId: PropTypes.string.isRequired,
   isMaster: PropTypes.bool.isRequired,
-  userId: PropTypes.string.isRequired,
+  listenerList: PropTypes.array.isRequired,
 };
 
 export default Entrance;

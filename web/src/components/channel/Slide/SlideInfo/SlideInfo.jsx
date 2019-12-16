@@ -13,9 +13,6 @@ import FlyingEmojiButton from './FlyingEmojiButton';
 
 const SlideInfo = (props) => {
   const { isFullScreen, listenerList } = props;
-  // const channelName = useChannelSelector((state) => state.channelName);
-  // const masterName = useChannelSelector((state) => state.masterName);
-  // const { isFullScreen } = props;
   const { channelId, masterName } = useChannelSelector((state) => state);
   const { channelName } = useChannelNameChanged(channelId);
   const { emojiEffect } = useEmojiChanged(channelId);

@@ -54,6 +54,7 @@ const Channel = (props) => {
   }
 
   const { isMaster, channel } = data;
+
   const channelContext = {
     channelId,
     isMaster,
@@ -67,6 +68,7 @@ const Channel = (props) => {
     channelName: channel.channelOptions.channelName,
     anonymousChat: channel.channelOptions.anonymousChat,
     emojiEffect: data.channel.channelOptions.emojiEffect,
+    listenerList: channel.listenerList,
     dropyCanvas,
   };
 
@@ -75,11 +77,15 @@ const Channel = (props) => {
       <Entrance
         channelId={channelId}
         isMaster={isMaster}
-        userId={user.userId}
+        listenerList={channel.listenerList}
       >
         <S.Channel>
           <ToolBar />
-          <Slide channelId={channelId} openSettingModal={openModal} />
+          <Slide
+            channelId={channelId}
+            openSettingModal={openModal}
+            listenerList={channel.listenerList.length}
+          />
           <Chat channelId={channelId} userId={user.userId} />
           {data.isMaster && (
           <SettingModal
