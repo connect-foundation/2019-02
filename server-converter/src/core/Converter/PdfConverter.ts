@@ -54,18 +54,22 @@ class PdfConverter extends EventEmitter implements ConverterEngine {
     const convertStopped = () => {
       if (this.done) throw new Error('all convert done');
     };
-    const convertChain = this.sgms.reduce(
+    const convertEnd = () => {
+      this.end();
+      return this.slides;
+    };
+    const convertChain: Promise<SlideInfo[]> = this.sgms.reduce(
       (chain, sgm) => chain
         .then(convertStopped)
-        .then(() => sgm.optimize().write().then(convertDone)),
+        .then(() => sgm.write().then(convertDone)),
       Promise.resolve(null),
-    );
+    )
+      .then(convertEnd)
+      .catch(convertEnd);
 
-    await convertChain
-      .then(() => this.end())
-      .catch(() => this.end());
+    const slides: SlideInfo[] = await convertChain;
 
-    return this.slides;
+    return slides;
   }
 
   end(): void {
