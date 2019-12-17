@@ -4,7 +4,6 @@ import stop from './stop';
 import { PROGRESS_CONVERTING, CONVERT_TIMEOUT } from '../constants';
 
 const convertMiddleware: RequestHandler = (req, res, next) => {
-  console.log('convert', req.params.channelId);
   res.setTimeout(CONVERT_TIMEOUT, () => { res.emit('close'); });
 
   const { channelId } = req.params;

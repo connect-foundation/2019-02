@@ -34,7 +34,6 @@ const uploadToObjectStorage = (
 });
 
 const uploadMiddleware: RequestHandler = (req, res, next) => {
-  console.log('upload', req.params.channelId);
   req.stage = 'upload';
 
   const { channelId } = req.params;

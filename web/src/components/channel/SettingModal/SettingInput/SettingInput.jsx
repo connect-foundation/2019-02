@@ -44,12 +44,6 @@ const SettingPresentation = (props) => {
           />
         </S.InputRow>
         <S.InputRow>
-          채널 만료 기한
-        </S.InputRow>
-        <S.InputRow>
-          최대 인원
-        </S.InputRow>
-        <S.InputRow>
         익명 채팅 허용
           <S.SwitchButton
             onChange={() => setAnonymousChat(!newAnonymousChat)}

@@ -8,7 +8,6 @@ const destination: MulterHandler = (_, __, cb) => {
 };
 
 const filename: MulterHandler = (req, file, cb) => {
-  console.log('save', req.params.channelId, req.converter);
   req.stage = 'save';
   const extension = getExtension(file.originalname);
   cb(null, `${req.params.channelId}_file.${extension}`);

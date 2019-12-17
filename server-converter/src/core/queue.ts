@@ -46,6 +46,7 @@ class Queue extends EventEmitter {
 
   createJob(data) {
     const job = new Job(this, data);
+
     this.checkMem(job);
 
     process.nextTick(() => {
@@ -76,21 +77,29 @@ class Queue extends EventEmitter {
     process.nextTick(this.checkQueue.bind(this));
   }
 
-  async stopJob(job, stage = null) {
-    const { req, res, next } = job.data;
-    if (req.converter) req.converter.isStop = true;
-    const stopHandler = {
+  stopHandler(job) {
+    const { req, _, next } = job.data;
+    return {
       save: () => { next(); },
       saveComplete: () => { req.converter.clearInput(); },
       convert: () => { if (req.converter) req.converter.stop(true); },
       upload: () => { next(); },
-      remove: () => { },
+      remove: () => { next(); },
     };
+  }
+
+  stopJob(job, stage = null) {
+    const { req, res } = job.data;
+    const stopHandler = this.stopHandler(job);
+
+    if (req.converter) req.converter.isStop = true;
 
     this.dequeueActive();
     job.setState(true, 'stop');
+
     if (!stopHandler[stage]) res.end();
     else stopHandler[stage]();
+
     process.nextTick(this.checkQueue.bind(this));
   }
 
