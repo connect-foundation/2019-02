@@ -1,5 +1,6 @@
 export const CHAT_INIT = 'CHAT_INIT';
 export const CHAT_ADDED = 'CHAT_ADDED';
+export const MY_CHAT_ADDED = 'MY_CHAT_ADDED';
 export const CHAT_UPDATED = 'CHAT_UPDATED';
 export const CHAT_SORT_BY_RECENT = 'CHAT_SORT_BY_RECENT';
 export const CHAT_SORT_BY_LIKE = 'CHAT_SORT_BY_LIKE';

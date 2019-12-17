@@ -12,6 +12,22 @@ const computeScrollEndTop = (el) => {
   return wrapHeight > scrollerSize ? 0 : scrollerSize - wrapHeight;
 };
 
+const scrollToEnd = (el, filter) => {
+  const targetTop = computeScrollEndTop(el);
+
+  if (filter && !filter(targetTop)) return;
+
+  el.scrollTop = targetTop;
+};
+
+const scrollToTop = (el, filter) => {
+  const targetTop = 0;
+
+  if (filter && !filter(targetTop)) return;
+
+  el.scrollTop = targetTop;
+};
+
 /**
  * @description param으로 들어온 값을 클립보드에 복사해주는 유틸함수
  * @param {String} textToCopy
@@ -28,5 +44,7 @@ const copyToClipboard = (textToCopy) => {
 export {
   pxToNum,
   computeScrollEndTop,
+  scrollToEnd,
+  scrollToTop,
   copyToClipboard,
 };

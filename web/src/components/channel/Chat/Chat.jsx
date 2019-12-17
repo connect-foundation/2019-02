@@ -40,7 +40,7 @@ const Chat = (props) => {
   const { channelId, userId } = props;
 
   useInitChat(channelId);
-  useChatChanged(channelId);
+  useChatChanged(channelId, userId);
 
   return (
     <ChatToggle channelId={channelId} userId={userId} />
