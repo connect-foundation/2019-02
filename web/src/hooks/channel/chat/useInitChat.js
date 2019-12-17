@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 import { useApolloClient, useLazyQuery } from '@apollo/react-hooks';
 import { CHAT_SORT_BY_RECENT } from '@/constants';
 import { GET_CHAT_CACHED } from './useChatChanged';
+import { chatInit } from '@/graphql/cache/chat';
 
 const GET_CHAT_LOGS = gql`
   query InitChatLogs($channelId: String!) {
@@ -33,7 +34,7 @@ const useInitChat = (channelId) => {
         chatLogs: {
           __typename: 'chatLogs',
           logs: [],
-          changeType: null,
+          changeAction: chatInit(),
           sortType: CHAT_SORT_BY_RECENT,
         },
       },
@@ -51,7 +52,7 @@ const useInitChat = (channelId) => {
         chatLogs: {
           __typename: 'chatLogs',
           logs: [...logs, ...chatLogs.logs],
-          changeType: null,
+          changeAction: chatInit(),
           sortType: CHAT_SORT_BY_RECENT,
         },
       },

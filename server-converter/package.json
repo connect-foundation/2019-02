@@ -10,6 +10,7 @@
     "test": "jest --passWithNoTests"
   },
   "dependencies": {
+    "@types/connect-timeout": "^0.0.34",
     "aws-sdk": "^2.574.0",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",

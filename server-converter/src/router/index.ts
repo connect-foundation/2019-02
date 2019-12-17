@@ -4,12 +4,11 @@ import performanceRouter from './performance';
 import {
   requestQueue,
   auth,
+  createConverter,
   convert,
   upload,
   saveTmp,
-  checkSave,
   removeTmp,
-  requestEnd,
   setProgressPollingTopic,
   waitProgressPolling,
   clearProgress,
@@ -18,19 +17,20 @@ import {
 const prodRouter = Router();
 
 const queueMiddleware = requestQueue({
-  queueLimit: 20,
+  queueLimit: 5,
   activeLimit: 1,
   cpuUsage: 90,
 });
 
 const middlewares = [
-  queueMiddleware,
   auth,
-  [saveTmp, checkSave],
+  queueMiddleware,
+  saveTmp,
+  createConverter,
   convert,
   upload,
   removeTmp,
-].reduce((array:any, middleware) => array.concat(middleware, requestEnd), []);
+];
 
 prodRouter.post(
   '/images/:channelId',
@@ -38,9 +38,8 @@ prodRouter.post(
   (req, res) => {
     const { channelId } = req.params;
     const { slideUrls, slideRatioList, fileUrl } = req;
-
-    clearProgress(channelId);
     res.emit('end');
+    clearProgress(channelId);
     res.status(200).json({
       status: 'ok',
       slideUrls,

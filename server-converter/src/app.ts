@@ -1,6 +1,7 @@
 import * as express from 'express';
 import * as cors from 'cors';
 import router from './router';
+import { TIMEOUT } from './constants';
 
 const app = express();
 
@@ -24,7 +25,8 @@ const start = () => {
   app.use(express.json());
   app.use(router);
   app.use(handleError);
-  app.listen('3000', () => {
+  const server = app.listen('3000', () => {
+    server.setTimeout(TIMEOUT);
     console.log('🔗 welcome dropy converter!');
   });
 };

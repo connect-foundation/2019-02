@@ -24,8 +24,9 @@ const DropInput = (props) => {
     const channelCode = channelId.substring(0, CHANNEL_CODE_LENGTH);
     const file = e.target.files[0];
     const formData = createFormData({ file });
-    const unsubscribeProgress = subscribeProgress(channelId, ({ message }) => {
-      dropModalDispatch({ type: 'setLoadingModal', payload: message });
+    const unsubscribeProgress = subscribeProgress(channelId, ({ status, message }) => {
+      if (status === 'timeout') dropModalDispatch({ type: 'setErrorModal', payload: message });
+      else dropModalDispatch({ type: 'setLoadingModal', payload: message });
     });
     const {
       status,

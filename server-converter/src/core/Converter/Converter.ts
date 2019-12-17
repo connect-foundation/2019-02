@@ -11,6 +11,7 @@ class Converter {
   private outputPath: string;
   private outputNaming: OutputNaming;
   public engine: ConverterEngine;
+  public isStop: Boolean;
 
   constructor(
     inputPath: string,
@@ -20,6 +21,7 @@ class Converter {
     this.inputPath = inputPath;
     this.outputPath = outputPath;
     this.outputNaming = outputNaming;
+    this.isStop = false;
   }
 
   async init() {

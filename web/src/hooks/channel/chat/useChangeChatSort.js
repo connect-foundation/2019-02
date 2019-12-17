@@ -1,5 +1,6 @@
 import { useApolloClient } from '@apollo/react-hooks';
 import { GET_CHAT_CACHED } from './useChatChanged';
+import { chatInit } from '@/graphql/cache/chat';
 
 const useChangeChatSort = () => {
   const client = useApolloClient();
@@ -8,6 +9,7 @@ const useChangeChatSort = () => {
     const data = {
       chatLogs: {
         ...chatLogs,
+        changeAction: chatInit(),
         sortType,
       },
     };
