@@ -3,13 +3,17 @@ import {
   useSubscription,
   useApolloClient,
 } from '@apollo/react-hooks';
-import { CHAT_ADDED, CHAT_UPDATED } from '@/constants';
+import {
+  chatAdded,
+  myChatAdded,
+  chatUpdated,
+} from '@/graphql/cache/chat';
 
 const GET_CHAT_CACHED = gql`
   query GetChatCached {
     chatLogs @client {
       logs
-      changeType
+      changeAction
       sortType
     }
   }
@@ -31,7 +35,7 @@ const CHAT_CHANGED = gql`
   }
 `;
 
-const addOrUpdateChat = (cacheData, chat) => {
+const addOrUpdateChat = (userId, cacheData, chat) => {
   const { chatLogs } = cacheData;
   const indexOfChat = chatLogs.logs.findIndex(({ id }) => id === chat.id);
   const newData = {
@@ -42,17 +46,21 @@ const addOrUpdateChat = (cacheData, chat) => {
   };
 
   if (indexOfChat === -1) {
+    const changeAction = chat.author.userId === userId
+      ? myChatAdded(chat.id)
+      : chatAdded(chat.id);
+
     newData.chatLogs.logs.push(chat);
-    newData.chatLogs.changeType = CHAT_ADDED;
+    newData.chatLogs.changeAction = changeAction;
   } else {
     newData.chatLogs.logs.splice(indexOfChat, 1, chat);
-    newData.chatLogs.changeType = CHAT_UPDATED;
+    newData.chatLogs.changeAction = chatUpdated(chat.id);
   }
 
   return newData;
 };
 
-const useChatChanged = (channelId) => {
+const useChatChanged = (channelId, userId) => {
   const client = useApolloClient();
   const published = useSubscription(CHAT_CHANGED, { variables: { channelId } });
   const chatChanged = published.data && published.data.chatChanged;
@@ -60,7 +68,7 @@ const useChatChanged = (channelId) => {
   if (!chatChanged) return;
 
   const cacheData = client.readQuery({ query: GET_CHAT_CACHED });
-  const data = addOrUpdateChat(cacheData, chatChanged);
+  const data = addOrUpdateChat(userId, cacheData, chatChanged);
 
   client.writeQuery({ query: GET_CHAT_CACHED, data });
 };
