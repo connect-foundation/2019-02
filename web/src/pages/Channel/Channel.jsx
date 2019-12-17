@@ -54,6 +54,7 @@ const Channel = (props) => {
   }
 
   const { isMaster, channel } = data;
+
   const channelContext = {
     channelId,
     isMaster,
@@ -66,7 +67,8 @@ const Channel = (props) => {
     channelStatus: isMaster ? PRESENTATION_ON : channel.channelStatus,
     channelName: channel.channelOptions.channelName,
     anonymousChat: channel.channelOptions.anonymousChat,
-    emojiEffect: data.channel.channelOptions.emojiEffect,
+    emojiEffect: channel.channelOptions.emojiEffect,
+    listenerList: channel.listenerList,
     dropyCanvas,
   };
 

@@ -9,9 +9,9 @@ type Channel {
   channelCode: String
   channelStatus: String
   currentSlide: Int
+  listenerList: [String]
   channelOptions: ChannelOptions
 }
-
 type ChannelOptions {
   id: String,
   channelName: String
@@ -20,7 +20,6 @@ type ChannelOptions {
   anonymousChat: Boolean
   emojiEffect: Boolean
 }
-
 input ChannelOptionsInput {
   channelName: String
   maxHeadCount: Int
@@ -28,23 +27,19 @@ input ChannelOptionsInput {
   anonymousChat: Boolean
   emojiEffect: Boolean
 }
-
 type getChannelResponse {
   status: String!
   isMaster: Boolean!
   channel: Channel
 }
-
 type getChannelsByCodeResponse {
   status: String!
   channels: [Channel]
 }
-
 extend type Query {
   getChannelsByCode(channelCode: String!): getChannelsByCodeResponse
   getChannel(channelId: String!): getChannelResponse
 }
-
 extend type Mutation {
   createChannel(
     channelId: String!, 
@@ -57,11 +52,11 @@ extend type Mutation {
   setChannelStatus(channelId: String!, status: String!): Channel
   updateChannelOptions(channelId: String!, channelOptions: ChannelOptionsInput): ChannelOptions
 }
-
 extend type Subscription {
   slideChanged(channelId: String!): Channel
   channelStatusChanged(channelId: String!): Channel
   optionChanged(channelId: String!): ChannelOptions
+  listenerListChanged(channelId: String, listenerList: [String]): Channel
 }
 `;
 

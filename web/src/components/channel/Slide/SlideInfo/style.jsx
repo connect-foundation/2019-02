@@ -10,9 +10,14 @@ export default {
     border-top: 1px solid ${colorGray(3)};
     padding: ${px(15)} 0 0 ${px(20)};
   `,
-  TitleWrapper: styled.div`
+  ChannelSummaryWrapper: styled.div`
     display: flex;
     width: 50%;
+    flex-direction: column;
+  `,
+  TitleWrapper: styled.div`
+    display: flex;
+    width: 100%;
   `,
   ChannelTitle: styled.h1`
     display: flex;
@@ -33,6 +38,13 @@ export default {
     color: ${colorGray(7)};
     font-weight: 400;
     height: ${px(32)};
+  `,
+  PeopleWrapper: styled.div`
+    margin-top: ${px(4)};
+  `,
+  PeopleLogo: styled.img`
+    vertical-align: middle;
+    margin-right: ${px(4)};
   `,
   SlideButtonsWrapper: styled.div`
     display: flex;
