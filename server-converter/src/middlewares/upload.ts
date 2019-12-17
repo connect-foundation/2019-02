@@ -1,5 +1,5 @@
 import * as AwsSdk from 'aws-sdk';
-import { createReadStream, existsSync } from 'fs';
+import { createReadStream } from 'fs';
 import { RequestHandler } from '../@types';
 import { noitfyProgress } from './progress';
 import { PROGRESS_UPLOADING } from '../constants';
@@ -33,8 +33,10 @@ const uploadToObjectStorage = (
   });
 });
 
-const uploadMiddleware: RequestHandler = (req: any, _, next) => {
-  if (!existsSync(req.file.path)) next();
+const uploadMiddleware: RequestHandler = (req, res, next) => {
+  console.log('upload', req.params.channelId);
+  req.stage = 'upload';
+
   const { channelId } = req.params;
   const uploadFile: Promise<string> = uploadToObjectStorage(
     req.file.path,
@@ -49,9 +51,9 @@ const uploadMiddleware: RequestHandler = (req: any, _, next) => {
     false,
   ));
 
-  noitfyProgress(channelId, { 
-    statue:'upload',
-    message: PROGRESS_UPLOADING 
+  noitfyProgress(channelId, {
+    statue: 'upload',
+    message: PROGRESS_UPLOADING,
   });
   Promise.all([uploadFile, ...uploadSlides])
     .then((locations) => {
@@ -60,7 +62,7 @@ const uploadMiddleware: RequestHandler = (req: any, _, next) => {
       next();
     })
     .catch((err) => {
-      throw new Error(err);
+      next(err);
     });
 };
 
