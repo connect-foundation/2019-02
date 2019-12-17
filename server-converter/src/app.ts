@@ -26,7 +26,7 @@ const start = () => {
   app.use(router);
   app.use(handleError);
   const server = app.listen('3000', () => {
-    server.setTimeout( TIMEOUT )
+    server.setTimeout(TIMEOUT);
     console.log('🔗 welcome dropy converter!');
   });
 };

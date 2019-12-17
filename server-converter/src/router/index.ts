@@ -64,10 +64,4 @@ const router = ((env) => {
   return appRouter;
 })(process.env.NODE_ENV);
 
-setInterval(() => {
-  console.log(`queuelist: ${queueMiddleware.queue.queue.reduce((str, item) => `${str}  ${item.state}`, '')}`);
-  console.log(`activelist ${queueMiddleware.queue.active.reduce((str, item) => `${str}  ${item.state}`, '')}`);
-}, 10000);
-
-
 export default router;
