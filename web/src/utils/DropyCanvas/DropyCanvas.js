@@ -6,9 +6,12 @@ import {
 } from './utils';
 
 class DropyCanvas {
+  constructor(width, height) {
+    this.width = width;
+    this.height = height;
+  }
+
   init() {
-    this.width = 0;
-    this.height = 0;
     this.prevPosition = { x: 0, y: 0 };
     this.history = [];
     this.toolType = null;
@@ -121,7 +124,7 @@ class DropyCanvas {
     this.resetHistory();
   }
 
-  reDrawContent(context) {
+  reDrawContent() {
     const newPosition = [];
     this.history.forEach(([ratioX, ratioY], index) => {
       const { currPositionX, currPositionY } = ratioToRealPosition(
@@ -137,14 +140,14 @@ class DropyCanvas {
 
       const [prevNewPositionX, prevNewPositionY] = newPosition[index - 1];
 
-      context.lineWidth = this.lineWidth;
-      context.lineCap = this.lineCap;
-      context.strokeStyle = this.strokeStyle;
+      this.context.lineWidth = this.lineWidth;
+      this.context.lineCap = this.lineCap;
+      this.context.strokeStyle = this.strokeStyle;
 
-      context.beginPath();
-      context.moveTo(prevNewPositionX, prevNewPositionY);
-      context.lineTo(currPositionX, currPositionY);
-      context.stroke();
+      this.context.beginPath();
+      this.context.moveTo(prevNewPositionX, prevNewPositionY);
+      this.context.lineTo(currPositionX, currPositionY);
+      this.context.stroke();
     });
   }
 

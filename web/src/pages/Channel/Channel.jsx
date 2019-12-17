@@ -24,7 +24,6 @@ import {
   ENTERING_CHANNEL_MESSAGGGE,
   PRESENTATION_ON,
 } from '@/constants';
-import DropyCanvas from '@/utils/DropyCanvas';
 
 const Channel = (props) => {
   const { user } = props;
@@ -36,9 +35,6 @@ const Channel = (props) => {
     openModal,
     closeModal,
   } = useModal();
-  const dropyCanvas = new DropyCanvas();
-
-  dropyCanvas.init();
 
   useEffect(() => {
     if (data && data.status === 'ok') {
@@ -67,7 +63,6 @@ const Channel = (props) => {
     channelName: channel.channelOptions.channelName,
     anonymousChat: channel.channelOptions.anonymousChat,
     emojiEffect: data.channel.channelOptions.emojiEffect,
-    dropyCanvas,
   };
 
   return (

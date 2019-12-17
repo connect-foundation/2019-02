@@ -3,9 +3,9 @@ import S from './style';
 import { useChannelSelector } from '@/hooks';
 
 const EraserTool = () => {
-  const { dropyCanvas } = useChannelSelector((state) => state);
+  const { slideCanvas } = useChannelSelector((state) => state);
   const handleOnclick = () => {
-    dropyCanvas.clearCanvas();
+    slideCanvas.clearCanvas();
   };
 
   return (

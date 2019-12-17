@@ -1,12 +1,18 @@
 import React from 'react';
 import { SmallButton } from '@/components/common';
-import { useDispatch } from '@/hooks';
+import { useDispatch, useChannelSelector } from '@/hooks';
 
 const NoteButton = () => {
   const dispatch = useDispatch();
+  const { isToolBarActive } = useChannelSelector((state) => state);
   const handleOnClick = () => {
     window.dispatchEvent(new Event('resize'));
-    dispatch({ type: 'TOOLBAR_ACTIVE' });
+
+    if (isToolBarActive) {
+      dispatch({ type: 'TOOLBAR_INACTIVE' });
+    } else {
+      dispatch({ type: 'TOOLBAR_ACTIVE' });
+    }
   };
 
   return (
