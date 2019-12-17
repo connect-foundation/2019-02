@@ -6,13 +6,10 @@ import ChatLogs from './ChatLogs';
 import ChatSort from './ChatSort';
 import S from './style';
 
-const Chat = (props) => {
+const ChatToggle = (props) => {
   const { channelId, userId } = props;
   const [isClosed, setIsClosed] = useState(false);
   const [questionToggle, setQuestionToggle] = useState(false);
-
-  useInitChat(channelId);
-  useChatChanged(channelId);
 
   return (
     <S.Chat isClosed={isClosed}>
@@ -37,6 +34,22 @@ const Chat = (props) => {
       )}
     </S.Chat>
   );
+};
+
+const Chat = (props) => {
+  const { channelId, userId } = props;
+
+  useInitChat(channelId);
+  useChatChanged(channelId);
+
+  return (
+    <ChatToggle channelId={channelId} userId={userId} />
+  );
+};
+
+ChatToggle.propTypes = {
+  channelId: PropTypes.string.isRequired,
+  userId: PropTypes.string.isRequired,
 };
 
 Chat.propTypes = {
