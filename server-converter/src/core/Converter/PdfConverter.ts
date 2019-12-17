@@ -1,10 +1,13 @@
 import * as Path from 'path';
 import * as EventEmitter from 'events';
+import * as fs from 'fs';
+import { promisify } from 'util';
 import {
   ConverterEngine,
   OutputNaming,
   SlideInfo,
 } from '../../@types/converter';
+import { CLEAR_TIME } from '../../constants';
 import SimpleGm from './SimpleGm';
 
 class PdfConverter extends EventEmitter implements ConverterEngine {
@@ -12,7 +15,10 @@ class PdfConverter extends EventEmitter implements ConverterEngine {
   private outputPath: string;
   private outputNaming: OutputNaming;
   private sgms: SimpleGm[];
+  private slides: SlideInfo[];
   private pageLength: number;
+  private done: boolean;
+  private convertChain: Promise<SlideInfo[]>;
 
   constructor(
     inputPath: string,
@@ -24,7 +30,9 @@ class PdfConverter extends EventEmitter implements ConverterEngine {
     this.outputPath = outputPath;
     this.outputNaming = outputNaming;
     this.sgms = [];
+    this.slides = [];
     this.pageLength = 0;
+    this.done = false;
   }
 
   async init(): Promise<void> {
@@ -41,34 +49,63 @@ class PdfConverter extends EventEmitter implements ConverterEngine {
   }
 
   async convert(): Promise<SlideInfo[]> {
-    const slideInfos: SlideInfo[] = [];
-    const handleConvertFinished = (slideInfo: SlideInfo) => {
-      const { page } = slideInfo;
-
-      slideInfos.push(slideInfo);
-      this.emit('progress', { page, length: this.pageLength });
+    const convertDone = (slide: SlideInfo) => {
+      this.slides.push(slide);
+      this.emit('progress', { page: slide.page, length: this.pageLength });
     };
+    const convertStopped = () => {
+      if (this.done) throw new Error('all convert done');
+    };
+    const convertEnd = () => {
+      this.end();
+      return this.slides;
+    };
+    const convertChain: Promise<SlideInfo[]> = this.sgms.reduce(
+      (chain, sgm) => chain
+        .then(convertStopped)
+        .then(() => sgm.write().then(convertDone)),
+      Promise.resolve(null),
+    )
+      .then(convertEnd)
+      .catch(convertEnd);
 
-    try {
-      this.sgms.forEach((sgm) => sgm.resetStream());
-      await this.sgms.reduce((chain, sgm) => (
-        chain.then(() => sgm.optimize().write().then(handleConvertFinished))
-      ), Promise.resolve(null));
-      this.removeAllListeners('progress');
+    const slides: SlideInfo[] = await convertChain;
 
-      return slideInfos;
-    } catch (err) {
-      this.removeAllListeners('progress');
-      throw err;
+    return slides;
+  }
+
+  end(): void {
+    this.removeAllListeners('progress');
+    this.done = true;
+  }
+
+  async stop(clear): Promise<void> {
+    this.end();
+    await this.convertChain;
+    if (clear) {
+      await this.clear();
     }
   }
 
-  async stop(): Promise<void> {
-    // TODO
+  async clear(): Promise<void> {
+    await this.convertChain;
+    this.clearInput();
+    this.clearOutput();
   }
 
-  async clearOutput(): Promise<void> {
-    // TODO
+  clearInput(): void {
+    const removeFile = promisify(fs.unlink.bind(fs));
+    setTimeout(async () => {
+      await removeFile(this.inputPath);
+    }, CLEAR_TIME);
+  }
+
+  clearOutput(): void {
+    const removeFile = promisify(fs.unlink.bind(fs));
+    const removeAllOutput = this.slides.map(({ path }) => removeFile(path));
+    setTimeout(async () => {
+      await Promise.all(removeAllOutput);
+    }, CLEAR_TIME);
   }
 
   getPageLength() {

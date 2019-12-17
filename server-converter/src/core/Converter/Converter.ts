@@ -11,6 +11,7 @@ class Converter {
   private outputPath: string;
   private outputNaming: OutputNaming;
   public engine: ConverterEngine;
+  public isStop: Boolean;
 
   constructor(
     inputPath: string,
@@ -20,6 +21,7 @@ class Converter {
     this.inputPath = inputPath;
     this.outputPath = outputPath;
     this.outputNaming = outputNaming;
+    this.isStop = false;
   }
 
   async init() {
@@ -50,8 +52,16 @@ class Converter {
     }
   }
 
-  async stop(): Promise<void> {
-    return this.engine.stop();
+  async stop(clearOutput?: boolean): Promise<void> {
+    return this.engine.stop(clearOutput);
+  }
+
+  async clear(): Promise<void> {
+    return this.engine.clear();
+  }
+
+  async clearInput(): Promise<void> {
+    return this.engine.clearInput();
   }
 
   async clearOutput(): Promise<void> {
