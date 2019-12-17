@@ -1,14 +1,15 @@
 import Queue from '../core/queue';
 import { clearProgress, noitfyProgress } from '../middlewares';
 import { TIMEOUT_MESSAGE } from '../constants';
+import endMiddleware from './end';
 
 const requestQueue = (config) => {
   const queue = new Queue(config);
 
-  const cleanListeners= (job) => {
+  const cleanListeners = (job) => {
     clearProgress(job.data.req.params.channelId);
     job.data.res.removeAllListeners('end');
-  }
+  };
 
   queue.on('process', (job, complete) => {
     job.data.res.once('end', () => {
@@ -28,25 +29,32 @@ const requestQueue = (config) => {
   const queueMiddleware = (req, res, next) => {
     const data = { req, res, next };
     const job = queue.createJob(data);
-
-    res.once('close', () => {
-      if (job.state === 'queue') {
-        queue.cancelJob(job);
-      }
-      if (job.state === 'process') {
+    const stopHandler = {
+      queue: () => queue.cancelJob(job),
+      process: () => {
         noitfyProgress(req.params.channelId, {
           status: 'timeout',
-          message: TIMEOUT_MESSAGE
-        })
+          message: TIMEOUT_MESSAGE,
+        });
         cleanListeners(job);
-        queue.stopJob(job);
-      }
+        queue.stopJob(job, req.stage);
+      },
+    };
+
+    res.once('close', () => {
+      stopHandler[job.state]();
     });
   };
 
-  queueMiddleware.queue = queue;
+  const result = (req, res, next) => {
+    endMiddleware(req, res, () => {
+      queueMiddleware(req, res, next);
+    });
+  };
 
-  return queueMiddleware;
+  result.queue = queue;
+
+  return result;
 };
 
 export default requestQueue;

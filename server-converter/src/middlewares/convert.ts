@@ -1,28 +1,27 @@
-import * as path from 'path';
-import { Converter } from '../core';
-import { RequestHandler, OutputNaming } from '../@types';
+import { RequestHandler } from '../@types';
 import { noitfyProgress } from './progress';
-import { PROGRESS_CONVERTING, CONVERT_TIMEOUT,  } from '../constants';
+import stop from './stop';
+import { PROGRESS_CONVERTING, CONVERT_TIMEOUT } from '../constants';
 
-const convertMiddleware: RequestHandler = (req: any, res, next) => {
-  res.setTimeout(CONVERT_TIMEOUT, () => {res.emit('close');});
+const convertMiddleware: RequestHandler = (req, res, next) => {
+  console.log('convert', req.params.channelId);
+  res.setTimeout(CONVERT_TIMEOUT, () => { res.emit('close'); });
 
-  req.isConverted = true;
   const { channelId } = req.params;
-  const naming: OutputNaming = (page: number) => `${channelId}_${page}`;
-  const inputPath = req.file.path;
-  const outputPath = path.resolve(__dirname, '../../tmpFiles');
-  const converter = new Converter(inputPath, outputPath, naming);
-
+  const stopConverter = stop({ req, res, next }, 'convert');
+  const convertDone = (slides) => {
+    req.slides = slides;
+    req.slideRatioList = slides.map((slide) => slide.ratio);
+    stopConverter();
+  };
+  const { converter } = req;
   converter.init().then(() => {
     converter.engine.on('progress', ({ page, length }) => noitfyProgress(channelId, {
-      status: `convert`,
+      status: 'convert',
       message: `${PROGRESS_CONVERTING}: ${page}/${length} 완료`,
     }));
-    converter.convert().then((slides) => {
-      req.slides = slides;
-      req.slideRatioList = slides.map((slide) => slide.ratio);
-      next();
+    converter.convert().then(convertDone).catch((err) => {
+      stopConverter(err);
     });
   });
 };
