@@ -25,7 +25,8 @@ const S = {
     background: transparent;
     font-size: ${px(16)};
     line-height: ${px(21)};
-    word-break: break-all;
+    word-break: break-word;
+    word-wrap: break-word;
     color: ${colorGray(9)};
     resize: none;
     &::placeholder,

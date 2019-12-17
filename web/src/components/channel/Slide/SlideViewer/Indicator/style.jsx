@@ -6,9 +6,9 @@ export default {
   Indicator: styled.div`
     height: 100%;
     min-width: ${px(80)};
-    width: 10%;
+    width: 40%;
     position: absolute;
-    z-index: 200;
+    z-index: ${(props) => (props.isPenToolActive ? 900 : 999)};
     top: 0;
     display: flex;
     flex-direction: column;

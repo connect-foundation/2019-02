@@ -2,12 +2,15 @@ import * as gm from 'gm';
 import * as fs from 'fs';
 import { promisify } from 'util';
 import { GmOptimizeOptions, SlideInfo } from '../../@types/converter';
+import { fixRatio } from './utils';
 
 const optimizeOptions: GmOptimizeOptions = {
   quality: 100,
   resolution: 144,
   compression: 'JPEG2000',
 };
+
+const DEFAULT_IMAGE_RATIO = 1.77777;
 
 class SimpleGm {
   static createAndSelect(inputPath: string, outputPath: string, page: number) {
@@ -30,33 +33,42 @@ class SimpleGm {
     return pages;
   }
 
-  inputPath: string;
-  outputPath: string;
-  readStream: fs.ReadStream;
-  writeStream: fs.WriteStream;
-  state: gm.State;
-  page: number;
+  private inputPath: string;
+  private outputPath: string;
+  private readStream: fs.ReadStream;
+  private state: gm.State;
+  private page: number;
 
   constructor(inputPath: string, outputPath: string) {
     this.inputPath = inputPath;
     this.outputPath = outputPath;
+    this.readStream = null;
+    this.state = null;
     this.page = 0;
-    this.resetStream();
+  }
+
+  async getRatio(): Promise<number> {
+    this.reset();
+
+    const size: any = await promisify(this.state.size.bind(this.state))();
+    const ratio: number = size.width / size.height;
+
+    return ratio;
   }
 
   async write(): Promise<SlideInfo> {
-    const stream: fs.WriteStream = this.writeStream;
+    const stream: fs.WriteStream = fs.createWriteStream(this.outputPath);
     const outputPath: string = <string>stream.path;
-    const slideInfo: SlideInfo = { path: outputPath, ratio: 1.7777777777777777, page: this.page };
-    const size: any = await promisify(this.state.size.bind(this.state));
-    const ratio: number = size.width / size.height;
-
-    if (!Number.isNaN(ratio)) slideInfo.ratio = ratio;
+    const ratio: number = fixRatio(await this.getRatio()) || DEFAULT_IMAGE_RATIO;
+    const slideInfo: SlideInfo = {
+      path: outputPath,
+      ratio,
+      page: this.page,
+    };
 
     return new Promise((resolve) => {
       stream.once('close', () => resolve(slideInfo));
-      this.resetStream();
-      this.optimize();
+      this.reset().optimize();
       this.state.stream('jpeg').pipe(stream);
     });
   }
@@ -67,10 +79,11 @@ class SimpleGm {
     return this;
   }
 
-  resetStream() {
+  reset(): SimpleGm {
     this.readStream = fs.createReadStream(this.inputPath);
-    this.writeStream = fs.createWriteStream(this.outputPath);
     this.state = gm(this.readStream, `${this.readStream.path}[${this.page - 1}]`);
+
+    return this;
   }
 
   optimize(): SimpleGm {

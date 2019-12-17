@@ -4,8 +4,7 @@ const initialChannelState = {
   page: 0,
   isToolBarActive: false,
   isPenToolActive: false,
-  canvasSize: {},
-  storedCanvasUrl: '',
+  isEraserToolActive: false,
 };
 
 const channelReducer = (state, action) => {
@@ -35,15 +34,15 @@ const channelReducer = (state, action) => {
         ...state,
         isPenToolActive: !state.isPenToolActive,
       };
-    case 'SET_CANVAS_SIZE':
+    case 'ERASER_TOOL_ACTIVE':
       return {
         ...state,
-        canvasSize: action.payload,
+        isEraserToolActive: true,
       };
-    case 'SET_CANVAS_URL':
+    case 'ERASER_TOOL_INACTIVE':
       return {
         ...state,
-        storedCanvasUrl: action.payload,
+        isEraserToolActive: false,
       };
     default:
       return state;

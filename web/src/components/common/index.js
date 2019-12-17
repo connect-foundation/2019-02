@@ -7,3 +7,4 @@ export { default as ErrorModal } from './ErrorModal';
 export { default as SmallButton } from './SmallButton';
 export { default as FullScreen } from './FullScreen';
 export { default as Auth } from './Auth';
+export { default as Empty } from './Empty';

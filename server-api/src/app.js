@@ -10,6 +10,7 @@ const start = () => {
   const connectOptions = {
     useUnifiedTopology: true,
     useNewUrlParser: true,
+    poolSize: 50,
   };
   const doneDbConnection = (error) => {
     if (error) console.error('mongodb connect error', error);

@@ -1,22 +1,20 @@
-import React, {
-  useEffect,
-  useRef,
-} from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import S from './style';
-import { useChannelSelector, useDispatch } from '@/hooks';
+import { useChannelSelector } from '@/hooks';
 import { pxToNum } from '@/utils/dom';
 import SlideCanvas from './SlideCanvas';
 
-
 const MainSlide = (props) => {
   const { page, slideUrls } = props;
-  const { slideRatioList, isPenToolActive } = useChannelSelector((state) => state);
+  const [canvasSize, setCanvasSize] = useState({
+    canvasWidth: 0,
+    canvasHeight: 0,
+  });
+  const { slideRatioList, dropyCanvas } = useChannelSelector((state) => state);
   const slideRatio = slideRatioList[page];
-  const dispatch = useDispatch();
   const wrapperRef = useRef(null);
   const imageRef = useRef(null);
-  const canvasRef = useRef(null);
   const resizeSlide = (fitHeight) => {
     const { current } = imageRef;
 
@@ -28,13 +26,8 @@ const MainSlide = (props) => {
     const canvasWidth = fitHeight ? wrapperHeight * slideRatio : wrapperWidth;
     const canvasHeight = fitHeight ? wrapperHeight : wrapperWidth / slideRatio;
 
-    dispatch({
-      type: 'SET_CANVAS_SIZE',
-      payload: {
-        canvasWidth,
-        canvasHeight,
-      },
-    });
+    dropyCanvas.setSize(canvasWidth, canvasHeight);
+    setCanvasSize({ canvasWidth, canvasHeight });
   };
 
   useEffect(() => {
@@ -48,15 +41,6 @@ const MainSlide = (props) => {
         const fitHeight = wrapperRatio > slideRatio;
 
         resizeSlide(fitHeight);
-        const prevCanvas = canvasRef.current;
-
-        if (prevCanvas !== null) {
-          const prevCanvasUrl = prevCanvas.toDataURL();
-          dispatch({
-            type: 'SET_CANVAS_URL',
-            payload: prevCanvasUrl,
-          });
-        }
         resizeCanvas(fitHeight, wrapperWidth, wrapperHeight);
       });
     };
@@ -73,7 +57,10 @@ const MainSlide = (props) => {
     <S.MainSlide>
       <S.SlideWrapper ref={wrapperRef}>
         <S.SlideImg ref={imageRef} alt="slide" />
-        {isPenToolActive && <SlideCanvas ref={canvasRef} />}
+        <SlideCanvas
+          canvasWidth={canvasSize.canvasWidth}
+          canvasHeight={canvasSize.canvasHeight}
+        />
       </S.SlideWrapper>
     </S.MainSlide>
   );
