@@ -36,14 +36,6 @@ class Queue extends EventEmitter {
     return (cpuUsage < this.config.cpuUsage);
   }
 
-  async setActiveLimit() {
-    const cpuUsage = await cpu.usage();
-
-    if (this.activeLimit > 0) {
-      if (cpuUsage < this.config.cpuUsage) this.activeLimit += 1;
-    }
-  }
-
   async checkMem(job) {
     const { freeMemMb } = await mem.free();
 
@@ -59,10 +51,12 @@ class Queue extends EventEmitter {
     process.nextTick(() => {
       if (!this.canQueue()) return job.setState(true, 'reject');
       if (this.canStart() && this.queue.length === 0) return this.startJob(job);
+
       return this.enqueueJob(job);
     });
 
     process.nextTick(this.checkQueue.bind(this));
+
     return job;
   }
 
@@ -82,10 +76,21 @@ class Queue extends EventEmitter {
     process.nextTick(this.checkQueue.bind(this));
   }
 
-  stopJob(job){
+  async stopJob(job, stage = null) {
+    const { req, res, next } = job.data;
+    if (req.converter) req.converter.isStop = true;
+    const stopHandler = {
+      save: () => { next(); },
+      saveComplete: () => { req.converter.clearInput(); },
+      convert: () => { if (req.converter) req.converter.stop(true); },
+      upload: () => { next(); },
+      remove: () => { },
+    };
+
     this.dequeueActive();
-    job.setState(false, 'stop');
-    //TODO: callStopProcess(); //템프에 파일있으면 다 지우기, 컨버팅 멈추기
+    job.setState(true, 'stop');
+    if (!stopHandler[stage]) res.end();
+    else stopHandler[stage]();
     process.nextTick(this.checkQueue.bind(this));
   }
 
@@ -98,18 +103,18 @@ class Queue extends EventEmitter {
   }
 
   dequeueJob(job = null) {
-    if (job) {
-      const index = this.queue.indexOf(job);
+    const dequeueJob = job ? this.checkJobinQueue(job) : this.queue.shift();
 
-      if (index < 0) {
-        throw new Error('request not found in queue');
-      } else {
-        this.queue.splice(index, 1);
-      }
-    } else {
-      job = this.queue.shift();
-    }
-    job.setState(false, 'dequeue');
+    dequeueJob.setState(false, 'dequeue');
+
+    return dequeueJob;
+  }
+
+  checkJobinQueue(job) {
+    const index = this.queue.indexOf(job);
+
+    if (index < 0) throw new Error('request not found in queue');
+    else this.queue.splice(index, 1);
 
     return job;
   }
@@ -122,7 +127,7 @@ class Queue extends EventEmitter {
   };
 
   checkQueue() {
-    if(this.canStart() && this.queue.length > 0) {
+    if (this.canStart() && this.queue.length > 0) {
       const nextjob = this.dequeueJob();
       this.startJob(nextjob);
     }

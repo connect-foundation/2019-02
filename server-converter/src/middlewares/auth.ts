@@ -21,7 +21,6 @@ const authMiddleware: RequestHandler = (req, res, next) => {
   if (isVerified) {
     next();
   } else {
-    res.emit('close');
     res.status(401).json({ status: 'unauthorized' });
   }
 };
