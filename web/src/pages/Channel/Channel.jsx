@@ -67,25 +67,18 @@ const Channel = (props) => {
     channelStatus: isMaster ? PRESENTATION_ON : channel.channelStatus,
     channelName: channel.channelOptions.channelName,
     anonymousChat: channel.channelOptions.anonymousChat,
-    emojiEffect: data.channel.channelOptions.emojiEffect,
+    emojiEffect: channel.channelOptions.emojiEffect,
     listenerList: channel.listenerList,
     dropyCanvas,
   };
+  console.log('channel listenerList', channel.listenerList);
 
   return (
     <ChannelProvider value={channelContext}>
-      <Entrance
-        channelId={channelId}
-        isMaster={isMaster}
-        listenerList={channel.listenerList}
-      >
+      <Entrance channelId={channelId} isMaster={isMaster}>
         <S.Channel>
           <ToolBar />
-          <Slide
-            channelId={channelId}
-            openSettingModal={openModal}
-            listenerList={channel.listenerList.length}
-          />
+          <Slide channelId={channelId} openSettingModal={openModal} />
           <Chat channelId={channelId} userId={user.userId} />
           {data.isMaster && (
           <SettingModal

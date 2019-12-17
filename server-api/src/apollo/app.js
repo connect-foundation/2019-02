@@ -26,7 +26,6 @@ const apolloServer = new ApolloServer({
       token,
       channelId,
       isMaster,
-      listenerList,
     }) => {
       const user = token ? verifyToken(token) : null;
 
@@ -34,12 +33,11 @@ const apolloServer = new ApolloServer({
         user,
         channelId,
         isMaster,
-        listenerList,
         pubsub,
       };
-      if (!channelId) return;
-
       /* Hotfix: 추후 코드 리팩토링 */
+      if (!channelId) return;
+      const { listenerList } = await Channels.findOne({ channelId });
       const isExistListenerList = () => listenerList.includes(user.userId);
       if (!isExistListenerList()) {
         listenerList.push(user.userId);
@@ -47,7 +45,7 @@ const apolloServer = new ApolloServer({
           { channelId },
           { listenerList },
         );
-        const payload = await channelListenerList.toPayload({});
+        const payload = await channelListenerList.toPayload('channel', { channelId, listenerList });
         pubsub.publish('LISTENER_LIST_CHANGED', { listenerListChanged: payload });
       }
       if (!isMaster) return context;
@@ -60,27 +58,27 @@ const apolloServer = new ApolloServer({
     onDisconnect: async (_, { initPromise }) => {
       const context = await initPromise;
       if (!context) return;
-      console.log(context);
+
       const {
         user,
         channelId,
         isMaster,
       } = context;
 
-
       /* Hotfix: 추후 코드 리팩토링 */
-      const isExistListenerList = () => context.listenerList.includes(user.userId);
-
+      const channelInfomation = await Channels.findOne({ channelId });
+      if (channelInfomation.listenerList === null) return;
+      const isExistListenerList = () => channelInfomation.listenerList.includes(user.userId);
       if (isExistListenerList()) {
-        const listenerList = context.listenerList.filter((value) => value !== user.userId);
+        const listenerList = channelInfomation.listenerList
+          .filter((value) => value !== user.userId);
         const channelListenerList = await Channels.findOneAndUpdate(
           { channelId },
           { listenerList },
         );
-        const payload = await channelListenerList.toPayload({});
+        const payload = await channelListenerList.toPayload('channel', { channelId, listenerList });
         pubsub.publish('LISTENER_LIST_CHANGED', { listenerListChanged: payload });
       }
-
       if (!isMaster) return context;
 
       const channel = await Channels.findAndUpdateStatus(channelId, user.userId, 'off');

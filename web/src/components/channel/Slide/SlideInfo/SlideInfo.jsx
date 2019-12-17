@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import People from '@@/people.svg';
 import S from './style';
@@ -6,16 +6,24 @@ import {
   useChannelSelector,
   useChannelNameChanged,
   useEmojiChanged,
+  useListenerListChanged,
 } from '@/hooks';
 import CodeShareButton from './CodeShareButton';
 import SlideDownloadButton from './SlideDownloadButton';
 import FlyingEmojiButton from './FlyingEmojiButton';
 
 const SlideInfo = (props) => {
-  const { isFullScreen, listenerList } = props;
-  const { channelId, masterName } = useChannelSelector((state) => state);
-  const { channelName } = useChannelNameChanged(channelId);
-  const { emojiEffect } = useEmojiChanged(channelId);
+  const { isFullScreen } = props;
+
+  const channel = useChannelSelector((state) => state);
+  const { listenerList } = useListenerListChanged(channel.channelId);
+  const { channelName } = useChannelNameChanged(channel.channelId);
+  const { emojiEffect } = useEmojiChanged(channel.channelId);
+  const [listenerCount, setListenerCount] = useState(channel.listenerList.length + 1);
+  useEffect(() => {
+    if (listenerList.length === 0) return;
+    setListenerCount(listenerList.length);
+  }, [listenerList]);
 
   return (
     <S.SlideInfo>
@@ -24,7 +32,7 @@ const SlideInfo = (props) => {
           <S.ChannelTitle>{channelName}</S.ChannelTitle>
           <S.MasterName>
             <span>| &nbsp;&nbsp;</span>
-            {masterName}
+            {channel.masterName}
           </S.MasterName>
         </S.TitleWrapper>
         <S.PeopleWrapper>
@@ -32,7 +40,8 @@ const SlideInfo = (props) => {
             src={People}
             alt="people-logo"
           />
-          {listenerList}
+          {/* {listenerList.length} */}
+          {listenerCount}
           명 참여중
         </S.PeopleWrapper>
       </S.ChannelSummaryWrapper>
@@ -47,7 +56,6 @@ const SlideInfo = (props) => {
 
 SlideInfo.propTypes = {
   isFullScreen: PropTypes.bool.isRequired,
-  listenerList: PropTypes.number.isRequired,
 };
 
 export default SlideInfo;

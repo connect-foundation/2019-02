@@ -51,8 +51,6 @@ extend type Mutation {
   setCurrentSlide(channelId: String!, currentSlide: Int!): Channel
   setChannelStatus(channelId: String!, status: String!): Channel
   updateChannelOptions(channelId: String!, channelOptions: ChannelOptionsInput): ChannelOptions
-  enteredListener(channelId: String!, listenerList: [String]): Channel
-  leaveListener(channelId: String!, listenerList: [String]): Channel
 }
 extend type Subscription {
   slideChanged(channelId: String!): Channel
