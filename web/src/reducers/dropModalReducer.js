@@ -23,6 +23,7 @@ const dropModalReducer = (state, action) => {
     case 'setErrorModal':
       return {
         ...state,
+        isLoading: false,
         isError: true,
         errorMessage: action.payload,
       };

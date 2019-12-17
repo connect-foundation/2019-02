@@ -1,38 +1,46 @@
 import Queue from '../core/queue';
-import { clearProgress } from '../middlewares';
+import { clearProgress, noitfyProgress } from '../middlewares';
+import { TIMEOUT_MESSAGE } from '../constants';
 
 const requestQueue = (config) => {
   const queue = new Queue(config);
 
+  const cleanListeners = (job) => {
+    job.data.res.removeAllListeners('end');
+  };
+
   queue.on('process', (job, complete) => {
     job.data.res.once('end', () => {
-      complete('complete');
+      cleanListeners(job);
+      complete();
     });
-    if (!job.data.req.endflag) job.data.next();
+    job.data.next();
   });
 
-  queue.on('reject', (job) => {
+  queue.once('reject', (job) => {
     const { channelId } = job.data.req.params;
-
     clearProgress(channelId);
     job.data.res.status(200).json({ status: 'reject' });
   });
 
-  const canCancel = (job) => (job.state === 'process' && !job.data.req.isConverted);
+  const stopHandler = (job) => ({
+    queue: () => queue.cancelJob(job),
+    process: () => {
+      noitfyProgress(job.data.req.params.channelId, {
+        status: 'timeout',
+        message: TIMEOUT_MESSAGE,
+      });
+      cleanListeners(job);
+      queue.stopJob(job);
+    },
+  });
 
-  const queueMiddleware = (req, res, next) => {
+  const queueMiddleware = async (req, res, next) => {
     const data = { req, res, next };
     const job = queue.createJob(data);
 
     res.once('close', () => {
-      if (job.state === 'queue') {
-        job.data.req.endflag = true;
-        queue.cancelJob(job);
-      }
-      if (canCancel(job)) {
-        job.data.req.endflag = true;
-        queue.completeJob(job, 'cancel');
-      }
+      stopHandler(job)[job.state]();
     });
   };
 

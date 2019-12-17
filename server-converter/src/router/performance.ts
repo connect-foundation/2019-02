@@ -34,7 +34,7 @@ performanceRouter.post(
   ...middlewares,
   (req, res) => {
     const { slideUrls, slideRatioList, fileUrl } = req;
-    res.emit('end');
+
     res.status(200).json({
       status: 'ok',
       slideUrls,
