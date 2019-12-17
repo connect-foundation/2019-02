@@ -2,12 +2,33 @@ import React, { useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import ChatCards from './ChatCards';
 import { useGetChatsCached } from '@/hooks';
-import { computeScrollEndTop } from '@/utils/dom';
+import { scrollToTop, scrollToEnd } from '@/utils/dom';
 import {
   CHAT_ADDED,
+  CHAT_UPDATED,
   CHAT_SORT_BY_RECENT,
+  CHAT_INIT,
+  MY_CHAT_ADDED,
 } from '@/constants';
+import { getType } from '@/graphql/cache/chat';
 import S from './style';
+
+const sortByRecentCallback = (prev, next) => prev.createdAt - next.createdAt;
+const sortByLikeCallback = (prev, next) => next.likes.length - prev.likes.length;
+const scrollOnChatInit = (el, sortType) => (sortType === CHAT_SORT_BY_RECENT
+  ? scrollToEnd(el)
+  : scrollToTop(el));
+const scrollOnChatAdded = (el, sortType) => (sortType === CHAT_SORT_BY_RECENT
+  ? scrollToEnd(el, (targetTop) => targetTop - el.scrollTop < 700)
+  : scrollToTop(el));
+const scrollOnMyChatAdded = (el) => scrollToEnd(el);
+const scrollOnChatUpdated = () => null;
+const scrollCommander = {
+  [CHAT_INIT]: scrollOnChatInit,
+  [CHAT_ADDED]: scrollOnChatAdded,
+  [MY_CHAT_ADDED]: scrollOnMyChatAdded,
+  [CHAT_UPDATED]: scrollOnChatUpdated,
+};
 
 const ChatLogs = (props) => {
   const scrollWrapRef = useRef(null);
@@ -16,33 +37,19 @@ const ChatLogs = (props) => {
 
   if (loading) return <p>loading...</p>;
 
-  const { logs, changeType, sortType } = chatCache;
-  const sortByRecent = sortType === CHAT_SORT_BY_RECENT;
-  const sortCallback = sortByRecent
-    ? (prev, next) => prev.createdAt - next.createdAt
-    : (prev, next) => next.likes.length - prev.likes.length;
-
-  const chatLogsSort = logs.sort(sortCallback);
-  const chatLogs = questionToggle ? chatLogsSort.filter((log) => log.isQuestion) : chatLogsSort;
-
-  const changeScrollTop = (always) => () => {
+  const { logs, changeAction, sortType } = chatCache;
+  const changeType = getType(changeAction);
+  const sortCallback = sortType === CHAT_SORT_BY_RECENT ? sortByRecentCallback : sortByLikeCallback;
+  const chatLogsSorted = logs.sort(sortCallback);
+  const chatLogs = questionToggle ? chatLogsSorted.filter((log) => log.isQuestion) : chatLogsSorted;
+  const changeScrollPosition = () => {
     const scrollWrapEl = scrollWrapRef.current;
-    const targetTop = sortByRecent ? computeScrollEndTop(scrollWrapEl) : 0;
+    const move = scrollCommander[changeType];
 
-    if (always) {
-      scrollWrapEl.scrollTop = targetTop;
-      return;
-    }
-
-    const isAllowedRange = targetTop - scrollWrapEl.scrollTop < 700;
-
-    if (changeType === CHAT_ADDED && isAllowedRange) {
-      scrollWrapEl.scrollTop = targetTop;
-    }
+    if (move) move(scrollWrapEl, sortType);
   };
 
-  useEffect(changeScrollTop(), [logs]);
-  useEffect(changeScrollTop(true), [sortType]);
+  useEffect(changeScrollPosition, [sortType, changeAction]);
 
   return (
     <S.ChatLogs>

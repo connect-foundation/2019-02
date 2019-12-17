@@ -32,8 +32,9 @@ const DropZone = (props) => {
     if (checkFileTypeValidation(file)) {
       dropModalDispatch({ type: 'setLoadingModal', payload: CREATING_CHANNEL_MESSAGE });
       const formData = createFormData({ file });
-      const unsubscribeProgress = subscribeProgress(channelId, ({ message }) => {
-        dropModalDispatch({ type: 'setLoadingModal', payload: message });
+      const unsubscribeProgress = subscribeProgress(channelId, ({ status, message }) => {
+        if (status === 'timeout') dropModalDispatch({ type: 'setErrorModal', payload: message });
+        else dropModalDispatch({ type: 'setLoadingModal', payload: message });
       });
       const {
         status,

@@ -1,39 +1,24 @@
 import React, { useRef, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import S from './style';
 import { useChannelSelector, useDispatch } from '@/hooks';
-import DropyCanvas from '@/utils/DropyCanvas';
 
-const SlideCanvas = () => {
+const SlideCanvas = (props) => {
+  const { canvasWidth, canvasHeight } = props;
   const canvasRef = useRef(null);
   const canvas = canvasRef.current;
   const dispatch = useDispatch();
   const {
-    canvasSize: {
-      canvasWidth,
-      canvasHeight,
-    },
-    canvasHistory,
-    toolOption,
     isEraserToolActive,
     isPenToolActive,
+    dropyCanvas,
   } = useChannelSelector((state) => state);
-  const dropyCanvas = new DropyCanvas(canvasWidth, canvasHeight);
-
-  dropyCanvas.init();
 
   useEffect(() => {
     if (canvas === null) return;
     const context = canvas.getContext('2d');
 
-    context.clearRect(0, 0, canvasWidth, canvasHeight);
-    dropyCanvas.resetTempCanvasHistory();
-
-    dispatch({
-      type: 'RESET_CANVAS_HISTORY',
-      payload: {
-        canvasHistory: [],
-      },
-    });
+    dropyCanvas.clearCanvas(context);
   }, [isEraserToolActive]);
 
   useEffect(() => {
@@ -44,40 +29,32 @@ const SlideCanvas = () => {
     if (isPenToolActive) {
       const context = canvas.getContext('2d');
       dropyCanvas.setContext(context);
-      dropyCanvas.setTool(toolOption);
       dropyCanvas.addEventListener(canvas);
     }
 
     return () => {
-      if (!isEraserToolActive) {
-        dispatch({
-          type: 'UPDATE_CANVAS_HISTORY',
-          payload: {
-            canvasHistory: [
-              ...canvasHistory,
-              ...dropyCanvas.getTempCanvasHistory(),
-            ],
-          },
-        });
-      }
       dispatch({ type: 'ERASER_TOOL_INACTIVE' });
       dropyCanvas.removeEventListener(canvas);
     };
-  }, [canvas, canvasWidth, canvasHeight, isEraserToolActive, isPenToolActive]);
+  }, [canvas, canvasWidth, canvasHeight, isPenToolActive]);
 
   useEffect(() => {
     if (canvas === null) return;
     const context = canvas.getContext('2d');
 
-    dropyCanvas.setTool(toolOption);
-    dropyCanvas.reDrawContent(canvasHistory, context);
-  }, [canvasHistory, canvasWidth, canvasHeight, canvas]);
+    dropyCanvas.reDrawContent(context);
+  }, [canvas, canvasWidth, canvasHeight]);
 
   return (
     <S.CanvasWrapper isPenToolActive={isPenToolActive}>
       {dropyCanvas.render(canvasRef)}
     </S.CanvasWrapper>
   );
+};
+
+SlideCanvas.propTypes = {
+  canvasWidth: PropTypes.number.isRequired,
+  canvasHeight: PropTypes.number.isRequired,
 };
 
 export default SlideCanvas;

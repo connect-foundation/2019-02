@@ -1,33 +1,7 @@
-import React from 'react';
-import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import iconThumbGrayUrl from '@@/icon_thumb_gray.svg';
+import iconThumbOrangeUrl from '@@/icon_thumb_orange.svg';
 import { px, colorGray, colorYellow } from '@/styles';
-import { CHAT_LIKE_ICON_PATH } from '@/constants';
-
-const LikeIcon = styled(({ isActive, className }) => (
-  <span className={className}>
-    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path
-        d={CHAT_LIKE_ICON_PATH}
-        style={{
-          transition: 'fill .2s',
-          fill: isActive ? '#F08C00' : '#CED4DA',
-        }}
-      />
-    </svg>
-  </span>
-))`
-display: inline-block;
-width: ${px(14)};
-height: ${px(14)};
-margin: ${px(4)} ${px(5)} 0 0;
-vertical-align: top;
-`;
-
-LikeIcon.propTypes = {
-  isActive: PropTypes.bool.isRequired,
-  className: PropTypes.string,
-};
 
 const S = {
   ChatLogs: styled.ul`
@@ -92,7 +66,19 @@ const S = {
     color: ${colorGray(6)};
     cursor: pointer;
   `,
-  LikeIcon,
+  LikeIcon: styled.i`
+    display: inline-block;
+    width: ${px(14)};
+    height: ${px(14)};
+    margin: ${px(4)} ${px(5)} 0 0;
+    vertical-align: top;
+    background: no-repeat 50% 50%/100% auto;
+    ${({ isActive }) => (isActive ? `
+    background-image: url(${iconThumbOrangeUrl});
+    ` : `
+    background-image: url(${iconThumbGrayUrl});
+    `)}
+  `,
 };
 
 export default S;

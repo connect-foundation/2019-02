@@ -45,6 +45,7 @@ export const polling = ({ url, callback }) => {
     .then((response) => response.json())
     .then((payload) => {
       callback(payload);
+      if (payload.status === 'timeout') return null;
 
       if (!done) {
         return request();
