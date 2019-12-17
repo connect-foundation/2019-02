@@ -10,6 +10,7 @@ import {
   CHAT_INIT,
   MY_CHAT_ADDED,
 } from '@/constants';
+import { getType } from '@/graphql/cache/chat';
 import S from './style';
 
 const sortByRecentCallback = (prev, next) => prev.createdAt - next.createdAt;
@@ -36,7 +37,8 @@ const ChatLogs = (props) => {
 
   if (loading) return <p>loading...</p>;
 
-  const { logs, changeType, sortType } = chatCache;
+  const { logs, changeAction, sortType } = chatCache;
+  const changeType = getType(changeAction);
   const sortCallback = sortType === CHAT_SORT_BY_RECENT ? sortByRecentCallback : sortByLikeCallback;
   const chatLogsSorted = logs.sort(sortCallback);
   const chatLogs = questionToggle ? chatLogsSorted.filter((log) => log.isQuestion) : chatLogsSorted;
@@ -47,7 +49,7 @@ const ChatLogs = (props) => {
     if (move) move(scrollWrapEl, sortType);
   };
 
-  useEffect(changeScrollPosition, [sortType, changeType]);
+  useEffect(changeScrollPosition, [sortType, changeAction]);
 
   return (
     <S.ChatLogs>

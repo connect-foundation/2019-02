@@ -3,13 +3,17 @@ import {
   useSubscription,
   useApolloClient,
 } from '@apollo/react-hooks';
-import { CHAT_ADDED, CHAT_UPDATED, MY_CHAT_ADDED } from '@/constants';
+import {
+  chatAdded,
+  myChatAdded,
+  chatUpdated,
+} from '@/graphql/cache/chat';
 
 const GET_CHAT_CACHED = gql`
   query GetChatCached {
     chatLogs @client {
       logs
-      changeType
+      changeAction
       sortType
     }
   }
@@ -42,13 +46,15 @@ const addOrUpdateChat = (userId, cacheData, chat) => {
   };
 
   if (indexOfChat === -1) {
-    const changeType = chat.author.userId === userId ? MY_CHAT_ADDED : CHAT_ADDED;
+    const changeAction = chat.author.userId === userId
+      ? myChatAdded(chat.id)
+      : chatAdded(chat.id);
 
     newData.chatLogs.logs.push(chat);
-    newData.chatLogs.changeType = changeType;
+    newData.chatLogs.changeAction = changeAction;
   } else {
     newData.chatLogs.logs.splice(indexOfChat, 1, chat);
-    newData.chatLogs.changeType = CHAT_UPDATED;
+    newData.chatLogs.changeAction = chatUpdated(chat.id);
   }
 
   return newData;
