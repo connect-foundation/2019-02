@@ -1,13 +1,11 @@
 import Queue from '../core/queue';
 import { clearProgress, noitfyProgress } from '../middlewares';
 import { TIMEOUT_MESSAGE } from '../constants';
-import endMiddleware from './end';
 
 const requestQueue = (config) => {
   const queue = new Queue(config);
 
   const cleanListeners = (job) => {
-    clearProgress(job.data.req.params.channelId);
     job.data.res.removeAllListeners('end');
   };
 
@@ -19,42 +17,36 @@ const requestQueue = (config) => {
     job.data.next();
   });
 
-  queue.on('reject', (job) => {
+  queue.once('reject', (job) => {
     const { channelId } = job.data.req.params;
-
     clearProgress(channelId);
     job.data.res.status(200).json({ status: 'reject' });
   });
 
-  const queueMiddleware = (req, res, next) => {
+  const stopHandler = (job) => ({
+    queue: () => queue.cancelJob(job),
+    process: () => {
+      noitfyProgress(job.data.req.params.channelId, {
+        status: 'timeout',
+        message: TIMEOUT_MESSAGE,
+      });
+      cleanListeners(job);
+      queue.stopJob(job);
+    },
+  });
+
+  const queueMiddleware = async (req, res, next) => {
     const data = { req, res, next };
     const job = queue.createJob(data);
-    const stopHandler = {
-      queue: () => queue.cancelJob(job),
-      process: () => {
-        noitfyProgress(req.params.channelId, {
-          status: 'timeout',
-          message: TIMEOUT_MESSAGE,
-        });
-        cleanListeners(job);
-        queue.stopJob(job, req.stage);
-      },
-    };
 
     res.once('close', () => {
-      stopHandler[job.state]();
+      stopHandler(job)[job.state]();
     });
   };
 
-  const result = (req, res, next) => {
-    endMiddleware(req, res, () => {
-      queueMiddleware(req, res, next);
-    });
-  };
+  queueMiddleware.queue = queue;
 
-  result.queue = queue;
-
-  return result;
+  return queueMiddleware;
 };
 
 export default requestQueue;

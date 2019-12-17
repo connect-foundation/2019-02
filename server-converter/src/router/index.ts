@@ -17,7 +17,7 @@ import {
 const prodRouter = Router();
 
 const queueMiddleware = requestQueue({
-  queueLimit: 20,
+  queueLimit: 5,
   activeLimit: 1,
   cpuUsage: 90,
 });
@@ -38,7 +38,7 @@ prodRouter.post(
   (req, res) => {
     const { channelId } = req.params;
     const { slideUrls, slideRatioList, fileUrl } = req;
-
+    res.emit('end');
     clearProgress(channelId);
     res.status(200).json({
       status: 'ok',
@@ -63,5 +63,11 @@ const router = ((env) => {
 
   return appRouter;
 })(process.env.NODE_ENV);
+
+setInterval(() => {
+  console.log(`queuelist: ${queueMiddleware.queue.queue.reduce((str, item) => `${str}  ${item.state}`, '')}`);
+  console.log(`activelist ${queueMiddleware.queue.active.reduce((str, item) => `${str}  ${item.state}`, '')}`);
+}, 10000);
+
 
 export default router;

@@ -1,6 +1,8 @@
 import { EventEmitter } from 'events';
 import * as osu from 'node-os-utils';
+import * as fs from 'fs';
 import Job from './requestJob';
+import { CLEAR_TIME } from '../constants';
 
 const { cpu, mem } = osu;
 
@@ -32,29 +34,24 @@ class Queue extends EventEmitter {
 
   async checkCPU() {
     const cpuUsage = await cpu.usage();
-
     return (cpuUsage < this.config.cpuUsage);
   }
 
   async checkMem(job) {
     const { freeMemMb } = await mem.free();
-
-    if (freeMemMb <= 0) {
-      job.setState(true, 'reject');
-    }
+    if (freeMemMb <= 0) job.setState(true, 'reject');
   }
 
   createJob(data) {
     const job = new Job(this, data);
 
-    this.checkMem(job);
+    // await this.checkMem(job);
 
-    process.nextTick(() => {
-      if (!this.canQueue()) return job.setState(true, 'reject');
-      if (this.canStart() && this.queue.length === 0) return this.startJob(job);
-
-      return this.enqueueJob(job);
-    });
+    // process.nextTick(() => {
+    if (!this.canQueue()) return job.setState(true, 'reject');
+    if (this.canStart() && this.queue.length === 0) return this.startJob(job);
+    this.enqueueJob(job);
+    // });
 
     process.nextTick(this.checkQueue.bind(this));
 
@@ -78,24 +75,24 @@ class Queue extends EventEmitter {
   }
 
   stopHandler(job) {
-    const { req, _, next } = job.data;
+    const { req, next } = job.data;
+
     return {
-      save: () => { next(); },
-      saveComplete: () => { req.converter.clearInput(); },
-      convert: () => { if (req.converter) req.converter.stop(true); },
-      upload: () => { next(); },
-      remove: () => { next(); },
+      next: () => next(),
+      save: () => this.removeSavedFile(job),
+      convert: () => req.converter && req.converter.stop(true),
     };
   }
 
-  stopJob(job, stage = null) {
+  stopJob(job) {
     const { req, res } = job.data;
+    const stage = req.stage.next ? 'next' : req.stage.stage;
     const stopHandler = this.stopHandler(job);
 
-    if (req.converter) req.converter.isStop = true;
+    if (req.converter) req.isStop = true;
 
     this.dequeueActive();
-    job.setState(true, 'stop');
+    job.setState(false, 'stop');
 
     if (!stopHandler[stage]) res.end();
     else stopHandler[stage]();
@@ -113,7 +110,6 @@ class Queue extends EventEmitter {
 
   dequeueJob(job = null) {
     const dequeueJob = job ? this.checkJobinQueue(job) : this.queue.shift();
-
     dequeueJob.setState(false, 'dequeue');
 
     return dequeueJob;
@@ -147,6 +143,15 @@ class Queue extends EventEmitter {
     job.setState(false, 'cancle-queue');
 
     return job;
+  }
+
+  removeSavedFile(job) {
+    setTimeout(() => {
+      fs.unlink(job.data.req.stage.path, (err) => {
+        if (err) this.removeSavedFile(job);
+      });
+      job.data.res.end();
+    }, CLEAR_TIME);
   }
 
   canQueue() {

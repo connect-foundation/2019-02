@@ -7,7 +7,6 @@ import {
   OutputNaming,
   SlideInfo,
 } from '../../@types/converter';
-import { CLEAR_TIME } from '../../constants';
 import SimpleGm from './SimpleGm';
 
 class PdfConverter extends EventEmitter implements ConverterEngine {
@@ -33,6 +32,7 @@ class PdfConverter extends EventEmitter implements ConverterEngine {
     this.slides = [];
     this.pageLength = 0;
     this.done = false;
+    this.convertChain = null;
   }
 
   async init(): Promise<void> {
@@ -60,7 +60,8 @@ class PdfConverter extends EventEmitter implements ConverterEngine {
       this.end();
       return this.slides;
     };
-    const convertChain: Promise<SlideInfo[]> = this.sgms.reduce(
+
+    this.convertChain = this.sgms.reduce(
       (chain, sgm) => chain
         .then(convertStopped)
         .then(() => sgm.write().then(convertDone)),
@@ -69,7 +70,7 @@ class PdfConverter extends EventEmitter implements ConverterEngine {
       .then(convertEnd)
       .catch(convertEnd);
 
-    const slides: SlideInfo[] = await convertChain;
+    const slides: SlideInfo[] = await this.convertChain;
 
     return slides;
   }
@@ -93,19 +94,17 @@ class PdfConverter extends EventEmitter implements ConverterEngine {
     this.clearOutput();
   }
 
-  clearInput(): void {
+  async clearInput(): Promise<void> {
     const removeFile = promisify(fs.unlink.bind(fs));
-    setTimeout(async () => {
-      await removeFile(this.inputPath);
-    }, CLEAR_TIME);
+
+    await removeFile(this.inputPath);
   }
 
-  clearOutput(): void {
+  async clearOutput(): Promise<void> {
     const removeFile = promisify(fs.unlink.bind(fs));
     const removeAllOutput = this.slides.map(({ path }) => removeFile(path));
-    setTimeout(async () => {
-      await Promise.all(removeAllOutput);
-    }, CLEAR_TIME);
+
+    await Promise.all(removeAllOutput);
   }
 
   getPageLength() {

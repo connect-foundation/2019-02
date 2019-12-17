@@ -1,7 +1,7 @@
-const stop = ({ req, res, next }, stage, converter = req.converter) => {
-  req.stage = stage;
-  const handleNext = (err?) => (err ? next(err) : next());
-  const stopConverter = (err?) => (converter.isStop ? res.end() : handleNext(err));
-  return stopConverter;
+const handleResponse = (req, res, next) => {
+  const handleErrNext = (err?) => (err ? next(err) : next());
+  const response = (err?) => (req.isStop ? res.end() : handleErrNext(err));
+
+  return response;
 };
-export default stop;
+export default handleResponse;

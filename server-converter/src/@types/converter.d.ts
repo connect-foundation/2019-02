@@ -6,10 +6,10 @@ export type OutputNaming = (page: number) => string;
 export interface ConverterEngine extends EventEmitter {
   init: () => Promise<void>,
   convert: () => Promise<SlideInfo[]>
-  stop: (clearOutput?: boolean) => void
+  stop: (clearOutput?: boolean) => Promise<void>
   clear: () => Promise<void>
-  clearInput: () => void
-  clearOutput: () => void
+  clearInput: () => Promise<void>
+  clearOutput: () => Promise<void>
 }
 
 export interface GmOptimizeOptions {
