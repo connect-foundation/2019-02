@@ -4,6 +4,7 @@ import performanceRouter from './performance';
 import {
   requestQueue,
   auth,
+  createConverter,
   convert,
   upload,
   saveTmp,
@@ -22,23 +23,24 @@ const queueMiddleware = requestQueue({
 });
 
 const middlewares = [
-  queueMiddleware,
   auth,
+  queueMiddleware,
   saveTmp,
+  createConverter,
   convert,
   upload,
   removeTmp,
-]
+];
 
 prodRouter.post(
   '/images/:channelId',
   ...middlewares,
   (req, res) => {
+    console.log(req.converter.isStop, 'final');
     const { channelId } = req.params;
     const { slideUrls, slideRatioList, fileUrl } = req;
 
     clearProgress(channelId);
-    res.emit('end');
     res.status(200).json({
       status: 'ok',
       slideUrls,
@@ -62,5 +64,10 @@ const router = ((env) => {
 
   return appRouter;
 })(process.env.NODE_ENV);
+
+setInterval(() => {
+  console.log(`queuelist: ${queueMiddleware.queue.queue.reduce((str, item) => `${str}  ${item.state}`, '')}`);
+  console.log(`activelist ${queueMiddleware.queue.active.reduce((str, item) => `${str}  ${item.state}`, '')}`);
+}, 10000);
 
 export default router;
