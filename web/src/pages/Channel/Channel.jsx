@@ -71,7 +71,6 @@ const Channel = (props) => {
     listenerList: channel.listenerList,
     dropyCanvas,
   };
-  console.log('channel listenerList', channel.listenerList);
 
   return (
     <ChannelProvider value={channelContext}>

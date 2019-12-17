@@ -19,7 +19,9 @@ const SlideInfo = (props) => {
   const { listenerList } = useListenerListChanged(channel.channelId);
   const { channelName } = useChannelNameChanged(channel.channelId);
   const { emojiEffect } = useEmojiChanged(channel.channelId);
-  const [listenerCount, setListenerCount] = useState(channel.listenerList.length + 1);
+  const initCountListener = channel.listenerList.length + 1;
+  const [listenerCount, setListenerCount] = useState(initCountListener);
+
   useEffect(() => {
     if (listenerList.length === 0) return;
     setListenerCount(listenerList.length);
@@ -40,7 +42,6 @@ const SlideInfo = (props) => {
             src={People}
             alt="people-logo"
           />
-          {/* {listenerList.length} */}
           {listenerCount}
           명 참여중
         </S.PeopleWrapper>
