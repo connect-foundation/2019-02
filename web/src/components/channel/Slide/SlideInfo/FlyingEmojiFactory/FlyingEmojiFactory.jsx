@@ -10,7 +10,7 @@ import {
 class FlyingEmojiFactory {
   constructor(emoji, coordinates, friction, isFullScreen) {
     this.emoji = this.setEmoji(emoji);
-    this.steps = document.querySelector('body').offsetHeight / 2;
+    this.steps = document.querySelector('body').offsetHeight;
     this.item = null;
     this.friction = friction;
     this.coordinates = coordinates;
@@ -20,7 +20,7 @@ class FlyingEmojiFactory {
     this.rotation = ROTATION();
     this.siner = SINER();
     this.opacity = OPACITY;
-    this.appHeight = document.querySelector('body').offsetHeight;
+    this.appHeight = document.querySelector('body').offsetHeight / 1.2;
     this.dimensions = this.render();
   }
 
@@ -50,7 +50,7 @@ class FlyingEmojiFactory {
   }
 
   setOpacity() {
-    this.opacity -= 0.008;
+    this.opacity -= 0.02;
   }
 
   getDirection() {
