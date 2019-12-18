@@ -5,7 +5,8 @@
   "license": "MIT",
   "scripts": {
     "dev": "ts-node ./src/index.ts --project tsconfig.json",
-    "start": "pm2 start ./build/app.js",
+    "start": "pm2 start ./build/index.js -o ./prod.log -e ./error.log",
+    "restart": "pm2 restart 0",
     "build": "tsc",
     "test": "jest --passWithNoTests"
   },

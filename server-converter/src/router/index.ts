@@ -1,5 +1,4 @@
 import { Router } from 'express';
-import devRouter from './dev';
 import performanceRouter from './performance';
 import {
   requestQueue,
@@ -59,7 +58,6 @@ const router = ((env) => {
   let appRouter = prodRouter;
 
   if (env === 'performance') appRouter = performanceRouter;
-  if (env === 'development') appRouter = devRouter;
 
   return appRouter;
 })(process.env.NODE_ENV);

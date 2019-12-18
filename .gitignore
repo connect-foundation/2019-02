@@ -10,4 +10,5 @@ prod.env
 # os
 .DS_Store
 # log
-.log
+prod.log
+error.log
