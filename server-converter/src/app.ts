@@ -7,6 +7,7 @@ import router from './router';
 import { TIMEOUT } from './constants';
 
 const isProdMod = process.env.NODE_ENV === 'production';
+const ORIGIN = `${isProdMod ? 'https://dropy.online' : 'http://localhost'}:${process.env.PORT}`;
 const app = express();
 const corsOption = {
   origin: true,
@@ -38,7 +39,7 @@ const server = isProdMod
 const start = () => {
   server.listen(process.env.PORT, () => {
     server.setTimeout(TIMEOUT);
-    console.log(`Dropy Converter starts on port ${process.env.PORT}`);
+    console.log(`Dropy Converter starts on port ${ORIGIN}`);
   });
 };
 
