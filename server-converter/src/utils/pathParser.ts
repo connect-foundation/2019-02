@@ -1,4 +1,4 @@
-import * as path from 'path';
+import * as Path from 'path';
 
 export const getExtension = (path: string): string => {
   const indexOfPoint = path.lastIndexOf('.');
@@ -16,8 +16,8 @@ export const getFilename = (path: string): string => {
 };
 
 export const getPdfFilePath = (channelId) => {
-  const tmpPath = path.resolve(__dirname, '../../tmpFiles');
+  const tmpPath = Path.resolve(__dirname, '../../tmpFiles');
   const filename = `${channelId}_file.pdf`;
-  
+
   return `${tmpPath}/${filename}`;
-}
+};

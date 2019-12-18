@@ -1,6 +1,6 @@
 import { RequestHandler } from '../@types';
 
-const removeMiddleware: RequestHandler = (req: any, res, next) => {
+const removeMiddleware: RequestHandler = (req, res, next) => {
   req.stage = { stage: 'remove', next: true };
   req.converter.clear()
     .then(() => { next(); })

@@ -24,8 +24,8 @@ const queueMiddleware = requestQueue({
 
 const middlewares = [
   auth,
-  queueMiddleware,
   saveTmp,
+  queueMiddleware,
   createConverter,
   convert,
   upload,
@@ -38,7 +38,7 @@ prodRouter.post(
   (req, res) => {
     const { channelId } = req.params;
     const { slideUrls, slideRatioList, fileUrl } = req;
-    res.emit('end');
+
     clearProgress(channelId);
     res.status(200).json({
       status: 'ok',
