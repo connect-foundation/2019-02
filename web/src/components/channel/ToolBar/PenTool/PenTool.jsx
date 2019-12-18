@@ -6,12 +6,9 @@ const PenTool = () => {
   const dispatch = useDispatch();
   const { isPenToolActive } = useChannelSelector((state) => state);
   const penToolOption = {
-    toolType: 'pen',
-    toolStyleOption: {
-      lineWidth: 2,
-      lineCap: 'round',
-      lineColor: 'red',
-    },
+    lineWidth: 2,
+    lineCap: 'round',
+    lineColor: 'red',
   };
   const handleOnclick = () => {
     if (isPenToolActive) {
@@ -19,7 +16,7 @@ const PenTool = () => {
     } else {
       dispatch({
         type: 'PEN_TOOL_ACTIVE',
-        payload: { toolOption: penToolOption },
+        payload: { toolOptions: penToolOption },
       });
     }
   };

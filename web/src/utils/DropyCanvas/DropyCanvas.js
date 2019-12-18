@@ -14,7 +14,7 @@ class DropyCanvas {
   init() {
     this.prevPosition = { x: 0, y: 0 };
     this.history = [];
-    this.toolType = null;
+    this.newLineHistory = [];
     this.lineWidth = null;
     this.lineCap = null;
     this.strokeStyle = null;
@@ -25,9 +25,15 @@ class DropyCanvas {
       ['mouseleave', this.handleMouseLeave.bind(this)],
       ['mouseenter', this.handleMouseEnter.bind(this)],
     ];
+    this.customMouseUpHandler = null;
+  }
+
+  setCustomMouseUpHandler(customHandler) {
+    this.customMouseUpHandler = customHandler;
   }
 
   handleMouseDown(event) {
+    this.resetNewLineHistory();
     this.prevPosition.x = event.offsetX;
     this.prevPosition.y = event.offsetY;
   }
@@ -56,10 +62,14 @@ class DropyCanvas {
 
   handleMouseUp() {
     this.history.push([]);
+    this.newLineHistory.push([]);
+
+    if (this.customMouseUpHandler) this.customMouseUpHandler();
   }
 
   handleMouseLeave() {
     this.history.push([]);
+    this.newLineHistory.push([]);
   }
 
   addEventListener(canvasElement) {
@@ -75,6 +85,7 @@ class DropyCanvas {
     const ratioY = this.height / mousePositionY;
 
     this.history.push([ratioX, ratioY]);
+    this.newLineHistory.push([ratioX, ratioY]);
   }
 
   saveMousePosition(x, y) {
@@ -86,17 +97,13 @@ class DropyCanvas {
     this.context = context;
   }
 
-  setToolStyle(toolOption) {
+  setToolStyle(toolOptions) {
     const {
-      toolType,
-      toolStyleOption: {
-        lineWidth,
-        lineCap,
-        lineColor,
-      },
-    } = toolOption;
+      lineWidth,
+      lineCap,
+      lineColor,
+    } = toolOptions;
 
-    this.toolType = toolType;
     this.lineWidth = lineWidth;
     this.lineCap = lineCap;
     this.strokeStyle = lineColor;
@@ -107,8 +114,20 @@ class DropyCanvas {
     this.height = height;
   }
 
+  getToolOptions() {
+    return {
+      lineWidth: this.lineWidth,
+      lineCap: this.lineCap,
+      lineColor: this.strokeStyle,
+    };
+  }
+
   getHistory() {
     return this.history;
+  }
+
+  getNewLineHistory() {
+    return this.newLineHistory;
   }
 
   getContext() {
@@ -117,6 +136,14 @@ class DropyCanvas {
 
   resetHistory() {
     this.history = [];
+  }
+
+  setHistory(history) {
+    this.history = history;
+  }
+
+  resetNewLineHistory() {
+    this.newLineHistory = [];
   }
 
   clearCanvas() {

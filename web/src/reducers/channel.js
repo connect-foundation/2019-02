@@ -5,7 +5,11 @@ const initialChannelState = {
   isToolBarActive: false,
   isPenToolActive: false,
   slideCanvas: null,
-  toolOption: {},
+  toolOptions: {
+    lineWidth: 0,
+    lineCap: '',
+    lineColor: '',
+  },
 };
 
 const channelReducer = (state, action) => {
@@ -37,16 +41,21 @@ const channelReducer = (state, action) => {
         isPenToolActive: false,
       };
     case 'PEN_TOOL_ACTIVE':
+      console.log('리듀서', action.payload.toolOptions);
       return {
         ...state,
         isPenToolActive: true,
-        toolOption: action.payload.toolOption,
+        toolOptions: action.payload.toolOptions,
       };
     case 'PEN_TOOL_INACTIVE':
       return {
         ...state,
         isPenToolActive: false,
-        toolOption: {},
+        toolOptions: {
+          lineWidth: 0,
+          lineCap: '',
+          lineColor: '',
+        },
       };
     case 'SET_SLIDE_CANVAS':
       return {

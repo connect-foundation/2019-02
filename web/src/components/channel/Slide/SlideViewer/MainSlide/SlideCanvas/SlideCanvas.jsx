@@ -1,40 +1,87 @@
 import React, { useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import S from './style';
-import { useChannelSelector } from '@/hooks';
+import {
+  useChannelSelector,
+  useDispatch,
+  useAddCanvasHistory,
+  useGetCanvasHistory,
+} from '@/hooks';
+import DropyCanvas from '@/utils/DropyCanvas';
 
 const SlideCanvas = (props) => {
   const { canvasWidth, canvasHeight } = props;
+  const { mutate } = useAddCanvasHistory();
+  const { query, data } = useGetCanvasHistory();
+  const dispatch = useDispatch();
   const canvasRef = useRef(null);
   const canvas = canvasRef.current;
-  const { isPenToolActive, dropyCanvas } = useChannelSelector((state) => state);
+  const {
+    channelId,
+    page,
+    isPenToolActive,
+    slideCanvas,
+    toolOptions,
+  } = useChannelSelector((state) => state);
+  const initSlideCanvas = () => {
+    if (slideCanvas) slideCanvas.clearCanvas();
+    query({ variables: { channelId, page, toolOptions } });
+  };
 
   useEffect(() => {
-    if (canvas === null) {
-      window.dispatchEvent(new Event('resize'));
-      return;
-    }
-    if (isPenToolActive) {
-      const context = canvas.getContext('2d');
-      dropyCanvas.setContext(context);
-      dropyCanvas.addEventListener(canvas);
-    }
+    initSlideCanvas();
+    const dropyCanvas = new DropyCanvas(canvasWidth, canvasHeight);
 
-    return () => {
-      dropyCanvas.removeEventListener(canvas);
-    };
-  }, [canvas, canvasWidth, canvasHeight, isPenToolActive]);
+    dropyCanvas.init();
+    dropyCanvas.setCustomMouseUpHandler(() => {
+      mutate({
+        variables: {
+          channelId,
+          page,
+          history: dropyCanvas.getNewLineHistory(),
+          toolOptions: dropyCanvas.getToolOptions(),
+        },
+      });
+    });
+
+    dispatch({
+      type: 'SET_SLIDE_CANVAS',
+      payload: { slideCanvas: dropyCanvas },
+    });
+  }, [page]);
 
   useEffect(() => {
     if (canvas === null) return;
     const context = canvas.getContext('2d');
 
-    dropyCanvas.reDrawContent(context);
-  }, [canvas, canvasWidth, canvasHeight]);
+    slideCanvas.setContext(context);
+    if (isPenToolActive) {
+      slideCanvas.setToolStyle(toolOptions);
+      slideCanvas.addEventListener(canvas);
+    }
+
+    return () => slideCanvas.removeEventListener(canvas);
+  }, [slideCanvas, canvasWidth, canvasHeight, isPenToolActive]);
+
+  useEffect(() => {
+    if (data === null) return;
+    if (data.page === page) {
+      const curToopOptions = toolOptions;
+      slideCanvas.setToolStyle(data.toolOptions);
+      slideCanvas.setHistory(data.history);
+      slideCanvas.reDrawContent();
+      slideCanvas.setToolStyle(curToopOptions);
+    }
+  }, [data]);
+
+  useEffect(() => {
+    if (canvas === null) return;
+    slideCanvas.reDrawContent();
+  }, [canvasWidth, canvasHeight]);
 
   return (
     <S.CanvasWrapper isPenToolActive={isPenToolActive}>
-      {dropyCanvas.render(canvasRef)}
+      {slideCanvas && slideCanvas.render(canvasRef)}
     </S.CanvasWrapper>
   );
 };
