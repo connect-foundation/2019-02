@@ -1,5 +1,13 @@
-# server-api
+# node
 node_modules
+# build
+build
+# environment
 .env
+prod.env
+# editor
 .vscode
+# os
 .DS_Store
+# log
+.log
