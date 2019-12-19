@@ -7,14 +7,14 @@ import { useChannelSelector } from '@/hooks';
 const ToolBar = () => {
   const isToolBarActive = useChannelSelector((state) => state.isToolBarActive);
 
+  if (!isToolBarActive) return null;
+
   return (
     <S.ToolBar>
-      {isToolBarActive && (
       <S.ToolBarContent>
         <PenTool />
         <EraserTool />
       </S.ToolBarContent>
-      )}
     </S.ToolBar>
   );
 };

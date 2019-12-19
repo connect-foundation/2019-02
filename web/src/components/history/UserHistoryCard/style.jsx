@@ -10,9 +10,6 @@ export default {
     height: ${px(131)};
     box-shadow: ${px(0)} ${px(2)} ${px(9)} rgba(0, 0, 0, 0.03);
     border-radius: ${px(3)};
-    &:first-child {
-      margin-top: ${px(160)};
-    }
   `,
   HistoryCardLeftDetail: styled.div`
     margin: ${px(34)} 0 ${px(50)} ${px(40)};

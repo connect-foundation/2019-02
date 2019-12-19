@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Wrapper, Header } from '../common';
+import { Wrapper, Header, Container } from '../common';
 
 const Layout = ({ children }) => (
   <Wrapper>
     <Header />
-    {children}
+    <Container>{children}</Container>
   </Wrapper>
 );
 

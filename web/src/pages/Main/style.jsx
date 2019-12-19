@@ -6,8 +6,8 @@ export default {
     justify-content: center;
     align-items: center;
     width: 100%;
+    height: 100%;
     background-color: white;
-    flex: 1;
   `,
   MainContent: styled.div`
     display: flex;

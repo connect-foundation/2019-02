@@ -4,15 +4,14 @@ import { px } from '@/styles/themeUtil';
 
 export default {
   DropCloseButton: styled.div`
+    position: absolute;
+    z-index: 999;
+    top: ${px(35)};
+    right: ${px(35)};
     width: ${px(60)};
     height: ${px(60)};
-    margin-top: ${px(80)};
-    margin-right: ${px(35)};
-    position: absolute;
-    right: 0;
     text-align: center;
     cursor: pointer;
-    z-index: 999;
   `,
   CloseIcon: styled.img.attrs({
     src: closeIcon,
