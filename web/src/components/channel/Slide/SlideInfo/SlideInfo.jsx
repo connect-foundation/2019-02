@@ -8,6 +8,7 @@ import {
   useEmojiChanged,
   useListenerListChanged,
 } from '@/hooks';
+import { CHANNEL_INIT_LISTENER_COUNT } from '@/constants';
 import CodeShareButton from './CodeShareButton';
 import SlideDownloadButton from './SlideDownloadButton';
 import FlyingEmojiButton from './FlyingEmojiButton';
@@ -19,12 +20,12 @@ const SlideInfo = (props) => {
   const { listenerList } = useListenerListChanged(channel.channelId);
   const { channelName } = useChannelNameChanged(channel.channelId);
   const { emojiEffect } = useEmojiChanged(channel.channelId);
-  const initCountListener = channel.listenerList.length + 1;
+  const initCountListener = channel.listenerList.length;
   const [listenerCount, setListenerCount] = useState(initCountListener);
 
   useEffect(() => {
-    if (listenerList.length === 0) return;
-    setListenerCount(listenerList.length);
+    const listenerLength = listenerList.length === 0 ? CHANNEL_INIT_LISTENER_COUNT : listenerList.length;
+    setListenerCount(listenerLength);
   }, [listenerList]);
 
   return (
