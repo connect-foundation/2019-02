@@ -8,6 +8,7 @@ import {
   useGetCanvasHistory,
 } from '@/hooks';
 import DropyCanvas from '@/utils/DropyCanvas';
+import { CHANNEL_REDUCER_SET_SLIDE_CANVAS } from '@/constants';
 
 const SlideCanvas = (props) => {
   const { canvasWidth, canvasHeight } = props;
@@ -45,7 +46,7 @@ const SlideCanvas = (props) => {
     });
 
     dispatch({
-      type: 'SET_SLIDE_CANVAS',
+      type: CHANNEL_REDUCER_SET_SLIDE_CANVAS,
       payload: { slideCanvas: dropyCanvas },
     });
   }, [page]);

@@ -1,21 +1,28 @@
 import React from 'react';
 import S from './style';
 import { useChannelSelector, useDispatch } from '@/hooks';
+import {
+  DEFAULT_PEN_TOOL_LINE_WIDTH,
+  DEFAULT_PEN_TOOL_LINE_COLOR,
+  DEFAULT_PEN_TOOL_LINE_CAP,
+  CHANNEL_REDUCER_PEN_TOOL_ACTIVE,
+  CHANNEL_REDUCER_PEN_TOOL_INACTIVE,
+} from '@/constants';
 
 const PenTool = () => {
   const dispatch = useDispatch();
   const { isPenToolActive } = useChannelSelector((state) => state);
   const penToolOption = {
-    lineWidth: 2,
-    lineCap: 'round',
-    lineColor: 'red',
+    lineWidth: DEFAULT_PEN_TOOL_LINE_WIDTH,
+    lineCap: DEFAULT_PEN_TOOL_LINE_CAP,
+    lineColor: DEFAULT_PEN_TOOL_LINE_COLOR,
   };
   const handleOnclick = () => {
     if (isPenToolActive) {
-      dispatch({ type: 'PEN_TOOL_INACTIVE' });
+      dispatch({ type: CHANNEL_REDUCER_PEN_TOOL_INACTIVE });
     } else {
       dispatch({
-        type: 'PEN_TOOL_ACTIVE',
+        type: CHANNEL_REDUCER_PEN_TOOL_ACTIVE,
         payload: { toolOptions: penToolOption },
       });
     }

@@ -12,7 +12,11 @@ import {
   parseMessage,
   checkIsQuestion,
 } from '@/utils';
-import { CHAT_INPUT_PLACEHOLDER, CHAT_ANONYMOUS_PLACEHOLDER } from '@/constants';
+import {
+  CHAT_INPUT_PLACEHOLDER,
+  CHAT_ANONYMOUS_PLACEHOLDER,
+  CHANNEL_REDUCER_SET_ISCHAT,
+} from '@/constants';
 import S from './style';
 
 const KEYCODE_ENTER = 13;
@@ -45,7 +49,7 @@ const ChatInput = (props) => {
   };
   const handleFocus = (isChat) => () => {
     dispatch({
-      type: 'SET_ISCHAT',
+      type: CHANNEL_REDUCER_SET_ISCHAT,
       payload: { isChat },
     });
   };

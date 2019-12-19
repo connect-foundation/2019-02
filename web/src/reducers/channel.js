@@ -1,3 +1,14 @@
+import {
+  CHANNEL_REDUCER_SET_ISCHAT,
+  CHANNEL_REDUCER_SET_ISSYNC,
+  CHANNEL_REDUCER_SET_PAGE,
+  CHANNEL_REDUCER_TOOLBAR_ACTIVE,
+  CHANNEL_REDUCER_TOOLBAR_INACTIVE,
+  CHANNEL_REDUCER_PEN_TOOL_ACTIVE,
+  CHANNEL_REDUCER_PEN_TOOL_INACTIVE,
+  CHANNEL_REDUCER_SET_SLIDE_CANVAS,
+} from '@/constants';
+
 const initialChannelState = {
   isChat: false,
   isSync: true,
@@ -14,39 +25,39 @@ const initialChannelState = {
 
 const channelReducer = (state, action) => {
   switch (action.type) {
-    case 'SET_ISCHAT':
+    case CHANNEL_REDUCER_SET_ISCHAT:
       return {
         ...state,
         isChat: action.payload.isChat,
       };
-    case 'SET_ISSYNC':
+    case CHANNEL_REDUCER_SET_ISSYNC:
       return {
         ...state,
         isSync: action.payload.isSync,
       };
-    case 'SET_PAGE':
+    case CHANNEL_REDUCER_SET_PAGE:
       return {
         ...state,
         page: action.payload.page,
       };
-    case 'TOOLBAR_ACTIVE':
+    case CHANNEL_REDUCER_TOOLBAR_ACTIVE:
       return {
         ...state,
         isToolBarActive: true,
       };
-    case 'TOOLBAR_INACTIVE':
+    case CHANNEL_REDUCER_TOOLBAR_INACTIVE:
       return {
         ...state,
         isToolBarActive: false,
         isPenToolActive: false,
       };
-    case 'PEN_TOOL_ACTIVE':
+    case CHANNEL_REDUCER_PEN_TOOL_ACTIVE:
       return {
         ...state,
         isPenToolActive: true,
         toolOptions: action.payload.toolOptions,
       };
-    case 'PEN_TOOL_INACTIVE':
+    case CHANNEL_REDUCER_PEN_TOOL_INACTIVE:
       return {
         ...state,
         isPenToolActive: false,
@@ -56,7 +67,7 @@ const channelReducer = (state, action) => {
           lineColor: '',
         },
       };
-    case 'SET_SLIDE_CANVAS':
+    case CHANNEL_REDUCER_SET_SLIDE_CANVAS:
       return {
         ...state,
         slideCanvas: action.payload.slideCanvas,

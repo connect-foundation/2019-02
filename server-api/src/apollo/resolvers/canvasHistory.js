@@ -42,7 +42,7 @@ const getCanvasHistory = async (_, {
         toolOptions,
       }).save();
       const payload = newCanvasHistory.toPayload();
-      console.log('새로운 데이터를 조회하거나 저장함', payload);
+
       return payload;
     }
     const payload = canvasHistory.toPayload();
@@ -66,6 +66,7 @@ const resetCanvasHistory = async (_, { channelId, page }) => {
       { returnOriginal: false },
     );
     const payload = canvasHistory.toPayload();
+
     return payload;
   } catch (err) {
     throw new ApolloError(err.message);

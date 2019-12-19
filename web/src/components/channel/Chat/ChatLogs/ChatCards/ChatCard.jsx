@@ -8,6 +8,10 @@ import {
   useChannelSelector,
 } from '@/hooks';
 import { parseTag } from '@/utils';
+import {
+  CHANNEL_REDUCER_SET_ISSYNC,
+  CHANNEL_REDUCER_SET_PAGE,
+} from '@/constants';
 
 const ChatCard = (props) => {
   const {
@@ -24,8 +28,8 @@ const ChatCard = (props) => {
     const { nextPage, isExist } = parseTag(token, slideUrls.length);
     if (!isExist) return;
 
-    dispatch({ type: 'SET_ISSYNC', payload: { isSync: false } });
-    dispatch({ type: 'SET_PAGE', payload: { page: nextPage - 1 } });
+    dispatch({ type: CHANNEL_REDUCER_SET_ISSYNC, payload: { isSync: false } });
+    dispatch({ type: CHANNEL_REDUCER_SET_PAGE, payload: { page: nextPage - 1 } });
   };
   const renderQuestion = () => tokens.map(({ id, token, isQtag }) => {
     const { isExist } = parseTag(token, slideUrls.length);
