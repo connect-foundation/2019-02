@@ -3,7 +3,6 @@ import { px } from '@/styles/themeUtil';
 
 export default {
   Emoji: styled.div`
-    margin-top: ${px(100)};
     font-size: ${px(160)};
     text-align: center;  
     animation:fingerAni 2s infinite;

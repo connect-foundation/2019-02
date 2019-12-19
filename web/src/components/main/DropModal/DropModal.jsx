@@ -32,13 +32,11 @@ const DropModal = (props) => {
         <S.DropModalContent>
           <DropEmoji emoji={dropModalEmoji} />
           <DropText dragOver={isDragOver} />
+          <DropInput dropModalDispatch={dropModalDispatch} />
         </S.DropModalContent>
+        <DropZone dropModalDispatch={dropModalDispatch} />
+        <DropModalCloseButton setShowDropModal={setShowDropModal} />
       </S.DropModal>
-      <DropModalCloseButton setShowDropModal={setShowDropModal} />
-      <DropZone dropModalDispatch={dropModalDispatch} />
-      <DropInput
-        dropModalDispatch={dropModalDispatch}
-      />
       {isError && <ErrorModal message={errorMessage} />}
       {isLoading && <LoadingModal message={loadingMessage} />}
     </>

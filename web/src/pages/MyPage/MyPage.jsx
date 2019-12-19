@@ -10,7 +10,7 @@ const MyPage = () => {
   const { displayName } = useGetUserStatus();
 
   return (
-    <>
+    <S.MyPage>
       {displayName !== null
         ? (
           <S.MyPageWrapper>
@@ -19,7 +19,7 @@ const MyPage = () => {
           </S.MyPageWrapper>
         )
         : <ErrorModal message={LOGIN_STATUS_ERROR_MESSAGE} />}
-    </>
+    </S.MyPage>
   );
 };
 

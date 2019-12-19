@@ -3,8 +3,8 @@ import { px } from '@/styles';
 
 export default {
   Chat: styled.div`
+    float: right;
     display: flex;
-    flex: 0 0 auto;
     flex-direction: column;
     width: ${px(350)};
     height: 100%;

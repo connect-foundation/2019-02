@@ -1,12 +1,14 @@
 import styled from 'styled-components';
 import { colorGray, px } from '@/styles/themeUtil';
+import { SLIDE_INFO_HEIGHT } from '@/constants';
 
 export default {
   SlideInfo: styled.div`
     display: flex;
     flex-direction: row;
-    height: ${px(142)};
     width: 94%;
+    height: ${px(SLIDE_INFO_HEIGHT)};
+    margin: 0 auto;
     border-top: 1px solid ${colorGray(3)};
     padding: ${px(15)} 0 0 ${px(20)};
   `,

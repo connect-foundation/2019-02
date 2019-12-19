@@ -17,7 +17,7 @@ const Header = () => {
   const id = 'simple-popover';
 
   return (
-    <AppBar position="static" elevation={0}>
+    <AppBar position="relative" elevation={0}>
       <Toolbar>
         <a href="/">
           <Typography variant="h1">dropy</Typography>

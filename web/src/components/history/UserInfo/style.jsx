@@ -6,8 +6,7 @@ import { px, colorGray } from '@/styles';
 export default {
   UserInfo: styled.div`
     display: flex;
-    flex-shrink: 0;
-    flex-grow: 0;
+    flex: 0 0 auto;
     align-items: center;
     flex-direction: column;
     width: ${px(350)};

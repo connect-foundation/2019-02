@@ -5,19 +5,13 @@ import { px, colorGray } from '@/styles';
 
 export default {
   UserHistory: styled.div`
-    display: flex;
+    flex: 1 1 auto;
     background: ${colorGray(1)};
     position: relative;
-    flex-direction: column;
-    flex: 1;
     height: 100%;
     overflow: auto;
   `,
-  UserHistoryContents: styled.div`
-    position: absolute;
-    width: 100%;
-    padding-top: ${px(50)};
-  `,
+  UserHistoryContents: styled.div``,
   UserHistoryTitle: styled.div`
     margin: ${px(82)} ${px(100)};
     width: ${px(749)};

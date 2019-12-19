@@ -10,11 +10,9 @@ const ErrorModal = (props) => {
 
   return (
     <S.ErrorModal>
-      <S.ErrorModalContent>
-        <ErrorEmoji />
-        <ErrorText message={message} />
-        <BackButton />
-      </S.ErrorModalContent>
+      <ErrorEmoji />
+      <ErrorText message={message} />
+      <BackButton />
     </S.ErrorModal>
   );
 };

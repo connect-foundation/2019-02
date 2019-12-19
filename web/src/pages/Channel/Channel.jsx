@@ -77,8 +77,8 @@ const Channel = (props) => {
       <Entrance channelId={channelId} isMaster={isMaster}>
         <S.Channel>
           <ToolBar />
-          <Slide channelId={channelId} openSettingModal={openModal} />
           <Chat channelId={channelId} userId={user.userId} />
+          <Slide channelId={channelId} openSettingModal={openModal} />
           {data.isMaster && (
           <SettingModal
             channelId={channelId}
