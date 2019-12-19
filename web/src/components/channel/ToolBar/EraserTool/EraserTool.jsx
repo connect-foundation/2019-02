@@ -1,11 +1,20 @@
 import React from 'react';
 import S from './style';
-import { useDispatch } from '@/hooks';
+import {
+  useChannelSelector,
+  useResetCanavsHistory,
+} from '@/hooks';
 
 const EraserTool = () => {
-  const dispatch = useDispatch();
+  const {
+    slideCanvas,
+    channelId,
+    page,
+  } = useChannelSelector((state) => state);
+  const { mutate } = useResetCanavsHistory();
   const handleOnclick = () => {
-    dispatch({ type: 'ERASER_TOOL_ACTIVE' });
+    slideCanvas.clearCanvas();
+    mutate({ variables: { channelId, page } });
   };
 
   return (

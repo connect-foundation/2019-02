@@ -1,17 +1,21 @@
 import React, { useState, useEffect, useRef } from 'react';
-import PropTypes from 'prop-types';
 import S from './style';
 import { useChannelSelector } from '@/hooks';
 import { pxToNum } from '@/utils/dom';
 import SlideCanvas from './SlideCanvas';
 
-const MainSlide = (props) => {
-  const { page, slideUrls } = props;
+const MainSlide = () => {
+  const {
+    slideRatioList,
+    isToolBarActive,
+    slideCanvas,
+    page,
+    slideUrls,
+  } = useChannelSelector((state) => state);
   const [canvasSize, setCanvasSize] = useState({
     canvasWidth: 0,
     canvasHeight: 0,
   });
-  const { slideRatioList, dropyCanvas } = useChannelSelector((state) => state);
   const slideRatio = slideRatioList[page];
   const wrapperRef = useRef(null);
   const imageRef = useRef(null);
@@ -26,7 +30,8 @@ const MainSlide = (props) => {
     const canvasWidth = fitHeight ? wrapperHeight * slideRatio : wrapperWidth;
     const canvasHeight = fitHeight ? wrapperHeight : wrapperWidth / slideRatio;
 
-    dropyCanvas.setSize(canvasWidth, canvasHeight);
+    if (slideCanvas) slideCanvas.setSize(canvasWidth, canvasHeight);
+
     setCanvasSize({ canvasWidth, canvasHeight });
   };
 
@@ -51,24 +56,21 @@ const MainSlide = (props) => {
     return () => {
       window.removeEventListener('resize', handleResize);
     };
-  }, [page]);
+  }, [page, slideCanvas]);
 
   return (
     <S.MainSlide>
       <S.SlideWrapper ref={wrapperRef}>
         <S.SlideImg ref={imageRef} alt="slide" />
+        {isToolBarActive && (
         <SlideCanvas
           canvasWidth={canvasSize.canvasWidth}
           canvasHeight={canvasSize.canvasHeight}
         />
+        )}
       </S.SlideWrapper>
     </S.MainSlide>
   );
-};
-
-MainSlide.propTypes = {
-  page: PropTypes.number.isRequired,
-  slideUrls: PropTypes.arrayOf(PropTypes.string).isRequired,
 };
 
 export default MainSlide;

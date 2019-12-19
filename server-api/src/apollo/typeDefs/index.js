@@ -5,4 +5,5 @@ module.exports = [
   require('./users'),
   require('./histories'),
   require('./flyingEmojis'),
+  require('./canvasHistory'),
 ];

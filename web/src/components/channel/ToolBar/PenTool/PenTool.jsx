@@ -4,21 +4,21 @@ import { useChannelSelector, useDispatch } from '@/hooks';
 
 const PenTool = () => {
   const dispatch = useDispatch();
-  const {
-    isPenToolActive,
-    dropyCanvas,
-  } = useChannelSelector((state) => state);
+  const { isPenToolActive } = useChannelSelector((state) => state);
   const penToolOption = {
-    toolType: 'pen',
-    toolStyleOption: {
-      lineWidth: 2,
-      lineCap: 'round',
-      lineColor: 'red',
-    },
+    lineWidth: 2,
+    lineCap: 'round',
+    lineColor: 'red',
   };
   const handleOnclick = () => {
-    dropyCanvas.setToolStyle(penToolOption);
-    dispatch({ type: 'PEN_TOOL_ACTIVE' });
+    if (isPenToolActive) {
+      dispatch({ type: 'PEN_TOOL_INACTIVE' });
+    } else {
+      dispatch({
+        type: 'PEN_TOOL_ACTIVE',
+        payload: { toolOptions: penToolOption },
+      });
+    }
   };
 
   return (

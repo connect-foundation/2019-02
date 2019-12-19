@@ -6,12 +6,15 @@ import {
 } from './utils';
 
 class DropyCanvas {
+  constructor(width, height) {
+    this.width = width;
+    this.height = height;
+  }
+
   init() {
-    this.width = 0;
-    this.height = 0;
     this.prevPosition = { x: 0, y: 0 };
     this.history = [];
-    this.toolType = null;
+    this.newLineHistory = [];
     this.lineWidth = null;
     this.lineCap = null;
     this.strokeStyle = null;
@@ -22,9 +25,15 @@ class DropyCanvas {
       ['mouseleave', this.handleMouseLeave.bind(this)],
       ['mouseenter', this.handleMouseEnter.bind(this)],
     ];
+    this.customMouseUpHandler = null;
+  }
+
+  setCustomMouseUpHandler(customHandler) {
+    this.customMouseUpHandler = customHandler;
   }
 
   handleMouseDown(event) {
+    this.resetNewLineHistory();
     this.prevPosition.x = event.offsetX;
     this.prevPosition.y = event.offsetY;
   }
@@ -53,10 +62,14 @@ class DropyCanvas {
 
   handleMouseUp() {
     this.history.push([]);
+    this.newLineHistory.push([]);
+
+    if (this.customMouseUpHandler) this.customMouseUpHandler();
   }
 
   handleMouseLeave() {
     this.history.push([]);
+    this.newLineHistory.push([]);
   }
 
   addEventListener(canvasElement) {
@@ -72,6 +85,7 @@ class DropyCanvas {
     const ratioY = this.height / mousePositionY;
 
     this.history.push([ratioX, ratioY]);
+    this.newLineHistory.push([ratioX, ratioY]);
   }
 
   saveMousePosition(x, y) {
@@ -83,17 +97,13 @@ class DropyCanvas {
     this.context = context;
   }
 
-  setToolStyle(toolOption) {
+  setToolStyle(toolOptions) {
     const {
-      toolType,
-      toolStyleOption: {
-        lineWidth,
-        lineCap,
-        lineColor,
-      },
-    } = toolOption;
+      lineWidth,
+      lineCap,
+      lineColor,
+    } = toolOptions;
 
-    this.toolType = toolType;
     this.lineWidth = lineWidth;
     this.lineCap = lineCap;
     this.strokeStyle = lineColor;
@@ -104,20 +114,44 @@ class DropyCanvas {
     this.height = height;
   }
 
+  getToolOptions() {
+    return {
+      lineWidth: this.lineWidth,
+      lineCap: this.lineCap,
+      lineColor: this.strokeStyle,
+    };
+  }
+
   getHistory() {
     return this.history;
+  }
+
+  getNewLineHistory() {
+    return this.newLineHistory;
+  }
+
+  getContext() {
+    return this.context;
   }
 
   resetHistory() {
     this.history = [];
   }
 
-  clearCanvas(context) {
-    context.clearRect(0, 0, this.width, this.height);
+  setHistory(history) {
+    this.history = history;
+  }
+
+  resetNewLineHistory() {
+    this.newLineHistory = [];
+  }
+
+  clearCanvas() {
+    this.context.clearRect(0, 0, this.width, this.height);
     this.resetHistory();
   }
 
-  reDrawContent(context) {
+  reDrawContent() {
     const newPosition = [];
     this.history.forEach(([ratioX, ratioY], index) => {
       const { currPositionX, currPositionY } = ratioToRealPosition(
@@ -133,14 +167,14 @@ class DropyCanvas {
 
       const [prevNewPositionX, prevNewPositionY] = newPosition[index - 1];
 
-      context.lineWidth = this.lineWidth;
-      context.lineCap = this.lineCap;
-      context.strokeStyle = this.strokeStyle;
+      this.context.lineWidth = this.lineWidth;
+      this.context.lineCap = this.lineCap;
+      this.context.strokeStyle = this.strokeStyle;
 
-      context.beginPath();
-      context.moveTo(prevNewPositionX, prevNewPositionY);
-      context.lineTo(currPositionX, currPositionY);
-      context.stroke();
+      this.context.beginPath();
+      this.context.moveTo(prevNewPositionX, prevNewPositionY);
+      this.context.lineTo(currPositionX, currPositionY);
+      this.context.stroke();
     });
   }
 
