@@ -11,5 +11,6 @@ export default {
     height: 100%;
     background: ${colorGray(0)};
     border-right: 1px solid ${colorGray(2)};
+    padding-top: ${px(75)};
   `,
 };
