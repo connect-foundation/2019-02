@@ -19,10 +19,7 @@ const Slide = (props) => {
         isFullScreen={isFullScreen}
         setFullScreen={setFullScreen}
       />
-      <SlideInfo
-        channelId={channelId}
-        isFullScreen={isFullScreen}
-      />
+      <SlideInfo channelId={channelId} isFullScreen={isFullScreen} />
     </S.Slide>
   );
 };

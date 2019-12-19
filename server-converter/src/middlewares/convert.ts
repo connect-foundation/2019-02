@@ -1,17 +1,15 @@
 import { RequestHandler } from '../@types';
 import { noitfyProgress } from './progress';
-import handleResponse from './stop';
 import { PROGRESS_CONVERTING, CONVERT_TIMEOUT } from '../constants';
 
-const convertMiddleware: RequestHandler = (req, res, next) => {
+const convertMiddleware: RequestHandler = (req:any, res, next) => {
   res.setTimeout(CONVERT_TIMEOUT, () => { res.emit('close'); });
   req.stage = { stage: 'convert', next: false };
   const { channelId } = req.params;
-  const response = handleResponse(req, res, next);
   const convertDone = (slides) => {
     req.slides = slides;
     req.slideRatioList = slides.map((slide) => slide.ratio);
-    response();
+    if (!req.isStop) { res.emit('complete'); next(); }
   };
   const { converter } = req;
 
@@ -21,7 +19,7 @@ const convertMiddleware: RequestHandler = (req, res, next) => {
       message: `${PROGRESS_CONVERTING}: ${page}/${length} 완료`,
     }));
     converter.convert().then(convertDone).catch((err) => {
-      response(err);
+      next(err);
     });
   });
 };

@@ -4,6 +4,7 @@ import S from './style';
 
 const SmallButton = (props) => {
   const { children, color, onClick } = props;
+
   return (
     <S.SmallButton
       color={color}

@@ -1,5 +1,4 @@
 import { Router } from 'express';
-import devRouter from './dev';
 import performanceRouter from './performance';
 import {
   requestQueue,
@@ -24,8 +23,8 @@ const queueMiddleware = requestQueue({
 
 const middlewares = [
   auth,
-  queueMiddleware,
   saveTmp,
+  queueMiddleware,
   createConverter,
   convert,
   upload,
@@ -38,7 +37,7 @@ prodRouter.post(
   (req, res) => {
     const { channelId } = req.params;
     const { slideUrls, slideRatioList, fileUrl } = req;
-    res.emit('end');
+
     clearProgress(channelId);
     res.status(200).json({
       status: 'ok',
@@ -59,7 +58,6 @@ const router = ((env) => {
   let appRouter = prodRouter;
 
   if (env === 'performance') appRouter = performanceRouter;
-  if (env === 'development') appRouter = devRouter;
 
   return appRouter;
 })(process.env.NODE_ENV);

@@ -1,3 +1,4 @@
+
 const { withFilter, ApolloError } = require('apollo-server-express');
 const Channels = require('../../models/channels');
 const Histories = require('../../models/histories');
@@ -6,6 +7,7 @@ const Users = require('../../models/users');
 const SLIDE_CHANGED = 'SLIDE_CHANGED';
 const CHANNEL_STATUS_CHANGED = 'CHANNEL_STATUS_CHANGED';
 const OPTION_CHANGED = 'OPTION_CHANGED';
+const LISTENER_LIST_CHANGED = 'LISTENER_LIST_CHANGED';
 
 const createChannelInfo = (
   user,
@@ -150,6 +152,13 @@ const updateChannelOptions = async (_, { channelId, channelOptions }, { user, pu
   }
 };
 
+const listenerListChanged = {
+  subscribe: withFilter(
+    (_, __, { pubsub }) => pubsub.asyncIterator(LISTENER_LIST_CHANGED),
+    (payload, variables) => payload.listenerListChanged.channelId === variables.channelId,
+  ),
+};
+
 const slideChanged = {
   subscribe: withFilter(
     (_, __, { pubsub }) => pubsub.asyncIterator(SLIDE_CHANGED),
@@ -187,6 +196,7 @@ const resolvers = {
     slideChanged,
     channelStatusChanged,
     optionChanged,
+    listenerListChanged,
   },
 };
 

@@ -5,6 +5,8 @@
   "license": "MIT",
   "scripts": {
     "dev": "nodemon ./src/index.js",
+    "start": "pm2 start ./src/index.js -o ./prod.log -e ./error.log",
+    "restart": "pm2 restart 0",
     "test": "echo Preparing..."
   },
   "dependencies": {

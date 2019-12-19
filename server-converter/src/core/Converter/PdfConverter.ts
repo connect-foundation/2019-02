@@ -84,7 +84,7 @@ class PdfConverter extends EventEmitter implements ConverterEngine {
     this.end();
     await this.convertChain;
     if (clear) {
-      await this.clear();
+      await this.clearOutput();
     }
   }
 

@@ -45,15 +45,9 @@ class Queue extends EventEmitter {
   createJob(data) {
     const job = new Job(this, data);
 
-    // await this.checkMem(job);
-
-    // process.nextTick(() => {
     if (!this.canQueue()) return job.setState(true, 'reject');
     if (this.canStart() && this.queue.length === 0) return this.startJob(job);
     this.enqueueJob(job);
-    // });
-
-    process.nextTick(this.checkQueue.bind(this));
 
     return job;
   }
@@ -70,7 +64,7 @@ class Queue extends EventEmitter {
 
   completeJob(job) {
     this.dequeueActive();
-    job.setState(false, 'complete');
+    job.setState(true, 'complete');
     process.nextTick(this.checkQueue.bind(this));
   }
 
@@ -79,7 +73,6 @@ class Queue extends EventEmitter {
 
     return {
       next: () => next(),
-      save: () => this.removeSavedFile(job),
       convert: () => req.converter && req.converter.stop(true),
     };
   }

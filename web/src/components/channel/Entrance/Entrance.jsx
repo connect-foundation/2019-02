@@ -1,13 +1,12 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { wsClient, wsParams } from '@/graphql/link';
-// import {
-//   PRESENTATION_OFF,
-//   PRESENTATION_ON,
-//   MESSAGE_ON_BROWSER_CLOSE,
-// } from '@/constants';
 
-const Entrance = ({ children, channelId, isMaster }) => {
+const Entrance = ({
+  children,
+  channelId,
+  isMaster,
+}) => {
   useEffect(() => {
     wsParams.channelId = channelId;
     wsParams.isMaster = isMaster;
