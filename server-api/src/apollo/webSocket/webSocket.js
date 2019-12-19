@@ -57,12 +57,13 @@ const leaveListener = async ({ initPromise }, pubsub) => {
 
   const user = token ? verifyToken(token) : null;
   const channelInfomation = await Channels.findOne({ channelId });
-
-  if (channelInfomation.listenerList === null) return;
+  if (!channelInfomation) return;
 
   if (await isExistListenerList(user, channelInfomation.listenerList)) {
-    const listenerList = channelInfomation.listenerList
+    const filterListener = channelInfomation.listenerList
       .filter((value) => value !== user.userId);
+    const listenerList = filterListener || [];
+
     updateListenerList(channelId, listenerList, pubsub);
   }
   if (!isMaster) return context;
