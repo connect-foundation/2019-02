@@ -34,7 +34,9 @@ const LogoutPopover = (props) => {
           <MenuItem onClick={onClose}>마이페이지</MenuItem>
         </Link>
         <MenuItem onClick={handleClickLogout}>로그아웃</MenuItem>
-        <MenuItem onClick={onClose}>도움말</MenuItem>
+        <Link to="/help">
+          <MenuItem onClick={onClose}>도움말</MenuItem>
+        </Link>
       </S.PopoverWrapper>
     </Popover>
   );
