@@ -14,6 +14,7 @@ import {
   Channel,
   MyPage,
   PrivacyPolicy,
+  Help,
 } from './pages';
 
 const App = () => (
@@ -33,6 +34,7 @@ const App = () => (
           <Route exact path="/mypage" component={MyPage} />
           <Route exact path="/login/callback" component={Empty} />
           <Route exact path="/privacy-policy" component={PrivacyPolicy} />
+          <Route exact path="/help" component={Help} />
           <Route component={() => <ErrorModal message={NOT_FOUND} />} />
         </Switch>
       </Layout>
