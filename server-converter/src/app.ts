@@ -30,7 +30,7 @@ app.use(handleError);
 
 const server = isProdMod
   ? https.createServer({
-    key: fs.readFileSync(`${process.env.PEM_PATH}/key.pem`),
+    key: fs.readFileSync(`${process.env.PEM_PATH}/privkey.pem`),
     cert: fs.readFileSync(`${process.env.PEM_PATH}/cert.pem`),
     ca: fs.readFileSync(`${process.env.PEM_PATH}/chain.pem`),
   }, app)

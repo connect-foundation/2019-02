@@ -9,7 +9,7 @@ const isProdEnv = process.env.NODE_ENV === 'production';
 const ORIGIN = `${isProdEnv ? 'https' : 'http'}://${process.env.HOST}:${process.env.PORT}`;
 const server = isProdEnv
   ? https.createServer({
-    key: fs.readFileSync(`${process.env.PEM_PATH}/key.pem`),
+    key: fs.readFileSync(`${process.env.PEM_PATH}/privkey.pem`),
     cert: fs.readFileSync(`${process.env.PEM_PATH}/cert.pem`),
     ca: fs.readFileSync(`${process.env.PEM_PATH}/chain.pem`),
   }, expressApp)
