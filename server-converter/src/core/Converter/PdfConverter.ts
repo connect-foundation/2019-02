@@ -7,9 +7,67 @@ import {
   OutputNaming,
   SlideInfo,
 } from '../../@types/converter';
-import SimpleGm from './SimpleGm';
+import SimpleGm, { DEFAULT_IMAGE_RATIO } from './SimpleGm';
+
+/**
+ * Hotfix: callback 방식의 IO 작업을 중단점을 두고 순차적으로 실행시키기 위한 Generator 함수
+ * - 추후 리팩토링 예정
+ * - Promise 활용시 이슈 있음 (queue 의 동작과 연관 있는듯 추정)
+ */
+const CONVERT_STOPPED = 'CONVERT_STOPPED';
+
+interface Iterator<T> {
+  next(value?: boolean): IteratorResult<T>;
+  return?(value?: void): IteratorResult<T>;
+  throw?(e?: any): IteratorResult<T>;
+}
+
+function* getConvertIterator(
+  sgms: SimpleGm[],
+  convertDone: Function,
+  convertEnd: Function,
+): Iterator<void> {
+  const imageConverters: SimpleGm[] = [...sgms];
+  let stopped: boolean = false;
+
+  while (imageConverters.length > 0) {
+    if (stopped) throw new Error(CONVERT_STOPPED);
+    stopped = yield imageConverters.shift().write(convertDone);
+  }
+  convertEnd();
+}
 
 class PdfConverter extends EventEmitter implements ConverterEngine {
+  /**
+   * Hotfix: 가끔 첫 페이지의 ratio 가 gm.js 모듈로부터 NaN으로 넘어온다.
+   * 이를 다른 슬라이드값으로 넣어준다.
+   */
+  static fixRatios(slides: SlideInfo[]): SlideInfo[] {
+    let generalRatio = DEFAULT_IMAGE_RATIO;
+
+    for (let i = 0; i < slides.length; i += 1) {
+      if (!Number.isNaN(slides[i].ratio)) {
+        generalRatio = slides[i].ratio;
+        break;
+      }
+    }
+
+    return slides.map(({ path, ratio, page }) => ({
+      path,
+      page,
+      ratio: Number.isNaN(ratio) ? generalRatio : ratio,
+    }));
+  }
+
+  /**
+   * Event object
+   */
+  static EVENTS = {
+    DONE: 'done',
+    STOP: 'stop',
+    PROGRESS: 'progress',
+  };
+
   private inputPath: string;
   private outputPath: string;
   private outputNaming: OutputNaming;
@@ -17,7 +75,6 @@ class PdfConverter extends EventEmitter implements ConverterEngine {
   private slides: SlideInfo[];
   private pageLength: number;
   private done: boolean;
-  private convertChain: Promise<SlideInfo[]>;
 
   constructor(
     inputPath: string,
@@ -32,7 +89,6 @@ class PdfConverter extends EventEmitter implements ConverterEngine {
     this.slides = [];
     this.pageLength = 0;
     this.done = false;
-    this.convertChain = null;
   }
 
   async init(): Promise<void> {
@@ -48,50 +104,51 @@ class PdfConverter extends EventEmitter implements ConverterEngine {
     });
   }
 
-  async convert(): Promise<SlideInfo[]> {
-    const convertDone = (slide: SlideInfo) => {
-      this.slides.push(slide);
-      this.emit('progress', { page: slide.page, length: this.pageLength });
-    };
-    const convertStopped = () => {
-      if (this.done) throw new Error('all convert done');
-    };
-    const convertEnd = () => {
-      this.end();
-      return this.slides;
-    };
+  convert(): void {
+    const self: PdfConverter = this;
+    const convertIterator: Iterator<void> = getConvertIterator(this.sgms, convertDone, convertEnd);
+    let done: boolean = false;
 
-    this.convertChain = this.sgms.reduce(
-      (chain, sgm) => chain
-        .then(convertStopped)
-        .then(() => sgm.write().then(convertDone)),
-      Promise.resolve(null),
-    )
-      .then(convertEnd)
-      .catch(convertEnd);
+    convertIterator.next();
 
-    const slides: SlideInfo[] = await this.convertChain;
+    function convertDone(slide: SlideInfo) {
+      self.slides.push(slide);
+      self.emit(PdfConverter.EVENTS.PROGRESS, { page: slide.page, length: self.pageLength });
 
-    return slides;
+      try {
+        if (!done) ({ done } = convertIterator.next(self.done));
+      } catch (err) {
+        if (err === CONVERT_STOPPED) convertStopped();
+        else throw err;
+      }
+    }
+    function convertEnd() {
+      self.emit(PdfConverter.EVENTS.DONE, PdfConverter.fixRatios(self.slides));
+      self.end();
+    }
+    function convertStopped() {
+      self.emit(PdfConverter.EVENTS.STOP, PdfConverter.fixRatios(self.slides));
+      self.end();
+    }
   }
 
   end(): void {
-    this.removeAllListeners('progress');
+    this.removeAllListeners(PdfConverter.EVENTS.PROGRESS);
+    this.removeAllListeners(PdfConverter.EVENTS.DONE);
+    this.removeAllListeners(PdfConverter.EVENTS.STOP);
     this.done = true;
   }
 
-  async stop(clear): Promise<void> {
-    this.end();
-    await this.convertChain;
+  stop(clear: boolean): void {
+    this.done = true;
     if (clear) {
-      await this.clearOutput();
+      this.on(PdfConverter.EVENTS.STOP, () => this.clearOutput());
     }
   }
 
   async clear(): Promise<void> {
-    await this.convertChain;
-    this.clearInput();
-    this.clearOutput();
+    await this.clearInput();
+    await this.clearOutput();
   }
 
   async clearInput(): Promise<void> {

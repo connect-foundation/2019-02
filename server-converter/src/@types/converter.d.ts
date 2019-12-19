@@ -5,8 +5,8 @@ export type OutputNaming = (page: number) => string;
 
 export interface ConverterEngine extends EventEmitter {
   init: () => Promise<void>,
-  convert: () => Promise<SlideInfo[]>
-  stop: (clearOutput?: boolean) => Promise<void>
+  convert: () => void
+  stop: (clear?: boolean) => void
   clear: () => Promise<void>
   clearInput: () => Promise<void>
   clearOutput: () => Promise<void>

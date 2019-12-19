@@ -10,8 +10,13 @@ const optimizeOptions: GmOptimizeOptions = {
   compression: 'JPEG2000',
 };
 
-const DEFAULT_IMAGE_RATIO = 1.77777;
+export const DEFAULT_IMAGE_RATIO = 1.77777;
 
+/**
+ * [ ISSUE & HOTFIX ]
+ * Promise 방식을 사용시 micro task queue 를 점령해서 request를 큐로 관리하기 어렵다.
+ * 따라서 우선은 모두 Callback 방식을 활용해서 설계한다.
+ */
 class SimpleGm {
   static createAndSelect(inputPath: string, outputPath: string, page: number) {
     const sgm = new SimpleGm(inputPath, outputPath);
@@ -47,27 +52,32 @@ class SimpleGm {
     this.page = 0;
   }
 
-  async getRatio(): Promise<number> {
+  getRatio(afterDone: Function): void {
     this.reset();
+    this.state.size((err, size) => {
+      if (err) {
+        afterDone(DEFAULT_IMAGE_RATIO);
+        return;
+      }
 
-    const size: any = await promisify(this.state.size.bind(this.state))();
-    const ratio: number = size.width / size.height;
+      const ratio = fixRatio(size.width / size.height);
 
-    return ratio;
+      afterDone(ratio);
+    });
   }
 
-  async write(): Promise<SlideInfo> {
+  write(afterDone: Function): void {
     const stream: fs.WriteStream = fs.createWriteStream(this.outputPath);
     const outputPath: string = <string>stream.path;
-    const ratio: number = fixRatio(await this.getRatio()) || DEFAULT_IMAGE_RATIO;
     const slideInfo: SlideInfo = {
       path: outputPath,
-      ratio,
+      ratio: null,
       page: this.page,
     };
 
-    return new Promise((resolve) => {
-      stream.once('close', () => resolve(slideInfo));
+    stream.once('close', () => afterDone(slideInfo));
+    this.getRatio((ratio: number) => {
+      slideInfo.ratio = ratio;
       this.reset().optimize();
       this.state.stream('jpeg').pipe(stream);
     });

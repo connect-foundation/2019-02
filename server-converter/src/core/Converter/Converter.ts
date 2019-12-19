@@ -42,18 +42,16 @@ class Converter {
     }
   }
 
-  async convert(): Promise<SlideInfo[]> {
+  convert(): void {
     try {
-      const slideInfos: SlideInfo[] = await this.engine.convert();
-
-      return slideInfos;
+      this.engine.convert();
     } catch (err) {
       this.logError(err);
     }
   }
 
-  async stop(clearOutput?: boolean): Promise<void> {
-    return this.engine.stop(clearOutput);
+  stop(clear?: boolean): void {
+    return this.engine.stop(clear);
   }
 
   async clear(): Promise<void> {
