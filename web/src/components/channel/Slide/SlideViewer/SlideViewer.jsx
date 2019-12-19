@@ -95,7 +95,7 @@ const SlideViewer = (props) => {
           enabled={isFullScreen}
           onChange={handleScreenOnChange}
         >
-          <MainSlide />
+          <MainSlide currentIndex={syncSlide} />
           {IndicatorRender}
         </FullScreen>
         <PageNumber
