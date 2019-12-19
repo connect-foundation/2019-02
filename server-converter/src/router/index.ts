@@ -1,15 +1,13 @@
 import { Router } from 'express';
-import devRouter from './dev';
 import performanceRouter from './performance';
 import {
   requestQueue,
   auth,
+  createConverter,
   convert,
   upload,
   saveTmp,
-  checkSave,
   removeTmp,
-  requestEnd,
   setProgressPollingTopic,
   waitProgressPolling,
   clearProgress,
@@ -18,19 +16,20 @@ import {
 const prodRouter = Router();
 
 const queueMiddleware = requestQueue({
-  queueLimit: 20,
+  queueLimit: 5,
   activeLimit: 1,
   cpuUsage: 90,
 });
 
 const middlewares = [
-  queueMiddleware,
   auth,
-  [saveTmp, checkSave],
+  saveTmp,
+  queueMiddleware,
+  createConverter,
   convert,
   upload,
   removeTmp,
-].reduce((array:any, middleware) => array.concat(middleware, requestEnd), []);
+];
 
 prodRouter.post(
   '/images/:channelId',
@@ -40,7 +39,6 @@ prodRouter.post(
     const { slideUrls, slideRatioList, fileUrl } = req;
 
     clearProgress(channelId);
-    res.emit('end');
     res.status(200).json({
       status: 'ok',
       slideUrls,
@@ -60,7 +58,6 @@ const router = ((env) => {
   let appRouter = prodRouter;
 
   if (env === 'performance') appRouter = performanceRouter;
-  if (env === 'development') appRouter = devRouter;
 
   return appRouter;
 })(process.env.NODE_ENV);

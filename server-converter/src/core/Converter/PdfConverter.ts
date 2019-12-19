@@ -17,6 +17,7 @@ class PdfConverter extends EventEmitter implements ConverterEngine {
   private slides: SlideInfo[];
   private pageLength: number;
   private done: boolean;
+  private convertChain: Promise<SlideInfo[]>;
 
   constructor(
     inputPath: string,
@@ -31,6 +32,7 @@ class PdfConverter extends EventEmitter implements ConverterEngine {
     this.slides = [];
     this.pageLength = 0;
     this.done = false;
+    this.convertChain = null;
   }
 
   async init(): Promise<void> {
@@ -58,7 +60,8 @@ class PdfConverter extends EventEmitter implements ConverterEngine {
       this.end();
       return this.slides;
     };
-    const convertChain: Promise<SlideInfo[]> = this.sgms.reduce(
+
+    this.convertChain = this.sgms.reduce(
       (chain, sgm) => chain
         .then(convertStopped)
         .then(() => sgm.write().then(convertDone)),
@@ -67,7 +70,7 @@ class PdfConverter extends EventEmitter implements ConverterEngine {
       .then(convertEnd)
       .catch(convertEnd);
 
-    const slides: SlideInfo[] = await convertChain;
+    const slides: SlideInfo[] = await this.convertChain;
 
     return slides;
   }
@@ -77,14 +80,18 @@ class PdfConverter extends EventEmitter implements ConverterEngine {
     this.done = true;
   }
 
-  async stop(clearOutput): Promise<void> {
+  async stop(clear): Promise<void> {
     this.end();
-    if (clearOutput) await this.clearOutput();
+    await this.convertChain;
+    if (clear) {
+      await this.clearOutput();
+    }
   }
 
   async clear(): Promise<void> {
-    await this.clearOutput();
-    await this.clearInput();
+    await this.convertChain;
+    this.clearInput();
+    this.clearOutput();
   }
 
   async clearInput(): Promise<void> {

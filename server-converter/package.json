@@ -5,11 +5,13 @@
   "license": "MIT",
   "scripts": {
     "dev": "ts-node ./src/index.ts --project tsconfig.json",
-    "start": "pm2 start ./build/app.js",
+    "start": "pm2 start ./build/index.js -o ./prod.log -e ./error.log",
+    "restart": "pm2 restart 0",
     "build": "tsc",
     "test": "jest --passWithNoTests"
   },
   "dependencies": {
+    "@types/connect-timeout": "^0.0.34",
     "aws-sdk": "^2.574.0",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",

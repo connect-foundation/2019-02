@@ -3,18 +3,18 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const Dotenv = require('dotenv-webpack');
 
 module.exports = {
-  mode: 'development',
+  mode: 'production',
   entry: {
-    app: ['./src/index.js'],
+    app: Path.resolve(__dirname, '../src/index.js'),
   },
   output: {
-    path: Path.join(__dirname, './build'),
+    path: Path.resolve(__dirname, '../build'),
     filename: 'index.bundle.js',
   },
   resolve: {
     alias: {
-      '@': Path.resolve(__dirname, './src'),
-      '@@': Path.resolve(__dirname, './public/images'),
+      '@': Path.resolve(__dirname, '../src'),
+      '@@': Path.resolve(__dirname, '../public/images'),
     },
     extensions: ['.mjs', '.js', '.jsx'],
   },
@@ -45,8 +45,10 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: 'public/index.html',
+      template: Path.resolve(__dirname, '../public/index.html'),
     }),
-    new Dotenv(),
+    new Dotenv({
+      path: Path.resolve(__dirname, '../.env'),
+    }),
   ],
 };

@@ -51,6 +51,11 @@ const ChannelSchema = new Schema({
     required: true,
     default: 0,
   },
+  listenerList: {
+    type: Array,
+    required: true,
+    default: [],
+  },
   anonymousChat: {
     type: Boolean,
     default: true,
@@ -116,6 +121,7 @@ ChannelSchema.methods.toPayload = async function toChannelPayload(type, ...objs)
     'channelStatus',
     'currentSlide',
     'channelCode',
+    'listenerList',
   ], channel, { master }, ...objs);
 
   const channelOptions = assignFilter([

@@ -5,6 +5,7 @@ import Converter from '../core/Converter';
 declare global {
   namespace Express {
       interface Request {
+          stage: {stage:string, next:boolean, path?:string};
           topic: string;
           slides: SlideInfo[];
           fileUrl: string;

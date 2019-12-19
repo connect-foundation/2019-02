@@ -39,7 +39,6 @@ class SimpleGm {
   private state: gm.State;
   private page: number;
 
-
   constructor(inputPath: string, outputPath: string) {
     this.inputPath = inputPath;
     this.outputPath = outputPath;
