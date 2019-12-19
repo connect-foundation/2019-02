@@ -12,3 +12,4 @@ export { default as useAddEmoji } from './useAddEmoji';
 export { default as useSetChannelStatus } from './useSetChannelStatus';
 export { default as useAddCanvasHistory } from './useAddCanvasHistory';
 export { default as useGetCanvasHistory } from './useGetCanvasHistory';
+export { default as useResetCanavsHistory } from './useResetCanavsHistory';

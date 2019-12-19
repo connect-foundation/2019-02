@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const { assignFilter } = require('../utils/object');
 
 const { Schema } = mongoose;
 
@@ -23,5 +24,19 @@ const CanvasHistorySchema = new Schema({
     default: Date.now,
   },
 });
+
+CanvasHistorySchema.methods.toPayload = function toCanvasHistoryPayload(...objs) {
+  const canvasHistory = this;
+  // eslint-disable-next-line no-underscore-dangle
+  const id = canvasHistory._id;
+
+  return assignFilter([
+    'id',
+    'channelId',
+    'page',
+    'history',
+    'toolOptions',
+  ], canvasHistory, { id }, ...objs);
+};
 
 module.exports = mongoose.model('canvasHistory', CanvasHistorySchema);

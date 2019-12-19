@@ -18,7 +18,9 @@ const addCanvasHistory = async (_, {
     canvasHistory.toolOptions = toolOptions;
     canvasHistory.save();
 
-    return canvasHistory;
+    const payload = canvasHistory.toPayload();
+
+    return payload;
   } catch (err) {
     throw new ApolloError(err.message);
   }
@@ -30,10 +32,7 @@ const getCanvasHistory = async (_, {
   toolOptions,
 }) => {
   try {
-    const canvasHistory = await CanvasHistory.findOne({
-      channelId,
-      page,
-    });
+    const canvasHistory = await CanvasHistory.findOne({ channelId, page });
 
     if (!canvasHistory) {
       const newCanvasHistory = await new CanvasHistory({
@@ -42,21 +41,43 @@ const getCanvasHistory = async (_, {
         history: [],
         toolOptions,
       }).save();
-      return newCanvasHistory;
+      const payload = newCanvasHistory.toPayload();
+      console.log('새로운 데이터를 조회하거나 저장함', payload);
+      return payload;
     }
+    const payload = canvasHistory.toPayload();
 
-    return canvasHistory;
+    return payload;
   } catch (err) {
     throw new ApolloError(err.message);
   }
 };
 
+const resetCanvasHistory = async (_, { channelId, page }) => {
+  try {
+    const defaultToolOptions = {
+      lineWidth: 0,
+      lineCap: '',
+      lineColor: '',
+    };
+    const canvasHistory = await CanvasHistory.findOneAndUpdate(
+      { channelId, page },
+      { $set: { history: [], toolOptions: defaultToolOptions } },
+      { returnOriginal: false },
+    );
+    const payload = canvasHistory.toPayload();
+    return payload;
+  } catch (err) {
+    throw new ApolloError(err.message);
+  }
+};
 const resolvers = {
   Query: {
     getCanvasHistory,
   },
   Mutation: {
     addCanvasHistory,
+    resetCanvasHistory,
   },
 };
 

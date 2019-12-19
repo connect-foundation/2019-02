@@ -41,7 +41,6 @@ const channelReducer = (state, action) => {
         isPenToolActive: false,
       };
     case 'PEN_TOOL_ACTIVE':
-      console.log('리듀서', action.payload.toolOptions);
       return {
         ...state,
         isPenToolActive: true,

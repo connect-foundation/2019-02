@@ -14,7 +14,14 @@ const ADD_CANVAS_HISTORY = gql`
       history: $history,
       toolOptions: $toolOptions
     ) {
-      channelId
+      id
+      page
+      history
+      toolOptions {
+        lineWidth
+        lineCap
+        lineColor
+      }
     }
   }
 `;

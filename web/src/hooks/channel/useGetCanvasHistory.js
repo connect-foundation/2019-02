@@ -12,6 +12,7 @@ const GET_CANVAS_HISTORY = gql`
       page: $page, 
       toolOptions: $toolOptions,
       ) {
+      id
       page
       history
       toolOptions {
@@ -25,7 +26,6 @@ const GET_CANVAS_HISTORY = gql`
 
 const useGetCanvasHistory = () => {
   const [getCanvasHistory, { loading, data }] = useLazyQuery(GET_CANVAS_HISTORY);
-  console.log('useGetCanvasHistory 로직을 수행합니다');
   const result = data
     ? {
       page: data.getCanvasHistory.page,

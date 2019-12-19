@@ -1,5 +1,6 @@
 const typeDefs = `
 type CanvasHistory {
+  id: String!
   channelId: String!
   page: Int!
   history: [Coordinate]
@@ -33,6 +34,10 @@ extend type Mutation {
     history: [Coordinate],
     toolOptions: ToolOptionsInput,
   ): CanvasHistory
+  resetCanvasHistory(
+    channelId: String!, 
+    page: Int!
+  ): CanvasHistory 
 }
 `;
 
