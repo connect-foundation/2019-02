@@ -24,8 +24,13 @@ const GET_CANVAS_HISTORY = gql`
   } 
 `;
 
-const useGetCanvasHistory = () => {
-  const [getCanvasHistory, { loading, data }] = useLazyQuery(GET_CANVAS_HISTORY);
+const useGetCanvasHistory = (noCache) => {
+  const queryOption = noCache ? { fetchPolicy: 'no-cache' } : undefined;
+  const [getCanvasHistory, {
+    loading,
+    data,
+    called,
+  }] = useLazyQuery(GET_CANVAS_HISTORY, queryOption);
   const result = data
     ? {
       page: data.getCanvasHistory.page,
@@ -33,7 +38,12 @@ const useGetCanvasHistory = () => {
       toolOptions: data.getCanvasHistory.toolOptions,
     } : { page: null, history: null, toolOptions: null };
 
-  return { query: getCanvasHistory, data: result, loading };
+  return {
+    query: getCanvasHistory,
+    data: result,
+    loading,
+    called,
+  };
 };
 
 export default useGetCanvasHistory;

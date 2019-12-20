@@ -13,7 +13,9 @@ import { CHANNEL_REDUCER_SET_SLIDE_CANVAS } from '@/constants';
 const SlideCanvas = (props) => {
   const { canvasWidth, canvasHeight } = props;
   const { mutate } = useAddCanvasHistory();
-  const { query, data } = useGetCanvasHistory();
+  const {
+    query, data, loading, called,
+  } = useGetCanvasHistory(true);
   const dispatch = useDispatch();
   const canvasRef = useRef(null);
   const canvas = canvasRef.current;
@@ -30,6 +32,7 @@ const SlideCanvas = (props) => {
   };
 
   useEffect(() => {
+    console.log('Init Page...');
     initSlideCanvas();
     const dropyCanvas = new DropyCanvas(canvasWidth, canvasHeight);
 
@@ -61,12 +64,14 @@ const SlideCanvas = (props) => {
       slideCanvas.addEventListener(canvas);
     }
 
+    slideCanvas.reDrawContent();
     return () => slideCanvas.removeEventListener(canvas);
   }, [slideCanvas, canvasWidth, canvasHeight, isPenToolActive]);
 
   useEffect(() => {
-    if (data === null) return;
+    if (!called || loading) return;
     if (data.page === page && canvas) {
+      console.log('Redraw...');
       const context = canvas.getContext('2d');
       const curToopOptions = toolOptions;
       slideCanvas.setContext(context);
@@ -75,12 +80,7 @@ const SlideCanvas = (props) => {
       slideCanvas.reDrawContent();
       slideCanvas.setToolOptions(curToopOptions);
     }
-  }, [data]);
-
-  useEffect(() => {
-    if (canvas === null) return;
-    slideCanvas.reDrawContent();
-  }, [canvasWidth, canvasHeight]);
+  }, [loading]);
 
   return (
     <S.CanvasWrapper isPenToolActive={isPenToolActive}>
