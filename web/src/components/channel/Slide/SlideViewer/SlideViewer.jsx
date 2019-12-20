@@ -76,6 +76,11 @@ const SlideViewer = (props) => {
     mutate({ variables: { channelId, currentSlide: page } });
   }, [page]);
 
+  useCallback(() => {
+    if (!isMaster) return;
+    dispatch({ type: CHANNEL_REDUCER_SET_ISSYNC, payload: { isSync: false } });
+  }, []);
+
   const handleScreenOnChange = (event) => {
     setFullScreen(event);
     window.dispatchEvent(new Event('resize'));

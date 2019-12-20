@@ -32,7 +32,7 @@ const scrollCommander = {
 
 const ChatLogs = (props) => {
   const scrollWrapRef = useRef(null);
-  const { userId, questionToggle } = props;
+  const { userId, questionToggle, slideLength } = props;
   const { loading, chatCache } = useGetChatsCached();
 
   if (loading) return <p>loading...</p>;
@@ -54,7 +54,11 @@ const ChatLogs = (props) => {
   return (
     <S.ChatLogs>
       <S.ScrollWrap ref={scrollWrapRef}>
-        <ChatCards userId={userId} chats={chatLogs} />
+        <ChatCards
+          userId={userId}
+          chats={chatLogs}
+          slideLength={slideLength}
+        />
       </S.ScrollWrap>
     </S.ChatLogs>
   );
@@ -63,6 +67,7 @@ const ChatLogs = (props) => {
 ChatLogs.propTypes = {
   userId: PropTypes.string.isRequired,
   questionToggle: PropTypes.bool.isRequired,
+  slideLength: PropTypes.number.isRequired,
 };
 
 export default ChatLogs;

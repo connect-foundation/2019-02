@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import {
   useAddChat,
-  useChannelSelector,
   useAnonymousChanged,
   useGetUserStatus,
   useDispatch,
@@ -26,13 +25,12 @@ const ChatInput = (props) => {
   const dispatch = useDispatch();
   const { mutate } = useAddChat();
   const { isAnonymous } = useGetUserStatus();
-  const { channelId, setQuestionToggle } = props;
-  const limit = useChannelSelector((state) => state.slideUrls.length);
+  const { channelId, setQuestionToggle, slideLength } = props;
   const { anonymousChat } = useAnonymousChanged(channelId);
 
   const sendMessage = () => {
     if (message === '') return;
-    const { isQuestion } = pipe(parseMessage, checkIsQuestion)({ text: message, limit });
+    const { isQuestion } = pipe(parseMessage, checkIsQuestion)({ text: message, slideLength });
 
     mutate({ variables: { channelId, message, isQuestion } });
     setMessage('');
@@ -53,19 +51,21 @@ const ChatInput = (props) => {
       payload: { isChat },
     });
   };
+  const handleAnonymous = (input, anonymousInput) => {
+    if (anonymousChat || !isAnonymous) return input;
+    return anonymousInput;
+  };
 
   return (
     <S.ChatInput>
       <S.MessageInput
-        placeholder={anonymousChat || !isAnonymous
-          ? CHAT_INPUT_PLACEHOLDER
-          : CHAT_ANONYMOUS_PLACEHOLDER}
+        placeholder={handleAnonymous(CHAT_INPUT_PLACEHOLDER, CHAT_ANONYMOUS_PLACEHOLDER)}
         onChange={handleChangeInput}
         onKeyDown={handleKeyDownInput}
         onFocus={handleFocus(true)}
         onBlur={handleFocus(false)}
         anonymousChat={!anonymousChat && isAnonymous}
-        value={message}
+        value={handleAnonymous(message, '')}
       />
       <S.SendButton
         type="button"
@@ -80,6 +80,7 @@ const ChatInput = (props) => {
 ChatInput.propTypes = {
   channelId: PropTypes.string.isRequired,
   setQuestionToggle: PropTypes.func.isRequired,
+  slideLength: PropTypes.number.isRequired,
 };
 
 export default ChatInput;

@@ -5,7 +5,7 @@ import ChatCard from './ChatCard';
 import S from './style';
 
 const ChatCards = (props) => {
-  const { userId, chats } = props;
+  const { userId, chats, slideLength } = props;
   const { mutate } = useLikeChat();
 
   return (
@@ -22,6 +22,7 @@ const ChatCards = (props) => {
             message={message}
             isLiked={likes.includes(userId)}
             likesCount={likes.length}
+            slideLength={slideLength}
             handleClickLike={() => mutate({ variables: { chatId: id } })}
           />
         </S.ChatLog>
@@ -41,6 +42,7 @@ ChatCards.propTypes = {
     message: PropTypes.string.isRequired,
     likes: PropTypes.arrayOf(PropTypes.string).isRequired,
   })).isRequired,
+  slideLength: PropTypes.number.isRequired,
 };
 
 export default ChatCards;

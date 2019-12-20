@@ -5,7 +5,6 @@ import S from './style';
 import {
   useGetQuestion,
   useDispatch,
-  useChannelSelector,
 } from '@/hooks';
 import { parseTag } from '@/utils';
 import {
@@ -20,19 +19,19 @@ const ChatCard = (props) => {
     isLiked,
     likesCount,
     handleClickLike,
+    slideLength,
   } = props;
   const dispatch = useDispatch();
-  const slideUrls = useChannelSelector((state) => state.slideUrls);
-  const tokens = useGetQuestion({ text: message, limit: slideUrls.length });
+  const tokens = useGetQuestion({ text: message, limit: slideLength });
   const handleSetPage = (token) => () => {
-    const { nextPage, isExist } = parseTag(token, slideUrls.length);
+    const { nextPage, isExist } = parseTag(token, slideLength);
     if (!isExist) return;
 
     dispatch({ type: CHANNEL_REDUCER_SET_ISSYNC, payload: { isSync: false } });
     dispatch({ type: CHANNEL_REDUCER_SET_PAGE, payload: { page: nextPage - 1 } });
   };
   const renderQuestion = () => tokens.map(({ id, token, isQtag }) => {
-    const { isExist } = parseTag(token, slideUrls.length);
+    const { isExist } = parseTag(token, slideLength);
     const noneQuestion = isQtag && !isExist ? 'disable' : 'nomal';
     const state = isQtag && isExist ? 'question' : noneQuestion;
 
@@ -74,6 +73,7 @@ ChatCard.propTypes = {
   isLiked: PropTypes.bool.isRequired,
   likesCount: PropTypes.number.isRequired,
   handleClickLike: PropTypes.func.isRequired,
+  slideLength: PropTypes.number.isRequired,
 };
 
 export default ChatCard;

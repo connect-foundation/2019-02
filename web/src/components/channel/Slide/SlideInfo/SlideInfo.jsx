@@ -24,7 +24,8 @@ const SlideInfo = (props) => {
   const [listenerCount, setListenerCount] = useState(initCountListener);
 
   useEffect(() => {
-    const listenerLength = listenerList.length === 0 ? CHANNEL_INIT_LISTENER_COUNT : listenerList.length;
+    const listenerLength = listenerList.length === 0
+      ? CHANNEL_INIT_LISTENER_COUNT : listenerList.length;
     setListenerCount(listenerLength);
   }, [listenerList]);
 
