@@ -41,7 +41,7 @@
 
 ## 📺 Demo Video
 
-> 준비 중 입니다.
+https://youtu.be/233P-EtFJbg
 
 <br>
 
@@ -67,6 +67,11 @@
 
 ## 🗂 Tech Stack
 ![](https://kr.object.ncloudstorage.com/dropy/01_IMG_DONT_TOUCH/techstack.png)
+ 
+<br>
+
+## 💾 DB modeling
+![](https://kr.object.ncloudstorage.com/dropy/01_IMG_DONT_TOUCH/db_modeling.png)
 
 <br>
 
