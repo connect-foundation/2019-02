@@ -1,23 +1,23 @@
 import React from 'react';
+import DrawingCanvas from './DrawingCanvas';
 import {
-  ratioToRealPosition,
   addHandlerToEvent,
   removeHandlerFromEvent,
+  getRatioCoordinate,
 } from './utils';
 
 class DropyCanvas {
   constructor(width, height) {
     this.width = width;
     this.height = height;
+    this.drawingCanvas = new DrawingCanvas();
   }
 
   init() {
+    this.drawingCanvas.init();
     this.prevPosition = { x: 0, y: 0 };
     this.history = [];
     this.newLineHistory = [];
-    this.lineWidth = null;
-    this.lineCap = null;
-    this.strokeStyle = null;
     this.eventAndHandlerList = [
       ['mousemove', this.handleMouseMove.bind(this)],
       ['mouseup', this.handleMouseUp.bind(this)],
@@ -28,98 +28,37 @@ class DropyCanvas {
     this.customMouseUpHandler = null;
   }
 
-  setCustomMouseUpHandler(customHandler) {
-    this.customMouseUpHandler = customHandler;
-  }
-
-  handleMouseDown(event) {
+  handleMouseDown({ offsetX, offsetY }) {
     this.resetNewLineHistory();
-    this.prevPosition.x = event.offsetX;
-    this.prevPosition.y = event.offsetY;
+    this.prevPosition.x = offsetX;
+    this.prevPosition.y = offsetY;
   }
 
-  handleMouseMove(event) {
-    if (event.buttons !== 1) return;
+  handleMouseMove({ buttons, offsetX, offsetY }) {
+    if (buttons !== 1) return;
+    const curPosition = { x: offsetX, y: offsetY };
 
-    this.context.beginPath();
-
-    this.context.lineWidth = this.lineWidth;
-    this.context.lineCap = this.lineCap;
-    this.context.strokeStyle = this.strokeStyle;
-
-    this.context.moveTo(this.prevPosition.x, this.prevPosition.y);
-    this.context.lineTo(event.offsetX, event.offsetY);
-    this.context.stroke();
-
-    this.saveMousePosition(event.offsetX, event.offsetY);
-    this.addCanvasHistory(event.offsetX, event.offsetY);
+    this.drawingCanvas.drawContent(this.prevPosition, curPosition);
+    this.saveMousePosition(offsetX, offsetY);
+    this.addCanvasHistory(curPosition);
   }
 
-  handleMouseEnter(event) {
-    this.prevPosition.x = event.offsetX;
-    this.prevPosition.y = event.offsetY;
+  handleMouseEnter({ offsetX, offsetY }) {
+    this.prevPosition.x = offsetX;
+    this.prevPosition.y = offsetY;
   }
 
   handleMouseUp() {
-    this.history.push([]);
-    this.newLineHistory.push([]);
-
+    this.pushHistoryToHistoryList([]);
     if (this.customMouseUpHandler) this.customMouseUpHandler();
   }
 
   handleMouseLeave() {
-    this.history.push([]);
-    this.newLineHistory.push([]);
-  }
-
-  addEventListener(canvasElement) {
-    addHandlerToEvent(canvasElement, this.eventAndHandlerList);
-  }
-
-  removeEventListener(canvasElement) {
-    removeHandlerFromEvent(canvasElement, this.eventAndHandlerList);
-  }
-
-  addCanvasHistory(mousePositionX, mousePositionY) {
-    const ratioX = this.width / mousePositionX;
-    const ratioY = this.height / mousePositionY;
-
-    this.history.push([ratioX, ratioY]);
-    this.newLineHistory.push([ratioX, ratioY]);
-  }
-
-  saveMousePosition(x, y) {
-    this.prevPosition.x = x;
-    this.prevPosition.y = y;
-  }
-
-  setContext(context) {
-    this.context = context;
-  }
-
-  setToolStyle(toolOptions) {
-    const {
-      lineWidth,
-      lineCap,
-      lineColor,
-    } = toolOptions;
-
-    this.lineWidth = lineWidth;
-    this.lineCap = lineCap;
-    this.strokeStyle = lineColor;
-  }
-
-  setSize(width, height) {
-    this.width = width;
-    this.height = height;
+    this.pushHistoryToHistoryList([]);
   }
 
   getToolOptions() {
-    return {
-      lineWidth: this.lineWidth,
-      lineCap: this.lineCap,
-      lineColor: this.strokeStyle,
-    };
+    return this.drawingCanvas.getToolOptions();
   }
 
   getHistory() {
@@ -134,48 +73,74 @@ class DropyCanvas {
     return this.context;
   }
 
-  resetHistory() {
-    this.history = [];
-  }
-
   setHistory(history) {
     this.history = history;
+  }
+
+  setContext(context) {
+    this.drawingCanvas.setContext(context);
+  }
+
+  setToolOptions(toolOptions) {
+    this.drawingCanvas.setToolOptions(toolOptions);
+  }
+
+  setSize(width, height) {
+    this.width = width;
+    this.height = height;
+  }
+
+  setCustomMouseUpHandler(customHandler) {
+    this.customMouseUpHandler = customHandler;
+  }
+
+  resetHistory() {
+    this.history = [];
   }
 
   resetNewLineHistory() {
     this.newLineHistory = [];
   }
 
+  addEventListener(canvasElement) {
+    addHandlerToEvent(canvasElement, this.eventAndHandlerList);
+  }
+
+  removeEventListener(canvasElement) {
+    removeHandlerFromEvent(canvasElement, this.eventAndHandlerList);
+  }
+
+  addCanvasHistory(curPosition) {
+    const { ratioX, ratioY } = getRatioCoordinate(
+      curPosition,
+      this.width,
+      this.height,
+    );
+
+    this.pushHistoryToHistoryList([ratioX, ratioY]);
+  }
+
+  pushHistoryToHistoryList(canvasHistory) {
+    this.history.push(canvasHistory);
+    this.newLineHistory.push(canvasHistory);
+  }
+
+  saveMousePosition(x, y) {
+    this.prevPosition.x = x;
+    this.prevPosition.y = y;
+  }
+
   clearCanvas() {
-    this.context.clearRect(0, 0, this.width, this.height);
+    this.drawingCanvas.clearCanvas(this.width, this.height);
     this.resetHistory();
   }
 
   reDrawContent() {
-    const newPosition = [];
-    this.history.forEach(([ratioX, ratioY], index) => {
-      const { currPositionX, currPositionY } = ratioToRealPosition(
-        ratioX,
-        ratioY,
-        this.width,
-        this.height,
-      );
-
-      newPosition.push([currPositionX, currPositionY]);
-
-      if (index === 0) return;
-
-      const [prevNewPositionX, prevNewPositionY] = newPosition[index - 1];
-
-      this.context.lineWidth = this.lineWidth;
-      this.context.lineCap = this.lineCap;
-      this.context.strokeStyle = this.strokeStyle;
-
-      this.context.beginPath();
-      this.context.moveTo(prevNewPositionX, prevNewPositionY);
-      this.context.lineTo(currPositionX, currPositionY);
-      this.context.stroke();
-    });
+    this.drawingCanvas.reDrawContent(
+      this.history,
+      this.width,
+      this.height,
+    );
   }
 
   render(canvasRef) {
