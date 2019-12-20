@@ -66,8 +66,10 @@ const SlideCanvas = (props) => {
 
   useEffect(() => {
     if (data === null) return;
-    if (data.page === page) {
+    if (data.page === page && canvas) {
+      const context = canvas.getContext('2d');
       const curToopOptions = toolOptions;
+      slideCanvas.setContext(context);
       slideCanvas.setToolOptions(data.toolOptions);
       slideCanvas.setHistory(data.history);
       slideCanvas.reDrawContent();

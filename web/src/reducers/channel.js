@@ -50,6 +50,7 @@ const channelReducer = (state, action) => {
         ...state,
         isToolBarActive: false,
         isPenToolActive: false,
+        slideCanvas: null,
       };
     case CHANNEL_REDUCER_PEN_TOOL_ACTIVE:
       return {
