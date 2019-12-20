@@ -39,6 +39,12 @@
 
 <br>
 
+## 📺 Demo Video
+
+> 준비 중 입니다.
+
+<br>
+
 ## 📝 Document
 
 - [기획 / 규칙 / 로그](https://github.com/connect-foundation/2019-02/wiki)
