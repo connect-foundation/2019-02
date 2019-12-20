@@ -60,6 +60,16 @@
 
 <br>
 
+## 🏛 Service Architecture
+![](https://kr.object.ncloudstorage.com/dropy/01_IMG_DONT_TOUCH/architecture.png)
+
+<br>
+
+## 🗂 Tech Stack
+![](https://kr.object.ncloudstorage.com/dropy/01_IMG_DONT_TOUCH/techstack.png)
+
+<br>
+
 ## 🔨 Usage
 ### 프로젝트 구성도
 ```bash
