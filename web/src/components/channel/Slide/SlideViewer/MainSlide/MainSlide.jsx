@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import S from './style';
 import { useChannelSelector } from '@/hooks';
+import { throttle } from '@/utils/optimize';
 import { pxToNum } from '@/utils/dom';
 import SlideCanvas from './SlideCanvas';
 
@@ -50,12 +51,13 @@ const MainSlide = (props) => {
         resizeCanvas(fitHeight, wrapperWidth, wrapperHeight);
       });
     };
+    const throttleResize = throttle(() => handleResize(), 500);
 
     handleResize();
-    window.addEventListener('resize', handleResize);
+    window.addEventListener('resize', throttleResize);
 
     return () => {
-      window.removeEventListener('resize', handleResize);
+      window.removeEventListener('resize', throttleResize);
     };
   }, [currentIndex, slideCanvas]);
 
