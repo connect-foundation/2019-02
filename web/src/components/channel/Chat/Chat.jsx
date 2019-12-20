@@ -7,7 +7,7 @@ import ChatSort from './ChatSort';
 import S from './style';
 
 const ChatToggle = (props) => {
-  const { channelId, userId } = props;
+  const { channelId, userId, slideLength } = props;
   const [isClosed, setIsClosed] = useState(false);
   const [questionToggle, setQuestionToggle] = useState(false);
 
@@ -28,8 +28,13 @@ const ChatToggle = (props) => {
             channelId={channelId}
             userId={userId}
             questionToggle={questionToggle}
+            slideLength={slideLength}
           />
-          <ChatInput channelId={channelId} setQuestionToggle={setQuestionToggle} />
+          <ChatInput
+            slideLength={slideLength}
+            channelId={channelId}
+            setQuestionToggle={setQuestionToggle}
+          />
         </>
       )}
     </S.Chat>
@@ -37,24 +42,31 @@ const ChatToggle = (props) => {
 };
 
 const Chat = (props) => {
-  const { channelId, userId } = props;
+  const { channelId, userId, slideLength } = props;
 
   useInitChat(channelId);
   useChatChanged(channelId, userId);
 
   return (
-    <ChatToggle channelId={channelId} userId={userId} />
+    <ChatToggle
+      slideLength={slideLength}
+      channelId={channelId}
+      userId={userId}
+    />
   );
 };
 
 ChatToggle.propTypes = {
   channelId: PropTypes.string.isRequired,
   userId: PropTypes.string.isRequired,
+  slideLength: PropTypes.number.isRequired,
 };
 
 Chat.propTypes = {
   channelId: PropTypes.string.isRequired,
   userId: PropTypes.string.isRequired,
+  slideLength: PropTypes.number.isRequired,
+
 };
 
 export default Chat;
