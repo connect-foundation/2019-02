@@ -6,7 +6,7 @@ import { px } from '@/styles';
 
 const PenToolIcon = styled(({ className }) => (
   <span className={className}>
-    <svg width="20" height="20">
+    <svg width="21" height="21">
       <path
         d={PEN_TOOL_ICON_PATH}
         style={{ fill: 'currentColor' }}

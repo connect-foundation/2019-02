@@ -16,7 +16,7 @@ class DrawingCanvas {
     this.context = context;
   }
 
-  setToolStyle(toolOptions) {
+  setToolOptions(toolOptions) {
     const {
       lineWidth,
       lineCap,

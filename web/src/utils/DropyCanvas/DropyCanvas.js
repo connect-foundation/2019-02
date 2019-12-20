@@ -81,8 +81,8 @@ class DropyCanvas {
     this.drawingCanvas.setContext(context);
   }
 
-  setToolStyle(toolOptions) {
-    this.drawingCanvas.setToolStyle(toolOptions);
+  setToolOptions(toolOptions) {
+    this.drawingCanvas.setToolOptions(toolOptions);
   }
 
   setSize(width, height) {

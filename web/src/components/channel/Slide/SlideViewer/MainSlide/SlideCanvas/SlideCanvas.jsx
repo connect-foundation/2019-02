@@ -57,7 +57,7 @@ const SlideCanvas = (props) => {
 
     slideCanvas.setContext(context);
     if (isPenToolActive) {
-      slideCanvas.setToolStyle(toolOptions);
+      slideCanvas.setToolOptions(toolOptions);
       slideCanvas.addEventListener(canvas);
     }
 
@@ -68,10 +68,10 @@ const SlideCanvas = (props) => {
     if (data === null) return;
     if (data.page === page) {
       const curToopOptions = toolOptions;
-      slideCanvas.setToolStyle(data.toolOptions);
+      slideCanvas.setToolOptions(data.toolOptions);
       slideCanvas.setHistory(data.history);
       slideCanvas.reDrawContent();
-      slideCanvas.setToolStyle(curToopOptions);
+      slideCanvas.setToolOptions(curToopOptions);
     }
   }, [data]);
 
