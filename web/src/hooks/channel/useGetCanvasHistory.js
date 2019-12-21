@@ -5,12 +5,10 @@ const GET_CANVAS_HISTORY = gql`
   query GetCanvasHistory(
     $channelId: String!, 
     $page: Int!, 
-    $toolOptions: ToolOptionsInput,
     ) {
     getCanvasHistory(
       channelId: $channelId, 
       page: $page, 
-      toolOptions: $toolOptions,
       ) {
       id
       page

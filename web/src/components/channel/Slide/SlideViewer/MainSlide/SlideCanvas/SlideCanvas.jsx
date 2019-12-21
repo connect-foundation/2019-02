@@ -1,97 +1,104 @@
 import React, { useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import withCanvasInit from './withCanvasInit';
 import S from './style';
 import {
   useChannelSelector,
-  useDispatch,
   useAddCanvasHistory,
-  useGetCanvasHistory,
+  useDispatch,
 } from '@/hooks';
-import DropyCanvas from '@/utils/DropyCanvas';
-import { CHANNEL_REDUCER_SET_SLIDE_CANVAS } from '@/constants';
+import { CAHNNEL_REDUCER_SET_ERASER_INACTIVE } from '@/constants';
 
-const SlideCanvas = (props) => {
-  const { canvasWidth, canvasHeight } = props;
-  const { mutate } = useAddCanvasHistory();
+const SlideCanvas = ({ initialData }) => {
   const {
-    query, data, loading, called,
-  } = useGetCanvasHistory(true);
+    canvasHistory,
+    loading,
+    channelId,
+    slideCanvas,
+    initSlideCanvas,
+    canvasWidth,
+    canvasHeight,
+  } = initialData;
+  const { isPenToolActive, isEraserToolActive } = useChannelSelector((state) => state);
   const dispatch = useDispatch();
+  const { mutate } = useAddCanvasHistory();
   const canvasRef = useRef(null);
   const canvas = canvasRef.current;
-  const {
-    channelId,
-    page,
-    isPenToolActive,
-    slideCanvas,
-    toolOptions,
-  } = useChannelSelector((state) => state);
-  const initSlideCanvas = () => {
-    if (slideCanvas) slideCanvas.clearCanvas();
-    query({ variables: { channelId, page, toolOptions } });
-  };
 
   useEffect(() => {
-    console.log('Init Page...');
+    if (!slideCanvas) return;
     initSlideCanvas();
-    const dropyCanvas = new DropyCanvas(canvasWidth, canvasHeight);
+    dispatch({ type: CAHNNEL_REDUCER_SET_ERASER_INACTIVE });
+  }, [isEraserToolActive]);
 
-    dropyCanvas.init();
-    dropyCanvas.setCustomMouseUpHandler(() => {
-      mutate({
-        variables: {
-          channelId,
-          page,
-          history: dropyCanvas.getNewLineHistory(),
-          toolOptions: dropyCanvas.getToolOptions(),
-        },
-      });
-    });
+  useEffect(() => {
+    if (!slideCanvas || !canvas) return;
+    if (isPenToolActive) {
+      const saveCanvasHistoryHandler = () => {
+        mutate({
+          variables: {
+            channelId,
+            page: slideCanvas.getSlidePage(),
+            history: slideCanvas.getNewLineHistory(),
+            toolOptions: slideCanvas.getToolOptions(),
+          },
+        });
+      };
+      slideCanvas.setCustomMouseUpHandler(saveCanvasHistoryHandler);
+      slideCanvas.setCustomMouseLeaveHandler(saveCanvasHistoryHandler);
+      slideCanvas.addEventListener(canvas);
+    }
 
-    dispatch({
-      type: CHANNEL_REDUCER_SET_SLIDE_CANVAS,
-      payload: { slideCanvas: dropyCanvas },
-    });
-  }, [page]);
+    return () => slideCanvas.removeEventListener(canvas);
+  }, [slideCanvas, canvas, isPenToolActive]);
+
+  useEffect(() => {
+    if (loading || !canvas) return;
+    const context = canvas.getContext('2d');
+
+    slideCanvas.setContext(context);
+    slideCanvas.setHistory(canvasHistory.history);
+    slideCanvas.reDrawContent();
+  }, [loading]);
 
   useEffect(() => {
     if (canvas === null) return;
     const context = canvas.getContext('2d');
 
+    slideCanvas.setSize(canvasWidth, canvasHeight);
     slideCanvas.setContext(context);
-    if (isPenToolActive) {
-      slideCanvas.setToolOptions(toolOptions);
-      slideCanvas.addEventListener(canvas);
-    }
-
     slideCanvas.reDrawContent();
-    return () => slideCanvas.removeEventListener(canvas);
-  }, [slideCanvas, canvasWidth, canvasHeight, isPenToolActive]);
-
-  useEffect(() => {
-    if (!called || loading) return;
-    if (data.page === page && canvas) {
-      console.log('Redraw...');
-      const context = canvas.getContext('2d');
-      const curToopOptions = toolOptions;
-      slideCanvas.setContext(context);
-      slideCanvas.setToolOptions(data.toolOptions);
-      slideCanvas.setHistory(data.history);
-      slideCanvas.reDrawContent();
-      slideCanvas.setToolOptions(curToopOptions);
-    }
-  }, [loading]);
+  }, [canvasWidth, canvasHeight]);
 
   return (
     <S.CanvasWrapper isPenToolActive={isPenToolActive}>
-      {slideCanvas && slideCanvas.render(canvasRef)}
+      {slideCanvas && slideCanvas.render(
+        canvasRef,
+        canvasWidth,
+        canvasHeight,
+      )}
     </S.CanvasWrapper>
   );
 };
 
 SlideCanvas.propTypes = {
-  canvasWidth: PropTypes.number.isRequired,
-  canvasHeight: PropTypes.number.isRequired,
+  initialData: PropTypes.shape({
+    canvasHistory: PropTypes.shape({
+      page: PropTypes.number,
+      history: PropTypes.array,
+      toolOptions: PropTypes.shape({
+        lineWidth: PropTypes.number.isRequired,
+        lineCap: PropTypes.string.isRequired,
+        lineColor: PropTypes.string.isRequired,
+      }),
+    }),
+    loading: PropTypes.bool.isRequired,
+    channelId: PropTypes.string.isRequired,
+    slideCanvas: PropTypes.object,
+    initSlideCanvas: PropTypes.func.isRequired,
+    canvasWidth: PropTypes.number.isRequired,
+    canvasHeight: PropTypes.number.isRequired,
+  }),
 };
 
-export default SlideCanvas;
+export default withCanvasInit(SlideCanvas);

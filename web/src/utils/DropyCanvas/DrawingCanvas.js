@@ -2,9 +2,9 @@ import { ratioToRealPosition } from './utils';
 
 class DrawingCanvas {
   init() {
-    this.lineWidth = null;
-    this.lineCap = null;
-    this.strokeStyle = null;
+    this.lineWidth = 2;
+    this.lineCap = 'round';
+    this.strokeStyle = 'red';
     this.context = null;
   }
 
@@ -16,16 +16,8 @@ class DrawingCanvas {
     this.context = context;
   }
 
-  setToolOptions(toolOptions) {
-    const {
-      lineWidth,
-      lineCap,
-      lineColor,
-    } = toolOptions;
-
-    this.lineWidth = lineWidth;
-    this.lineCap = lineCap;
-    this.strokeStyle = lineColor;
+  getContext() {
+    return this.context;
   }
 
   getToolOptions() {

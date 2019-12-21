@@ -5,6 +5,7 @@ import { useChannelSelector } from '@/hooks';
 import { throttle } from '@/utils/optimize';
 import { pxToNum } from '@/utils/dom';
 import SlideCanvas from './SlideCanvas';
+import { THROTTLETIME } from '@/constants';
 
 const MainSlide = (props) => {
   const { currentIndex } = props;
@@ -32,8 +33,6 @@ const MainSlide = (props) => {
     const canvasWidth = fitHeight ? wrapperHeight * slideRatio : wrapperWidth;
     const canvasHeight = fitHeight ? wrapperHeight : wrapperWidth / slideRatio;
 
-    if (slideCanvas) slideCanvas.setSize(canvasWidth, canvasHeight);
-
     setCanvasSize({ canvasWidth, canvasHeight });
   };
 
@@ -51,14 +50,12 @@ const MainSlide = (props) => {
         resizeCanvas(fitHeight, wrapperWidth, wrapperHeight);
       });
     };
-    const throttleResize = throttle(() => handleResize(), 500);
+    const throttleResize = throttle(() => handleResize(), THROTTLETIME);
 
     handleResize();
     window.addEventListener('resize', throttleResize);
 
-    return () => {
-      window.removeEventListener('resize', throttleResize);
-    };
+    return () => window.removeEventListener('resize', throttleResize);
   }, [currentIndex, slideCanvas]);
 
   return (
@@ -69,6 +66,7 @@ const MainSlide = (props) => {
         <SlideCanvas
           canvasWidth={canvasSize.canvasWidth}
           canvasHeight={canvasSize.canvasHeight}
+          page={currentIndex}
         />
         )}
       </S.SlideWrapper>
