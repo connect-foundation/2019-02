@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useGetCanvasHistory, useChannelSelector } from '@/hooks';
 import DropyCanvas from '@/utils/DropyCanvas';
 
-const withInit = (WrappedComponent) => (props) => {
+const withCanvasInit = (WrappedComponent) => (props) => {
   const { canvasWidth, canvasHeight, page } = props;
   const { channelId } = useChannelSelector((state) => state);
   const { query, data, loading } = useGetCanvasHistory(true);
@@ -35,4 +35,4 @@ const withInit = (WrappedComponent) => (props) => {
   return <WrappedComponent initialData={initialData} />;
 };
 
-export default withInit;
+export default withCanvasInit;

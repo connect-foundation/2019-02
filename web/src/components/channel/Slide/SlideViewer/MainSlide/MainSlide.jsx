@@ -5,6 +5,7 @@ import { useChannelSelector } from '@/hooks';
 import { throttle } from '@/utils/optimize';
 import { pxToNum } from '@/utils/dom';
 import SlideCanvas from './SlideCanvas';
+import { THROTTLETIME } from '@/constants';
 
 const MainSlide = (props) => {
   const { currentIndex } = props;
@@ -49,7 +50,7 @@ const MainSlide = (props) => {
         resizeCanvas(fitHeight, wrapperWidth, wrapperHeight);
       });
     };
-    const throttleResize = throttle(() => handleResize(), 100);
+    const throttleResize = throttle(() => handleResize(), THROTTLETIME);
 
     handleResize();
     window.addEventListener('resize', throttleResize);

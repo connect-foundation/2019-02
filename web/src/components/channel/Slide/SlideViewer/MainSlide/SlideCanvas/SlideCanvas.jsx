@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import withInit from './withInit';
+import withCanvasInit from './withCanvasInit';
 import S from './style';
 import {
   useChannelSelector,
@@ -101,4 +101,4 @@ SlideCanvas.propTypes = {
   }),
 };
 
-export default withInit(SlideCanvas);
+export default withCanvasInit(SlideCanvas);
