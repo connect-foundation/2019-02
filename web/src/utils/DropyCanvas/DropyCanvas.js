@@ -7,9 +7,10 @@ import {
 } from './utils';
 
 class DropyCanvas {
-  constructor(width, height) {
+  constructor(width, height, page) {
     this.width = width;
     this.height = height;
+    this.page = page;
     this.drawingCanvas = new DrawingCanvas();
   }
 
@@ -26,12 +27,17 @@ class DropyCanvas {
       ['mouseenter', this.handleMouseEnter.bind(this)],
     ];
     this.customMouseUpHandler = null;
+    this.customMouseLeaveHandler = null;
+    this.customMouseEnterHandler = null;
+    this.customMouseMoveHandler = null;
+    this.customMouseDownHandler = null;
   }
 
   handleMouseDown({ offsetX, offsetY }) {
     this.resetNewLineHistory();
     this.prevPosition.x = offsetX;
     this.prevPosition.y = offsetY;
+    if (this.customMouseDownHandler) this.customMouseDownHandler();
   }
 
   handleMouseMove({ buttons, offsetX, offsetY }) {
@@ -41,11 +47,13 @@ class DropyCanvas {
     this.drawingCanvas.drawContent(this.prevPosition, curPosition);
     this.saveMousePosition(offsetX, offsetY);
     this.addCanvasHistory(curPosition);
+    if (this.customMouseMoveHandler) this.customMouseMoveHandler();
   }
 
   handleMouseEnter({ offsetX, offsetY }) {
     this.prevPosition.x = offsetX;
     this.prevPosition.y = offsetY;
+    if (this.customMouseEnterHandler) this.customMouseEnterHandler();
   }
 
   handleMouseUp() {
@@ -53,8 +61,10 @@ class DropyCanvas {
     if (this.customMouseUpHandler) this.customMouseUpHandler();
   }
 
-  handleMouseLeave() {
+  handleMouseLeave({ buttons }) {
+    if (buttons !== 1) return;
     this.pushHistoryToHistoryList([]);
+    if (this.customMouseLeaveHandler) this.customMouseLeaveHandler();
   }
 
   getToolOptions() {
@@ -70,7 +80,11 @@ class DropyCanvas {
   }
 
   getContext() {
-    return this.context;
+    return this.drawingCanvas.getContext();
+  }
+
+  getSlidePage() {
+    return this.page;
   }
 
   setHistory(history) {
@@ -81,10 +95,6 @@ class DropyCanvas {
     this.drawingCanvas.setContext(context);
   }
 
-  setToolOptions(toolOptions) {
-    this.drawingCanvas.setToolOptions(toolOptions);
-  }
-
   setSize(width, height) {
     this.width = width;
     this.height = height;
@@ -92,6 +102,22 @@ class DropyCanvas {
 
   setCustomMouseUpHandler(customHandler) {
     this.customMouseUpHandler = customHandler;
+  }
+
+  setCustomMouseLeaveHandler(customHandler) {
+    this.customMouseLeaveHandler = customHandler;
+  }
+
+  setCustomMouseEnterHandler(customHandler) {
+    this.customMouseEnterHandler = customHandler;
+  }
+
+  setCustomMouseMoveHandler(customHandler) {
+    this.customMouseMoveHandler = customHandler;
+  }
+
+  setCustomMouseDownHandler(customHandler) {
+    this.customMouseDownHandler = customHandler;
   }
 
   resetHistory() {
@@ -143,12 +169,12 @@ class DropyCanvas {
     );
   }
 
-  render(canvasRef) {
+  render(canvasRef, canvasWidth, canvasHeight) {
     return (
       <canvas
         ref={canvasRef}
-        width={this.width}
-        height={this.height}
+        width={canvasWidth}
+        height={canvasHeight}
       />
     );
   }

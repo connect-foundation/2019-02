@@ -6,7 +6,8 @@ import {
   CHANNEL_REDUCER_TOOLBAR_INACTIVE,
   CHANNEL_REDUCER_PEN_TOOL_ACTIVE,
   CHANNEL_REDUCER_PEN_TOOL_INACTIVE,
-  CHANNEL_REDUCER_SET_SLIDE_CANVAS,
+  CHANNEL_REDUCER_SET_ERASER_ACTIVE,
+  CAHNNEL_REDUCER_SET_ERASER_INACTIVE,
 } from '@/constants';
 
 const initialChannelState = {
@@ -15,12 +16,7 @@ const initialChannelState = {
   page: 0,
   isToolBarActive: false,
   isPenToolActive: false,
-  slideCanvas: null,
-  toolOptions: {
-    lineWidth: 0,
-    lineCap: '',
-    lineColor: '',
-  },
+  isEraserToolActive: false,
 };
 
 const channelReducer = (state, action) => {
@@ -50,28 +46,26 @@ const channelReducer = (state, action) => {
         ...state,
         isToolBarActive: false,
         isPenToolActive: false,
-        slideCanvas: null,
       };
     case CHANNEL_REDUCER_PEN_TOOL_ACTIVE:
       return {
         ...state,
         isPenToolActive: true,
-        toolOptions: action.payload.toolOptions,
       };
     case CHANNEL_REDUCER_PEN_TOOL_INACTIVE:
       return {
         ...state,
         isPenToolActive: false,
-        toolOptions: {
-          lineWidth: 0,
-          lineCap: '',
-          lineColor: '',
-        },
       };
-    case CHANNEL_REDUCER_SET_SLIDE_CANVAS:
+    case CHANNEL_REDUCER_SET_ERASER_ACTIVE:
       return {
         ...state,
-        slideCanvas: action.payload.slideCanvas,
+        isEraserToolActive: true,
+      };
+    case CAHNNEL_REDUCER_SET_ERASER_INACTIVE:
+      return {
+        ...state,
+        isEraserToolActive: false,
       };
     default:
       return state;
