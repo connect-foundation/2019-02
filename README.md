@@ -41,7 +41,7 @@
 
 ## 📺 Demo Video
 
-<a href="https://www.youtube.com/watch?v=233P-EtFJbg&feature=youtu.be">
+<a href="https://www.youtube.com/watch?v=233P-EtFJbg&feature=youtu.be" target="_blank">
   <img src="https://kr.object.ncloudstorage.com/privatebucket/screenshot__dropy_demo.png" width="600">
 </a>
 
