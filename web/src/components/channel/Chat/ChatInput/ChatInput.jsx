@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import {
   useAddChat,
@@ -18,6 +18,7 @@ import {
 } from '@/constants';
 import S from './style';
 
+
 const KEYCODE_ENTER = 13;
 
 const ChatInput = (props) => {
@@ -27,7 +28,6 @@ const ChatInput = (props) => {
   const { isAnonymous } = useGetUserStatus();
   const { channelId, setQuestionToggle, slideLength } = props;
   const { anonymousChat } = useAnonymousChanged(channelId);
-
   const sendMessage = () => {
     if (message === '') return;
     const { isQuestion } = pipe(parseMessage, checkIsQuestion)({ text: message, slideLength });
@@ -56,6 +56,11 @@ const ChatInput = (props) => {
     return anonymousInput;
   };
 
+  useEffect(() => {
+    if (anonymousChat || !isAnonymous) return;
+    setMessage('');
+  }, [anonymousChat, isAnonymous]);
+
   return (
     <S.ChatInput>
       <S.MessageInput
@@ -65,7 +70,7 @@ const ChatInput = (props) => {
         onFocus={handleFocus(true)}
         onBlur={handleFocus(false)}
         anonymousChat={!anonymousChat && isAnonymous}
-        value={handleAnonymous(message, '')}
+        value={message}
       />
       <S.SendButton
         type="button"
