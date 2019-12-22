@@ -1,38 +1,47 @@
+import {
+  MAIN_REDUCER_SET_LOADING_MODAL,
+  MAIN_REDUCER_CLOSE_LOADING_MODAL,
+  DROP_MODAL_DEFAULT_DROP_EMOJI,
+  MAIN_REDUCER_SET_ERROR_MODAL,
+  MAIN_REDUCER_SET_DRAG_OVER,
+  MAIN_REDUCER_SET_DROP_ZONE_EMOJI,
+} from '@/constants';
+
 const dropModalInitState = {
   isLoading: false,
   loadingMessage: '',
   isError: false,
   errorMessage: '',
   isDragOver: false,
-  dropModalEmoji: '👇',
+  dropModalEmoji: DROP_MODAL_DEFAULT_DROP_EMOJI,
 };
 
 const dropModalReducer = (state, action) => {
   switch (action.type) {
-    case 'setLoadingModal':
+    case MAIN_REDUCER_SET_LOADING_MODAL:
       return {
         ...state,
         isLoading: true,
         loadingMessage: action.payload,
       };
-    case 'closeLoadingModal':
+    case MAIN_REDUCER_CLOSE_LOADING_MODAL:
       return {
         ...state,
         isLoading: false,
       };
-    case 'setErrorModal':
+    case MAIN_REDUCER_SET_ERROR_MODAL:
       return {
         ...state,
         isLoading: false,
         isError: true,
         errorMessage: action.payload,
       };
-    case 'setDragOver':
+    case MAIN_REDUCER_SET_DRAG_OVER:
       return {
         ...state,
         isDragOver: !state.isDragOver,
       };
-    case 'setDropZoneEmoji':
+    case MAIN_REDUCER_SET_DROP_ZONE_EMOJI:
       return {
         ...state,
         dropModalEmoji: action.payload,

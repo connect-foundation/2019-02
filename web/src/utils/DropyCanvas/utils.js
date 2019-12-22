@@ -23,8 +23,17 @@ const removeHandlerFromEvent = (canvasElement, eventAndHandlerList) => {
   });
 };
 
+const getRatioCoordinate = (curPosition, canvasWidth, canvasHeight) => {
+  const { x, y } = curPosition;
+  const ratioX = canvasWidth / x;
+  const ratioY = canvasHeight / y;
+
+  return { ratioX, ratioY };
+};
+
 export {
   ratioToRealPosition,
   addHandlerToEvent,
   removeHandlerFromEvent,
+  getRatioCoordinate,
 };

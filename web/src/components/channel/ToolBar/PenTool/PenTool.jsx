@@ -1,24 +1,20 @@
 import React from 'react';
 import S from './style';
 import { useChannelSelector, useDispatch } from '@/hooks';
+import {
+  CHANNEL_REDUCER_PEN_TOOL_ACTIVE,
+  CHANNEL_REDUCER_PEN_TOOL_INACTIVE,
+} from '@/constants';
 
 const PenTool = () => {
   const dispatch = useDispatch();
-  const {
-    isPenToolActive,
-    dropyCanvas,
-  } = useChannelSelector((state) => state);
-  const penToolOption = {
-    toolType: 'pen',
-    toolStyleOption: {
-      lineWidth: 2,
-      lineCap: 'round',
-      lineColor: 'red',
-    },
-  };
+  const { isPenToolActive } = useChannelSelector((state) => state);
   const handleOnclick = () => {
-    dropyCanvas.setToolStyle(penToolOption);
-    dispatch({ type: 'PEN_TOOL_ACTIVE' });
+    if (isPenToolActive) {
+      dispatch({ type: CHANNEL_REDUCER_PEN_TOOL_INACTIVE });
+    } else {
+      dispatch({ type: CHANNEL_REDUCER_PEN_TOOL_ACTIVE });
+    }
   };
 
   return (

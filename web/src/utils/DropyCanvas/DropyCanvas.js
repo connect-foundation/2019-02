@@ -1,20 +1,24 @@
 import React from 'react';
+import DrawingCanvas from './DrawingCanvas';
 import {
-  ratioToRealPosition,
   addHandlerToEvent,
   removeHandlerFromEvent,
+  getRatioCoordinate,
 } from './utils';
 
 class DropyCanvas {
+  constructor(width, height, page) {
+    this.width = width;
+    this.height = height;
+    this.page = page;
+    this.drawingCanvas = new DrawingCanvas();
+  }
+
   init() {
-    this.width = 0;
-    this.height = 0;
+    this.drawingCanvas.init();
     this.prevPosition = { x: 0, y: 0 };
     this.history = [];
-    this.toolType = null;
-    this.lineWidth = null;
-    this.lineCap = null;
-    this.strokeStyle = null;
+    this.newLineHistory = [];
     this.eventAndHandlerList = [
       ['mousemove', this.handleMouseMove.bind(this)],
       ['mouseup', this.handleMouseUp.bind(this)],
@@ -22,41 +26,106 @@ class DropyCanvas {
       ['mouseleave', this.handleMouseLeave.bind(this)],
       ['mouseenter', this.handleMouseEnter.bind(this)],
     ];
+    this.customMouseUpHandler = null;
+    this.customMouseLeaveHandler = null;
+    this.customMouseEnterHandler = null;
+    this.customMouseMoveHandler = null;
+    this.customMouseDownHandler = null;
   }
 
-  handleMouseDown(event) {
-    this.prevPosition.x = event.offsetX;
-    this.prevPosition.y = event.offsetY;
+  handleMouseDown({ offsetX, offsetY }) {
+    this.resetNewLineHistory();
+    this.prevPosition.x = offsetX;
+    this.prevPosition.y = offsetY;
+    if (this.customMouseDownHandler) this.customMouseDownHandler();
   }
 
-  handleMouseMove(event) {
-    if (event.buttons !== 1) return;
+  handleMouseMove({ buttons, offsetX, offsetY }) {
+    if (buttons !== 1) return;
+    const curPosition = { x: offsetX, y: offsetY };
 
-    this.context.beginPath();
-
-    this.context.lineWidth = this.lineWidth;
-    this.context.lineCap = this.lineCap;
-    this.context.strokeStyle = this.strokeStyle;
-
-    this.context.moveTo(this.prevPosition.x, this.prevPosition.y);
-    this.context.lineTo(event.offsetX, event.offsetY);
-    this.context.stroke();
-
-    this.saveMousePosition(event.offsetX, event.offsetY);
-    this.addCanvasHistory(event.offsetX, event.offsetY);
+    this.drawingCanvas.drawContent(this.prevPosition, curPosition);
+    this.saveMousePosition(offsetX, offsetY);
+    this.addCanvasHistory(curPosition);
+    if (this.customMouseMoveHandler) this.customMouseMoveHandler();
   }
 
-  handleMouseEnter(event) {
-    this.prevPosition.x = event.offsetX;
-    this.prevPosition.y = event.offsetY;
+  handleMouseEnter({ offsetX, offsetY }) {
+    this.prevPosition.x = offsetX;
+    this.prevPosition.y = offsetY;
+    if (this.customMouseEnterHandler) this.customMouseEnterHandler();
   }
 
   handleMouseUp() {
-    this.history.push([]);
+    this.pushHistoryToHistoryList([]);
+    if (this.customMouseUpHandler) this.customMouseUpHandler();
   }
 
-  handleMouseLeave() {
-    this.history.push([]);
+  handleMouseLeave({ buttons }) {
+    if (buttons !== 1) return;
+    this.pushHistoryToHistoryList([]);
+    if (this.customMouseLeaveHandler) this.customMouseLeaveHandler();
+  }
+
+  getToolOptions() {
+    return this.drawingCanvas.getToolOptions();
+  }
+
+  getHistory() {
+    return this.history;
+  }
+
+  getNewLineHistory() {
+    return this.newLineHistory;
+  }
+
+  getContext() {
+    return this.drawingCanvas.getContext();
+  }
+
+  getSlidePage() {
+    return this.page;
+  }
+
+  setHistory(history) {
+    this.history = history;
+  }
+
+  setContext(context) {
+    this.drawingCanvas.setContext(context);
+  }
+
+  setSize(width, height) {
+    this.width = width;
+    this.height = height;
+  }
+
+  setCustomMouseUpHandler(customHandler) {
+    this.customMouseUpHandler = customHandler;
+  }
+
+  setCustomMouseLeaveHandler(customHandler) {
+    this.customMouseLeaveHandler = customHandler;
+  }
+
+  setCustomMouseEnterHandler(customHandler) {
+    this.customMouseEnterHandler = customHandler;
+  }
+
+  setCustomMouseMoveHandler(customHandler) {
+    this.customMouseMoveHandler = customHandler;
+  }
+
+  setCustomMouseDownHandler(customHandler) {
+    this.customMouseDownHandler = customHandler;
+  }
+
+  resetHistory() {
+    this.history = [];
+  }
+
+  resetNewLineHistory() {
+    this.newLineHistory = [];
   }
 
   addEventListener(canvasElement) {
@@ -67,11 +136,19 @@ class DropyCanvas {
     removeHandlerFromEvent(canvasElement, this.eventAndHandlerList);
   }
 
-  addCanvasHistory(mousePositionX, mousePositionY) {
-    const ratioX = this.width / mousePositionX;
-    const ratioY = this.height / mousePositionY;
+  addCanvasHistory(curPosition) {
+    const { ratioX, ratioY } = getRatioCoordinate(
+      curPosition,
+      this.width,
+      this.height,
+    );
 
-    this.history.push([ratioX, ratioY]);
+    this.pushHistoryToHistoryList([ratioX, ratioY]);
+  }
+
+  pushHistoryToHistoryList(canvasHistory) {
+    this.history.push(canvasHistory);
+    this.newLineHistory.push(canvasHistory);
   }
 
   saveMousePosition(x, y) {
@@ -79,77 +156,25 @@ class DropyCanvas {
     this.prevPosition.y = y;
   }
 
-  setContext(context) {
-    this.context = context;
-  }
-
-  setToolStyle(toolOption) {
-    const {
-      toolType,
-      toolStyleOption: {
-        lineWidth,
-        lineCap,
-        lineColor,
-      },
-    } = toolOption;
-
-    this.toolType = toolType;
-    this.lineWidth = lineWidth;
-    this.lineCap = lineCap;
-    this.strokeStyle = lineColor;
-  }
-
-  setSize(width, height) {
-    this.width = width;
-    this.height = height;
-  }
-
-  getHistory() {
-    return this.history;
-  }
-
-  resetHistory() {
-    this.history = [];
-  }
-
-  clearCanvas(context) {
-    context.clearRect(0, 0, this.width, this.height);
+  clearCanvas() {
+    this.drawingCanvas.clearCanvas(this.width, this.height);
     this.resetHistory();
   }
 
-  reDrawContent(context) {
-    const newPosition = [];
-    this.history.forEach(([ratioX, ratioY], index) => {
-      const { currPositionX, currPositionY } = ratioToRealPosition(
-        ratioX,
-        ratioY,
-        this.width,
-        this.height,
-      );
-
-      newPosition.push([currPositionX, currPositionY]);
-
-      if (index === 0) return;
-
-      const [prevNewPositionX, prevNewPositionY] = newPosition[index - 1];
-
-      context.lineWidth = this.lineWidth;
-      context.lineCap = this.lineCap;
-      context.strokeStyle = this.strokeStyle;
-
-      context.beginPath();
-      context.moveTo(prevNewPositionX, prevNewPositionY);
-      context.lineTo(currPositionX, currPositionY);
-      context.stroke();
-    });
+  reDrawContent() {
+    this.drawingCanvas.reDrawContent(
+      this.history,
+      this.width,
+      this.height,
+    );
   }
 
-  render(canvasRef) {
+  render(canvasRef, canvasWidth, canvasHeight) {
     return (
       <canvas
         ref={canvasRef}
-        width={this.width}
-        height={this.height}
+        width={canvasWidth}
+        height={canvasHeight}
       />
     );
   }

@@ -24,7 +24,6 @@ import {
   ENTERING_CHANNEL_MESSAGGGE,
   PRESENTATION_ON,
 } from '@/constants';
-import DropyCanvas from '@/utils/DropyCanvas';
 
 const Channel = (props) => {
   const { user } = props;
@@ -36,9 +35,6 @@ const Channel = (props) => {
     openModal,
     closeModal,
   } = useModal();
-  const dropyCanvas = new DropyCanvas();
-
-  dropyCanvas.init();
 
   useEffect(() => {
     if (data && data.status === 'ok') {
@@ -69,7 +65,6 @@ const Channel = (props) => {
     anonymousChat: channel.channelOptions.anonymousChat,
     emojiEffect: channel.channelOptions.emojiEffect,
     listenerList: channel.listenerList,
-    dropyCanvas,
   };
 
   return (
@@ -77,7 +72,11 @@ const Channel = (props) => {
       <Entrance channelId={channelId} isMaster={isMaster}>
         <S.Channel>
           <ToolBar />
-          <Chat channelId={channelId} userId={user.userId} />
+          <Chat
+            channelId={channelId}
+            userId={user.userId}
+            slideLength={channel.slideUrls.length}
+          />
           <Slide channelId={channelId} openSettingModal={openModal} />
           {data.isMaster && (
           <SettingModal

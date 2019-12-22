@@ -13,10 +13,13 @@ import {
   TEMP_ERROR_MESSAGE,
   CREATING_CHANNEL_MESSAGE,
   FILE_TYPE_VALIDATION_ERROR_MESSAGE,
+  MAIN_REDUCER_SET_LOADING_MODAL,
+  CHANNEL_CODE_LENGTH,
+  DROP_MODAL_DEFAULT_DROP_EMOJI,
+  MAIN_REDUCER_SET_ERROR_MODAL,
+  MAIN_REDUCER_SET_DRAG_OVER,
+  MAIN_REDUCER_SET_DROP_ZONE_EMOJI,
 } from '@/constants';
-
-const ChannelCodeLength = 5;
-const DefaultDropEmoji = '👇';
 
 const DropZone = (props) => {
   const { dropModalDispatch } = props;
@@ -25,16 +28,28 @@ const DropZone = (props) => {
     event.preventDefault();
 
     const channelId = createChannelId();
-    const channelCode = channelId.substring(0, ChannelCodeLength);
+    const channelCode = channelId.substring(0, CHANNEL_CODE_LENGTH);
     const { dataTransfer: { files } } = event;
     const file = files[0];
 
     if (checkFileTypeValidation(file)) {
-      dropModalDispatch({ type: 'setLoadingModal', payload: CREATING_CHANNEL_MESSAGE });
+      dropModalDispatch({
+        type: MAIN_REDUCER_SET_LOADING_MODAL,
+        payload: CREATING_CHANNEL_MESSAGE,
+      });
       const formData = createFormData({ file });
       const unsubscribeProgress = subscribeProgress(channelId, ({ status, message }) => {
-        if (status === 'timeout') dropModalDispatch({ type: 'setErrorModal', payload: message });
-        else dropModalDispatch({ type: 'setLoadingModal', payload: message });
+        if (status === 'timeout') {
+          dropModalDispatch({
+            type: MAIN_REDUCER_SET_ERROR_MODAL,
+            payload: message,
+          });
+        } else {
+          dropModalDispatch({
+            type: MAIN_REDUCER_SET_LOADING_MODAL,
+            payload: message,
+          });
+        }
       });
       const {
         status,
@@ -55,17 +70,26 @@ const DropZone = (props) => {
           },
         });
       } else {
-        dropModalDispatch({ type: 'setErrorModal', payload: TEMP_ERROR_MESSAGE });
+        dropModalDispatch({
+          type: MAIN_REDUCER_SET_ERROR_MODAL,
+          payload: TEMP_ERROR_MESSAGE,
+        });
       }
     } else {
-      dropModalDispatch({ type: 'setErrorModal', payload: FILE_TYPE_VALIDATION_ERROR_MESSAGE });
+      dropModalDispatch({
+        type: MAIN_REDUCER_SET_ERROR_MODAL,
+        payload: FILE_TYPE_VALIDATION_ERROR_MESSAGE,
+      });
     }
   };
   const handleDragEnter = (event) => {
     event.preventDefault();
 
-    dropModalDispatch({ type: 'setDragOver' });
-    dropModalDispatch({ type: 'setDropZoneEmoji', payload: getRandomItemOfList(EMOJI_LIST) });
+    dropModalDispatch({ type: MAIN_REDUCER_SET_DRAG_OVER });
+    dropModalDispatch({
+      type: MAIN_REDUCER_SET_DROP_ZONE_EMOJI,
+      payload: getRandomItemOfList(EMOJI_LIST),
+    });
   };
   const handleDragOver = (event) => {
     event.preventDefault();
@@ -73,8 +97,11 @@ const DropZone = (props) => {
   const handleDragLeave = (event) => {
     event.preventDefault();
 
-    dropModalDispatch({ type: 'setDragOver' });
-    dropModalDispatch({ type: 'setDropZoneEmoji', payload: DefaultDropEmoji });
+    dropModalDispatch({ type: MAIN_REDUCER_SET_DRAG_OVER });
+    dropModalDispatch({
+      type: MAIN_REDUCER_SET_DROP_ZONE_EMOJI,
+      payload: DROP_MODAL_DEFAULT_DROP_EMOJI,
+    });
   };
 
   if (data) {

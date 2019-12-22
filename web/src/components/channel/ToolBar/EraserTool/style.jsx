@@ -6,7 +6,7 @@ import { colorGray, colorPrimary } from '@/styles/themeUtil';
 
 const EraserToolIcon = styled(({ className }) => (
   <span className={className}>
-    <svg width="20" height="20">
+    <svg width="21" height="21">
       <path
         d={ERASER_ICON_PATH}
         style={{ fill: 'currentColor' }}

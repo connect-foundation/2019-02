@@ -12,21 +12,36 @@ import {
   REJECT_ERROR_MESSAGE,
   CREATING_CHANNEL_MESSAGE,
   CHANNEL_CODE_LENGTH,
+  MAIN_REDUCER_SET_LOADING_MODAL,
+  MAIN_REDUCER_CLOSE_LOADING_MODAL,
+  MAIN_REDUCER_SET_ERROR_MODAL,
 } from '@/constants';
 
 const DropInput = (props) => {
   const { mutate, data } = useCreateChannel();
   const { dropModalDispatch } = props;
   const handleUpload = async (e) => {
-    dropModalDispatch({ type: 'setLoadingModal', payload: CREATING_CHANNEL_MESSAGE });
+    dropModalDispatch({
+      type: MAIN_REDUCER_SET_LOADING_MODAL,
+      payload: CREATING_CHANNEL_MESSAGE,
+    });
 
     const channelId = createChannelId();
     const channelCode = channelId.substring(0, CHANNEL_CODE_LENGTH);
     const file = e.target.files[0];
     const formData = createFormData({ file });
     const unsubscribeProgress = subscribeProgress(channelId, ({ status, message }) => {
-      if (status === 'timeout') dropModalDispatch({ type: 'setErrorModal', payload: message });
-      else dropModalDispatch({ type: 'setLoadingModal', payload: message });
+      if (status === 'timeout') {
+        dropModalDispatch({
+          type: MAIN_REDUCER_SET_ERROR_MODAL,
+          payload: message,
+        });
+      } else {
+        dropModalDispatch({
+          type: MAIN_REDUCER_SET_LOADING_MODAL,
+          payload: message,
+        });
+      }
     });
     const {
       status,
@@ -48,10 +63,10 @@ const DropInput = (props) => {
         },
       });
     } else {
-      dropModalDispatch({ type: 'closeLoadingModal' });
-      dropModalDispatch({ type: 'setErrorModal', payload: TEMP_ERROR_MESSAGE });
+      dropModalDispatch({ type: MAIN_REDUCER_CLOSE_LOADING_MODAL });
+      dropModalDispatch({ type: MAIN_REDUCER_SET_ERROR_MODAL, payload: TEMP_ERROR_MESSAGE });
       const payload = status === 'reject' ? REJECT_ERROR_MESSAGE : TEMP_ERROR_MESSAGE;
-      dropModalDispatch({ type: 'setErrorModal', payload });
+      dropModalDispatch({ type: MAIN_REDUCER_SET_ERROR_MODAL, payload });
     }
   };
 

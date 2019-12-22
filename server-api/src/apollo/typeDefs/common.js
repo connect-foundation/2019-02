@@ -1,5 +1,6 @@
 const typeDefs = `
 scalar Date
+scalar Coordinate
 
 type Query {
   _empty: String

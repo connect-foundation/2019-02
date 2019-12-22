@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import {
   useAddChat,
-  useChannelSelector,
   useAnonymousChanged,
   useGetUserStatus,
   useDispatch,
@@ -12,8 +11,13 @@ import {
   parseMessage,
   checkIsQuestion,
 } from '@/utils';
-import { CHAT_INPUT_PLACEHOLDER, CHAT_ANONYMOUS_PLACEHOLDER } from '@/constants';
+import {
+  CHAT_INPUT_PLACEHOLDER,
+  CHAT_ANONYMOUS_PLACEHOLDER,
+  CHANNEL_REDUCER_SET_ISCHAT,
+} from '@/constants';
 import S from './style';
+
 
 const KEYCODE_ENTER = 13;
 
@@ -22,13 +26,11 @@ const ChatInput = (props) => {
   const dispatch = useDispatch();
   const { mutate } = useAddChat();
   const { isAnonymous } = useGetUserStatus();
-  const { channelId, setQuestionToggle } = props;
-  const limit = useChannelSelector((state) => state.slideUrls.length);
+  const { channelId, setQuestionToggle, slideLength } = props;
   const { anonymousChat } = useAnonymousChanged(channelId);
-
   const sendMessage = () => {
     if (message === '') return;
-    const { isQuestion } = pipe(parseMessage, checkIsQuestion)({ text: message, limit });
+    const { isQuestion } = pipe(parseMessage, checkIsQuestion)({ text: message, slideLength });
 
     mutate({ variables: { channelId, message, isQuestion } });
     setMessage('');
@@ -45,17 +47,24 @@ const ChatInput = (props) => {
   };
   const handleFocus = (isChat) => () => {
     dispatch({
-      type: 'SET_ISCHAT',
+      type: CHANNEL_REDUCER_SET_ISCHAT,
       payload: { isChat },
     });
   };
+  const handleAnonymous = (input, anonymousInput) => {
+    if (anonymousChat || !isAnonymous) return input;
+    return anonymousInput;
+  };
+
+  useEffect(() => {
+    if (anonymousChat || !isAnonymous) return;
+    setMessage('');
+  }, [anonymousChat, isAnonymous]);
 
   return (
     <S.ChatInput>
       <S.MessageInput
-        placeholder={anonymousChat || !isAnonymous
-          ? CHAT_INPUT_PLACEHOLDER
-          : CHAT_ANONYMOUS_PLACEHOLDER}
+        placeholder={handleAnonymous(CHAT_INPUT_PLACEHOLDER, CHAT_ANONYMOUS_PLACEHOLDER)}
         onChange={handleChangeInput}
         onKeyDown={handleKeyDownInput}
         onFocus={handleFocus(true)}
@@ -76,6 +85,7 @@ const ChatInput = (props) => {
 ChatInput.propTypes = {
   channelId: PropTypes.string.isRequired,
   setQuestionToggle: PropTypes.func.isRequired,
+  slideLength: PropTypes.number.isRequired,
 };
 
 export default ChatInput;

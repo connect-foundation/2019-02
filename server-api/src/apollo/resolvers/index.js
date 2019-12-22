@@ -11,6 +11,7 @@ const resolvers = merge({
   require('./chats'),
   require('./histories'),
   require('./flyingEmojis'),
+  require('./canvasHistory'),
 ]);
 
 module.exports = resolvers;

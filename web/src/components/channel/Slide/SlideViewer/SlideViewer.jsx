@@ -10,7 +10,12 @@ import {
 } from '@/hooks';
 import { moveSlide, moveSlidePossible } from '@/utils/slide';
 import { FullScreen } from '@/components/common';
-import { KEYCODE_BACK, KEYCODE_FOWARD } from '@/constants';
+import {
+  KEYCODE_BACK,
+  KEYCODE_FOWARD,
+  CHANNEL_REDUCER_SET_ISSYNC,
+  CHANNEL_REDUCER_SET_PAGE,
+} from '@/constants';
 import Indicator from './Indicator';
 import MainSlide from './MainSlide';
 import PageNumber from './PageNumber';
@@ -40,14 +45,14 @@ const SlideViewer = (props) => {
   directionKey[KEYCODE_FOWARD] = true;
 
   const setPage = (next) => {
-    dispatch({ type: 'SET_PAGE', payload: { page: next } });
+    dispatch({ type: CHANNEL_REDUCER_SET_PAGE, payload: { page: next } });
   };
   const handleSetPage = (direction) => () => {
     const syncIndex = !isMaster && isSync ? currentSlide : page;
 
     if (!moveSlidePossible(direction, syncIndex, slideUrls.length)) return;
     if (!isMaster && isSync) {
-      dispatch({ type: 'SET_ISSYNC', payload: { isSync: false } });
+      dispatch({ type: CHANNEL_REDUCER_SET_ISSYNC, payload: { isSync: false } });
       moveSlide(currentSlide, direction, setPage);
     } else {
       moveSlide(page, direction, setPage);
@@ -71,6 +76,11 @@ const SlideViewer = (props) => {
     mutate({ variables: { channelId, currentSlide: page } });
   }, [page]);
 
+  useCallback(() => {
+    if (!isMaster) return;
+    dispatch({ type: CHANNEL_REDUCER_SET_ISSYNC, payload: { isSync: false } });
+  }, []);
+
   const handleScreenOnChange = (event) => {
     setFullScreen(event);
     window.dispatchEvent(new Event('resize'));
@@ -90,10 +100,7 @@ const SlideViewer = (props) => {
           enabled={isFullScreen}
           onChange={handleScreenOnChange}
         >
-          <MainSlide
-            page={syncSlide}
-            slideUrls={slideUrls}
-          />
+          <MainSlide currentIndex={syncSlide} />
           {IndicatorRender}
         </FullScreen>
         <PageNumber

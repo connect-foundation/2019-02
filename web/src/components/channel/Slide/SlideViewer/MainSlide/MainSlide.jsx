@@ -2,17 +2,24 @@ import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import S from './style';
 import { useChannelSelector } from '@/hooks';
+import { throttle } from '@/utils/optimize';
 import { pxToNum } from '@/utils/dom';
 import SlideCanvas from './SlideCanvas';
+import { THROTTLETIME } from '@/constants';
 
 const MainSlide = (props) => {
-  const { page, slideUrls } = props;
+  const { currentIndex } = props;
+  const {
+    slideRatioList,
+    isToolBarActive,
+    slideCanvas,
+    slideUrls,
+  } = useChannelSelector((state) => state);
   const [canvasSize, setCanvasSize] = useState({
     canvasWidth: 0,
     canvasHeight: 0,
   });
-  const { slideRatioList, dropyCanvas } = useChannelSelector((state) => state);
-  const slideRatio = slideRatioList[page];
+  const slideRatio = slideRatioList[currentIndex];
   const wrapperRef = useRef(null);
   const imageRef = useRef(null);
   const resizeSlide = (fitHeight) => {
@@ -20,13 +27,12 @@ const MainSlide = (props) => {
 
     current.style.width = fitHeight ? 'auto' : '100%';
     current.style.height = fitHeight ? '100%' : 'auto';
-    current.src = slideUrls[page];
+    current.src = slideUrls[currentIndex];
   };
   const resizeCanvas = (fitHeight, wrapperWidth, wrapperHeight) => {
     const canvasWidth = fitHeight ? wrapperHeight * slideRatio : wrapperWidth;
     const canvasHeight = fitHeight ? wrapperHeight : wrapperWidth / slideRatio;
 
-    dropyCanvas.setSize(canvasWidth, canvasHeight);
     setCanvasSize({ canvasWidth, canvasHeight });
   };
 
@@ -44,31 +50,32 @@ const MainSlide = (props) => {
         resizeCanvas(fitHeight, wrapperWidth, wrapperHeight);
       });
     };
+    const throttleResize = throttle(() => handleResize(), THROTTLETIME);
 
     handleResize();
-    window.addEventListener('resize', handleResize);
+    window.addEventListener('resize', throttleResize);
 
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
-  }, [page]);
+    return () => window.removeEventListener('resize', throttleResize);
+  }, [currentIndex, slideCanvas]);
 
   return (
     <S.MainSlide>
       <S.SlideWrapper ref={wrapperRef}>
         <S.SlideImg ref={imageRef} alt="slide" />
+        {isToolBarActive && (
         <SlideCanvas
           canvasWidth={canvasSize.canvasWidth}
           canvasHeight={canvasSize.canvasHeight}
+          page={currentIndex}
         />
+        )}
       </S.SlideWrapper>
     </S.MainSlide>
   );
 };
 
 MainSlide.propTypes = {
-  page: PropTypes.number.isRequired,
-  slideUrls: PropTypes.arrayOf(PropTypes.string).isRequired,
+  currentIndex: PropTypes.number.isRequired,
 };
 
 export default MainSlide;
