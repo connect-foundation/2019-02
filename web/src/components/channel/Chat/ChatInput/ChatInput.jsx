@@ -30,7 +30,9 @@ const ChatInput = (props) => {
   const { anonymousChat } = useAnonymousChanged(channelId);
   const sendMessage = () => {
     if (message === '') return;
-    const { isQuestion } = pipe(parseMessage, checkIsQuestion)({ text: message, slideLength });
+    const { isQuestion } = pipe(parseMessage, checkIsQuestion)({
+      text: message, limit: slideLength,
+    });
 
     mutate({ variables: { channelId, message, isQuestion } });
     setMessage('');
