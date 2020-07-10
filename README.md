@@ -64,12 +64,12 @@
 <br>
 
 ## 🏛 Service Architecture
-![](https://kr.object.ncloudstorage.com/dropy/01_IMG_DONT_TOUCH/architecture.png)
+![architecture](https://user-images.githubusercontent.com/29801123/87169897-962fe800-c30b-11ea-9c7e-c852f6e9dfb9.png)
 
 <br>
 
 ## 🗂 Tech Stack
-![](https://kr.object.ncloudstorage.com/dropy/01_IMG_DONT_TOUCH/techstack.png)
+![techstack](https://user-images.githubusercontent.com/29801123/87169926-a051e680-c30b-11ea-97df-4128127fbac2.png)
  
 <br>
 
